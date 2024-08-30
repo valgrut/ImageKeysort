@@ -1,0 +1,23 @@
+{
+    "keys": {
+        "a": {
+            "dst_path": "",
+            "keys": {
+                "s": {
+                    "dst_path": "",
+                    "keys": {
+                        "d": {
+                            "dst_path": "",
+                            "keys": {
+                                "f": {
+                                    "dst_path": "/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
