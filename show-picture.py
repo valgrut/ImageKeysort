@@ -4,11 +4,15 @@ from PIL import Image
 # from tr import tr
 from pathlib import Path
 import shutil
+from os import listdir
+from os.path import isfile, join
 
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import QSize, Qt, QStringListModel
 from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
+    QTreeWidget,
+    QTreeWidgetItem,
     QLabel,
     QMainWindow,
     QPushButton,
@@ -17,6 +21,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QFileDialog,
     QShortcut,
+    QMenu,
 )
 from PyQt5.QtGui import QPixmap, QKeyEvent, QKeySequence
 
@@ -27,28 +32,14 @@ width = 1152
 height = 864
 
 
-
 # TODO:
 # - [ ] pridat kontrolu, ktere klavesy lze zmacknout (zablokovat napr. mezernik a bile znaky)
 # - [ ] Pridat label, ve kterem bude napsany aktualni Mod (sort, home, edit)
 
 
-
-# shortcuts = {"keys": {"f": {"dst_path": "", "keys": {"b": {}}}}}
-# print(json.dumps(shortcuts, indent=2))
-# shortcuts["keys"]["f"].update({"dst_path": "/home/jpeska/Obrazky"})
-# print(json.dumps(shortcuts, indent=2))
-# shortcuts["keys"]["f"]["keys"]["b"].update({"dst_path": "/home/jpeska/Obrazky/ostatni"})
-# print(json.dumps(shortcuts, indent=2))
-
-# print(shortcuts["keys"]["f"]["keys"]["c"])
-
-# exit(1)
-
 class Shortcuts():
     def __init__(self):
         self.shortcuts = {"keys": {}}
-        # self.shortcuts = {"keys": {"f": {"dst_path": "", "keys": {"b": {"dst_path": "", "keys": {}}}}}}
 
     def printShortcuts():
         pass
@@ -125,12 +116,17 @@ class Shortcuts():
 
 
     def save_shortcuts(self):
+        print("Ulozeno do data.json")
         with open('data.json', 'w', encoding='utf-8') as datafile:
             json.dump(self.shortcuts, datafile, ensure_ascii=False, indent=4)
 
     def load_shortcuts(self):
+        print("Nactena data.json")
         with open('data.json', 'r', encoding='utf-8') as data:
-            self.shortcuts = json.loads(data) #TODO fix this
+            self.shortcuts = json.load(data)
+
+
+
 
 
 
@@ -145,6 +141,17 @@ class ImageWidget(QWidget):
         self.label.setPixmap(self.pixmap)
         # self.resize(self.pixmap.width(), self.pixmap.height())
 
+
+
+
+
+
+
+
+
+
+
+
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -154,34 +161,57 @@ class MainWindow(QMainWindow):
         self.setMinimumWidth(width)
         self.setMinimumHeight(height)
 
-        layout = QHBoxLayout()
+        main_layout = QHBoxLayout()
+        left_inner_layout = QVBoxLayout()
+        right_inner_layout = QVBoxLayout()
 
-        widget = QWidget()
-        widget.setLayout(layout)
-        # Set the central widget of the Window.
-        self.setCentralWidget(widget)
+        main_window_widget = QWidget()
+        main_window_widget.setLayout(main_layout)
+        main_window_widget.setFocus(True)
+        self.setCentralWidget(main_window_widget)
 
         self.shortcuts = Shortcuts()
+        self.set_source_directory()
 
-        self.gallery_source_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
-        print(self.gallery_source_directory)
-        self.images = []
-        from os import listdir
-        from os.path import isfile, join
-        self.images = [f for f in listdir(self.gallery_source_directory) if isfile(join(self.gallery_source_directory, f))]
-        print(self.images)
-        self.gallery_index = 0
+        # Add sub-layouts into the main layout
+        main_layout.addLayout(left_inner_layout)
+        main_layout.addLayout(right_inner_layout)
 
-        # button1 = QPushButton("Press Me!")
+        # Right side of the main layout
         self.imagewidget = ImageWidget()
+        self.imagewidget.resize(self.imagewidget.sizeHint())
         self.imagewidget.set_new_image(str(Path(self.gallery_source_directory + "/" + self.images[self.gallery_index])))
         print(str(Path(self.gallery_source_directory + "/" + self.images[self.gallery_index])))
+        right_inner_layout.addWidget(self.imagewidget)
 
-        # layout.addWidget(button1)
-        self.key_label = QLabel("Key Sequence Pressed: None", widget)
+        self.previous_image_button = QPushButton("&Previous", self)
+        self.previous_image_button.clicked.connect(self.show_previous_image)
 
-        layout.addWidget(self.key_label)
-        layout.addWidget(self.imagewidget)
+        self.next_image_button = QPushButton("&Next", self)
+        self.next_image_button.clicked.connect(self.show_next_image)
+
+        right_control_buttons_layout = QHBoxLayout()
+        right_control_buttons_layout.addWidget(self.previous_image_button)
+        right_control_buttons_layout.addWidget(self.next_image_button)
+
+        right_inner_layout.addLayout(right_control_buttons_layout)
+
+        # Left side of the main layout
+        self.key_label = QLabel("Key Sequence Pressed: None")
+        self.key_label.resize(self.key_label.sizeHint())
+
+        self.edit_button = QPushButton("&Edit", self)
+        self.edit_button.clicked.connect(self.set_edit_mode)
+
+        self.sort_button = QPushButton("&Sort", self)
+        self.sort_button.clicked.connect(self.set_sort_mode)
+
+        left_inner_button_layout = QHBoxLayout()
+        left_inner_button_layout.addWidget(self.edit_button)
+        left_inner_button_layout.addWidget(self.sort_button)
+
+        left_inner_layout.addLayout(left_inner_button_layout)
+        left_inner_layout.addWidget(self.key_label)
 
         self.key_seq_history = []
         self.mv_history = []
@@ -189,6 +219,7 @@ class MainWindow(QMainWindow):
         self.current_mode = "home" #dalsi: edit, sort
         print("Mod: " + self.current_mode)
 
+        # Register global keyboard shortcuts:
         set_edit_mode_seq = QKeySequence(Qt.CTRL + Qt.Key_E)
         self.set_edit_mode_shortcut = QShortcut(set_edit_mode_seq, self)
         self.set_edit_mode_shortcut.activated.connect(self.set_edit_mode)
@@ -200,22 +231,85 @@ class MainWindow(QMainWindow):
         undo_seq = QKeySequence(Qt.CTRL + Qt.Key_Z)
         self.undo_shortcut = QShortcut(undo_seq, self)
         self.undo_shortcut.activated.connect(self.undo_last_operation)
-        
+
         save_data_seq = QKeySequence(Qt.CTRL + Qt.Key_S)
         self.save_data_shortcut = QShortcut(save_data_seq, self)
         self.save_data_shortcut.activated.connect(self.save_data)
-        
+
         load_data_seq = QKeySequence(Qt.CTRL + Qt.Key_L)
         self.load_data_shortcut = QShortcut(load_data_seq, self)
         self.load_data_shortcut.activated.connect(self.load_data)
 
+        # Tree view for user's sorting shortcuts:
+        self.tree = QTreeWidget()
+        self.tree.setMaximumWidth(200)
+        left_inner_layout.addWidget(self.tree)
+        self.tree.setColumnCount(2)
+        self.tree.setHeaderLabels(["Shortcut", "Directory"])
+        self.tree.setEnabled(False)
+        self.update_tree_view()
+
+        # Create main Menu bar
+        self._createMenuBar()
+
+    def set_source_directory(self):
+        self.gallery_source_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
+        print("Source directory:", self.gallery_source_directory)
+        self.images = []
+        self.images = [f for f in listdir(self.gallery_source_directory) if isfile(join(self.gallery_source_directory, f))]
+        print(self.images)
+        self.gallery_index = 0
+
+    def show_next_image(self):
+        self.gallery_index += 1
+        self.set_image()
+
+    def show_previous_image(self):
+        self.gallery_index -= 1
+        self.set_image()
+
+    def _createMenuBar(self):
+        menuBar = self.menuBar()
+
+        # Creating menus using a QMenu object
+        fileMenu = QMenu("&File", self)
+        # TODO: add "open source directory" option under File
+        menuBar.addMenu(fileMenu)
+        editMenu = menuBar.addMenu("&Edit")
+        # TODO: add "save / load" options for the data.json loading and saving
+        helpMenu = menuBar.addMenu("&Help")
+        # TODO: add info about project, add shortcuts
+
+
+    def update_tree_view(self):
+        # Just flush the whole content of the tree and rebuild it from scratch.
+        self.tree.clear()
+        items = []
+        shortcuts_data = self.shortcuts.get_data()
+
+        # TODO: add view for 3rd level of shortcuts, currently just 2 levels shown.
+        for key, values in shortcuts_data["keys"].items():
+            # print("Key a value", key, values)
+            item = QTreeWidgetItem([key])
+            # self.tree.expandItem(item)
+            for subkey, subvalue in values["keys"].items():
+                dst_path = subvalue["dst_path"]
+                child = QTreeWidgetItem([subkey, Path(dst_path).name])
+                item.addChild(child)
+            items.append(item)
+
+        self.tree.insertTopLevelItems(0, items)
+        self.tree.expandAll()
+
     def save_data(self):
         self.shortcuts.save_shortcuts()
-    
+
     def load_data(self):
         self.shortcuts.load_shortcuts()
+        self.update_tree_view()
 
     def undo_last_operation(self):
+        # TODO
         pass
 
     def set_edit_mode(self):
@@ -223,18 +317,23 @@ class MainWindow(QMainWindow):
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Edit")
         self.current_mode = "edit"
+        # TODO: highlight active button (mode)
 
     def set_sort_mode(self):
         # Display a message when the shortcut is activated
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Sort")
         self.current_mode = "sort"
+        # TODO: highlight active button (mode)
 
     def set_image(self):
         if self.gallery_index < 0:
             self.gallery_index = 0
         if self.gallery_index >= len(self.images):
             self.gallery_index = len(self.images) - 1
+
+        if len(self.images) == 0:
+            return
 
         self.imagewidget.set_new_image(str(Path(self.gallery_source_directory + "/" + self.images[self.gallery_index])))
         print(str(Path(self.gallery_source_directory + "/" + self.images[self.gallery_index])))
@@ -245,17 +344,15 @@ class MainWindow(QMainWindow):
             pressed_key = event.text()
             print(pressed_key)
 
-            if self.current_mode == "home":
-                if event.key() == Qt.Key_Left:
-                    self.gallery_index -= 1
-                    self.set_image()
+            # if self.current_mode == "home":
+            if event.key() == Qt.Key_Left:
+                self.show_previous_image()
 
-                if event.key() == Qt.Key_Right:
-                    self.gallery_index += 1
-                    self.set_image()
+            if event.key() == Qt.Key_Right:
+                self.show_next_image()
 
-                if event.key() == Qt.Key_Delete:
-                    pass
+            if event.key() == Qt.Key_Delete:
+                pass
 
             elif self.current_mode == "edit":
                 if event.key() == Qt.Key_Escape:
@@ -272,6 +369,7 @@ class MainWindow(QMainWindow):
                                 dst_sort_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
                                 self.shortcuts.add_dst_path(self.key_seq, dst_sort_directory)
                                 self.key_seq = ""
+                                self.update_tree_view()
                                 print(json.dumps(self.shortcuts.get_data(), indent=2))
                     else:
                         print("probably empty")
@@ -303,23 +401,41 @@ class MainWindow(QMainWindow):
 
                         src = self.mv_history[-1]["src"]
                         dst = self.mv_history[-1]["dst"]
-                        shutil.move(src + "/" + image_name, dst)
+                        shutil.move(src + "/" + image_name, dst + "/" + image_name)
+                        self.gallery_index += 1
+                        self.set_image()
                     else:
                         print("History is empty.")
 
                 else:
                     self.key_seq += pressed_key
+                    print("key_seq:", self.key_seq)
+                    print("dst for shortcut:", self.shortcuts.get_dst_for_shortcut(self.key_seq))
+                    if not self.key_seq:
+                        return
+
                     if self.shortcuts.get_dst_for_shortcut(self.key_seq):
                         # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
                         self.key_seq_history.append(self.key_seq)
 
-                        print(f"Nalezeno, lze presunout z {self.gallery_source_directory} do {dst}!")
+                        if not self.images:
+                            print("Source directory is empty")
+                            return
+
                         image_name = self.images[self.gallery_index]
                         src = self.gallery_source_directory
                         dst = self.shortcuts.get_dst_for_shortcut(self.key_seq)
+                        print(f"Nalezeno, lze presunout z {self.gallery_source_directory} do {dst}!")
 
                         self.mv_history.append({"src": src, "dst": dst, "image": image_name})
                         shutil.move(src + "/" + image_name, dst + "/" + image_name)
+
+                        self.gallery_index += 1
+                        self.set_image()
+
+                        # TODO: Remove moved image_name from self.images[]
+                        # TODO: when ctrl+z - Add image name back to self.images[]
+                        # TODO: add check for self.images - whether array is empty or not.
 
                         self.key_seq = ""
                         self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
