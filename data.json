@@ -12,6 +12,15 @@
                     "keys": {}
                 }
             }
+        },
+        "f": {
+            "dst_path": "",
+            "keys": {
+                "b": {
+                    "dst_path": "/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/fotky/brutal",
+                    "keys": {}
+                }
+            }
         }
     }
 }
