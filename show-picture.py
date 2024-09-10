@@ -70,6 +70,7 @@ class ShortcutManager():
         last = self._get_last_key_of_sequence(sequence)
         if not last:
             return None
+        print("last: ", last)
         return last["dst_path"]
 
     def add_key_under_current(self, current_key_ref, new_key):
@@ -312,20 +313,21 @@ class MainWindow(QMainWindow):
         self.update_tree_view()
 
     def undo_last_operation(self):
-        image_name = self.images[self.gallery_index]
-        
+
         print("Undo last op")
+        # print(self.mv_history)
 
         if not self.mv_history:
             return
 
+        image_name = self.mv_history[-1]["image"]
         src = self.mv_history[-1]["dst"]
         dst = self.mv_history[-1]["src"]
         shutil.move(src + "/" + image_name, dst + "/" + image_name)
 
         # Remove current image from the list of images in src directory
         self.images.insert(0, image_name)
-        
+
         # Remove last record from history
         if self.mv_history:
             self.mv_history.pop()
@@ -439,6 +441,14 @@ class MainWindow(QMainWindow):
                         print("History is empty.")
 
                 else:
+                    # TODO: Obecne, pridat moznost appendnout pouze a-z, nic jineho.
+                    if event.key() == Qt.Key_Control:
+                        print("ctrl pressed, nothing to append to shortcuts.")
+                        return
+                    if event.key() not in [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]:
+                        print("not a-z was pressed, nothing to append to shortcuts.")
+                        return
+
                     self.key_seq += pressed_key
                     print("key_seq:", self.key_seq)
                     print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(self.key_seq))
