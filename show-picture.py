@@ -136,6 +136,7 @@ class ImageWidget(QWidget):
         self.label.resize(900, 780)
 
     def set_new_image(self, img_path):
+        # TODO: Pridat label nad ImageWidget, kde bude nazev souboru (Dobre treba ze uvidime, ze to je .gif)
         self.pixmap = QPixmap(img_path)
         self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
         self.label.setPixmap(self.pixmap)
