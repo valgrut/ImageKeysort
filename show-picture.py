@@ -128,22 +128,17 @@ class ShortcutManager():
 
 
 
-
-
-
 class ImageWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.label = QLabel(self)
+        self.label.setStyleSheet("background-color: yellow; border: 1px solid black; padding: 3px;")
+        self.label.resize(900, 780)
 
     def set_new_image(self, img_path):
         self.pixmap = QPixmap(img_path)
-        # self.pixmap = QPixmap('networking.jpg')
+        self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
         self.label.setPixmap(self.pixmap)
-        # self.resize(self.pixmap.width(), self.pixmap.height())
-
-
-
 
 
 
