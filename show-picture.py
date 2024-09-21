@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QShortcut,
     QMenu,
+    QAction,
 )
 from PyQt5.QtGui import QPixmap, QKeyEvent, QKeySequence
 
@@ -31,10 +32,17 @@ from PyQt5.QtGui import QPixmap, QKeyEvent, QKeySequence
 width = 1152
 height = 864
 
-
 # TODO:
 # - [ ] pridat kontrolu, ktere klavesy lze zmacknout (zablokovat napr. mezernik a bile znaky)
-# - [ ] Pridat label, ve kterem bude napsany aktualni Mod (sort, home, edit)
+# - [ ] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
+# - [ ] Pridat nekam, jaka src slozka je aktualne nastavena
+# - [ ] REFACTORING
+# - [ ] Pridat counter (x/y), kolik obrazku zbyva v src slozce
+# - [ ] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
+# - [ ] ! Focus, abych mohl pouzivat sipky pro prochazeni obrazku
+# - [ ]
+
+upper_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
 
 
 class ShortcutManager():
@@ -134,13 +142,15 @@ class ImageWidget(QWidget):
         self.label = QLabel(self)
         self.label.setStyleSheet("background-color: yellow; border: 1px solid black; padding: 3px;")
         self.label.resize(900, 780)
-
-    def set_new_image(self, img_path):
-        # TODO: Pridat label nad ImageWidget, kde bude nazev souboru (Dobre treba ze uvidime, ze to je .gif)
-        self.pixmap = QPixmap(img_path)
-        self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
+        # self.pixmap = QPixmap(img_path)
+        self.pixmap = QPixmap()
         self.label.setPixmap(self.pixmap)
 
+    def set_new_image(self, img_path):
+        # TODO: Pokud .gif, tak movie, else pixmap
+        self.pixmap.load(img_path)
+        self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
+        self.label.setPixmap(self.pixmap)
 
 
 
@@ -163,18 +173,26 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(main_window_widget)
 
         self.shortcut_manager = ShortcutManager()
-        self.set_source_directory()
+
+        # TODO: Remove. [Just for DEBUG]: Manually setting src dir
+        # self.set_source_directory = ""
 
         # Add sub-layouts into the main layout
         main_layout.addLayout(left_inner_layout)
         main_layout.addLayout(right_inner_layout)
 
+        self.image_filename_label = QLabel()
+        # self.image_filename_label.resize(900, 10)
+        self.image_filename_label.setMaximumHeight(25)
+        # self.image_filename_label.setStyleSheet("background-color: green; border: 1px solid black; padding: 1px;")
+        right_inner_layout.addWidget(self.image_filename_label)
+
         # Right side of the main layout
         self.imagewidget = ImageWidget()
         self.imagewidget.resize(self.imagewidget.sizeHint())
-        self.imagewidget.set_new_image(str(Path(self.gallery_source_directory + "/" + self.images[self.gallery_index])))
-        print(str(Path(self.gallery_source_directory + "/" + self.images[self.gallery_index])))
         self.imagewidget.setFocus(False)
+        # TODO: Nez se nacte nejaka src dir, tak sem dat nejakej "empty" obrazek. Neco jako kruh, nejake opacity logo...
+        # - Pouzit k tomu Resources
         right_inner_layout.addWidget(self.imagewidget)
 
         self.previous_image_button = QPushButton("&Previous", self)
@@ -246,27 +264,9 @@ class MainWindow(QMainWindow):
         self.update_tree_view()
 
         # Create main Menu bar
+        self._createActions()
         self._createMenuBar()
-
-    def set_source_directory(self):
-        self.gallery_source_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
-        print("Source directory:", self.gallery_source_directory)
-        self.images = []
-        self.images = [f for f in listdir(self.gallery_source_directory) if isfile(join(self.gallery_source_directory, f))]
-        print(self.images)
-        self.gallery_index = 0
-
-    def show_next_image(self):
-        if self.gallery_index < len(self.images) -1:
-            self.gallery_index += 1
-        print(f"DBG: new gallery_index: {self.gallery_index} out of {len(self.images) - 1}")
-        self.set_image()
-
-    def show_previous_image(self):
-        if self.gallery_index >= 1:
-            self.gallery_index -= 1
-        print(f"DBG: new gallery_index: {self.gallery_index} out of {len(self.images) - 1}")
-        self.set_image()
+        self._connectActions()
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
@@ -275,11 +275,60 @@ class MainWindow(QMainWindow):
         fileMenu = QMenu("&File", self)
         # TODO: add "open source directory" option under File
         menuBar.addMenu(fileMenu)
+
+        fileMenu.addAction(self.openDirectoryAction)
+        fileMenu.addAction(self.loadAction)
+        fileMenu.addAction(self.saveAction)
+        fileMenu.addAction(self.exitAction)
+
         editMenu = menuBar.addMenu("&Edit")
+
         # TODO: add "save / load" options for the data.json loading and saving
+
         helpMenu = menuBar.addMenu("&Help")
         # TODO: add info about project, add shortcuts
 
+    def exitApp(self):
+        #TODO: zjistit, jestli jsou zmeny v shortcuts a pripadne se zeptat, jestli ulozit
+        print("Exiting")
+
+        sys.exit(0)
+        exit(0)
+
+    def _createActions(self):
+        self.openDirectoryAction = QAction("&open", self)
+        self.saveAction = QAction("&save", self)
+        self.loadAction = QAction("&load", self)
+        self.exitAction = QAction("&exit", self)
+
+    def _connectActions(self):
+        self.openDirectoryAction.triggered.connect(self.set_source_directory)
+        self.saveAction.triggered.connect(self.save_data)
+        self.loadAction.triggered.connect(self.load_data)
+        self.exitAction.triggered.connect(self.exitApp)
+
+
+    def set_source_directory(self):
+        self.gallery_source_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
+        print("Source directory:", self.gallery_source_directory)
+        self.images = []
+        self.images = [f for f in listdir(self.gallery_source_directory) if isfile(join(self.gallery_source_directory, f))]
+        print(self.images)
+        self.gallery_index = 0
+        self.set_image()
+
+    def show_next_image(self):
+        if self.gallery_index < len(self.images) -1:
+            self.gallery_index += 1
+        print(f"DBG: new gallery_index: {self.gallery_index} out of {len(self.images) - 1}")
+        self.set_image()
+
+
+    def show_previous_image(self):
+        if self.gallery_index >= 1:
+            self.gallery_index -= 1
+        print(f"DBG: new gallery_index: {self.gallery_index} out of {len(self.images) - 1}")
+        self.set_image()
 
     def update_tree_view(self):
         # Just flush the whole content of the tree and rebuild it from scratch.
@@ -337,14 +386,16 @@ class MainWindow(QMainWindow):
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Edit")
         self.current_mode = "edit"
-        # TODO: highlight active button (mode)
+        self.edit_button.setStyleSheet("background-color: yellow;")
+        self.sort_button.setStyleSheet("background-color: none;")
 
     def set_sort_mode(self):
         # Display a message when the shortcut is activated
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Sort")
         self.current_mode = "sort"
-        # TODO: highlight active button (mode)
+        self.edit_button.setStyleSheet("background-color: none;")
+        self.sort_button.setStyleSheet("background-color: yellow;")
 
     def set_image(self):
         if self.gallery_index < 0:
@@ -357,6 +408,7 @@ class MainWindow(QMainWindow):
 
         self.imagewidget.set_new_image(str(Path(self.gallery_source_directory + "/" + self.images[self.gallery_index])))
         print(str(Path(self.gallery_source_directory + "/" + self.images[self.gallery_index])))
+        self.image_filename_label.setText(f"{self.images[self.gallery_index]}")
 
 
     def keyPressEvent(self, event):
@@ -409,9 +461,16 @@ class MainWindow(QMainWindow):
 
             # ==== SORT MODE ====
             elif self.current_mode == "sort":
+                # Cancel currently started shortcut or escape from the hold partial sequence
                 if event.key() == Qt.Key_Escape:
                     self.key_seq = ""
                     self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
+
+                # Hold current shortcut and use it as default for upcoming sequences until escape
+                elif event.key() == Qt.Key_Enter:
+                    pass
+                    # self.key_seq = ""
+                    # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
 
                 # Repeat last move from src to dst of current image.
                 elif event.key() == Qt.Key_Period:
@@ -441,7 +500,7 @@ class MainWindow(QMainWindow):
                     if event.key() == Qt.Key_Control:
                         print("ctrl pressed, nothing to append to shortcuts.")
                         return
-                    if event.key() not in [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]:
+                    if event.key() not in upper_keys:
                         print("not a-z was pressed, nothing to append to shortcuts.")
                         return
 
