@@ -40,6 +40,9 @@ height = 864
 # - [ ] Pridat counter (x/y), kolik obrazku zbyva v src slozce
 # - [ ] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [ ] ! Focus, abych mohl pouzivat sipky pro prochazeni obrazku
+# - [ ] Pridat testy (make test)
+# - [ ]
+# - [ ]
 # - [ ]
 
 upper_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
