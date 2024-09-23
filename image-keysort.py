@@ -535,9 +535,6 @@ class MainWindow(QMainWindow):
                         # Show new image
                         self.set_image()
 
-                        # TODO: when ctrl+z - Add image name back to self.images[]
-                        # TODO: add check for self.images - whether array is empty or not.
-
                         self.key_seq = ""
                         self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
                     else:

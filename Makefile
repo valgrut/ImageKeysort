@@ -1,4 +1,4 @@
-NAME=image-sorter.py
+NAME=image-keysort.py
 
 run:
 	python3 ${NAME}
