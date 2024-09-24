@@ -1,6 +1,6 @@
 import sys
 import json
-from PIL import Image
+# from PIL import Image
 # from tr import tr
 from pathlib import Path
 import shutil
