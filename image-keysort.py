@@ -41,11 +41,17 @@ height = 864
 # - [ ] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [ ] ! Focus, abych mohl pouzivat sipky pro prochazeni obrazku
 # - [ ] Pridat testy (make test)
-# - [ ]
+# - [ ] Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
 # - [ ]
 # - [ ]
 
-upper_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
+
+allowed_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
+
+
+class Shortcut():
+    def __init__(self):
+        pass
 
 
 class ShortcutManager():
@@ -81,7 +87,7 @@ class ShortcutManager():
         last = self._get_last_key_of_sequence(sequence)
         if not last:
             return None
-        print("last: ", last)
+        # print("last: ", last)
         return last["dst_path"]
 
     def add_key_under_current(self, current_key_ref, new_key):
@@ -233,6 +239,7 @@ class MainWindow(QMainWindow):
         self.key_seq_history = []
         self.mv_history = []
         self.key_seq = ""
+        self.permanent_key_seq = ""
         self.current_mode = "home" #dalsi: edit, sort
         print("Mod: " + self.current_mode)
 
@@ -437,7 +444,8 @@ class MainWindow(QMainWindow):
                 if event.key() == Qt.Key_Escape:
                     self.key_seq_history.append(self.key_seq)
                     self.key_seq = ""
-                    self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
+                    # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
+                    self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
 
                 elif event.key() == Qt.Key_Return:
                     # Potvrdit zkratku - pak vyskoci dialog pro dst dir.
@@ -458,20 +466,35 @@ class MainWindow(QMainWindow):
                     self.key_seq += pressed_key
                     self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
 
-                    # if pressed_key == "+":
-                    #     print("")
-
 
             # ==== SORT MODE ====
             elif self.current_mode == "sort":
                 # Cancel currently started shortcut or escape from the hold partial sequence
                 if event.key() == Qt.Key_Escape:
-                    self.key_seq = ""
-                    self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
+                    print("ESC")
+                    print("key_seq:", self.key_seq)
+                    print("permanent_key_seq:", self.permanent_key_seq)
+                    if self.key_seq and self.permanent_key_seq:
+                        self.key_seq = ""
+                    elif not self.key_seq and self.permanent_key_seq:
+                        self.permanent_key_seq = ""
+                    elif self.key_seq and not self.permanent_key_seq:
+                        self.key_seq = ""
+                    else:
+                        pass
+                    # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
+                    self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
 
                 # Hold current shortcut and use it as default for upcoming sequences until escape
-                elif event.key() == Qt.Key_Enter:
-                    pass
+                elif event.key() == Qt.Key_Return:  # Key_Return is non-numeric Enter key
+                    print("ENTER")
+                    print("b: key_seq:", self.key_seq)
+                    print("b: permanent_key_seq:", self.permanent_key_seq)
+                    if self.key_seq:
+                        self.permanent_key_seq = self.key_seq
+                        self.key_seq = ""
+                    print("a: key_seq:", self.key_seq)
+                    print("a: permanent_key_seq:", self.permanent_key_seq)
                     # self.key_seq = ""
                     # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
 
@@ -499,23 +522,30 @@ class MainWindow(QMainWindow):
                         print("History is empty.")
 
                 else:
-                    # TODO: Obecne, pridat moznost appendnout pouze a-z, nic jineho.
-                    if event.key() == Qt.Key_Control:
-                        print("ctrl pressed, nothing to append to shortcuts.")
-                        return
-                    if event.key() not in upper_keys:
+                    if event.key() not in allowed_keys:
                         print("not a-z was pressed, nothing to append to shortcuts.")
                         return
 
                     self.key_seq += pressed_key
+
+                    full_shortcut = ""
+                    if self.permanent_key_seq:
+                        full_shortcut = self.permanent_key_seq + self.key_seq
+                    else:
+                        full_shortcut = self.key_seq
+
                     print("key_seq:", self.key_seq)
-                    print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(self.key_seq))
+                    print("full key_seq:", full_shortcut)
+
+                    print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(full_shortcut))
                     if not self.key_seq:
                         return
 
-                    if self.shortcut_manager.get_dst_for_shortcut(self.key_seq):
+                    # TODO: Zabranit, aby se obrazek presunul do slozky, pokud zkratka obsahuje sice dst cestu, ale i childrens.
+
+                    if self.shortcut_manager.get_dst_for_shortcut(full_shortcut):
                         # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
-                        self.key_seq_history.append(self.key_seq)
+                        self.key_seq_history.append(full_shortcut)
 
                         if not self.images:
                             print("Source directory is empty")
@@ -523,7 +553,7 @@ class MainWindow(QMainWindow):
 
                         image_name = self.images[self.gallery_index]
                         src = self.gallery_source_directory
-                        dst = self.shortcut_manager.get_dst_for_shortcut(self.key_seq)
+                        dst = self.shortcut_manager.get_dst_for_shortcut(full_shortcut)
                         print(f"Nalezeno, lze presunout z {self.gallery_source_directory} do {dst}!")
 
                         self.mv_history.append({"src": src, "dst": dst, "image": image_name})
@@ -535,10 +565,12 @@ class MainWindow(QMainWindow):
                         # Show new image
                         self.set_image()
 
+                        # Enable temporaly save and reuse partial shortcut
                         self.key_seq = ""
-                        self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
+
+                        self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
                     else:
-                        self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
+                        self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
             else:
                 pass
 
