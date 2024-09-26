@@ -36,13 +36,13 @@ height = 864
 # - [ ] pridat kontrolu, ktere klavesy lze zmacknout (zablokovat napr. mezernik a bile znaky)
 # - [ ] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
 # - [ ] Pridat nekam, jaka src slozka je aktualne nastavena
-# - [ ] REFACTORING
+# - [ ] ! REFACTORING
 # - [ ] Pridat counter (x/y), kolik obrazku zbyva v src slozce
 # - [ ] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [ ] ! Focus, abych mohl pouzivat sipky pro prochazeni obrazku
 # - [ ] Pridat testy (make test)
 # - [ ] Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
-# - [ ]
+# - [ ] ! Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
 # - [ ]
 
 
