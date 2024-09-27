@@ -47,7 +47,7 @@ height = 864
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 # - [ ] Pridat Copy mode, aby se obrazek nepresunul, ale jen zkopiroval do dst.
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
-
+# - [ ] Pridat zobrazeni i 3. vnoreni zkratek
 
 allowed_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
 
@@ -147,6 +147,14 @@ class ShortcutManager():
             self.shortcut_manager = json.load(data)
 
 
+class ImageGallery():
+    # Bude handlovat gallery index v aktualne otevrene src slozce, nacitani dalsiho obrazku a pod.
+    # Budu tak moct tuhle celou logiku vyjmout z MainWindow class.
+    # TODO
+    def __init__(self):
+        pass
+        
+
 
 class ImageWidget(QWidget):
     def __init__(self):
@@ -186,9 +194,6 @@ class MainWindow(QMainWindow):
 
         self.shortcut_manager = ShortcutManager()
 
-        # TODO: Remove. [Just for DEBUG]: Manually setting src dir
-        # self.set_source_directory = ""
-
         # Add sub-layouts into the main layout
         main_layout.addLayout(left_inner_layout)
         main_layout.addLayout(right_inner_layout)
@@ -204,8 +209,13 @@ class MainWindow(QMainWindow):
         self.imagewidget.resize(self.imagewidget.sizeHint())
         self.imagewidget.setFocus(False)
         # TODO: Nez se nacte nejaka src dir, tak sem dat nejakej "empty" obrazek. Neco jako kruh, nejake opacity logo...
+        # - Pridat moznost kliknout do toho prostoru pro zvoleni src slozky.
         # - Pouzit k tomu Resources
         right_inner_layout.addWidget(self.imagewidget)
+
+        # TODO: Remove. [Just for DEBUG]: Manually setting src dir
+        self.gallery_source_directory = "/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads"
+        self.load_images()
 
         self.previous_image_button = QPushButton("&Previous", self)
         self.previous_image_button.clicked.connect(self.show_previous_image)
@@ -324,6 +334,13 @@ class MainWindow(QMainWindow):
     def set_source_directory(self):
         self.gallery_source_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
         print("Source directory:", self.gallery_source_directory)
+        self.load_images()
+
+    def load_images(self):
+        if not self.gallery_source_directory:
+            print("Error, src dir path is empty")
+            return
+
         self.images = []
         self.images = [f for f in listdir(self.gallery_source_directory) if isfile(join(self.gallery_source_directory, f))]
         print(self.images)
