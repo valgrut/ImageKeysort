@@ -1,0 +1,56 @@
+# Image Keysort
+
+## 1. Description
+
+Do you have directory with hundreds of screenshots, where every image belongs to different directory?
+
+And even the thought of the repetitive sequence of opening the image, resolve where it belongs, open that directory and move it ONE BY ONE by hand make you tired?
+
+This could help you, just as it helped me!
+
+## 2. Tutorial
+
+### 2.1. Add shortcut
+
+1. Select EDIT mode (Ctrl+E or click on button)
+2. Hit the desired shortcut, for example:
+    - 'i' for 'images'
+    - 'a' for 'anime'
+    - 'n' for 'naruto'
+3. Hit Enter and select destination directory, for example:
+    - '/home/USER/Images/Anime/Naruto'
+4. Select SORT mode (Ctrl+R or click on button)
+5. Write the sequence, and by writing the last key, the image will be moved to the corresponding destination.
+
+## 3. Features
+
+- Select source directory for the gallery to be sorted
+- 2 modes - SORT and EDIT
+- Create shortcut and set destination directory for it
+- Repeat last src-dst move by hitting '.'
+- Undo the move
+- Temporarily preserve part of the shortcut, so instead of repeating the whole 'ian', you can fix 'ia' and 
+  then hit just the last part of the sequence: 'n' for naruto, 'd' for deathnote and so on.
+
+## 4. How to build the app
+
+### 4.1. Linux
+
+1. xyz
+
+    ```
+
+    ```
+
+### 4.2. Windows
+
+1.  x
+    
+    ```
+
+    ```
+
+## 5. Known issues:
+
+- Focus is not on the next/prev buttons, so arrow keys do not work.
+
