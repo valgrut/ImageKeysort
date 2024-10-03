@@ -37,7 +37,7 @@ height = 864
 # - [ ] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
 # - [ ] Pridat nekam, jaka src slozka je aktualne nastavena
 # - [ ] ! REFACTORING
-# - [ ] Pridat counter (x/y), kolik obrazku zbyva v src slozce
+# - [x] Pridat counter (x/y), kolik obrazku zbyva v src slozce
 # - [ ] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [ ] ! Focus, abych mohl pouzivat sipky pro prochazeni obrazku
 # - [ ] Pridat testy (make test)
@@ -47,7 +47,13 @@ height = 864
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 # - [ ] Pridat Copy mode, aby se obrazek nepresunul, ale jen zkopiroval do dst.
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
-# - [ ] Pridat zobrazeni i 3. vnoreni zkratek
+# - [x] Pridat zobrazeni i 3. vnoreni zkratek
+# - [ ] FIX: searching longest path!
+#
+# TODO: Promyslet:
+# - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
+# ze jakmile vytvorim podslozku, tak uz nepujde nic priradit do rodicovske slozky teto slozky? Jakoze, kdyz budu mit slozku Naruto ve slozce Anime, tak
+# uz nic nepujde dat do Anime, ale pouze do dalsi podslozky? Pripadne, pridat moznost do configu nastavit casovy interval, po ktery pujde stisknout dodatecna klavesa, jinak se to presune do 'oa' ?
 
 allowed_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
 
@@ -153,7 +159,7 @@ class ImageGallery():
     # TODO
     def __init__(self):
         pass
-        
+
 
 
 class ImageWidget(QWidget):
@@ -220,13 +226,21 @@ class MainWindow(QMainWindow):
         self.previous_image_button = QPushButton("&Previous", self)
         self.previous_image_button.clicked.connect(self.show_previous_image)
         self.previous_image_button.setFocus(False)
+        self.previous_image_button.setStyleSheet("width: 150px;")
 
         self.next_image_button = QPushButton("&Next", self)
         self.next_image_button.clicked.connect(self.show_next_image)
         self.next_image_button.setFocus(False)
+        self.next_image_button.setStyleSheet("width: 150px;")
+
+        self.image_counter_label = QLabel()
+        self.image_counter_label.setText("0/0")
 
         right_control_buttons_layout = QHBoxLayout()
         right_control_buttons_layout.addWidget(self.previous_image_button)
+        right_control_buttons_layout.addStretch()
+        right_control_buttons_layout.addWidget(self.image_counter_label)
+        right_control_buttons_layout.addStretch()
         right_control_buttons_layout.addWidget(self.next_image_button)
 
         right_inner_layout.addLayout(right_control_buttons_layout)
@@ -285,6 +299,9 @@ class MainWindow(QMainWindow):
         self.tree.setHeaderLabels(["Shortcut", "Directory"])
         self.tree.setEnabled(False)
         self.update_tree_view()
+
+        # Update Counter label
+        self.image_counter_label.setText(self.get_counter_string())
 
         # Create main Menu bar
         self._createActions()
@@ -352,6 +369,7 @@ class MainWindow(QMainWindow):
             self.gallery_index += 1
         print(f"DBG: new gallery_index: {self.gallery_index} out of {len(self.images) - 1}")
         self.set_image()
+        self.image_counter_label.setText(self.get_counter_string())
 
 
     def show_previous_image(self):
@@ -359,6 +377,7 @@ class MainWindow(QMainWindow):
             self.gallery_index -= 1
         print(f"DBG: new gallery_index: {self.gallery_index} out of {len(self.images) - 1}")
         self.set_image()
+        self.image_counter_label.setText(self.get_counter_string())
 
     def update_tree_view(self):
         # Just flush the whole content of the tree and rebuild it from scratch.
@@ -366,16 +385,30 @@ class MainWindow(QMainWindow):
         items = []
         shortcuts_data = self.shortcut_manager.get_data()
 
-        # TODO: add view for 3rd level of shortcuts, currently just 2 levels shown.
-        for key, values in shortcuts_data["keys"].items():
+        for key_L1, values_L1 in shortcuts_data["keys"].items():
             # print("Key a value", key, values)
-            item = QTreeWidgetItem([key])
+            item_L1 = QTreeWidgetItem([key_L1])
             # self.tree.expandItem(item)
-            for subkey, subvalue in values["keys"].items():
-                dst_path = subvalue["dst_path"]
-                child = QTreeWidgetItem([subkey, Path(dst_path).name])
-                item.addChild(child)
-            items.append(item)
+            for key_L2, values_L2 in values_L1["keys"].items():
+                item_L2 = QTreeWidgetItem([key_L2])
+                for key_L3, values_L3 in values_L2["keys"].items():
+                    item_L3 = QTreeWidgetItem([key_L3])
+                    dst_path = values_L3["dst_path"]
+                    child = QTreeWidgetItem([key_L3, Path(dst_path).name])
+                    item_L2.addChild(child)
+                item_L1.addChild(item_L2)
+            items.append(item_L1)
+
+        # for key, values in shortcuts_data["keys"].items():
+        #     # print("Key a value", key, values)
+        #     item = QTreeWidgetItem([key])
+        #     # self.tree.expandItem(item)
+        #     for subkey, subvalue in values["keys"].items():
+        #         # TODO
+        #         dst_path = subvalue["dst_path"]
+        #         child = QTreeWidgetItem([subkey, Path(dst_path).name])
+        #         item.addChild(child)
+        #     items.append(item)
 
         self.tree.insertTopLevelItems(0, items)
         self.tree.expandAll()
@@ -386,6 +419,10 @@ class MainWindow(QMainWindow):
     def load_data(self):
         self.shortcut_manager.load_shortcuts()
         self.update_tree_view()
+
+    def get_counter_string(self) -> str:
+        counter = str(self.gallery_index + 1) + "/" + str(len(self.images))
+        return counter
 
     def undo_last_operation(self):
 
@@ -402,6 +439,9 @@ class MainWindow(QMainWindow):
 
         # Remove current image from the list of images in src directory
         self.images.insert(0, image_name)
+
+        # Update counter label
+        self.image_counter_label.setText(self.get_counter_string())
 
         # Remove last record from history
         if self.mv_history:
@@ -536,6 +576,9 @@ class MainWindow(QMainWindow):
                         # Remove current image from the list of images in src directory
                         self.images.remove(image_name)
 
+                        # Update counter label
+                        self.image_counter_label.setText(self.get_counter_string())
+
                         # Show new image
                         self.set_image()
                     else:
@@ -581,6 +624,9 @@ class MainWindow(QMainWindow):
 
                         # Remove current image from the list of images in src directory
                         self.images.remove(image_name)
+
+                        # Update counter label
+                        self.image_counter_label.setText(self.get_counter_string())
 
                         # Show new image
                         self.set_image()
