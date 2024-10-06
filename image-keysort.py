@@ -33,21 +33,23 @@ width = 1152
 height = 864
 
 # TODO:
-# - [ ] pridat kontrolu, ktere klavesy lze zmacknout (zablokovat napr. mezernik a bile znaky)
-# - [ ] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
-# - [ ] Pridat nekam, jaka src slozka je aktualne nastavena
-# - [ ] ! REFACTORING
+# - [x] Pridat nekam, jaka src slozka je aktualne nastavena
+# - [x] Pridat zobrazeni i 3. vnoreni zkratek
 # - [x] Pridat counter (x/y), kolik obrazku zbyva v src slozce
-# - [ ] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
-# - [ ] ! Focus, abych mohl pouzivat sipky pro prochazeni obrazku
+# - [x] pridat kontrolu, ktere klavesy lze zmacknout (zablokovat napr. mezernik a bile znaky)
+# - [x] Pridat Copy mode, aby se obrazek nepresunul, ale jen zkopiroval do dst.
+# - [ ] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
+# - [~] ! REFACTORING
+# - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
+# - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku
 # - [ ] Pridat testy (make test)
 # - [ ] Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
 # - [ ] ! Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
+#
+# Shortcuts management:
 # - [ ] Klikatko pro pridani a odstraneni zkratky / podzkratky
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
-# - [ ] Pridat Copy mode, aby se obrazek nepresunul, ale jen zkopiroval do dst.
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
-# - [x] Pridat zobrazeni i 3. vnoreni zkratek
 # - [ ] FIX: searching longest path!
 #
 # TODO: Promyslet:
@@ -156,6 +158,7 @@ class ShortcutManager():
 #############################################################################
 #############################################################################
 
+# TODO: if gallery_empty or src_path not set: pixart = nejakej default obrazek.
 class GalleryManager():
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow # TODO: sig-slots
@@ -169,7 +172,7 @@ class GalleryManager():
         self.sourceDirectoryPath = path
         self.mainWindow.source_dir_label.setText(path) # TODO: sig-slots
         self.loadImagesInDirectory()
-    
+
     def getSourcePath(self) -> str:
         return self.sourceDirectoryPath
 
@@ -185,6 +188,7 @@ class GalleryManager():
 
         self.images = []
         self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
+        self.images.sort()
         self.galleryIndex = 0
         # self.updatePreview()
 
@@ -227,7 +231,7 @@ class GalleryManager():
         if self.images:
             return self.images[self.galleryIndex]
         return ""
-    
+
     # TODO: previewLabel pryc, misto toho signal-slot
     def updatePreview(self, previewLabel):
         numOfImages = len(self.images)
@@ -255,12 +259,15 @@ class GalleryManager():
         counter = str(self.galleryIndex + 1) + "/" + str(len(self.images))
         return counter
 
-    def addFile(self, fileName):
-        self.images.insert(0, fileName)
+    def addFile(self, fileName, positionIndex=0):
+        self.images.insert(positionIndex, fileName)
 
     def removeFile(self, fileName):
         if fileName in self.images:
             self.images.remove(fileName)
+
+        if self.galleryIndex >= len(self.images):
+            self.galleryIndex = len(self.images) - 1
 
 #############################################################################
 #############################################################################
@@ -324,16 +331,12 @@ class MainWindow(QMainWindow):
         self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
 
         # Right side of the main layout
-        # self.imagewidget = ImageWidget()
-        # self.imagewidget.resize(self.imagewidget.sizeHint())
-        # self.imagewidget.setFocus(False)
         self.previewLabel = QLabel()
         self.previewLabel.setFocus(False)
         self.previewLabel.setStyleSheet("border: 1px solid blue;")
         # TODO: Nez se nacte nejaka src dir, tak sem dat nejakej "empty" obrazek. Neco jako kruh, nejake opacity logo...
         # - Pridat moznost kliknout do toho prostoru pro zvoleni src slozky.
         # - Pouzit k tomu Resources
-        # right_inner_layout.addWidget(self.imagewidget)
         right_inner_layout.addWidget(self.previewLabel)
 
         self.previous_image_button = QPushButton("&Previous", self)
@@ -368,6 +371,9 @@ class MainWindow(QMainWindow):
         self.key_label = QLabel("Key Sequence Pressed: None")
         self.key_label.resize(self.key_label.sizeHint())
 
+        self.copy_button = QPushButton("&Copy", self)
+        self.copy_button.clicked.connect(self.toggleCopyMode)
+
         self.edit_button = QPushButton("&Edit", self)
         self.edit_button.clicked.connect(self.set_edit_mode)
 
@@ -378,6 +384,7 @@ class MainWindow(QMainWindow):
         left_inner_button_layout.addWidget(self.edit_button)
         left_inner_button_layout.addWidget(self.sort_button)
 
+        left_inner_layout.addWidget(self.copy_button)
         left_inner_layout.addLayout(left_inner_button_layout)
         left_inner_layout.addWidget(self.key_label)
 
@@ -387,6 +394,7 @@ class MainWindow(QMainWindow):
         self.key_seq = ""
         self.permanent_key_seq = ""
         self.current_mode = "home" #dalsi: edit, sort
+        self.copyOnly = False
         print("Mod: " + self.current_mode)
 
         # Register global keyboard shortcuts:
@@ -426,6 +434,8 @@ class MainWindow(QMainWindow):
         self._createActions()
         self._createMenuBar()
         self._connectActions()
+
+        self.galleryManager.updatePreview(self.previewLabel)
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
@@ -528,11 +538,12 @@ class MainWindow(QMainWindow):
         image_name = self.mv_history[-1]["image"]
         src = self.mv_history[-1]["dst"]
         dst = self.mv_history[-1]["src"]
+        positionIndex = self.mv_history[-1]["gallery_index"]
         shutil.move(src + "/" + image_name, dst + "/" + image_name)
         self.statusBarLabel.setText(f"File moved BACK From: {src} to {dst}.")
 
         # Remove current image from the list of images in src directory
-        self.galleryManager.addFile(image_name)
+        self.galleryManager.addFile(image_name, positionIndex)
 
         # Update counter label
         self.image_counter_label.setText(self.galleryManager.getCounterString())
@@ -544,6 +555,19 @@ class MainWindow(QMainWindow):
         # Show new image
         self.galleryManager.updatePreview(self.previewLabel)
         # print(self.images)
+
+    def toggleCopyMode(self):
+        if self.copyOnly is False:
+            print("Current mode: Copy")
+            self.copyOnly = True
+            self.copy_button.setStyleSheet("background-color: yellow;")
+            return
+
+        if self.copyOnly is True:
+            print("Current mode: Move")
+            self.copyOnly = False
+            self.copy_button.setStyleSheet("background-color: none;")
+            return
 
 
     def set_edit_mode(self):
@@ -581,6 +605,7 @@ class MainWindow(QMainWindow):
             else:
                 pass
 
+            # TODO: Refactor following if-else hell:  !!!!!!!!!!!!!
             # ==== EDIT MODE ====
             if self.current_mode == "edit":
                 if event.key() == Qt.Key_Escape:
@@ -613,8 +638,8 @@ class MainWindow(QMainWindow):
                 # Cancel currently started shortcut or escape from the hold partial sequence
                 if event.key() == Qt.Key_Escape:
                     print("ESC")
-                    print("key_seq:", self.key_seq)
-                    print("permanent_key_seq:", self.permanent_key_seq)
+                    # print("key_seq:", self.key_seq)
+                    # print("permanent_key_seq:", self.permanent_key_seq)
                     if self.key_seq and self.permanent_key_seq:
                         self.key_seq = ""
                     elif not self.key_seq and self.permanent_key_seq:
@@ -623,7 +648,6 @@ class MainWindow(QMainWindow):
                         self.key_seq = ""
                     else:
                         pass
-                    # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
                     self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
 
                 # Hold current shortcut and use it as default for upcoming sequences until escape
@@ -652,11 +676,16 @@ class MainWindow(QMainWindow):
 
                         src = self.mv_history[-1]["src"]
                         dst = self.mv_history[-1]["dst"]
-                        shutil.move(src + "/" + image_name, dst + "/" + image_name)
-                        self.statusBarLabel.setText(f"File moved From: {src} to {dst}.")
 
                         # Remove current image from the list of images in src directory
-                        self.galleryManager.removeFile(image_name)
+                        if not self.copyOnly:
+                            self.galleryManager.removeFile(image_name)
+                            shutil.move(src + "/" + image_name, dst + "/" + image_name)
+                            self.statusBarLabel.setText(f"File moved From: {src} to {dst}.")
+                        else:
+                            shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
+                            self.galleryManager.incrementGalleryIndex()
+                            self.statusBarLabel.setText(f"File copied From: {src} to {dst}.")
 
                         # Update counter label
                         self.image_counter_label.setText(self.galleryManager.getCounterString())
@@ -693,6 +722,7 @@ class MainWindow(QMainWindow):
                         self.key_seq_history.append(full_shortcut)
 
                         if self.galleryManager.isGalleryEmpty():
+                            # TODO: set some generic image for background
                             print("Source directory is empty")
                             return
 
@@ -701,12 +731,16 @@ class MainWindow(QMainWindow):
                         dst = self.shortcut_manager.get_dst_for_shortcut(full_shortcut)
                         print(f"Nalezeno, lze presunout z {self.galleryManager.getSourcePath()} do {dst}!")
 
-                        self.mv_history.append({"src": src, "dst": dst, "image": image_name})
-                        shutil.move(src + "/" + image_name, dst + "/" + image_name)
-                        self.statusBarLabel.setText(f"File moved From: {src} to {dst}.")
-
                         # Remove current image from the list of images in src directory
-                        self.galleryManager.removeFile(image_name)
+                        if not self.copyOnly:
+                            self.galleryManager.removeFile(image_name)
+                            shutil.move(src + "/" + image_name, dst + "/" + image_name)
+                            self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
+                            self.statusBarLabel.setText(f"File moved From: {src} to {dst}.")
+                        else:
+                            shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
+                            self.galleryManager.incrementGalleryIndex()
+                            self.statusBarLabel.setText(f"File copied From: {src} to {dst}.")
 
                         # Update counter label
                         self.image_counter_label.setText(self.galleryManager.getCounterString())
