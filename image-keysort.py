@@ -49,6 +49,7 @@ height = 864
 # - [ ] Pridat testy (make test)
 # - [ ] Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
 # - [ ] ! Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
+# - [ ] Pridat moznost zvolit file se shortcuts pro nacteni, a pri ukladani tez.
 #
 # Shortcuts management:
 # - [ ] Klikatko pro pridani a odstraneni zkratky / podzkratky
