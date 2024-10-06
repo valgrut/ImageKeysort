@@ -4,7 +4,8 @@ import json
 # from tr import tr
 from pathlib import Path
 import shutil
-from os import listdir
+import os
+from os import listdir, makedirs
 from os.path import isfile, join
 
 from PyQt5.QtCore import QSize, Qt, QStringListModel
@@ -32,12 +33,15 @@ from PyQt5.QtGui import QPixmap, QKeyEvent, QKeySequence, QMovie
 width = 1152
 height = 864
 
-# TODO:
+# Features DONE:
 # - [x] Pridat nekam, jaka src slozka je aktualne nastavena
 # - [x] Pridat zobrazeni i 3. vnoreni zkratek
 # - [x] Pridat counter (x/y), kolik obrazku zbyva v src slozce
 # - [x] pridat kontrolu, ktere klavesy lze zmacknout (zablokovat napr. mezernik a bile znaky)
 # - [x] Pridat Copy mode, aby se obrazek nepresunul, ale jen zkopiroval do dst.
+# - [x] Delete current image (Presune se do slozky TO_DELETE, kde si to pak uzivatel bude moct rucne smazat - to aby porad fungovala funkce Undo - nevim, jak bych to dostaval z kose).
+#
+# Features TODO:
 # - [ ] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
 # - [~] ! REFACTORING
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
@@ -51,6 +55,8 @@ height = 864
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
 # - [ ] FIX: searching longest path!
+# - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a) odstrani 'a' z 'o'.
+#
 #
 # TODO: Promyslet:
 # - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
@@ -418,6 +424,10 @@ class MainWindow(QMainWindow):
         self.load_data_shortcut = QShortcut(load_data_seq, self)
         self.load_data_shortcut.activated.connect(self.load_data)
 
+        toggle_copy_seq = QKeySequence(Qt.CTRL + Qt.Key_C)
+        self.toggle_copy_shortcut = QShortcut(toggle_copy_seq, self)
+        self.toggle_copy_shortcut.activated.connect(self.toggleCopyMode)
+
         # Tree view for user's sorting shortcuts:
         self.tree = QTreeWidget()
         self.tree.setMaximumWidth(200)
@@ -694,6 +704,31 @@ class MainWindow(QMainWindow):
                         self.galleryManager.updatePreview(self.previewLabel)
                     else:
                         print("History is empty.")
+
+                elif event.key() == Qt.Key_Delete:
+                    if self.galleryManager.isGalleryEmpty():
+                        # TODO: set some generic image for background
+                        print("Source directory is empty")
+                        return
+
+                    image_name = self.galleryManager.getCurrentFilename()
+                    src = self.galleryManager.getSourcePath()
+                    dst = src + "/" + "__DELETED__"
+                    if not os.path.exists(dst):
+                        os.makedirs(dst)
+                    print(f"Nalezeno, lze presunout z {self.galleryManager.getSourcePath()} do {dst}!")
+
+                    # Remove current image from the list of images in src directory
+                    self.galleryManager.removeFile(image_name)
+                    shutil.move(src + "/" + image_name, dst + "/" + image_name)
+                    self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
+                    self.statusBarLabel.setText(f"File Deleted.")
+
+                    # Update counter label
+                    self.image_counter_label.setText(self.galleryManager.getCounterString())
+
+                    # Show new image
+                    self.galleryManager.updatePreview(self.previewLabel)
 
                 else:
                     if event.key() not in allowed_keys:
