@@ -393,7 +393,7 @@ class TreeItemWithButtons(QWidget):
                 color: white;  /* Change text color on hover */
             }
         """)
-        
+
         self.setStyleSheet("background-color: green;")
         # self.setStyleSheet(
         # """
