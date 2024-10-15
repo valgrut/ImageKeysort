@@ -8,7 +8,7 @@ import os
 from os import listdir, makedirs
 from os.path import isfile, join
 
-from PyQt5.QtCore import QSize, Qt, QStringListModel
+from PyQt5.QtCore import QSize, Qt, QStringListModel, pyqtSignal, pyqtSlot, QObject
 from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -26,6 +26,7 @@ from PyQt5.QtWidgets import (
     QAction,
 )
 from PyQt5.QtGui import QPixmap, QKeyEvent, QKeySequence, QMovie
+from PyQt5 import QtGui, QtWidgets
 
 # pip3 install pyqt5
 # pip3 install keyboard
@@ -42,21 +43,23 @@ height = 864
 # - [x] Delete current image (Presune se do slozky TO_DELETE, kde si to pak uzivatel bude moct rucne smazat - to aby porad fungovala funkce Undo - nevim, jak bych to dostaval z kose).
 #
 # Features TODO:
-# - [ ] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
+# - [~] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
 # - [~] ! REFACTORING
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku
 # - [ ] Pridat testy (make test)
 # - [ ] Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
-# - [ ] ! Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
+# - [~] ! Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
 # - [ ] Pridat moznost zvolit file se shortcuts pro nacteni, a pri ukladani tez.
 #
 # Shortcuts management:
-# - [ ] Klikatko pro pridani a odstraneni zkratky / podzkratky
+# - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
+# - [ ] Pridat, ze cudlik bude polopruhledny a po najeti se zviditelni.
+# - [ ] Pridat obrazky pro buttons (kos s cervenym backgroundem, a takoveto pero pro edit)
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
 # - [ ] FIX: searching longest path!
-# - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a) odstrani 'a' z 'o'.
+# - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani 'a' zkratku z rodicovske 'o'.
 #
 #
 # TODO: Promyslet:
@@ -167,6 +170,9 @@ class ShortcutManager():
 
 # TODO: if gallery_empty or src_path not set: pixart = nejakej default obrazek.
 class GalleryManager():
+
+    setSourceDirLabelTextSignal = pyqtSignal(str)
+
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow # TODO: sig-slots
         self.images = []
@@ -175,29 +181,50 @@ class GalleryManager():
         self.imageView = ImageWidget()  # for .png, .jpg, ...
         self.videoView = QMovie()  # for .gif and such
 
+        self.emptyInboxLabel = EmptyGalleryImageLabel()
+        self.emptyInboxLabel.setFocus(False)
+        self.emptyInboxLabel.setStyleSheet("border: 1px solid blue;")
+        # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
+
+    def getSuitableLabel(self):
+        """
+        Return such label based on the gallery state (empty vs non-empty..)
+        """
+        if self.isGalleryEmpty():
+            return self.emptyInboxLabel
+        else:
+            return self.imageView
+
+    def mousePressEvent(self, ev):
+        self.clicked.emit()
+
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
-        self.mainWindow.source_dir_label.setText(path) # TODO: sig-slots
+        self.mainWindow.source_dir_label.setText(path) # TODO: sig-slots, replace this.
+        self.setSourceDirLabelTextSignal.emit(path) # TODO: for this.
         self.loadImagesInDirectory()
 
     def getSourcePath(self) -> str:
         return self.sourceDirectoryPath
 
     def selectSourceDirectory(self):
-        self.sourceDirectoryPath = QFileDialog.getExistingDirectory(self.mainWindow, "Select source directory")
+        srcPath = QFileDialog.getExistingDirectory(self.mainWindow, "Select source directory")
+        if not srcPath:
+            return
+        self.sourceDirectoryPath = srcPath
         self.mainWindow.source_dir_label.setText(self.sourceDirectoryPath) # TODO: sig-slots
         self.loadImagesInDirectory()
 
     def loadImagesInDirectory(self):
         if not self.sourceDirectoryPath:
-            # print("Msg: Error, src dir path is empty")
-            self.selectSourceDirectory()
+            print("DEBUG: Error, src dir path is empty")
+            return
 
         self.images = []
         self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
         self.images.sort()
         self.galleryIndex = 0
-        # self.updatePreview()
+        self.updatePreview(self.mainWindow.previewLabel) #TODO
 
     def isGalleryEmpty(self):
         if not self.images:
@@ -241,11 +268,12 @@ class GalleryManager():
 
     # TODO: previewLabel pryc, misto toho signal-slot
     def updatePreview(self, previewLabel):
-        numOfImages = len(self.images)
-
-        if numOfImages == 0:
+        if self.isGalleryEmpty():
             # TODO: sets something containing clickable board to open and set new source Directory.
             # self.previewLabel = ...?
+            # previewLabel.setPixmap(self.emptyInboxIcon)
+            # previewLabel.addWidget(self.emptyInboxIcon)
+            previewLabel = self.getSuitableLabel()
             return
 
         if self.isCurrentVideo():
@@ -253,6 +281,7 @@ class GalleryManager():
             self.videoView.setFileName(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
             previewLabel.setMovie(self.videoView)
             self.videoView.start()
+
         else:
             # It is image
             print(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
@@ -279,6 +308,27 @@ class GalleryManager():
 #############################################################################
 #############################################################################
 
+# TODO: rename
+class EmptyGalleryImageLabel(QLabel):
+
+    selectSourceSignal = pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+        icon = QPixmap("Resources/empty-inbox.png")
+        icon = icon.scaled(200, 200, Qt.KeepAspectRatio)
+        self.setPixmap(icon)
+
+    def mousePressEvent(self, event):
+        self.selectSourceSignal.emit()
+        if event.button() == Qt.LeftButton:
+            print("Emitted")
+        super().mousePressEvent(event)
+
+#############################################################################
+#############################################################################
+
+# TODO: rename
 class ImageWidget(QWidget):
     def __init__(self):
         super().__init__()
@@ -295,6 +345,85 @@ class ImageWidget(QWidget):
         self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
         self.label.setPixmap(self.pixmap)
 
+#############################################################################
+#############################################################################
+
+# TODO: rename
+class TreeItemWithButtons(QWidget):
+    """
+    tree item containing buttons to remove or edit item
+    """
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        layout = QHBoxLayout(self)
+
+        edit_button = QPushButton("E", self)
+        # edit_button.setStyleSheet("max-width: 10px; border: 1px solid black; :hover {background-color: green;};")
+        edit_button.setStyleSheet("""
+            QPushButton {
+                max-width: 13px;
+                width: 13px;
+                background-color: transparent;
+                border: 1px solid black;
+                border-radius: 3px;
+                color: black;  /* Set the initial text color */
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 0, 0, 0.5);  /* Solid color on hover */
+                color: white;  /* Change text color on hover */
+            }
+        """)
+
+        delete_button = QPushButton("D", self)
+        # delete_button.setStyleSheet("max-width: 10px")
+        delete_button.setStyleSheet(
+        """
+            QPushButton {
+                max-width: 13px;
+                width: 13px;
+                background-color: transparent;
+                border: 1px solid black;
+                border-radius: 3px;
+                color: black;  /* Set the initial text color */
+                background-color: rgba(100, 0, 0, 0.3);  /* Solid color on hover */
+            }
+            QPushButton:hover {
+                background-color: rgba(200, 0, 0, 1);  /* Solid color on hover */
+                color: white;  /* Change text color on hover */
+            }
+        """)
+        
+        self.setStyleSheet("background-color: green;")
+        # self.setStyleSheet(
+        # """
+        #     TreeItemWithButtons {
+        #         xbackground-color: transparent;
+        #         border: 1px solid black;
+        #         xborder-radius: 3px;
+        #         xcolor: black;  /* Set the initial text color */
+        #         xbackground-color: rgba(100, 0, 0, 0.3);  /* Solid color on hover */
+        #     }
+        #     TreeItemWithButtons:hover {
+        #         background-color: rgba(200, 0, 0, 1);  /* Solid color on hover */
+        #         color: white;  /* Change text color on hover */
+        #     }
+        # """)
+
+        layout.addWidget(edit_button)
+        layout.addWidget(delete_button)
+        layout.addStretch()
+
+        self.setLayout(layout)
+
+
+class AddNewTreeWidgetItem(QTreeWidgetItem):
+    """
+    tree item representing "Add Item" button under current parent's item.
+    """
+
+    def __init(self):
+        super().__init__()
 
 #############################################################################
 #############################################################################
@@ -334,13 +463,11 @@ class MainWindow(QMainWindow):
         self.shortcut_manager = ShortcutManager()
         self.galleryManager = GalleryManager(self)
         # TODO: Remove. [Just for DEBUG]: Manually setting src dir
-        self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
-        self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
+        # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
+        # self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
 
         # Right side of the main layout
-        self.previewLabel = QLabel()
-        self.previewLabel.setFocus(False)
-        self.previewLabel.setStyleSheet("border: 1px solid blue;")
+        self.previewLabel = self.galleryManager.getSuitableLabel()
         # TODO: Nez se nacte nejaka src dir, tak sem dat nejakej "empty" obrazek. Neco jako kruh, nejake opacity logo...
         # - Pridat moznost kliknout do toho prostoru pro zvoleni src slozky.
         # - Pouzit k tomu Resources
@@ -431,11 +558,14 @@ class MainWindow(QMainWindow):
 
         # Tree view for user's sorting shortcuts:
         self.tree = QTreeWidget()
-        self.tree.setMaximumWidth(200)
+        self.tree.setMaximumWidth(250)
         left_inner_layout.addWidget(self.tree)
-        self.tree.setColumnCount(2)
-        self.tree.setHeaderLabels(["Shortcut", "Directory"])
-        self.tree.setEnabled(False)
+        self.tree.setColumnCount(3)
+        self.tree.setHeaderLabels(["Shortcut", "Directory", "Actions"])
+        self.tree.setColumnWidth(0, 90)
+        self.tree.setColumnWidth(1, 100)
+        self.tree.setColumnWidth(2, 50)
+        # self.tree.setEnabled(False)
         self.update_tree_view()
 
         # Update Counter label
@@ -446,6 +576,7 @@ class MainWindow(QMainWindow):
         self._createMenuBar()
         self._connectActions()
 
+        self.previewLabel.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)
         self.galleryManager.updatePreview(self.previewLabel)
 
     def _createMenuBar(self):
@@ -518,6 +649,7 @@ class MainWindow(QMainWindow):
                 item_L1.addChild(item_L2)
             items.append(item_L1)
 
+
         # for key, values in shortcuts_data["keys"].items():
         #     # print("Key a value", key, values)
         #     item = QTreeWidgetItem([key])
@@ -529,8 +661,16 @@ class MainWindow(QMainWindow):
         #         item.addChild(child)
         #     items.append(item)
 
+        newItem = QTreeWidgetItem(["test"])
+        items.append(newItem)
+
         self.tree.insertTopLevelItems(0, items)
+
+        myWidget = TreeItemWithButtons()
+        self.tree.setItemWidget(newItem, 2, myWidget)
+
         self.tree.expandAll()
+
 
     def save_data(self):
         self.shortcut_manager.save_shortcuts()
@@ -588,6 +728,7 @@ class MainWindow(QMainWindow):
         self.current_mode = "edit"
         self.edit_button.setStyleSheet("background-color: yellow;")
         self.sort_button.setStyleSheet("background-color: none;")
+        self.tree.setColumnHidden(2, False)
 
     def set_sort_mode(self):
         # Display a message when the shortcut is activated
@@ -596,6 +737,7 @@ class MainWindow(QMainWindow):
         self.current_mode = "sort"
         self.edit_button.setStyleSheet("background-color: none;")
         self.sort_button.setStyleSheet("background-color: yellow;")
+        self.tree.setColumnHidden(2, True)
 
 
     def keyPressEvent(self, event):
