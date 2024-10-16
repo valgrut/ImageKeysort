@@ -325,10 +325,11 @@ class MainWindow(QMainWindow):
         self.update_tree_view()
 
     def undo_last_operation(self):
-        print("Undo last op")
+        print("Undo last operation")
         # print(self.mv_history)
 
         if not self.mv_history:
+            print(f"History is Empty!")
             return
 
         image_name = self.mv_history[-1]["image"]
@@ -428,6 +429,11 @@ class MainWindow(QMainWindow):
                     if "-" in self.key_seq:
                         # TODO
                         # self.shortcut_manager.removeShortcutSequence(self.key_seq)
+                        # Jak? Projit od zacatku stringu, jak narazim na -, tak od te doby smazat nasledujici podstrom,
+                        # pokud existuje.
+                        # for key in self.key_seq:
+                        #   if key == "-":
+                        #       ...
                         self.key_seq = ""
                         return
 
@@ -438,6 +444,7 @@ class MainWindow(QMainWindow):
                     dst_sort_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
                     self.shortcut_manager.add_dst_path(self.key_seq, dst_sort_directory)
                     self.key_seq = ""
+                    self.updateKeySequenceLabel()
                     self.update_tree_view()
                     print(json.dumps(self.shortcut_manager.get_data(), indent=2))
 
@@ -465,24 +472,18 @@ class MainWindow(QMainWindow):
                 # Hold current shortcut and use it as default for upcoming sequences until escape
                 elif event.key() == Qt.Key_Return:  # Key_Return is non-numeric Enter key
                     print("ENTER")
-                    # print("b: key_seq:", self.key_seq)
-                    # print("b: permanent_key_seq:", self.permanent_key_seq)
+
                     if self.key_seq:
                         self.permanent_key_seq = self.key_seq
                         self.key_seq = ""
-                    # print("a: key_seq:", self.key_seq)
-                    # print("a: permanent_key_seq:", self.permanent_key_seq)
-                    # self.key_seq = ""
+
                     self.updateKeySequenceLabel()
 
                 # Repeat last move from src to dst of current image.
                 elif event.key() == Qt.Key_Period:
                     print("Repeat last finished command for current image")
-                    if self.key_seq_history:
-                        print(self.key_seq_history[-1])
-                        # print(".......")
-                        # print("from:", self.mv_history[-1]["src"])
-                        # print("to", self.mv_history[-1]["dst"])
+                    if len(self.key_seq_history) > 0:
+                        print(f"Last history entry: {self.key_seq_history[-1]}")
 
                         image_name = self.galleryManager.getCurrentFilename()
 
@@ -497,6 +498,7 @@ class MainWindow(QMainWindow):
                         if not self.copyOnly:
                             self.galleryManager.removeFile(image_name)
                             shutil.move(src + "/" + image_name, dst + "/" + image_name)
+                            self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
                             self.statusBarLabel.setText(f"File moved From: {src} \nto {dst}.")
                         else:
                             shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
