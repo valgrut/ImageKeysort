@@ -23,7 +23,7 @@ class GalleryManager():
 
         self.emptyInboxLabel = EmptyGalleryImageLabel()
         self.emptyInboxLabel.setFocus(False)
-        self.emptyInboxLabel.setStyleSheet("border: 1px solid blue;")
+        self.emptyInboxLabel.setStyleSheet("border: 1px solid black;")
         # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
 
     def getSuitableLabel(self):

@@ -44,6 +44,7 @@ height = 864
 # - [x] Pridat moznost zvolit file se shortcuts pro nacteni, a pri ukladani tez.
 # - [x] Pridat, ze cudlik bude polopruhledny a po najeti se zviditelni.
 # - [x] Pridat obrazky pro buttons (kos s cervenym backgroundem, a takoveto pero pro edit)
+# - [x] Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
 #
 # Features TODO:
 # - [~] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
@@ -52,13 +53,15 @@ height = 864
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 # - [ ] Pridat testy (make test)
 # - [ ] Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
-# - [~] ! Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
-#   - Issues:
-#       - Clickable even when images are already loaded and gallery is not empty.
 # - [ ] Prepsat vse z CZ do EN
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] Zobrazit history Label kde bude historie zmacknutych zkratek, aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 # - [ ] Pridat filtr ze se nactou do galerie pouze .png, .jpeg, .jpg, .gif, proste jen obrazkove formaty. Zadna pdf a tak.
+#
+# Fixes TODO:
+# - [ ] Crashing when moving the .git bcz process (medium) is used or what...
+# - [ ] All Images are clickable instead of just the one when gallery is empty.
+# - [ ] Kdyz v galerii dojdou obrazky, vratit tam ten obrazek EmptyInbox.
 #
 # Shortcuts management:
 # - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
@@ -94,6 +97,7 @@ class MainWindow(QMainWindow):
         main_window_widget = QWidget()
         main_window_widget.setLayout(main_layout)
         main_window_widget.setFocus(True)
+        # main_window_widget.setStyleSheet("background-color: rgb(200, 200, 200);")
         self.setCentralWidget(main_window_widget)
 
         # Add sub-layouts into the main layout
@@ -101,10 +105,12 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(right_inner_layout)
 
         self.source_dir_label = QLabel("Not selected")
+        # self.source_dir_label.setStyleSheet("border: 1px solid black;")
         self.source_dir_label.setMaximumHeight(25)
         right_inner_layout.addWidget(self.source_dir_label)
 
         self.image_filename_label = QLabel()
+        # self.image_filename_label.setStyleSheet("border: 1px solid black;")
         self.image_filename_label.setMaximumHeight(25)
         # self.image_filename_label.setStyleSheet("background-color: green; border: 1px solid black; padding: 1px;")
         right_inner_layout.addWidget(self.image_filename_label)
@@ -128,6 +134,7 @@ class MainWindow(QMainWindow):
         self.next_image_button.setStyleSheet("width: 150px;")
 
         self.image_counter_label = QLabel()
+        self.image_counter_label.setStyleSheet("font-size: 20px;")
         self.image_counter_label.setText("0/0")
 
         right_control_buttons_layout = QHBoxLayout()
@@ -148,7 +155,8 @@ class MainWindow(QMainWindow):
         # Left side of the main layout
         self.key_label = QLabel("Key Sequence Pressed: \nNone")
         self.key_label.resize(self.key_label.sizeHint())
-        self.key_label.setStyleSheet("font-size: 16px; font-weight: bold; height: 20px;")
+        self.key_label.setStyleSheet("font-size: 16px; font-weight: bold; height: 20px; border: 1px solid black;")
+        self.key_label.setAlignment(Qt.AlignCenter)
 
         self.copy_button = QPushButton("&Copy", self)
         self.copy_button.clicked.connect(self.toggleCopyMode)
@@ -204,6 +212,7 @@ class MainWindow(QMainWindow):
 
         # Tree view for user's sorting shortcuts:
         self.tree = CustomTreeWidget()
+        self.tree.setStyleSheet("border: 1px solid black;")
         self.tree.setMaximumWidth(250)
         left_inner_layout.addWidget(self.tree)
         self.tree.setColumnCount(3)
@@ -561,11 +570,10 @@ class MainWindow(QMainWindow):
                     print("key_seq:", self.key_seq)
                     print("full key_seq:", full_shortcut)
 
-                    print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(full_shortcut))
+                    # print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(full_shortcut))
                     if not self.key_seq:
                         return
 
-                    # TODO: Zabranit, aby se obrazek presunul do slozky, pokud zkratka obsahuje sice dst cestu, ale i childrens.
                     if self.shortcut_manager.get_dst_for_shortcut(full_shortcut):
                         print("HIT!")
 

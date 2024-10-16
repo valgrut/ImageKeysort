@@ -33,11 +33,12 @@ class ShortcutManager():
         pass
 
     def get_dst_for_shortcut(self, sequence):
-        last = self._get_last_key_of_sequence(sequence)
-        if not last:
+        print(f"get_dst_for_shortcut: {sequence}")
+        last_key = self._get_last_key_of_sequence(sequence)
+        if not last_key:
             return None
-        # print("last: ", last)
-        return last["dst_path"]
+        # print("last: ", last_key)
+        return last_key["dst_path"]
 
     def add_key_under_current(self, current_key_ref, new_key):
         current_key_ref.update({new_key: {"dst_path": "", "keys": {}}})
@@ -59,21 +60,19 @@ class ShortcutManager():
         return pre_current
 
     def _get_last_key_of_sequence(self, sequence):
-        pre_current = self.shortcutsData["keys"]
-        current = self.shortcutsData["keys"]
-        # print("Current: ", current)
+        current = self.shortcutsData["keys"]  # a, b, x, ...
+
+        currentKeyContent = ""
         for key in sequence:
-            # print("Sequence: ", sequence, "key:", key)
-            if key not in current.keys():
-                print(key, " nebyl nalezen")
-                # self.add_key_under_current(current, key)
-                return False
+            if key in current.keys():
+                currentKeyContent = current[key]  # dst_path, keys
+                current = currentKeyContent["keys"]
 
-            # Go one key deeper into saved sequence
-            pre_current = current[key]
-            current = current[key]["keys"]
+        # If key exists but does have another sub-keys under the "keys", return False (Not longest match)
+        if currentKeyContent["keys"]:
+            return False
 
-        return pre_current
+        return currentKeyContent
 
     def does_shortcut_exist(self, sequence) -> bool:
         last_key = _return_last_key_of_sequence(sequence)
