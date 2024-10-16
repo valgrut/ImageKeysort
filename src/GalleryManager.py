@@ -61,7 +61,11 @@ class GalleryManager():
             return
 
         self.images = []
-        self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
+        # self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
+        self.images = [
+            f for f in listdir(self.sourceDirectoryPath)
+            if isfile(join(self.sourceDirectoryPath, f)) and f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))
+        ]
         self.images.sort()
         self.galleryIndex = 0
         self.updatePreview(self.mainWindow.previewLabel)  # TODO

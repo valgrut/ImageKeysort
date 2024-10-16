@@ -69,7 +69,7 @@ class ShortcutManager():
                 current = currentKeyContent["keys"]
 
         # If key exists but does have another sub-keys under the "keys", return False (Not longest match)
-        if currentKeyContent["keys"]:
+        if "keys" not in currentKeyContent or currentKeyContent["keys"]:
             return False
 
         return currentKeyContent
@@ -95,6 +95,11 @@ class ShortcutManager():
 
     def save_shortcuts(self):
         jsonDataFile = QFileDialog.getSaveFileName(self.mainWindow, "Select file with data")
+
+        if not jsonDataFile[0]:
+            print(f"No file selected.")
+            return False
+
         with open(jsonDataFile[0], 'w', encoding='utf-8') as datafile:
             json.dump(self.shortcutsData, datafile, ensure_ascii=False, indent=4)
         print(f"Ulozeno do {jsonDataFile}.")
