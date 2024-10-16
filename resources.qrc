@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/empty-inbox.png</file>
+    </qresource>
+</RCC>

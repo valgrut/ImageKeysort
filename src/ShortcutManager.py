@@ -1,0 +1,94 @@
+import json
+from PyQt5.QtWidgets import QFileDialog
+
+
+class ShortcutManager():
+    def __init__(self, mainWindow):
+        self.shortcut_manager = {"keys": {}}
+        self.mainWindow = mainWindow
+
+    def printShortcuts(self):
+        pass
+
+    def add_shortcut(self, sequence):
+        # TODO: toto je potreba dodelat a plnit ten dict behem Edit modu
+        for category in sequence:
+            if category in self.shortcut_manager:
+                self.shortcut_manager.update({category: self.subcategory})
+
+        print(self.shortcut_manager)
+
+    def get_data(self):
+        return self.shortcut_manager
+
+    def add_dst_path(self, sequence, dst_path):
+        last_key = self._get_last_key_of_sequence_and_update(sequence)
+        print("last_key:", last_key)
+        if last_key:
+            last_key.update({"dst_path" : dst_path})
+        else:
+            print(f"Zkratka {sequence} nebyla nalezena.")
+
+    def removeShortcut(self):
+        pass
+
+    def get_dst_for_shortcut(self, sequence):
+        last = self._get_last_key_of_sequence(sequence)
+        if not last:
+            return None
+        # print("last: ", last)
+        return last["dst_path"]
+
+    def add_key_under_current(self, current_key_ref, new_key):
+        current_key_ref.update({new_key: {"dst_path": "", "keys": {}}})
+
+    def _get_last_key_of_sequence_and_update(self, sequence):
+        pre_current = self.shortcut_manager["keys"]
+        current = self.shortcut_manager["keys"]
+        # print("Current: ", current)
+        for key in sequence:
+            # print("Sequence: ", sequence, "key:", key)
+            if key not in current.keys():
+                print(key, " nebyl nalezen. Pridavam ho.")
+                self.add_key_under_current(current, key)
+
+            # Go one key deeper into saved sequence
+            pre_current = current[key]
+            current = current[key]["keys"]
+
+        return pre_current
+
+    def _get_last_key_of_sequence(self, sequence):
+        pre_current = self.shortcut_manager["keys"]
+        current = self.shortcut_manager["keys"]
+        # print("Current: ", current)
+        for key in sequence:
+            # print("Sequence: ", sequence, "key:", key)
+            if key not in current.keys():
+                print(key, " nebyl nalezen")
+                # self.add_key_under_current(current, key)
+                return False
+
+            # Go one key deeper into saved sequence
+            pre_current = current[key]
+            current = current[key]["keys"]
+
+        return pre_current
+
+    def does_shortcut_exist(self, sequence) -> bool:
+        last_key = _return_last_key_of_sequence(sequence)
+        if last_key:
+            return True
+        return False
+
+    def load_shortcuts(self):
+        jsonDataFile = QFileDialog.getOpenFileName(self.mainWindow, "Select file with data")
+        with open(jsonDataFile[0], 'r', encoding='utf-8') as data:
+            self.shortcut_manager = json.load(data)
+        print(f"Nactena data.json")
+
+    def save_shortcuts(self):
+        jsonDataFile = QFileDialog.getSaveFileName(self.mainWindow, "Select file with data")
+        with open(jsonDataFile[0], 'w', encoding='utf-8') as datafile:
+            json.dump(self.shortcut_manager, datafile, ensure_ascii=False, indent=4)
+        print(f"Ulozeno do data.json")

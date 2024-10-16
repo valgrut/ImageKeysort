@@ -1,23 +1,17 @@
 import sys
 import json
-# from PIL import Image
-# from tr import tr
 from pathlib import Path
 import shutil
 import os
-from os import listdir, makedirs
-from os.path import isfile, join
 
-from PyQt5.QtCore import QSize, Qt, QStringListModel, pyqtSignal, pyqtSlot, QObject
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
-    QTreeWidget,
     QTreeWidgetItem,
     QLabel,
     QMainWindow,
     QPushButton,
-    QStackedLayout,
     QVBoxLayout,
     QWidget,
     QFileDialog,
@@ -25,11 +19,15 @@ from PyQt5.QtWidgets import (
     QMenu,
     QAction,
 )
-from PyQt5.QtGui import QPixmap, QKeyEvent, QKeySequence, QMovie
-from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtGui import QKeyEvent, QKeySequence
 
 # pip3 install pyqt5
 # pip3 install keyboard
+
+from GalleryManager import GalleryManager
+from ShortcutManager import ShortcutManager
+from TreeItemWithButtons import TreeItemWithButtons
+from CustomTreeWidget import CustomTreeWidget
 
 width = 1152
 height = 864
@@ -41,16 +39,21 @@ height = 864
 # - [x] pridat kontrolu, ktere klavesy lze zmacknout (zablokovat napr. mezernik a bile znaky)
 # - [x] Pridat Copy mode, aby se obrazek nepresunul, ale jen zkopiroval do dst.
 # - [x] Delete current image (Presune se do slozky TO_DELETE, kde si to pak uzivatel bude moct rucne smazat - to aby porad fungovala funkce Undo - nevim, jak bych to dostaval z kose).
+# - [x] Rozsirit Status bar na 2 radky.
+# - [x] Pridat moznost zvolit file se shortcuts pro nacteni, a pri ukladani tez.
 #
 # Features TODO:
 # - [~] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
 # - [~] ! REFACTORING
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
-# - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku
+# - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 # - [ ] Pridat testy (make test)
 # - [ ] Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
 # - [~] ! Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
-# - [ ] Pridat moznost zvolit file se shortcuts pro nacteni, a pri ukladani tez.
+#   - Issues:
+#       - Clickable even when images are already loaded and gallery is not empty.
+# - [ ] Prepsat vse z CZ do EN
+# - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 #
 # Shortcuts management:
 # - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
@@ -67,366 +70,10 @@ height = 864
 # ze jakmile vytvorim podslozku, tak uz nepujde nic priradit do rodicovske slozky teto slozky? Jakoze, kdyz budu mit slozku Naruto ve slozce Anime, tak
 # uz nic nepujde dat do Anime, ale pouze do dalsi podslozky? Pripadne, pridat moznost do configu nastavit casovy interval, po ktery pujde stisknout dodatecna klavesa, jinak se to presune do 'oa' ?
 
-allowed_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J, Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T, Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
+allowed_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
+                Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
+                Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
 
-
-class Shortcut():
-    def __init__(self):
-        self.shortcut = ""
-        self.dst_path = ""
-
-
-class ShortcutManager():
-    def __init__(self):
-        self.shortcut_manager = {"keys": {}}
-
-    def printShortcuts():
-        pass
-
-    def add_shortcut(self, sequence):
-        # TODO: toto je potreba dodelat a plnit ten dict behem Edit modu
-        for category in sequence:
-            if category in self.shortcut_manager:
-                self.shortcut_manager.update({category: self.subcategory})
-
-        print(self.shortcut_manager)
-
-    def get_data(self):
-        return self.shortcut_manager
-
-    def add_dst_path(self, sequence, dst_path):
-        last_key = self._get_last_key_of_sequence_and_update(sequence)
-        print("last_key:", last_key)
-        if last_key:
-            last_key.update({"dst_path" : dst_path})
-        else:
-            print(f"Zkratka {sequence} nebyla nalezena.")
-
-    def removeShortcut():
-        pass
-
-    def get_dst_for_shortcut(self, sequence):
-        last = self._get_last_key_of_sequence(sequence)
-        if not last:
-            return None
-        # print("last: ", last)
-        return last["dst_path"]
-
-    def add_key_under_current(self, current_key_ref, new_key):
-        current_key_ref.update({new_key: {"dst_path": "", "keys": {}}})
-
-    def _get_last_key_of_sequence_and_update(self, sequence):
-        pre_current = self.shortcut_manager["keys"]
-        current = self.shortcut_manager["keys"]
-        # print("Current: ", current)
-        for key in sequence:
-            # print("Sequence: ", sequence, "key:", key)
-            if key not in current.keys():
-                print(key, " nebyl nalezen. Pridavam ho.")
-                self.add_key_under_current(current, key)
-
-            # Go one key deeper into saved sequence
-            pre_current = current[key]
-            current = current[key]["keys"]
-
-        return pre_current
-
-    def _get_last_key_of_sequence(self, sequence):
-        pre_current = self.shortcut_manager["keys"]
-        current = self.shortcut_manager["keys"]
-        # print("Current: ", current)
-        for key in sequence:
-            # print("Sequence: ", sequence, "key:", key)
-            if key not in current.keys():
-                print(key, " nebyl nalezen")
-                # self.add_key_under_current(current, key)
-                return False
-
-            # Go one key deeper into saved sequence
-            pre_current = current[key]
-            current = current[key]["keys"]
-
-        return pre_current
-
-    def does_shortcut_exist(self, sequence) -> bool:
-        last_key = _return_last_key_of_sequence(sequence)
-        if last_key:
-            return True
-        return False
-
-
-    def save_shortcuts(self):
-        print("Ulozeno do data.json")
-        with open('data.json', 'w', encoding='utf-8') as datafile:
-            json.dump(self.shortcut_manager, datafile, ensure_ascii=False, indent=4)
-
-    def load_shortcuts(self):
-        print("Nactena data.json")
-        with open('data.json', 'r', encoding='utf-8') as data:
-            self.shortcut_manager = json.load(data)
-
-#############################################################################
-#############################################################################
-
-# TODO: if gallery_empty or src_path not set: pixart = nejakej default obrazek.
-class GalleryManager():
-
-    setSourceDirLabelTextSignal = pyqtSignal(str)
-
-    def __init__(self, mainWindow):
-        self.mainWindow = mainWindow # TODO: sig-slots
-        self.images = []
-        self.galleryIndex = 0
-        self.sourceDirectoryPath = ""
-        self.imageView = ImageWidget()  # for .png, .jpg, ...
-        self.videoView = QMovie()  # for .gif and such
-
-        self.emptyInboxLabel = EmptyGalleryImageLabel()
-        self.emptyInboxLabel.setFocus(False)
-        self.emptyInboxLabel.setStyleSheet("border: 1px solid blue;")
-        # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
-
-    def getSuitableLabel(self):
-        """
-        Return such label based on the gallery state (empty vs non-empty..)
-        """
-        if self.isGalleryEmpty():
-            return self.emptyInboxLabel
-        else:
-            return self.imageView
-
-    def mousePressEvent(self, ev):
-        self.clicked.emit()
-
-    def setSourcePath(self, path):
-        self.sourceDirectoryPath = path
-        self.mainWindow.source_dir_label.setText(path) # TODO: sig-slots, replace this.
-        self.setSourceDirLabelTextSignal.emit(path) # TODO: for this.
-        self.loadImagesInDirectory()
-
-    def getSourcePath(self) -> str:
-        return self.sourceDirectoryPath
-
-    def selectSourceDirectory(self):
-        srcPath = QFileDialog.getExistingDirectory(self.mainWindow, "Select source directory")
-        if not srcPath:
-            return
-        self.sourceDirectoryPath = srcPath
-        self.mainWindow.source_dir_label.setText(self.sourceDirectoryPath) # TODO: sig-slots
-        self.loadImagesInDirectory()
-
-    def loadImagesInDirectory(self):
-        if not self.sourceDirectoryPath:
-            print("DEBUG: Error, src dir path is empty")
-            return
-
-        self.images = []
-        self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
-        self.images.sort()
-        self.galleryIndex = 0
-        self.updatePreview(self.mainWindow.previewLabel) #TODO
-
-    def isGalleryEmpty(self):
-        if not self.images:
-            return True
-        return False
-
-    def isCurrentVideo(self) -> bool:
-        """
-        returns true if current image is .gif or other video format
-        """
-        videoSuffixes = ("gif", "mp4", "avi")
-        if str(self.images[self.galleryIndex]).endswith(videoSuffixes):
-            return True
-        return False
-
-    def getGalleryIndex(self):
-        return self.galleryIndex
-
-    def incrementGalleryIndex(self):
-        if self.galleryIndex < len(self.images) -1:
-            self.galleryIndex += 1
-        print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.images) - 1}")
-
-    def decrementGalleryIndex(self):
-        if self.galleryIndex >= 1:
-            self.galleryIndex -= 1
-        print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.images) - 1}")
-
-    def setNextImage(self, viewLabel):
-        self.incrementGalleryIndex()
-        self.updatePreview(viewLabel) # TODO: sig-slots
-
-    def setPreviousImage(self, viewLabel):
-        self.decrementGalleryIndex()
-        self.updatePreview(viewLabel) # TODO: sig-slots
-
-    def getCurrentFilename(self):
-        if self.images:
-            return self.images[self.galleryIndex]
-        return ""
-
-    # TODO: previewLabel pryc, misto toho signal-slot
-    def updatePreview(self, previewLabel):
-        if self.isGalleryEmpty():
-            # TODO: sets something containing clickable board to open and set new source Directory.
-            # self.previewLabel = ...?
-            # previewLabel.setPixmap(self.emptyInboxIcon)
-            # previewLabel.addWidget(self.emptyInboxIcon)
-            previewLabel = self.getSuitableLabel()
-            return
-
-        if self.isCurrentVideo():
-            # It is playable
-            self.videoView.setFileName(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            previewLabel.setMovie(self.videoView)
-            self.videoView.start()
-
-        else:
-            # It is image
-            print(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            self.imageView.updateImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            previewLabel.setPixmap(self.imageView.pixmap)
-
-        self.mainWindow.image_filename_label.setText(self.getCurrentFilename()) # TODO: sig-slots
-        self.mainWindow.image_counter_label.setText(self.getCounterString()) # TODO: sig-slots
-
-    def getCounterString(self) -> str:
-        counter = str(self.galleryIndex + 1) + "/" + str(len(self.images))
-        return counter
-
-    def addFile(self, fileName, positionIndex=0):
-        self.images.insert(positionIndex, fileName)
-
-    def removeFile(self, fileName):
-        if fileName in self.images:
-            self.images.remove(fileName)
-
-        if self.galleryIndex >= len(self.images):
-            self.galleryIndex = len(self.images) - 1
-
-#############################################################################
-#############################################################################
-
-# TODO: rename
-class EmptyGalleryImageLabel(QLabel):
-
-    selectSourceSignal = pyqtSignal()
-
-    def __init__(self):
-        super().__init__()
-        icon = QPixmap("Resources/empty-inbox.png")
-        icon = icon.scaled(200, 200, Qt.KeepAspectRatio)
-        self.setPixmap(icon)
-
-    def mousePressEvent(self, event):
-        self.selectSourceSignal.emit()
-        if event.button() == Qt.LeftButton:
-            print("Emitted")
-        super().mousePressEvent(event)
-
-#############################################################################
-#############################################################################
-
-# TODO: rename
-class ImageWidget(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.label = QLabel(self)
-        self.label.setStyleSheet("background-color: yellow; border: 1px solid black; padding: 3px;")
-        self.label.resize(900, 780)
-        # self.pixmap = QPixmap(img_path)
-        self.pixmap = QPixmap()
-        self.label.setPixmap(self.pixmap)
-
-    def updateImage(self, img_path):
-        # TODO: Pokud .gif, tak movie, else pixmap
-        self.pixmap.load(img_path)
-        self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
-        self.label.setPixmap(self.pixmap)
-
-#############################################################################
-#############################################################################
-
-# TODO: rename
-class TreeItemWithButtons(QWidget):
-    """
-    tree item containing buttons to remove or edit item
-    """
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        layout = QHBoxLayout(self)
-
-        edit_button = QPushButton("E", self)
-        # edit_button.setStyleSheet("max-width: 10px; border: 1px solid black; :hover {background-color: green;};")
-        edit_button.setStyleSheet("""
-            QPushButton {
-                max-width: 13px;
-                width: 13px;
-                background-color: transparent;
-                border: 1px solid black;
-                border-radius: 3px;
-                color: black;  /* Set the initial text color */
-            }
-            QPushButton:hover {
-                background-color: rgba(0, 0, 0, 0.5);  /* Solid color on hover */
-                color: white;  /* Change text color on hover */
-            }
-        """)
-
-        delete_button = QPushButton("D", self)
-        # delete_button.setStyleSheet("max-width: 10px")
-        delete_button.setStyleSheet(
-        """
-            QPushButton {
-                max-width: 13px;
-                width: 13px;
-                background-color: transparent;
-                border: 1px solid black;
-                border-radius: 3px;
-                color: black;  /* Set the initial text color */
-                background-color: rgba(100, 0, 0, 0.3);  /* Solid color on hover */
-            }
-            QPushButton:hover {
-                background-color: rgba(200, 0, 0, 1);  /* Solid color on hover */
-                color: white;  /* Change text color on hover */
-            }
-        """)
-
-        self.setStyleSheet("background-color: green;")
-        # self.setStyleSheet(
-        # """
-        #     TreeItemWithButtons {
-        #         xbackground-color: transparent;
-        #         border: 1px solid black;
-        #         xborder-radius: 3px;
-        #         xcolor: black;  /* Set the initial text color */
-        #         xbackground-color: rgba(100, 0, 0, 0.3);  /* Solid color on hover */
-        #     }
-        #     TreeItemWithButtons:hover {
-        #         background-color: rgba(200, 0, 0, 1);  /* Solid color on hover */
-        #         color: white;  /* Change text color on hover */
-        #     }
-        # """)
-
-        layout.addWidget(edit_button)
-        layout.addWidget(delete_button)
-        layout.addStretch()
-
-        self.setLayout(layout)
-
-
-class AddNewTreeWidgetItem(QTreeWidgetItem):
-    """
-    tree item representing "Add Item" button under current parent's item.
-    """
-
-    def __init(self):
-        super().__init__()
-
-#############################################################################
-#############################################################################
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
@@ -460,7 +107,7 @@ class MainWindow(QMainWindow):
         right_inner_layout.addWidget(self.image_filename_label)
 
         # Management objects
-        self.shortcut_manager = ShortcutManager()
+        self.shortcut_manager = ShortcutManager(self)
         self.galleryManager = GalleryManager(self)
         # TODO: Remove. [Just for DEBUG]: Manually setting src dir
         # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
@@ -475,12 +122,12 @@ class MainWindow(QMainWindow):
 
         self.previous_image_button = QPushButton("&Previous", self)
         self.previous_image_button.clicked.connect(self.showPreviousImage)
-        self.previous_image_button.setFocus(False)
+        self.previous_image_button.setFocus(True)
         self.previous_image_button.setStyleSheet("width: 150px;")
 
         self.next_image_button = QPushButton("&Next", self)
         self.next_image_button.clicked.connect(self.showNextImage)
-        self.next_image_button.setFocus(False)
+        self.next_image_button.setFocus(True)
         self.next_image_button.setStyleSheet("width: 150px;")
 
         self.image_counter_label = QLabel()
@@ -498,6 +145,7 @@ class MainWindow(QMainWindow):
         self.statusBarLabel = QLabel("Status bar")
         self.statusBarLabel.setMaximumHeight(25)
         self.statusBarLabel.setStyleSheet("border: 1px solid black;")
+        self.statusBarLabel.setWordWrap(True)
         right_inner_layout.addWidget(self.statusBarLabel)
 
 
@@ -557,7 +205,7 @@ class MainWindow(QMainWindow):
         self.toggle_copy_shortcut.activated.connect(self.toggleCopyMode)
 
         # Tree view for user's sorting shortcuts:
-        self.tree = QTreeWidget()
+        self.tree = CustomTreeWidget()
         self.tree.setMaximumWidth(250)
         left_inner_layout.addWidget(self.tree)
         self.tree.setColumnCount(3)
@@ -578,6 +226,9 @@ class MainWindow(QMainWindow):
 
         self.previewLabel.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)
         self.galleryManager.updatePreview(self.previewLabel)
+
+        # Sort mode is default mode when app starts
+        self.set_sort_mode()
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
@@ -637,29 +288,20 @@ class MainWindow(QMainWindow):
 
         for key_L1, values_L1 in shortcuts_data["keys"].items():
             # print("Key a value", key, values)
-            item_L1 = QTreeWidgetItem([key_L1])
+            dst_path_L1 = values_L1["dst_path"]
+            item_L1 = QTreeWidgetItem([key_L1, Path(dst_path_L1).name])
             # self.tree.expandItem(item)
             for key_L2, values_L2 in values_L1["keys"].items():
-                item_L2 = QTreeWidgetItem([key_L2])
+                dst_path_L2 = values_L2["dst_path"]
+                item_L2 = QTreeWidgetItem([key_L2, Path(dst_path_L2).name])
                 for key_L3, values_L3 in values_L2["keys"].items():
                     item_L3 = QTreeWidgetItem([key_L3])
-                    dst_path = values_L3["dst_path"]
-                    child = QTreeWidgetItem([key_L3, Path(dst_path).name])
+                    dst_path_L3 = values_L3["dst_path"]
+                    child = QTreeWidgetItem([key_L3, Path(dst_path_L3).name])
                     item_L2.addChild(child)
+                    print(f"DBD: L3 val: {values_L3}")
                 item_L1.addChild(item_L2)
             items.append(item_L1)
-
-
-        # for key, values in shortcuts_data["keys"].items():
-        #     # print("Key a value", key, values)
-        #     item = QTreeWidgetItem([key])
-        #     # self.tree.expandItem(item)
-        #     for subkey, subvalue in values["keys"].items():
-        #         # TODO
-        #         dst_path = subvalue["dst_path"]
-        #         child = QTreeWidgetItem([subkey, Path(dst_path).name])
-        #         item.addChild(child)
-        #     items.append(item)
 
         newItem = QTreeWidgetItem(["test"])
         items.append(newItem)
@@ -690,8 +332,13 @@ class MainWindow(QMainWindow):
         src = self.mv_history[-1]["dst"]
         dst = self.mv_history[-1]["src"]
         positionIndex = self.mv_history[-1]["gallery_index"]
+
+        if not os.path.exists(dst):
+            print(f"ERROR: Destination directory {dst} does not exist.")
+            return
+
         shutil.move(src + "/" + image_name, dst + "/" + image_name)
-        self.statusBarLabel.setText(f"File moved BACK From: {src} to {dst}.")
+        self.statusBarLabel.setText(f"File moved BACK From: {src} \nto {dst}.")
 
         # Remove current image from the list of images in src directory
         self.galleryManager.addFile(image_name, positionIndex)
@@ -708,6 +355,7 @@ class MainWindow(QMainWindow):
         # print(self.images)
 
     def toggleCopyMode(self):
+        self.next_image_button.setFocus()
         if self.copyOnly is False:
             print("Current mode: Copy")
             self.copyOnly = True
@@ -720,7 +368,6 @@ class MainWindow(QMainWindow):
             self.copy_button.setStyleSheet("background-color: none;")
             return
 
-
     def set_edit_mode(self):
         # Display a message when the shortcut is activated
         # self.message_label.setText("You pressed Ctrl+M!")
@@ -729,6 +376,7 @@ class MainWindow(QMainWindow):
         self.edit_button.setStyleSheet("background-color: yellow;")
         self.sort_button.setStyleSheet("background-color: none;")
         self.tree.setColumnHidden(2, False)
+        self.tree.setEnabled(True)
 
     def set_sort_mode(self):
         # Display a message when the shortcut is activated
@@ -738,7 +386,7 @@ class MainWindow(QMainWindow):
         self.edit_button.setStyleSheet("background-color: none;")
         self.sort_button.setStyleSheet("background-color: yellow;")
         self.tree.setColumnHidden(2, True)
-
+        self.tree.setEnabled(False)
 
     def keyPressEvent(self, event):
         if isinstance(event, QKeyEvent):
@@ -756,7 +404,7 @@ class MainWindow(QMainWindow):
                 pass
 
             else:
-                pass
+                super().keyPressEvent(event)
 
             # TODO: Refactor following if-else hell:  !!!!!!!!!!!!!
             # ==== EDIT MODE ====
@@ -784,7 +432,6 @@ class MainWindow(QMainWindow):
                 else:
                     self.key_seq += pressed_key
                     self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
-
 
             # ==== SORT MODE ====
             elif self.current_mode == "sort":
@@ -830,15 +477,19 @@ class MainWindow(QMainWindow):
                         src = self.mv_history[-1]["src"]
                         dst = self.mv_history[-1]["dst"]
 
+                        if not os.path.exists(dst):
+                            print(f"ERROR: Destination directory {dst} does not exist.")
+                            return
+
                         # Remove current image from the list of images in src directory
                         if not self.copyOnly:
                             self.galleryManager.removeFile(image_name)
                             shutil.move(src + "/" + image_name, dst + "/" + image_name)
-                            self.statusBarLabel.setText(f"File moved From: {src} to {dst}.")
+                            self.statusBarLabel.setText(f"File moved From: {src} \nto {dst}.")
                         else:
                             shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
                             self.galleryManager.incrementGalleryIndex()
-                            self.statusBarLabel.setText(f"File copied From: {src} to {dst}.")
+                            self.statusBarLabel.setText(f"File copied From: {src} \nto {dst}.")
 
                         # Update counter label
                         self.image_counter_label.setText(self.galleryManager.getCounterString())
@@ -857,8 +508,10 @@ class MainWindow(QMainWindow):
                     image_name = self.galleryManager.getCurrentFilename()
                     src = self.galleryManager.getSourcePath()
                     dst = src + "/" + "__DELETED__"
+
                     if not os.path.exists(dst):
                         os.makedirs(dst)
+
                     print(f"Nalezeno, lze presunout z {self.galleryManager.getSourcePath()} do {dst}!")
 
                     # Remove current image from the list of images in src directory
@@ -907,6 +560,11 @@ class MainWindow(QMainWindow):
                         image_name = self.galleryManager.getCurrentFilename()
                         src = self.galleryManager.getSourcePath()
                         dst = self.shortcut_manager.get_dst_for_shortcut(full_shortcut)
+
+                        if not os.path.exists(dst):
+                            print(f"ERROR: Destination directory {dst} does not exist.")
+                            return
+
                         print(f"Nalezeno, lze presunout z {self.galleryManager.getSourcePath()} do {dst}!")
 
                         # Remove current image from the list of images in src directory
@@ -914,11 +572,11 @@ class MainWindow(QMainWindow):
                             self.galleryManager.removeFile(image_name)
                             shutil.move(src + "/" + image_name, dst + "/" + image_name)
                             self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
-                            self.statusBarLabel.setText(f"File moved From: {src} to {dst}.")
+                            self.statusBarLabel.setText(f"File moved From: {src} \nto {dst}.")
                         else:
                             shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
                             self.galleryManager.incrementGalleryIndex()
-                            self.statusBarLabel.setText(f"File copied From: {src} to {dst}.")
+                            self.statusBarLabel.setText(f"File copied From: {src} \nto {dst}.")
 
                         # Update counter label
                         self.image_counter_label.setText(self.galleryManager.getCounterString())
@@ -935,7 +593,6 @@ class MainWindow(QMainWindow):
             else:
                 pass
 
-
     def parse_sequence(self):
         pass
 
@@ -950,6 +607,7 @@ def main():
     window.show()
 
     sys.exit(app.exec())
+
 
 if __name__ == "__main__":
     main()
