@@ -14,6 +14,8 @@ class EmptyGalleryImageLabel(QLabel):
         icon = QPixmap(":/Resources/empty-inbox.png")
         icon = icon.scaled(200, 200, Qt.KeepAspectRatio)
         self.setPixmap(icon)
+        self.setAlignment(Qt.AlignCenter)
+        self.setToolTip("Click to select source directory of the gallery.")
 
     def mousePressEvent(self, event):
         self.selectSourceSignal.emit()

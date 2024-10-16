@@ -58,6 +58,7 @@ height = 864
 # - [ ] Prepsat vse z CZ do EN
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] Zobrazit history Label kde bude historie zmacknutych zkratek, aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
+# - [ ] Pridat filtr ze se nactou do galerie pouze .png, .jpeg, .jpg, .gif, proste jen obrazkove formaty. Zadna pdf a tak.
 #
 # Shortcuts management:
 # - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
@@ -111,15 +112,9 @@ class MainWindow(QMainWindow):
         # Management objects
         self.shortcut_manager = ShortcutManager(self)
         self.galleryManager = GalleryManager(self)
-        # TODO: Remove. [Just for DEBUG]: Manually setting src dir
-        # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
-        # self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
 
         # Right side of the main layout
         self.previewLabel = self.galleryManager.getSuitableLabel()
-        # TODO: Nez se nacte nejaka src dir, tak sem dat nejakej "empty" obrazek. Neco jako kruh, nejake opacity logo...
-        # - Pridat moznost kliknout do toho prostoru pro zvoleni src slozky.
-        # - Pouzit k tomu Resources
         right_inner_layout.addWidget(self.previewLabel)
 
         self.previous_image_button = QPushButton("&Previous", self)
@@ -157,6 +152,7 @@ class MainWindow(QMainWindow):
 
         self.copy_button = QPushButton("&Copy", self)
         self.copy_button.clicked.connect(self.toggleCopyMode)
+        self.copy_button.setToolTip("Toggle copy mode (switch between copy and move operation).")
 
         self.edit_button = QPushButton("&Edit", self)
         self.edit_button.clicked.connect(self.set_edit_mode)
@@ -177,7 +173,7 @@ class MainWindow(QMainWindow):
         self.mv_history = []
         self.key_seq = ""
         self.permanent_key_seq = ""
-        self.current_mode = "home" #dalsi: edit, sort
+        self.current_mode = "home"  # Next options: edit, sort
         self.copyOnly = False
         print("Mod: " + self.current_mode)
 
@@ -228,6 +224,12 @@ class MainWindow(QMainWindow):
 
         self.previewLabel.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)
         self.galleryManager.updatePreview(self.previewLabel)
+
+        # vvvvvvvv TODO: Remove. [Just for DEBUG]: Manually setting src dir
+        # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
+        self.galleryManager.setSourcePath(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\test\downloads")
+        self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
+        # ^^^^^^^^^
 
         # Sort mode is default mode when app starts
         self.set_sort_mode()
@@ -482,36 +484,39 @@ class MainWindow(QMainWindow):
                 # Repeat last move from src to dst of current image.
                 elif event.key() == Qt.Key_Period:
                     print("Repeat last finished command for current image")
-                    if len(self.key_seq_history) > 0:
-                        print(f"Last history entry: {self.key_seq_history[-1]}")
 
-                        image_name = self.galleryManager.getCurrentFilename()
-
-                        src = self.mv_history[-1]["src"]
-                        dst = self.mv_history[-1]["dst"]
-
-                        if not os.path.exists(dst):
-                            print(f"ERROR: Destination directory {dst} does not exist.")
-                            return
-
-                        # Remove current image from the list of images in src directory
-                        if not self.copyOnly:
-                            self.galleryManager.removeFile(image_name)
-                            shutil.move(src + "/" + image_name, dst + "/" + image_name)
-                            self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
-                            self.statusBarLabel.setText(f"File moved From: {src} \nto {dst}.")
-                        else:
-                            shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
-                            self.galleryManager.incrementGalleryIndex()
-                            self.statusBarLabel.setText(f"File copied From: {src} \nto {dst}.")
-
-                        # Update counter label
-                        self.image_counter_label.setText(self.galleryManager.getCounterString())
-
-                        # Show new image
-                        self.galleryManager.updatePreview(self.previewLabel)
-                    else:
+                    if len(self.mv_history) <= 0:
                         print("History is empty.")
+                        return
+
+                    print(f"Last history entry: {self.key_seq_history[-1]}")
+
+                    image_name = self.galleryManager.getCurrentFilename()
+
+                    src = self.mv_history[-1]["src"]
+                    dst = self.mv_history[-1]["dst"]
+
+                    if not os.path.exists(dst):
+                        print(f"ERROR: Destination directory {dst} does not exist.")
+                        return
+
+                    # Remove current image from the list of images in src directory
+                    if not self.copyOnly:
+                        self.galleryManager.removeFile(image_name)
+                        shutil.move(src + "/" + image_name, dst + "/" + image_name)
+                        self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
+                        self.statusBarLabel.setText(f"File moved From: {src} \nto {dst}.")
+                    else:
+                        shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
+                        self.galleryManager.incrementGalleryIndex()
+                        self.statusBarLabel.setText(f"File copied From: {src} \nto {dst}.")
+
+                    # Update counter label
+                    self.image_counter_label.setText(self.galleryManager.getCounterString())
+
+                    # Show new image
+                    self.galleryManager.updatePreview(self.previewLabel)
+
 
                 elif event.key() == Qt.Key_Delete:
                     if self.galleryManager.isGalleryEmpty():
@@ -565,7 +570,6 @@ class MainWindow(QMainWindow):
                         print("HIT!")
 
                         if self.galleryManager.isGalleryEmpty():
-                            # TODO: set some generic image for background
                             print("Source directory is empty")
                             self.key_seq = ""
                             self.updateKeySequenceLabel()
