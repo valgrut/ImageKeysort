@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QFileDialog
 
 class ShortcutManager():
     def __init__(self, mainWindow):
-        self.shortcut_manager = {"keys": {}}
+        self.shortcutsData = {"keys": {}}
         self.mainWindow = mainWindow
 
     def printShortcuts(self):
@@ -13,13 +13,13 @@ class ShortcutManager():
     def add_shortcut(self, sequence):
         # TODO: toto je potreba dodelat a plnit ten dict behem Edit modu
         for category in sequence:
-            if category in self.shortcut_manager:
-                self.shortcut_manager.update({category: self.subcategory})
+            if category in self.shortcutsData:
+                self.shortcutsData.update({category: self.subcategory})
 
-        print(self.shortcut_manager)
+        print(self.shortcutsData)
 
     def get_data(self):
-        return self.shortcut_manager
+        return self.shortcutsData
 
     def add_dst_path(self, sequence, dst_path):
         last_key = self._get_last_key_of_sequence_and_update(sequence)
@@ -43,8 +43,8 @@ class ShortcutManager():
         current_key_ref.update({new_key: {"dst_path": "", "keys": {}}})
 
     def _get_last_key_of_sequence_and_update(self, sequence):
-        pre_current = self.shortcut_manager["keys"]
-        current = self.shortcut_manager["keys"]
+        pre_current = self.shortcutsData["keys"]
+        current = self.shortcutsData["keys"]
         # print("Current: ", current)
         for key in sequence:
             # print("Sequence: ", sequence, "key:", key)
@@ -59,8 +59,8 @@ class ShortcutManager():
         return pre_current
 
     def _get_last_key_of_sequence(self, sequence):
-        pre_current = self.shortcut_manager["keys"]
-        current = self.shortcut_manager["keys"]
+        pre_current = self.shortcutsData["keys"]
+        current = self.shortcutsData["keys"]
         # print("Current: ", current)
         for key in sequence:
             # print("Sequence: ", sequence, "key:", key)
@@ -81,14 +81,21 @@ class ShortcutManager():
             return True
         return False
 
-    def load_shortcuts(self):
+    def load_shortcuts(self) -> bool:
         jsonDataFile = QFileDialog.getOpenFileName(self.mainWindow, "Select file with data")
+
+        if not jsonDataFile[0]:
+            print(f"No file selected.")
+            return False
+
         with open(jsonDataFile[0], 'r', encoding='utf-8') as data:
-            self.shortcut_manager = json.load(data)
-        print(f"Nactena data.json")
+            self.shortcutsData = json.load(data)
+
+        print(f"Nactena data z {jsonDataFile}.")
+        return True
 
     def save_shortcuts(self):
         jsonDataFile = QFileDialog.getSaveFileName(self.mainWindow, "Select file with data")
         with open(jsonDataFile[0], 'w', encoding='utf-8') as datafile:
-            json.dump(self.shortcut_manager, datafile, ensure_ascii=False, indent=4)
-        print(f"Ulozeno do data.json")
+            json.dump(self.shortcutsData, datafile, ensure_ascii=False, indent=4)
+        print(f"Ulozeno do {jsonDataFile}.")

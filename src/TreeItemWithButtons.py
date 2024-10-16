@@ -1,5 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton
+from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtCore import QSize
 
+import resources_rc
 
 class TreeItemWithButtons(QWidget):
     """
@@ -9,6 +12,12 @@ class TreeItemWithButtons(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         layout = QHBoxLayout(self)
+
+        editPixmap = QPixmap(":/Resources/edit.png")
+        editIcon = QIcon(editPixmap)
+
+        deletePixmap = QPixmap(":/Resources/bin.png")
+        deleteIcon = QIcon(deletePixmap)
 
         edit_button = QPushButton("E", self)
         # edit_button.setStyleSheet("max-width: 10px; border: 1px solid black; :hover {background-color: green;};")
@@ -26,6 +35,8 @@ class TreeItemWithButtons(QWidget):
                 color: white;  /* Change text color on hover */
             }
         """)
+        edit_button.setIcon(editIcon)
+        edit_button.setIconSize(edit_button.size())  # - QSize(5, 5))
 
         delete_button = QPushButton("D", self)
         # delete_button.setStyleSheet("max-width: 10px")
@@ -45,6 +56,8 @@ class TreeItemWithButtons(QWidget):
                 color: white;  /* Change text color on hover */
             }
         """)
+        delete_button.setIcon(deleteIcon)
+        delete_button.setIconSize(delete_button.size())
 
         self.setStyleSheet("background-color: green; border: 1px solid black;")
         # self.setStyleSheet(

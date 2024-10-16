@@ -29,6 +29,7 @@ from ShortcutManager import ShortcutManager
 from TreeItemWithButtons import TreeItemWithButtons
 from CustomTreeWidget import CustomTreeWidget
 
+
 width = 1152
 height = 864
 
@@ -41,6 +42,8 @@ height = 864
 # - [x] Delete current image (Presune se do slozky TO_DELETE, kde si to pak uzivatel bude moct rucne smazat - to aby porad fungovala funkce Undo - nevim, jak bych to dostaval z kose).
 # - [x] Rozsirit Status bar na 2 radky.
 # - [x] Pridat moznost zvolit file se shortcuts pro nacteni, a pri ukladani tez.
+# - [x] Pridat, ze cudlik bude polopruhledny a po najeti se zviditelni.
+# - [x] Pridat obrazky pro buttons (kos s cervenym backgroundem, a takoveto pero pro edit)
 #
 # Features TODO:
 # - [~] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
@@ -54,11 +57,10 @@ height = 864
 #       - Clickable even when images are already loaded and gallery is not empty.
 # - [ ] Prepsat vse z CZ do EN
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
+# - [ ] Zobrazit history Label kde bude historie zmacknutych zkratek, aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 #
 # Shortcuts management:
 # - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
-# - [ ] Pridat, ze cudlik bude polopruhledny a po najeti se zviditelni.
-# - [ ] Pridat obrazky pro buttons (kos s cervenym backgroundem, a takoveto pero pro edit)
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
 # - [ ] FIX: searching longest path!
@@ -80,7 +82,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Quick Picture sorter")
+        self.setWindowTitle("Image Keysort")
         self.setMinimumWidth(width)
         self.setMinimumHeight(height)
 
@@ -148,10 +150,10 @@ class MainWindow(QMainWindow):
         self.statusBarLabel.setWordWrap(True)
         right_inner_layout.addWidget(self.statusBarLabel)
 
-
         # Left side of the main layout
-        self.key_label = QLabel("Key Sequence Pressed: None")
+        self.key_label = QLabel("Key Sequence Pressed: \nNone")
         self.key_label.resize(self.key_label.sizeHint())
+        self.key_label.setStyleSheet("font-size: 16px; font-weight: bold; height: 20px;")
 
         self.copy_button = QPushButton("&Copy", self)
         self.copy_button.clicked.connect(self.toggleCopyMode)
@@ -318,7 +320,8 @@ class MainWindow(QMainWindow):
         self.shortcut_manager.save_shortcuts()
 
     def load_data(self):
-        self.shortcut_manager.load_shortcuts()
+        if not self.shortcut_manager.load_shortcuts():
+            return
         self.update_tree_view()
 
     def undo_last_operation(self):
@@ -412,26 +415,35 @@ class MainWindow(QMainWindow):
                 if event.key() == Qt.Key_Escape:
                     self.key_seq_history.append(self.key_seq)
                     self.key_seq = ""
-                    # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
-                    self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
+                    self.updateKeySequenceLabel()
 
-                elif event.key() == Qt.Key_Return:
-                    # Potvrdit zkratku - pak vyskoci dialog pro dst dir.
-                    if self.key_seq:
-                        for k in self.key_seq:
-                            self.shortcut_manager.add_shortcut(self.key_seq)
-                            if k == self.key_seq[-1]:
-                                dst_sort_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
-                                self.shortcut_manager.add_dst_path(self.key_seq, dst_sort_directory)
-                                self.key_seq = ""
-                                self.update_tree_view()
-                                print(json.dumps(self.shortcut_manager.get_data(), indent=2))
-                    else:
+                # Confirm entered shortcut
+                elif event.key() == Qt.Key_Return:  # "Return" is the "Enter" key in the center of keyboard.
+                    if not self.key_seq:
                         print("probably empty")
+                        return
+
+                    # Check, whether sequence contains '-', and if so
+                    # consider this as removing all shortcuts after the '-' character.
+                    if "-" in self.key_seq:
+                        # TODO
+                        # self.shortcut_manager.removeShortcutSequence(self.key_seq)
+                        self.key_seq = ""
+                        return
+
+                    # Add new shortcut sequence
+                    for k in self.key_seq:
+                        self.shortcut_manager.add_shortcut(self.key_seq)
+                        # if k == self.key_seq[-1]:
+                    dst_sort_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
+                    self.shortcut_manager.add_dst_path(self.key_seq, dst_sort_directory)
+                    self.key_seq = ""
+                    self.update_tree_view()
+                    print(json.dumps(self.shortcut_manager.get_data(), indent=2))
 
                 else:
                     self.key_seq += pressed_key
-                    self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
+                    self.updateKeySequenceLabel()
 
             # ==== SORT MODE ====
             elif self.current_mode == "sort":
@@ -448,7 +460,7 @@ class MainWindow(QMainWindow):
                         self.key_seq = ""
                     else:
                         pass
-                    self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
+                    self.updateKeySequenceLabel()
 
                 # Hold current shortcut and use it as default for upcoming sequences until escape
                 elif event.key() == Qt.Key_Return:  # Key_Return is non-numeric Enter key
@@ -461,7 +473,7 @@ class MainWindow(QMainWindow):
                     # print("a: key_seq:", self.key_seq)
                     # print("a: permanent_key_seq:", self.permanent_key_seq)
                     # self.key_seq = ""
-                    self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
+                    self.updateKeySequenceLabel()
 
                 # Repeat last move from src to dst of current image.
                 elif event.key() == Qt.Key_Period:
@@ -547,14 +559,14 @@ class MainWindow(QMainWindow):
                         return
 
                     # TODO: Zabranit, aby se obrazek presunul do slozky, pokud zkratka obsahuje sice dst cestu, ale i childrens.
-
                     if self.shortcut_manager.get_dst_for_shortcut(full_shortcut):
-                        # self.key_label.setText(f"Key Sequence Pressed: {self.key_seq}")
-                        self.key_seq_history.append(full_shortcut)
+                        print("HIT!")
 
                         if self.galleryManager.isGalleryEmpty():
                             # TODO: set some generic image for background
                             print("Source directory is empty")
+                            self.key_seq = ""
+                            self.updateKeySequenceLabel()
                             return
 
                         image_name = self.galleryManager.getCurrentFilename()
@@ -564,6 +576,8 @@ class MainWindow(QMainWindow):
                         if not os.path.exists(dst):
                             print(f"ERROR: Destination directory {dst} does not exist.")
                             return
+
+                        self.key_seq_history.append(full_shortcut)
 
                         print(f"Nalezeno, lze presunout z {self.galleryManager.getSourcePath()} do {dst}!")
 
@@ -586,12 +600,18 @@ class MainWindow(QMainWindow):
 
                         # Enable temporaly save and reuse partial shortcut
                         self.key_seq = ""
-
-                        self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
+                        self.updateKeySequenceLabel()
                     else:
-                        self.key_label.setText(f"Key Sequence Pressed: {self.permanent_key_seq}+{self.key_seq}")
+                        self.updateKeySequenceLabel()
             else:
                 pass
+
+    def updateKeySequenceLabel(self):
+        separator = "+"
+        if self.permanent_key_seq:
+            self.key_label.setText(f"Key Sequence Pressed: \n{self.permanent_key_seq}{separator}{self.key_seq}")
+        else:
+            self.key_label.setText(f"Key Sequence Pressed: \n{self.key_seq}")
 
     def parse_sequence(self):
         pass

@@ -40,8 +40,8 @@ class GalleryManager():
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
-        self.mainWindow.source_dir_label.setText(path) # TODO: sig-slots, replace this.
-        self.setSourceDirLabelTextSignal.emit(path) # TODO: for this.
+        self.mainWindow.source_dir_label.setText(path)  # TODO: sig-slots, replace this.
+        self.setSourceDirLabelTextSignal.emit(path)  # TODO: for this.
         self.loadImagesInDirectory()
 
     def getSourcePath(self) -> str:
