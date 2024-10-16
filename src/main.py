@@ -496,7 +496,7 @@ class MainWindow(QMainWindow):
                 elif event.key() == Qt.Key_Period:
                     print("Repeat last finished command for current image")
 
-                    if len(self.mv_history) <= 0:
+                    if len(self.mv_history) <= 0 or len(self.key_seq_history) <= 0:
                         print("History is empty.")
                         return
 
