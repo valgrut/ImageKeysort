@@ -45,24 +45,28 @@ height = 864
 # - [x] Pridat, ze cudlik bude polopruhledny a po najeti se zviditelni.
 # - [x] Pridat obrazky pro buttons (kos s cervenym backgroundem, a takoveto pero pro edit)
 # - [x] Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
+# - [x] Pridat filtr ze se nactou do galerie pouze .png, .jpeg, .jpg, .gif, proste jen obrazkove formaty. Zadna pdf a tak.
+#
+# Top priority:
+# - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
+# - [ ] !!! Pri nacteni dat ulozit cestu, odkud byla vzata a nabidnout ji pak kdyz chci ulozit zmeny.
+# - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
+# - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
+# - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 #
 # Features TODO:
 # - [~] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
 # - [~] ! REFACTORING
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
-# - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 # - [ ] Pridat testy (make test)
-# - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
 # - [ ] Prepsat vse z CZ do EN
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
-# - [ ] Zobrazit history Label kde bude historie zmacknutych zkratek, aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
-# - [ ] Pridat filtr ze se nactou do galerie pouze .png, .jpeg, .jpg, .gif, proste jen obrazkove formaty. Zadna pdf a tak.
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
-# - [ ] Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
 # - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
+# - [ ] MAYBE: Pridat AI advices based on keywords on image.
 #
-# Fixes TODO:
+# To Fix:
 # - [ ] Crashing when moving the .git bcz process (medium) is used or what...
 # - [ ] All Images are clickable instead of just the one when gallery is empty.
 # - [ ] Kdyz v galerii dojdou obrazky, vratit tam ten obrazek EmptyInbox.
