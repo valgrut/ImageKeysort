@@ -52,11 +52,15 @@ height = 864
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 # - [ ] Pridat testy (make test)
-# - [ ] Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
+# - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
 # - [ ] Prepsat vse z CZ do EN
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] Zobrazit history Label kde bude historie zmacknutych zkratek, aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 # - [ ] Pridat filtr ze se nactou do galerie pouze .png, .jpeg, .jpg, .gif, proste jen obrazkove formaty. Zadna pdf a tak.
+# - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
+# - [ ] Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
+# - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
+# - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
 #
 # Fixes TODO:
 # - [ ] Crashing when moving the .git bcz process (medium) is used or what...
@@ -355,7 +359,7 @@ class MainWindow(QMainWindow):
             return
 
         shutil.move(src + "/" + image_name, dst + "/" + image_name)
-        self.statusBarLabel.setText(f"File moved BACK From: {src} \nto {dst}.")
+        self.statusBarLabel.setText(f"File moved BACK From: {src}.")
 
         # Remove current image from the list of images in src directory
         self.galleryManager.addFile(image_name, positionIndex)
@@ -516,11 +520,11 @@ class MainWindow(QMainWindow):
                         self.galleryManager.removeFile(image_name)
                         shutil.move(src + "/" + image_name, dst + "/" + image_name)
                         self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
-                        self.statusBarLabel.setText(f"File moved From: {src} \nto {dst}.")
+                        self.statusBarLabel.setText(f"File moved to {dst}.")
                     else:
                         shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
                         self.galleryManager.incrementGalleryIndex()
-                        self.statusBarLabel.setText(f"File copied From: {src} \nto {dst}.")
+                        self.statusBarLabel.setText(f"File copied to {dst}.")
 
                     # Update counter label
                     self.image_counter_label.setText(self.galleryManager.getCounterString())
@@ -602,11 +606,11 @@ class MainWindow(QMainWindow):
                             self.galleryManager.removeFile(image_name)
                             shutil.move(src + "/" + image_name, dst + "/" + image_name)
                             self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
-                            self.statusBarLabel.setText(f"File moved From: {src} \nto {dst}.")
+                            self.statusBarLabel.setText(f"File moved to {dst}.")
                         else:
                             shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
                             self.galleryManager.incrementGalleryIndex()
-                            self.statusBarLabel.setText(f"File copied From: {src} \nto {dst}.")
+                            self.statusBarLabel.setText(f"File copied to {dst}.")
 
                         # Update counter label
                         self.image_counter_label.setText(self.galleryManager.getCounterString())
@@ -628,6 +632,9 @@ class MainWindow(QMainWindow):
             self.key_label.setText(f"Key Sequence Pressed: \n{self.permanent_key_seq}{separator}{self.key_seq}")
         else:
             self.key_label.setText(f"Key Sequence Pressed: \n{self.key_seq}")
+
+    def updateStatusBarLabel(self, src, dst):
+        self.statusBarLabel.setText(f"File copied to {dst}.")
 
     def parse_sequence(self):
         pass

@@ -1,0 +1,22 @@
+{
+    "keys": {
+        "a": {
+            "dst_path": "",
+            "keys": {
+                "b": {
+                    "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/test/dst/a",
+                    "keys": {
+                        "c": {
+                            "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/test/dst/a",
+                            "keys": {}
+                        }
+                    }
+                },
+                "x": {
+                    "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/test/dst/a",
+                    "keys": {}
+                }
+            }
+        }
+    }
+}

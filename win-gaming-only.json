@@ -1,0 +1,85 @@
+{
+    "keys": {
+        "w": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/The Witcher",
+            "keys": {}
+        },
+        "o": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/World of Warcraft",
+            "keys": {}
+        },
+        "c": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/Cyberpunk 2077",
+            "keys": {}
+        },
+        "m": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Memes/Gaming memes",
+            "keys": {
+                "f": {
+                    "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Memes/Gaming memes/Factorio",
+                    "keys": {}
+                },
+                "e": {
+                    "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Memes/Gaming memes/Path of Exile",
+                    "keys": {}
+                },
+                "w": {
+                    "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Memes/Gaming memes/The Witcher",
+                    "keys": {}
+                },
+                "o": {
+                    "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Memes/Gaming memes/WoW",
+                    "keys": {}
+                }
+            }
+        },
+        "g": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/Guild wars 2",
+            "keys": {}
+        },
+        "p": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/gaming setup",
+            "keys": {}
+        },
+        "s": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/The Elder Scrolls",
+            "keys": {}
+        },
+        "e": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/Path of Exile",
+            "keys": {}
+        },
+        "a": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Magic The Gathering",
+            "keys": {}
+        },
+        "f": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/Factorio",
+            "keys": {}
+        },
+        "x": {
+            "dst_path": "G:/Downloads/Fotky",
+            "keys": {}
+        },
+        "t": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/Metin 2",
+            "keys": {}
+        },
+        "i": {
+            "dst_path": "G:/Downloads/Fotky/GameDev",
+            "keys": {}
+        },
+        "h": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/Hoghwards Legacy",
+            "keys": {}
+        },
+        "v": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/Valheim",
+            "keys": {}
+        },
+        "r": {
+            "dst_path": "D:/Root Tree/Pictures ZAŘAZENÉ/Gaming/Terraria",
+            "keys": {}
+        }
+    }
+}
