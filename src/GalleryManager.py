@@ -4,7 +4,7 @@ from pathlib import Path
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QMovie
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QGraphicsDropShadowEffect
 
 from ImageWidget import ImageWidget
 from EmptyGalleryImageLabel import EmptyGalleryImageLabel
@@ -21,11 +21,27 @@ class GalleryManager():
         self.imageView = ImageWidget()  # for .png, .jpg, ...
         self.videoView = QMovie()  # for .gif and such
 
+        # TODO: !!! Tohle dat pryc, a vlozit to do toho prostoru AZ po te, co se zjisti, co tam patri, jestli image, nebo empty image a pod.
+        # A tyhle styly nudou genericke, ne jen pro emptyimage... Mozna udelat nejakou factory, ktera by podle podminek davala spravnej objekt sem.
         self.emptyInboxLabel = EmptyGalleryImageLabel()
         self.emptyInboxLabel.setFocus(False)
-        self.emptyInboxLabel.setStyleSheet("border: 1px solid black;")
+        # self.emptyInboxLabel.setStyleSheet("border: 1px solid green;")
+        self.emptyInboxLabel.setStyleSheet("""
+        QLabel {
+            width: 150px;
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 3px;
+            background-color: rgb(191, 189, 189);
+        }
+        """)
+        self.shadowEffect = QGraphicsDropShadowEffect()
+        self.shadowEffect.setOffset(3, 3)
+        self.shadowEffect.setBlurRadius(10)
+        self.emptyInboxLabel.setGraphicsEffect(self.shadowEffect)
         # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
 
+    # TODO: Tohle taky bude potreba predelat!
     def getSuitableLabel(self):
         """
         Return such label based on the gallery state (empty vs non-empty..)

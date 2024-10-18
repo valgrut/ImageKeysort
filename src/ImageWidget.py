@@ -7,7 +7,12 @@ class ImageWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.label = QLabel(self)
-        self.label.setStyleSheet("background-color: yellow; border: 1px solid black; padding: 3px;")
+        self.label.setStyleSheet("""
+            background-color: yellow;
+            border: 1px solid black;
+            border-radius: 20px;
+            padding: 3px;
+            """)
         self.label.resize(900, 780)
         # self.pixmap = QPixmap(img_path)
         self.pixmap = QPixmap()
