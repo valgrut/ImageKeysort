@@ -14,7 +14,7 @@ class TestMyApp(unittest.TestCase):
         self.galleryManager = self.window.galleryManager
         self.button = self.window.copy_button  # Example: the button you're testing
 
-    def toggleCoppyMode(self):
+    def test_toggleCoppyMode(self):
         # Check that copy mode is set to False
         self.assertEqual(self.window.copyOnly, False)  # Example assertion
         

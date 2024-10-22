@@ -33,5 +33,7 @@ clean:
 	rm -rf build
 	rm image-keysort.spec
 	rm -rf venv
+	find . -type d -name "__pycache__" -exec rm -r {} +
+	find . -name "*.pyc" -delete
 
 phony: config, run, test, build, clean
