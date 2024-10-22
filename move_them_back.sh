@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
 
-mv ./test/fotky/brutal/* ./test/downloads/
-mv ./test/obrazky/AI/* ./test/downloads/
-mv ./test/obrazky/Anime/* ./test/downloads/
+mv ./testing-data/fotky/brutal/* ./testing-data/downloads/
+mv ./testing-data/obrazky/AI/* ./testing-data/downloads/
+mv ./testing-data/obrazky/Anime/* ./testing-data/downloads/
