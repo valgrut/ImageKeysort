@@ -1,4 +1,4 @@
-ROOT_DIR="./"
+ROOT_DIR=./
 NAME=main.py
 
 config:
@@ -20,9 +20,10 @@ run: config
 test: config
 	( \
 	source ${ROOT_DIR}/venv/bin/activate; \
-	PYTHONPATH=${ROOT_DIR}/src pytest ${ROOT_DIR}/tests/test1.py; \
+	PYTHONPATH=${ROOT_DIR}/src pytest ${ROOT_DIR}/tests/*; \
 	deactivate; \
 	)
+	# PYTHONPATH=${ROOT_DIR}/src pytest -v tests/; \
 
 build:
 	pyinstaller --onefile ${ROOT_DIR}/${NAME}
