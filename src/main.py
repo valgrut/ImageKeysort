@@ -30,7 +30,6 @@ from ShortcutManager import ShortcutManager
 from TreeItemWithButtons import TreeItemWithButtons
 from CustomTreeWidget import CustomTreeWidget
 
-
 width = 1152
 height = 864
 
@@ -399,8 +398,8 @@ class MainWindow(QMainWindow):
 
         # vvvvvvvv TODO: Remove. [Just for DEBUG]: Manually setting src dir
         # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
-        self.galleryManager.setSourcePath(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\test\downloads")
-        self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
+        # self.galleryManager.setSourcePath(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\test\downloads")
+        # self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
         # ^^^^^^^^^
 
         # Sort mode is default mode when app starts
