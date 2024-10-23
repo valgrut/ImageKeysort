@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QPushButton,
     QVBoxLayout,
+    QStackedWidget,
     QWidget,
     QFileDialog,
     QShortcut,
@@ -58,7 +59,7 @@ height = 864
 # - [~] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
 # - [~] ! REFACTORING
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
-# - [ ] Pridat testy (make test)
+# - [~] Pridat testy (make test)
 # - [ ] Prepsat vse z CZ do EN
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
@@ -109,6 +110,10 @@ class MainWindow(QMainWindow):
             }
         """)
 
+        # Management objects
+        self.shortcut_manager = ShortcutManager(self)
+        self.galleryManager = GalleryManager(self)
+
         main_layout = QHBoxLayout()
         left_inner_layout = QVBoxLayout()
         right_inner_layout = QVBoxLayout()
@@ -134,13 +139,8 @@ class MainWindow(QMainWindow):
         # self.image_filename_label.setStyleSheet("background-color: green; border: 1px solid black; padding: 1px;")
         right_inner_layout.addWidget(self.image_filename_label)
 
-        # Management objects
-        self.shortcut_manager = ShortcutManager(self)
-        self.galleryManager = GalleryManager(self)
-
         # Right side of the main layout
-        self.previewLabel = self.galleryManager.getSuitableLabel()
-        right_inner_layout.addWidget(self.previewLabel)
+        right_inner_layout.addWidget(self.galleryManager)
 
         self.previous_image_button = QPushButton("&Previous", self)
         self.previous_image_button.clicked.connect(self.showPreviousImage)
@@ -214,7 +214,7 @@ class MainWindow(QMainWindow):
                 min-height: 20px;
                 border: 1px solid black;
                 border-radius: 5px;
-                background-color: rgb(191, 189, 189);
+                background-color: var(--components-background, rgb(191, 189, 189));
                 font-weight: bold;
                 font-size: 15px;
                 xxmargin: 5px;
@@ -393,8 +393,8 @@ class MainWindow(QMainWindow):
         self._createMenuBar()
         self._connectActions()
 
-        self.previewLabel.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)
-        self.galleryManager.updatePreview(self.previewLabel)
+        self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)
+        # self.galleryManager.updatePreview()
 
         # vvvvvvvv TODO: Remove. [Just for DEBUG]: Manually setting src dir
         # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
@@ -448,11 +448,11 @@ class MainWindow(QMainWindow):
     #     self.statusBarLabel.setText(message)
 
     def showNextImage(self):
-        self.galleryManager.setNextImage(self.previewLabel)
+        self.galleryManager.setNextImage()
         self.image_counter_label.setText(self.galleryManager.getCounterString())
 
     def showPreviousImage(self):
-        self.galleryManager.setPreviousImage(self.previewLabel)
+        self.galleryManager.setPreviousImage()
         self.image_counter_label.setText(self.galleryManager.getCounterString())
 
     def update_tree_view(self):
@@ -528,7 +528,7 @@ class MainWindow(QMainWindow):
             self.mv_history.pop()
 
         # Show new image
-        self.galleryManager.updatePreview(self.previewLabel)
+        self.galleryManager.updatePreview()
         # print(self.images)
 
     def toggleCopyMode(self):
@@ -686,7 +686,7 @@ class MainWindow(QMainWindow):
                     self.image_counter_label.setText(self.galleryManager.getCounterString())
 
                     # Show new image
-                    self.galleryManager.updatePreview(self.previewLabel)
+                    self.galleryManager.updatePreview()
 
 
                 elif event.key() == Qt.Key_Delete:
@@ -714,7 +714,7 @@ class MainWindow(QMainWindow):
                     self.image_counter_label.setText(self.galleryManager.getCounterString())
 
                     # Show new image
-                    self.galleryManager.updatePreview(self.previewLabel)
+                    self.galleryManager.updatePreview()
 
                 else:
                     if event.key() not in allowed_keys:
@@ -772,7 +772,7 @@ class MainWindow(QMainWindow):
                         self.image_counter_label.setText(self.galleryManager.getCounterString())
 
                         # Show new image
-                        self.galleryManager.updatePreview(self.previewLabel)
+                        self.galleryManager.updatePreview()
 
                         # Enable temporaly save and reuse partial shortcut
                         self.key_seq = ""
@@ -802,9 +802,14 @@ class MainWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    app.setStyle('Fusion')
     app.setStyleSheet("""
+        :root {
+            --components-background: rgb(191, 189, 189);
+            --main-background: rgb(122, 120, 120);
+        }   
         QWidget {
-            background-color: rgb(122, 120, 120);
+            background-color: var(--main-background, rgb(122, 120, 120));
         }
     """)
     window = MainWindow()

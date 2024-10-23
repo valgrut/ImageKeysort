@@ -3,56 +3,60 @@ from os.path import isfile, join
 from pathlib import Path
 
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QMovie
-from PyQt5.QtWidgets import QFileDialog, QGraphicsDropShadowEffect
+from PyQt5.QtWidgets import QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
 
+from VideoWidget import VideoWidget
 from ImageWidget import ImageWidget
-from EmptyGalleryImageLabel import EmptyGalleryImageLabel
+from EmptyGalleryWidget import EmptyGalleryImageWidget
 
-class GalleryManager():
 
+class GalleryManager(QStackedWidget):
+
+    # TODO: presunout do EmptyGalleryWidget
     setSourceDirLabelTextSignal = pyqtSignal(str)
 
     def __init__(self, mainWindow):
-        self.mainWindow = mainWindow # TODO: sig-slots
-        self.images = []
-        self.galleryIndex = 0
-        self.sourceDirectoryPath = ""
-        self.imageView = ImageWidget()  # for .png, .jpg, ...
-        self.videoView = QMovie()  # for .gif and such
+        super().__init__()
+        self.mainWindow = mainWindow  # TODO: sig-slots
 
-        # TODO: !!! Tohle dat pryc, a vlozit to do toho prostoru AZ po te, co se zjisti, co tam patri, jestli image, nebo empty image a pod.
-        # A tyhle styly nudou genericke, ne jen pro emptyimage... Mozna udelat nejakou factory, ktera by podle podminek davala spravnej objekt sem.
-        self.emptyInboxLabel = EmptyGalleryImageLabel()
-        self.emptyInboxLabel.setFocus(False)
-        # self.emptyInboxLabel.setStyleSheet("border: 1px solid green;")
-        self.emptyInboxLabel.setStyleSheet("""
-        QLabel {
+        # Graphics stylesheets:
+        self.setStyleSheet("""
             width: 150px;
             border: 1px solid black;
             border-radius: 10px;
             padding: 3px;
             background-color: rgb(191, 189, 189);
-        }
         """)
         self.shadowEffect = QGraphicsDropShadowEffect()
         self.shadowEffect.setOffset(3, 3)
         self.shadowEffect.setBlurRadius(10)
-        self.emptyInboxLabel.setGraphicsEffect(self.shadowEffect)
+        self.setGraphicsEffect(self.shadowEffect)
+
         # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
 
-    # TODO: Tohle taky bude potreba predelat!
-    def getSuitableLabel(self):
-        """
-        Return such label based on the gallery state (empty vs non-empty..)
-        """
-        if self.isGalleryEmpty():
-            return self.emptyInboxLabel
-        else:
-            return self.imageView
+        # Variables:
+        self.images = []
+        self.galleryIndex = 0
+        self.sourceDirectoryPath = ""
 
-    def mousePressEvent(self, ev):
-        self.clicked.emit()
+        # TODO: Semka mozna presunout sourceDirLabel a ImageNameLabel.
+
+        # Stacked widgets:
+        self.emptyInboxWidget = EmptyGalleryImageWidget()
+        self.imageViewWidget = ImageWidget()  # for .png, .jpg, ...
+        self.videoViewWidget = VideoWidget()  # for .gif and such
+
+        # TODO A tyhle styly nudou genericke, ne jen pro emptyimage... Mozna udelat nejakou factory, ktera by podle podminek davala spravnej objekt sem.
+
+        self.EMPTY_INBOX_WIDGET = 0
+        self.IMAGE_WIDGET = 1
+        self.VIDEO_WIDGET = 2
+
+        self.addWidget(self.emptyInboxWidget)
+        self.addWidget(self.imageViewWidget)
+        self.addWidget(self.videoViewWidget)
+
+        self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
@@ -84,7 +88,7 @@ class GalleryManager():
         ]
         self.images.sort()
         self.galleryIndex = 0
-        self.updatePreview(self.mainWindow.previewLabel)  # TODO
+        self.updatePreview()  # TODO
 
     def isGalleryEmpty(self):
         if not self.images:
@@ -113,13 +117,13 @@ class GalleryManager():
             self.galleryIndex -= 1
         print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.images) - 1}")
 
-    def setNextImage(self, viewLabel):
+    def setNextImage(self):
         self.incrementGalleryIndex()
-        self.updatePreview(viewLabel) # TODO: sig-slots
+        self.updatePreview() # TODO: sig-slots
 
-    def setPreviousImage(self, viewLabel):
+    def setPreviousImage(self):
         self.decrementGalleryIndex()
-        self.updatePreview(viewLabel) # TODO: sig-slots
+        self.updatePreview() # TODO: sig-slots
 
     def getCurrentFilename(self):
         if self.images:
@@ -127,29 +131,31 @@ class GalleryManager():
         return ""
 
     # TODO: previewLabel pryc, misto toho signal-slot
-    def updatePreview(self, previewLabel):
+    def updatePreview(self):
         if self.isGalleryEmpty():
             # TODO: sets something containing clickable board to open and set new source Directory.
             # self.previewLabel = ...?
             # previewLabel.setPixmap(self.emptyInboxIcon)
             # previewLabel.addWidget(self.emptyInboxIcon)
-            previewLabel = self.getSuitableLabel()
+            # previewLabel = self.getSuitableLabel()
+            self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
             return
 
         if self.isCurrentVideo():
             # It is playable
-            self.videoView.setFileName(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            previewLabel.setMovie(self.videoView)
-            self.videoView.start()
+            self.setCurrentIndex(self.VIDEO_WIDGET)
+            self.videoViewWidget.setFileName(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+            self.videoViewWidget.setMovie(self.videoViewWidget)
+            self.videoViewWidget.start()
 
         else:
             # It is image
-            print(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            self.imageView.updateImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            previewLabel.setPixmap(self.imageView.pixmap)
+            self.setCurrentIndex(self.IMAGE_WIDGET)
+            print("DEBUG:" + str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+            self.imageViewWidget.updateImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
 
-        self.mainWindow.image_filename_label.setText(self.getCurrentFilename()) # TODO: sig-slots
-        self.mainWindow.image_counter_label.setText(self.getCounterString()) # TODO: sig-slots
+        self.mainWindow.image_filename_label.setText(self.getCurrentFilename())  # TODO: sig-slots
+        self.mainWindow.image_counter_label.setText(self.getCounterString())  # TODO: sig-slots
 
     def getCounterString(self) -> str:
         counter = str(self.galleryIndex + 1) + "/" + str(len(self.images))
