@@ -59,6 +59,7 @@ height = 864
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 # - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
+# - [ ] Next/Prev buttons a counter se zobrazi jen, kdyz je nactena galerie.
 #
 # Features TODO:
 # - [~] ! REFACTORING
@@ -67,9 +68,12 @@ height = 864
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama).
+# - [ ] Edit/Delete buttons se zobrazi pouze v Edit modu.
+# - [ ] Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.
+# - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
 #
 # Design:
-# - [ ] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
+# - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
 #
 # To Fix:
 # - [ ] Crashing when moving the .git bcz process (medium) is used or what...
@@ -87,6 +91,7 @@ height = 864
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
 # - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
+# - [ ] Separatni repozitar, hodit na reddit, na RH, kolegum,
 #
 # TODO: Promyslet:
 # - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
