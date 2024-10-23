@@ -8,11 +8,12 @@ config:
 	pip install -r ${ROOT_DIR}/requirements.txt; \
 	deactivate; \
 	)
+	pyrcc5 ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py
+	pyrcc5.exe ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py
 
 run: config
 	( \
 	source ${ROOT_DIR}/venv/bin/activate; \
-	pyrcc5 ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py; \
 	python3 ${ROOT_DIR}/src/${NAME}; \
 	deactivate; \
 	)

@@ -3,5 +3,6 @@
         <file>Resources/empty-inbox.png</file>
         <file>Resources/bin.png</file>
         <file>Resources/edit.png</file>
+        <file>Resources/icon.jpg</file>
     </qresource>
 </RCC>

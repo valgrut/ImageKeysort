@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import (
     QAction,
     QGraphicsDropShadowEffect,
 )
-from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor
+from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
 # pip3 install pyqt5
 # pip3 install keyboard
@@ -54,9 +54,10 @@ height = 864
 # - [x] Track changes in shortcuts and ask for saving if changes were made.
 # - [x] Pri nacteni shortcuts-dat ulozit cestu, odkud byla vzata a nabidnout ji pak kdyz chci ulozit zmeny.
 # - [x] Po najeti na tlacitka/klikatelne veci, se zmeni kurzor na ruku.
+# - [x] Zprovoznit ikonu aplikace
 #
 # Top priority:
-# - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
+# - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno. Celkove resizing a responzivnost posefit.
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 # - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
@@ -72,6 +73,8 @@ height = 864
 # - [ ] Edit/Delete buttons se zobrazi pouze v Edit modu.
 # - [ ] Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
+# - [ ] Pridat slovo "EMPTY" do Inbox obrazku
+# - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 #
 # Design:
 # - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
@@ -112,6 +115,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Image Keysort")
+        self.setWindowIcon(QIcon(':Resources/icon.jpg'))
         self.setMinimumWidth(width)
         self.setMinimumHeight(height)
         self.setStyleSheet("""
@@ -146,7 +150,7 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(right_inner_layout)
 
         self.source_dir_label = QLabel("Not selected")
-        self.source_dir_label.setMaximumHeight(25)
+        self.source_dir_label.setMaximumHeight(30)
         self.source_dir_label.setStyleSheet(f"""
             QLabel {{
                 min-height: 20px;
@@ -161,6 +165,7 @@ class MainWindow(QMainWindow):
         right_inner_layout.addWidget(self.source_dir_label)
 
         self.image_filename_label = QLabel()
+        self.image_filename_label.setMaximumHeight(30)
         self.image_filename_label.setStyleSheet(f"""
             QLabel {{
                 _min-height: 20px;
@@ -172,7 +177,6 @@ class MainWindow(QMainWindow):
                 xxmargin: 5px;
                 }}
             """)
-        self.image_filename_label.setMaximumHeight(25)
         # self.image_filename_label.setStyleSheet("background-color: green; border: 1px solid black; padding: 1px;")
         right_inner_layout.addWidget(self.image_filename_label)
 
