@@ -13,7 +13,6 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QPushButton,
     QVBoxLayout,
-    QStackedWidget,
     QWidget,
     QFileDialog,
     QShortcut,
@@ -21,7 +20,7 @@ from PyQt5.QtWidgets import (
     QAction,
     QGraphicsDropShadowEffect,
 )
-from PyQt5.QtGui import QKeyEvent, QKeySequence
+from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor
 
 # pip3 install pyqt5
 # pip3 install keyboard
@@ -30,6 +29,7 @@ from GalleryManager import GalleryManager
 from ShortcutManager import ShortcutManager
 from TreeItemWithButtons import TreeItemWithButtons
 from CustomTreeWidget import CustomTreeWidget
+from Styles import Styles
 
 width = 1152
 height = 864
@@ -53,6 +53,7 @@ height = 864
 # - [x] Kdyz v galerii dojdou obrazky, vratit tam ten obrazek EmptyInbox.
 # - [x] Track changes in shortcuts and ask for saving if changes were made.
 # - [x] Pri nacteni shortcuts-dat ulozit cestu, odkud byla vzata a nabidnout ji pak kdyz chci ulozit zmeny.
+# - [x] Po najeti na tlacitka/klikatelne veci, se zmeni kurzor na ruku.
 #
 # Top priority:
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
@@ -113,7 +114,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Image Keysort")
         self.setMinimumWidth(width)
         self.setMinimumHeight(height)
-
         self.setStyleSheet("""
             QWidget {
                 font-family: "Inter";
@@ -123,6 +123,13 @@ class MainWindow(QMainWindow):
         # Management objects
         self.shortcut_manager = ShortcutManager(self)
         self.galleryManager = GalleryManager(self)
+        self.galleryManager.setStyleSheet(f"""
+            __width: 150px;
+            border: 1px solid black;
+            border-radius: {Styles.widgetBorderRadius}px;
+            padding: 3px;
+            background-color: {Styles.widgetsBgColor};
+        """)
 
         main_layout = QHBoxLayout()
         left_inner_layout = QVBoxLayout()
@@ -152,53 +159,54 @@ class MainWindow(QMainWindow):
         # Right side of the main layout
         right_inner_layout.addWidget(self.galleryManager)
 
+        previousshadowEffect = QGraphicsDropShadowEffect()
+        previousshadowEffect.setOffset(3, 3)
+        previousshadowEffect.setBlurRadius(10)
         self.previous_image_button = QPushButton("&Previous", self)
         self.previous_image_button.clicked.connect(self.showPreviousImage)
+        self.previous_image_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.previous_image_button.setFocus(True)
-        self.previous_image_button.setStyleSheet("""
-        QPushButton {
+        self.previous_image_button.setGraphicsEffect(previousshadowEffect)
+        self.previous_image_button.setStyleSheet(f"""
+        QPushButton {{
             width: 150px;
             height: 20px;
             border: 1px solid black;
-            border-radius: 5px;
+            border-radius: {Styles.buttonBorderRadius}px;
             padding: 3px;
-            background-color: rgb(191, 189, 189);
+            background-color: {Styles.widgetsBgColor};
             font-weight: bold;
             font-size: 15px;
-            
-        }
-        QPushButton:hover {
-            background-color: yellow;
-        }
+        }}
+        QPushButton:hover {{
+            background-color: {Styles.buttonHoverBgColor};
+        }}
         """)
-        self.shadowEffect = QGraphicsDropShadowEffect()
-        self.shadowEffect.setOffset(3, 3)
-        self.shadowEffect.setBlurRadius(10)
-        self.previous_image_button.setGraphicsEffect(self.shadowEffect)
 
+        nextshadowEffect = QGraphicsDropShadowEffect()
+        nextshadowEffect.setOffset(3, 3)
+        nextshadowEffect.setBlurRadius(10)
         self.next_image_button = QPushButton("&Next", self)
         self.next_image_button.clicked.connect(self.showNextImage)
+        self.next_image_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.next_image_button.setFocus(True)
-        self.next_image_button.setStyleSheet("""
-        QPushButton {
+        self.next_image_button.setGraphicsEffect(nextshadowEffect)
+        self.next_image_button.setStyleSheet(f"""
+        QPushButton {{
             width: 150px;
             height: 20px;
             border: 1px solid black;
-            border-radius: 5px;
+            border-radius: {Styles.buttonBorderRadius}px;
             padding: 3px;
-            background-color: rgb(191, 189, 189);
+            background-color: {Styles.widgetsBgColor};
             font-weight: bold;
             font-size: 15px;
 
-        }
-        QPushButton:hover {
-            background-color: yellow;
-        }
+        }}
+        QPushButton:hover {{
+            background-color: {Styles.buttonHoverBgColor};
+        }}
         """)
-        self.shadowEffect = QGraphicsDropShadowEffect()
-        self.shadowEffect.setOffset(3, 3)
-        self.shadowEffect.setBlurRadius(10)
-        self.next_image_button.setGraphicsEffect(self.shadowEffect)
 
         self.image_counter_label = QLabel()
         self.image_counter_label.setStyleSheet("font-size: 20px;")
@@ -213,95 +221,116 @@ class MainWindow(QMainWindow):
 
         right_inner_layout.addLayout(right_control_buttons_layout)
 
+        statusshadowEffect = QGraphicsDropShadowEffect()
+        statusshadowEffect.setOffset(3, 3)
+        statusshadowEffect.setBlurRadius(10)
         self.statusBarLabel = QLabel("Status bar")
+        self.statusBarLabel.setGraphicsEffect(statusshadowEffect)
         self.statusBarLabel.setMaximumHeight(25)
         # self.statusBarLabel.setStyleSheet("""
         #     border: 1px solid black;
         #     border-radius: 5px;
         # """)
-        self.statusBarLabel.setStyleSheet("""
-            QLabel {
+        self.statusBarLabel.setStyleSheet(f"""
+            QLabel {{
                 min-height: 20px;
                 border: 1px solid black;
-                border-radius: 5px;
-                background-color: var(--components-background, rgb(191, 189, 189));
+                border-radius: {Styles.buttonBorderRadius}px;
+                background-color: {Styles.widgetsBgColor};
                 font-weight: bold;
                 font-size: 15px;
                 xxmargin: 5px;
-                }
+                }}
             """)
-        self.shadowEffect = QGraphicsDropShadowEffect()
-        self.shadowEffect.setOffset(3, 3)
-        self.shadowEffect.setBlurRadius(10)
-        self.statusBarLabel.setGraphicsEffect(self.shadowEffect)
         self.statusBarLabel.setWordWrap(True)
         right_inner_layout.addWidget(self.statusBarLabel)
 
         # Left side of the main layout
+        key_labelshadowEffect = QGraphicsDropShadowEffect()
+        key_labelshadowEffect.setOffset(3, 3)
+        key_labelshadowEffect.setBlurRadius(10)
         self.key_label = QLabel("Key Sequence Pressed: \nNone")
         self.key_label.resize(self.key_label.sizeHint())
-        self.key_label.setStyleSheet("""
+        self.key_label.setGraphicsEffect(key_labelshadowEffect)
+        self.key_label.setStyleSheet(f"""
             font-size: 16px;
             font-weight: bold;
             height: 20px;
             border: 1px solid black;
-            border-radius: 5px;
+            border-radius: {Styles.widgetBorderRadius}px;
             color: rgb(171, 110, 3);
-            background-color: rgb(191, 189, 189);
+            background-color: {Styles.widgetsBgColor};
             """)
         self.key_label.setAlignment(Qt.AlignCenter)
 
+        copy_buttonshadowEffect = QGraphicsDropShadowEffect()
+        copy_buttonshadowEffect.setOffset(3, 3)
+        copy_buttonshadowEffect.setBlurRadius(10)
         self.copy_button = QPushButton("&Copy", self)
         self.copy_button.clicked.connect(self.toggleCopyMode)
+        self.copy_button.setGraphicsEffect(copy_buttonshadowEffect)
         self.copy_button.setToolTip("Toggle copy mode (switch between copy and move operation).")
-        self.copy_button.setStyleSheet("""
-        QPushButton {
+        self.copy_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.copy_button.setStyleSheet(f"""
+        QPushButton {{
             width: 150px;
+            height: 20px;
             border: 1px solid black;
-            border-radius: 5px;
+            border-radius: {Styles.buttonBorderRadius}px;
             padding: 3px;
-            background-color: rgb(191, 189, 189);
+            background-color: {Styles.widgetsBgColor};
             font-weight: bold;
             font-size: 15px;
-        }
-        QPushButton:hover {
-            background-color: yellow;
-        }
+        }}
+        _QPushButton:hover {{
+            background-color: {Styles.buttonHoverBgColor};
+        }}
         """)
 
+        edit_buttonshadowEffect = QGraphicsDropShadowEffect()
+        edit_buttonshadowEffect.setOffset(3, 3)
+        edit_buttonshadowEffect.setBlurRadius(10)
         self.edit_button = QPushButton("&Edit", self)
         self.edit_button.clicked.connect(self.set_edit_mode)
-        self.edit_button.setStyleSheet("""
-        QPushButton {
+        self.edit_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.edit_button.setGraphicsEffect(edit_buttonshadowEffect)
+        self.edit_button.setStyleSheet(f"""
+        QPushButton {{
             width: 150px;
             border: 1px solid black;
-            border-radius: 5px;
+            border-radius: {Styles.buttonBorderRadius}px;
             padding: 3px;
-            background-color: rgb(191, 189, 189);
+            background-color: {Styles.widgetsBgColor};
             font-weight: bold;
             font-size: 15px;
-        }
-        QPushButton:hover {
-            background-color: yellow;
-        }
+        }}
+        _QPushButton:hover {{
+            background-color: {Styles.buttonHoverBgColor};
+        }}
         """)
 
+        sort_buttonshadowEffect = QGraphicsDropShadowEffect()
+        sort_buttonshadowEffect.setOffset(3, 3)
+        sort_buttonshadowEffect.setBlurRadius(10)
         self.sort_button = QPushButton("&Sort", self)
         self.sort_button.clicked.connect(self.set_sort_mode)
-        self.sort_button.setStyleSheet("""
-        QPushButton {
-            width: 150px;
+        self.sort_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.sort_button.setGraphicsEffect(sort_buttonshadowEffect)
+        self.sort_button.setStyleSheet(f"""
+        QPushButton {{
+            __width: 150px;
             border: 1px solid black;
-            border-radius: 5px;
+            border-radius: {Styles.buttonBorderRadius}px;
             padding: 3px;
-            background-color: rgb(191, 189, 189);
+            background-color: {Styles.widgetsBgColor};
             font-weight: bold;
             font-size: 15px;
-        }
-        QPushButton:hover {
-            background-color: yellow;
-        }
+        }}
+        QPushButton:hover {{
+            background-color: {Styles.buttonHoverBgColor};
+        }}
         """)
+        # self.sort_button.setStyleSheet(Styles.getButtonStyles())
 
         left_inner_button_layout = QHBoxLayout()
         left_inner_button_layout.addWidget(self.edit_button)
@@ -347,29 +376,29 @@ class MainWindow(QMainWindow):
 
         # Tree view for user's sorting shortcuts:
         self.tree = CustomTreeWidget()
-        self.tree.setStyleSheet("""
-            QTreeWidget {
+        self.tree.setStyleSheet(f"""
+            QTreeWidget {{
                 border: 1px solid black;
                 border-radius: 10px;
-                background-color: rgb(191, 189, 189);
+                background-color: {Styles.widgetsBgColor};
                 __padding: 2px;
-            }
+            }}
             
-            QTreeWidget::header {
+            QTreeWidget::header {{
                 background-color: red;
                 min-height: 30px;
-            }
+            }}
             
-            QHeaderView {
-                background-color: rgb(191, 189, 189);
+            QHeaderView {{
+                background-color: {Styles.widgetsBgColor};
                 color: black;
                 border: 0px solid black;
                 border-radius: 10px;
                 margin-top: 8px;
                 min-height: 30px;
-            }
+            }}
             
-            QHeaderView::section {
+            QHeaderView::section {{
                 _color: green;
                 font-weight: bold;
                 background-color: rgb(214, 137, 60);
@@ -379,12 +408,12 @@ class MainWindow(QMainWindow):
                 
                 _margin: 3px;
                 _min-height: 20px;
-            }
+            }}
         """)
-        self.shadowEffect = QGraphicsDropShadowEffect()
-        self.shadowEffect.setOffset(3, 3)
-        self.shadowEffect.setBlurRadius(10)
-        self.tree.setGraphicsEffect(self.shadowEffect)
+        treeshadowEffect = QGraphicsDropShadowEffect()
+        treeshadowEffect.setOffset(3, 3)
+        treeshadowEffect.setBlurRadius(10)
+        self.tree.setGraphicsEffect(treeshadowEffect)
         self.tree.setMaximumWidth(250)
         left_inner_layout.addWidget(self.tree)
         self.tree.setColumnCount(3)
@@ -466,6 +495,7 @@ class MainWindow(QMainWindow):
         self.galleryManager.setPreviousImage()
         self.image_counter_label.setText(self.galleryManager.getCounterString())
 
+    # TODO: Telo presunout do CustromTreeWidget a sem pridat pouze volani teze funkce v customtreewidgetu.
     def update_tree_view(self):
         # Just flush the whole content of the tree and rebuild it from scratch.
         self.tree.clear()
@@ -547,13 +577,41 @@ class MainWindow(QMainWindow):
         if self.copyOnly is False:
             print("Current mode: Copy")
             self.copyOnly = True
-            self.copy_button.setStyleSheet("background-color: yellow;")
+            self.copy_button.setStyleSheet(f"""
+            QPushButton {{
+                width: 150px;
+                height: 20px;
+                border: 1px solid black;
+                border-radius: {Styles.buttonBorderRadius}px;
+                padding: 3px;
+                background-color: {Styles.buttonActivatedBgColor};
+                font-weight: bold;
+                font-size: 15px;
+            }}
+            _QPushButton:hover {{
+                background-color: {Styles.buttonHoverBgColor};
+            }}
+            """)
             return
 
         if self.copyOnly is True:
             print("Current mode: Move")
             self.copyOnly = False
-            self.copy_button.setStyleSheet("background-color: none;")
+            self.copy_button.setStyleSheet(f"""
+            QPushButton {{
+                width: 150px;
+                height: 20px;
+                border: 1px solid black;
+                border-radius: {Styles.buttonBorderRadius}px;
+                padding: 3px;
+                background-color: {Styles.buttonBgColor};
+                font-weight: bold;
+                font-size: 15px;
+            }}
+            _QPushButton:hover {{
+                background-color: {Styles.buttonHoverBgColor};
+            }}
+            """)
             return
 
     def set_edit_mode(self):
@@ -561,8 +619,36 @@ class MainWindow(QMainWindow):
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Edit")
         self.current_mode = "edit"
-        self.edit_button.setStyleSheet("background-color: yellow;")
-        self.sort_button.setStyleSheet("background-color: none;")
+        self.edit_button.setStyleSheet(f"""
+            QPushButton {{
+                __width: 100px;
+                height: 20px;
+                border: 1px solid black;
+                border-radius: {Styles.buttonBorderRadius}px;
+                padding: 3px;
+                background-color: {Styles.buttonActivatedBgColor};
+                font-weight: bold;
+                font-size: 15px;
+            }}
+            QPushButton:hover {{
+                background-color: {Styles.buttonHoverBgColor};
+            }}
+            """)
+        self.sort_button.setStyleSheet(f"""
+            QPushButton {{
+                __width: 100px;
+                height: 20px;
+                border: 1px solid black;
+                border-radius: {Styles.buttonBorderRadius}px;
+                padding: 3px;
+                background-color: {Styles.buttonBgColor};
+                font-weight: bold;
+                font-size: 15px;
+            }}
+            QPushButton:hover {{
+                background-color: {Styles.buttonHoverBgColor};
+            }}
+            """)
         self.tree.setColumnHidden(2, False)
         self.tree.setEnabled(True)
 
@@ -571,11 +657,40 @@ class MainWindow(QMainWindow):
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Sort")
         self.current_mode = "sort"
-        self.edit_button.setStyleSheet("background-color: none;")
-        self.sort_button.setStyleSheet("background-color: yellow;")
+        self.edit_button.setStyleSheet(f"""
+            QPushButton {{
+                __width: 150px;
+                height: 20px;
+                border: 1px solid black;
+                border-radius: {Styles.buttonBorderRadius}px;
+                padding: 3px;
+                background-color: {Styles.buttonBgColor};
+                font-weight: bold;
+                font-size: 15px;
+            }}
+            QPushButton:hover {{
+                background-color: {Styles.buttonHoverBgColor};
+            }}
+            """)
+        self.sort_button.setStyleSheet(f"""
+            QPushButton {{
+                __width: 150px;
+                height: 20px;
+                border: 1px solid black;
+                border-radius: {Styles.buttonBorderRadius}px;
+                padding: 3px;
+                background-color: {Styles.buttonActivatedBgColor};
+                font-weight: bold;
+                font-size: 15px;
+            }}
+            QPushButton:hover {{
+                background-color: {Styles.buttonHoverBgColor};
+            }}
+            """)
         self.tree.setColumnHidden(2, True)
         self.tree.setEnabled(False)
 
+    # TODO: Rozbit na mensi kousky:
     def keyPressEvent(self, event):
         if isinstance(event, QKeyEvent):
             pressed_key = event.text()
@@ -813,15 +928,10 @@ class MainWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    app.setStyle('Fusion')
-    app.setStyleSheet("""
-        :root {
-            --components-background: rgb(191, 189, 189);
-            --main-background: rgb(122, 120, 120);
-        }   
-        QWidget {
-            background-color: var(--main-background, rgb(122, 120, 120));
-        }
+    app.setStyleSheet(f"""
+        QWidget {{
+            background-color: {Styles.mainBackground};
+        }}
     """)
     window = MainWindow()
     window.show()

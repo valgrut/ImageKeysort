@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QCursor
 from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout
 
 import resources_rc
@@ -22,6 +22,8 @@ class EmptyGalleryImageWidget(QWidget):
 
         icon = QPixmap(":/Resources/empty-inbox.png")
         icon = icon.scaled(200, 200, Qt.KeepAspectRatio)
+
+        self.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.label = QLabel()
         self.label.setPixmap(icon)

@@ -19,14 +19,7 @@ class GalleryManager(QStackedWidget):
         super().__init__()
         self.mainWindow = mainWindow  # TODO: sig-slots
 
-        # Graphics stylesheets:
-        self.setStyleSheet("""
-            width: 150px;
-            border: 1px solid black;
-            border-radius: 10px;
-            padding: 3px;
-            background-color: rgb(191, 189, 189);
-        """)
+
         self.shadowEffect = QGraphicsDropShadowEffect()
         self.shadowEffect.setOffset(3, 3)
         self.shadowEffect.setBlurRadius(10)
