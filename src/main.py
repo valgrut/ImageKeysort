@@ -146,12 +146,32 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(right_inner_layout)
 
         self.source_dir_label = QLabel("Not selected")
-        # self.source_dir_label.setStyleSheet("border: 1px solid black;")
         self.source_dir_label.setMaximumHeight(25)
+        self.source_dir_label.setStyleSheet(f"""
+            QLabel {{
+                min-height: 20px;
+                border: 1px solid black;
+                border-radius: {Styles.buttonBorderRadius}px;
+                background-color: {Styles.widgetsBgColor};
+                font-weight: bold;
+                font-size: 15px;
+                xxmargin: 5px;
+                }}
+            """)
         right_inner_layout.addWidget(self.source_dir_label)
 
         self.image_filename_label = QLabel()
-        # self.image_filename_label.setStyleSheet("border: 1px solid black;")
+        self.image_filename_label.setStyleSheet(f"""
+            QLabel {{
+                _min-height: 20px;
+                border: 1px solid black;
+                border-radius: {Styles.buttonBorderRadius}px;
+                background-color: {Styles.widgetsBgColor};
+                font-weight: bold;
+                font-size: 15px;
+                xxmargin: 5px;
+                }}
+            """)
         self.image_filename_label.setMaximumHeight(25)
         # self.image_filename_label.setStyleSheet("background-color: green; border: 1px solid black; padding: 1px;")
         right_inner_layout.addWidget(self.image_filename_label)
