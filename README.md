@@ -31,6 +31,8 @@ This could help you, just as it helped me!
 - Undo the move
 - Temporarily preserve part of the shortcut, so instead of repeating the whole 'ian', you can fix 'ia' and 
   then hit just the last part of the sequence: 'n' for naruto, 'd' for deathnote and so on.
+- Create a subset of gallery photos: Select Copy mode and just copy some photos to target directory, for example to 
+  show just subset of photos to your family.
 
 ## 4. How to build the app
 

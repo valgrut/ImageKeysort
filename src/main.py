@@ -34,6 +34,7 @@ from CustomTreeWidget import CustomTreeWidget
 width = 1152
 height = 864
 
+# TODO: Translate DONE and TODO to EN:
 # Features DONE:
 # - [x] Pridat nekam, jaka src slozka je aktualne nastavena
 # - [x] Pridat zobrazeni i 3. vnoreni zkratek
@@ -47,33 +48,31 @@ height = 864
 # - [x] Pridat obrazky pro buttons (kos s cervenym backgroundem, a takoveto pero pro edit)
 # - [x] Kdyz neni otevrena zadna src slozka, tak moct kliknout na plochu, kde byvaji obrazky, pro otevreni dialogu vyberu src slozky.
 # - [x] Pridat filtr ze se nactou do galerie pouze .png, .jpeg, .jpg, .gif, proste jen obrazkove formaty. Zadna pdf a tak.
+# - [x] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
+# - [x] Fixed: All Images were clickable instead of just the one when gallery is empty.
+# - [x] Kdyz v galerii dojdou obrazky, vratit tam ten obrazek EmptyInbox.
+# - [x] Track changes in shortcuts and ask for saving if changes were made.
+# - [x] Pri nacteni shortcuts-dat ulozit cestu, odkud byla vzata a nabidnout ji pak kdyz chci ulozit zmeny.
 #
 # Top priority:
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno.
-# - [ ] !!! Pri nacteni dat ulozit cestu, odkud byla vzata a nabidnout ji pak kdyz chci ulozit zmeny.
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 # - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 #
 # Features TODO:
-# - [~] Pridat obrazek do imagewidgetu, kdyz neni nactena zadna src slozka.
 # - [~] ! REFACTORING
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [~] Pridat testy (make test)
-# - [ ] Prepsat vse z CZ do EN
-# - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
-# - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
-# - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
+# - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama).
 #
 # Design:
 # - [ ] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
 #
 # To Fix:
 # - [ ] Crashing when moving the .git bcz process (medium) is used or what...
-# - [ ] All Images are clickable instead of just the one when gallery is empty.
-# - [ ] Kdyz v galerii dojdou obrazky, vratit tam ten obrazek EmptyInbox.
 #
 # Shortcuts management:
 # - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
@@ -81,7 +80,13 @@ height = 864
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
 # - [ ] FIX: searching longest path!
 # - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani 'a' zkratku z rodicovske 'o'.
+# - [ ] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
 #
+# Minor issues:
+# - [ ] Prepsat vse z CZ do EN
+# - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
+# - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
+# - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
 #
 # TODO: Promyslet:
 # - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
@@ -426,9 +431,10 @@ class MainWindow(QMainWindow):
         # TODO: add info about project, add shortcuts
 
     def exitApp(self):
-        #TODO: zjistit, jestli jsou zmeny v shortcuts a pripadne se zeptat, jestli ulozit
-        print("Exiting")
+        if self.shortcut_manager.areShortcutsModified():
+            self.shortcut_manager.save_shortcuts()
 
+        print("Exiting")
         sys.exit(0)
         exit(0)
 
@@ -814,6 +820,7 @@ def main():
     """)
     window = MainWindow()
     window.show()
+    app.aboutToQuit.connect(window.shortcut_manager.askSaveIfChanged)
 
     sys.exit(app.exec())
 
