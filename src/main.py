@@ -152,101 +152,8 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(left_inner_layout)
         main_layout.addLayout(right_inner_layout)
 
-        self.source_dir_label = QLabel("Not selected")
-        self.source_dir_label.setMaximumHeight(30)
-        self.source_dir_label.setStyleSheet(f"""
-            QLabel {{
-                min-height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                background-color: {Styles.widgetsBgColor};
-                font-weight: bold;
-                font-size: 15px;
-                xxmargin: 5px;
-                }}
-            """)
-        right_inner_layout.addWidget(self.source_dir_label)
-
-        self.image_filename_label = QLabel()
-        self.image_filename_label.setMaximumHeight(30)
-        self.image_filename_label.setStyleSheet(f"""
-            QLabel {{
-                _min-height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                background-color: {Styles.widgetsBgColor};
-                font-weight: bold;
-                font-size: 15px;
-                xxmargin: 5px;
-                }}
-            """)
-        # self.image_filename_label.setStyleSheet("background-color: green; border: 1px solid black; padding: 1px;")
-        right_inner_layout.addWidget(self.image_filename_label)
-
         # Right side of the main layout
         right_inner_layout.addWidget(self.galleryManager)
-
-        previousshadowEffect = QGraphicsDropShadowEffect()
-        previousshadowEffect.setOffset(3, 3)
-        previousshadowEffect.setBlurRadius(10)
-        self.previous_image_button = QPushButton("&Previous", self)
-        self.previous_image_button.clicked.connect(self.showPreviousImage)
-        self.previous_image_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.previous_image_button.setFocus(True)
-        self.previous_image_button.setGraphicsEffect(previousshadowEffect)
-        self.previous_image_button.setStyleSheet(f"""
-        QPushButton {{
-            width: 150px;
-            height: 20px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-        }}
-        QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
-
-        nextshadowEffect = QGraphicsDropShadowEffect()
-        nextshadowEffect.setOffset(3, 3)
-        nextshadowEffect.setBlurRadius(10)
-        self.next_image_button = QPushButton("&Next", self)
-        self.next_image_button.clicked.connect(self.showNextImage)
-        self.next_image_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.next_image_button.setFocus(True)
-        self.next_image_button.setGraphicsEffect(nextshadowEffect)
-        self.next_image_button.setStyleSheet(f"""
-        QPushButton {{
-            width: 150px;
-            height: 20px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-
-        }}
-        QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
-
-        self.image_counter_label = QLabel()
-        self.image_counter_label.setStyleSheet("font-size: 20px;")
-        self.image_counter_label.setText("0/0")
-
-        right_control_buttons_layout = QHBoxLayout()
-        right_control_buttons_layout.addWidget(self.previous_image_button)
-        right_control_buttons_layout.addStretch()
-        right_control_buttons_layout.addWidget(self.image_counter_label)
-        right_control_buttons_layout.addStretch()
-        right_control_buttons_layout.addWidget(self.next_image_button)
-
-        right_inner_layout.addLayout(right_control_buttons_layout)
 
         statusshadowEffect = QGraphicsDropShadowEffect()
         statusshadowEffect.setOffset(3, 3)
@@ -451,9 +358,6 @@ class MainWindow(QMainWindow):
         # self.tree.setEnabled(False)
         self.update_tree_view()
 
-        # Update Counter label
-        self.image_counter_label.setText(self.galleryManager.getCounterString())
-
         # Create main Menu bar
         self._createActions()
         self._createMenuBar()
@@ -510,17 +414,6 @@ class MainWindow(QMainWindow):
         self.saveAction.triggered.connect(self.save_data)
         self.loadAction.triggered.connect(self.load_data)
         self.exitAction.triggered.connect(self.exitApp)
-
-    # def setStatusBarMessage(self, message):
-    #     self.statusBarLabel.setText(message)
-
-    def showNextImage(self):
-        self.galleryManager.setNextImage()
-        self.image_counter_label.setText(self.galleryManager.getCounterString())
-
-    def showPreviousImage(self):
-        self.galleryManager.setPreviousImage()
-        self.image_counter_label.setText(self.galleryManager.getCounterString())
 
     # TODO: Telo presunout do CustromTreeWidget a sem pridat pouze volani teze funkce v customtreewidgetu.
     def update_tree_view(self):
@@ -589,7 +482,7 @@ class MainWindow(QMainWindow):
         self.galleryManager.addFile(image_name, positionIndex)
 
         # Update counter label
-        self.image_counter_label.setText(self.galleryManager.getCounterString())
+        self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
 
         # Remove last record from history
         if self.mv_history:
@@ -600,7 +493,7 @@ class MainWindow(QMainWindow):
         # print(self.images)
 
     def toggleCopyMode(self):
-        self.next_image_button.setFocus()
+        # self.next_image_button.setFocus()
         if self.copyOnly is False:
             print("Current mode: Copy")
             self.copyOnly = True
@@ -835,8 +728,8 @@ class MainWindow(QMainWindow):
                         self.galleryManager.incrementGalleryIndex()
                         self.statusBarLabel.setText(f"File copied to {dst}.")
 
-                    # Update counter label
-                    self.image_counter_label.setText(self.galleryManager.getCounterString())
+                    # Update counter label TODO fix:
+                    self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
 
                     # Show new image
                     self.galleryManager.updatePreview()
@@ -863,8 +756,8 @@ class MainWindow(QMainWindow):
                     self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
                     self.statusBarLabel.setText(f"File Deleted.")
 
-                    # Update counter label
-                    self.image_counter_label.setText(self.galleryManager.getCounterString())
+                    # Update counter label TODO fix:
+                    self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
 
                     # Show new image
                     self.galleryManager.updatePreview()
@@ -921,8 +814,8 @@ class MainWindow(QMainWindow):
                             self.galleryManager.incrementGalleryIndex()
                             self.statusBarLabel.setText(f"File copied to {dst}.")
 
-                        # Update counter label
-                        self.image_counter_label.setText(self.galleryManager.getCounterString())
+                        # Update counter label TODO fix:
+                        self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
 
                         # Show new image
                         self.galleryManager.updatePreview()

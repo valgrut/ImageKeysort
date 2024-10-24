@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QFileDialog, QGraphicsDropShadowEffect, QStackedWidg
 from VideoWidget import VideoWidget
 from ImageWidget import ImageWidget
 from EmptyGalleryWidget import EmptyGalleryImageWidget
+from MediaContainerWidget import MediaContainerWidget
 
 
 class GalleryManager(QStackedWidget):
@@ -19,11 +20,10 @@ class GalleryManager(QStackedWidget):
         super().__init__()
         self.mainWindow = mainWindow  # TODO: sig-slots
 
-
-        self.shadowEffect = QGraphicsDropShadowEffect()
-        self.shadowEffect.setOffset(3, 3)
-        self.shadowEffect.setBlurRadius(10)
-        self.setGraphicsEffect(self.shadowEffect)
+        shadowEffect = QGraphicsDropShadowEffect()
+        shadowEffect.setOffset(3, 3)
+        shadowEffect.setBlurRadius(10)
+        self.setGraphicsEffect(shadowEffect)
 
         # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
 
@@ -36,25 +36,22 @@ class GalleryManager(QStackedWidget):
 
         # Stacked widgets:
         self.emptyInboxWidget = EmptyGalleryImageWidget()
-        self.imageViewWidget = ImageWidget()  # for .png, .jpg, ...
-        self.videoViewWidget = VideoWidget()  # for .gif and such
+        self.mediaContainerWidget = MediaContainerWidget(self)
 
         # TODO A tyhle styly nudou genericke, ne jen pro emptyimage... Mozna udelat nejakou factory, ktera by podle podminek davala spravnej objekt sem.
 
         self.EMPTY_INBOX_WIDGET = 0
-        self.IMAGE_WIDGET = 1
-        self.VIDEO_WIDGET = 2
+        self.MEDIA_WIDGET = 1
 
         self.addWidget(self.emptyInboxWidget)
-        self.addWidget(self.imageViewWidget)
-        self.addWidget(self.videoViewWidget)
+        self.addWidget(self.mediaContainerWidget)
 
         self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
         self.mainWindow.source_dir_label.setText(path)  # TODO: sig-slots, replace this.
-        #self.setSourceDirLabelTextSignal.emit(path)  # TODO: for this.
+        # self.setSourceDirLabelTextSignal.emit(path)  # TODO: for this.
         self.loadImagesInDirectory()
 
     def getSourcePath(self) -> str:
@@ -65,7 +62,7 @@ class GalleryManager(QStackedWidget):
         if not srcPath:
             return
         self.sourceDirectoryPath = srcPath
-        self.mainWindow.source_dir_label.setText(self.sourceDirectoryPath) # TODO: sig-slots
+        self.mediaContainerWidget.source_dir_label.setText(self.sourceDirectoryPath)  # TODO: sig-slots
         self.loadImagesInDirectory()
 
     def loadImagesInDirectory(self):
@@ -112,11 +109,11 @@ class GalleryManager(QStackedWidget):
 
     def setNextImage(self):
         self.incrementGalleryIndex()
-        self.updatePreview() # TODO: sig-slots
+        self.updatePreview()  # TODO: sig-slots
 
     def setPreviousImage(self):
         self.decrementGalleryIndex()
-        self.updatePreview() # TODO: sig-slots
+        self.updatePreview()  # TODO: sig-slots
 
     def getCurrentFilename(self):
         if self.images:
@@ -136,19 +133,21 @@ class GalleryManager(QStackedWidget):
 
         if self.isCurrentVideo():
             # It is playable
-            self.setCurrentIndex(self.VIDEO_WIDGET)
+            self.setCurrentIndex(self.MEDIA_WIDGET)
+            self.mediaContainerWidget.setVideoWidget()
             self.videoViewWidget.setFileName(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
             self.videoViewWidget.setMovie(self.videoViewWidget)
             self.videoViewWidget.start()
 
         else:
             # It is image
-            self.setCurrentIndex(self.IMAGE_WIDGET)
+            self.setCurrentIndex(self.MEDIA_WIDGET)
+            self.mediaContainerWidget.setImageWidget()
             print("DEBUG:" + str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            self.imageViewWidget.updateImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+            self.mediaContainerWidget.imageViewWidget.updateImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
 
-        self.mainWindow.image_filename_label.setText(self.getCurrentFilename())  # TODO: sig-slots
-        self.mainWindow.image_counter_label.setText(self.getCounterString())  # TODO: sig-slots
+        self.mediaContainerWidget.image_filename_label.setText(self.getCurrentFilename())  # TODO: sig-slots
+        self.mediaContainerWidget.image_counter_label.setText(self.getCounterString())  # TODO: sig-slots
 
     def getCounterString(self) -> str:
         counter = str(self.galleryIndex + 1) + "/" + str(len(self.images))

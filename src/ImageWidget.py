@@ -33,8 +33,6 @@ class ImageWidget(QWidget):
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
 
-        # TODO: presunout sem vsechna "NextImage, ..." tlacitka.
-
     def updateImage(self, img_path):
         # TODO: Nejake cache?
         self.pixmap.load(img_path)
