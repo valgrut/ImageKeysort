@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPixmap, QCursor
 from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout
 
 import resources_rc
-
+from Styles import Styles
 
 class EmptyGalleryImageWidget(QWidget):
 
@@ -12,10 +12,10 @@ class EmptyGalleryImageWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setStyleSheet("""
+        self.setStyleSheet(f"""
             width: 100px;
             border: 1px solid black;
-            border-radius: 10px;
+            border-radius: {Styles.widgetBorderRadius}px;
             padding: 3px;
             background-color: rgb(100, 189, 189);
         """)

@@ -2,15 +2,16 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 
+from Styles import Styles
 
 class ImageWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setStyleSheet("""
+        self.setStyleSheet(f"""
             width: 100px;
             border: 1px solid black;
-            border-radius: 10px;
+            border-radius: {Styles.widgetBorderRadius}px;
             padding: 3px;
             background-color: rgb(100, 100, 189);
         """)

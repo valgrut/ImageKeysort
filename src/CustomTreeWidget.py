@@ -3,6 +3,11 @@ from PyQt5.QtWidgets import QTreeWidget
 
 
 class CustomTreeWidget(QTreeWidget):
+
+    def __init__(self):
+        super().__init__()
+
+    # TODO: nejspis jde oddelat, nic moc mi to nepomaha s tim focusem.
     def keyPressEvent(self, event):
         # Block left and right arrow keys from affecting QTreeWidget behavior
         if event.key() == Qt.Key_Left or event.key() == Qt.Key_Right:

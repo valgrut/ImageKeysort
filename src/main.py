@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (
     QShortcut,
     QMenu,
     QAction,
-    QGraphicsDropShadowEffect,
+    QGraphicsDropShadowEffect, QSplitter,
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -55,13 +55,15 @@ height = 864
 # - [x] Pri nacteni shortcuts-dat ulozit cestu, odkud byla vzata a nabidnout ji pak kdyz chci ulozit zmeny.
 # - [x] Po najeti na tlacitka/klikatelne veci, se zmeni kurzor na ruku.
 # - [x] Zprovoznit ikonu aplikace
+# - [x] FIX: searching longest path!
+#
 #
 # Top priority:
+# - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani 'a' zkratku z rodicovske 'o'.
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno. Celkove resizing a responzivnost posefit.
-# - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 # - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
-# - [ ] Next/Prev buttons a counter se zobrazi jen, kdyz je nactena galerie.
+# - [ ] Next/Prev buttons, counter a src a image name se zobrazi jen, kdyz je nactena galerie.
 #
 # Features TODO:
 # - [~] ! REFACTORING
@@ -69,12 +71,14 @@ height = 864
 # - [~] Pridat testy (make test)
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
+# - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama).
-# - [ ] Edit/Delete buttons se zobrazi pouze v Edit modu.
+# - [ ] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
 # - [ ] Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
-# - [ ] Pridat slovo "EMPTY" do Inbox obrazku
 # - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
+# - [ ] Udelat CustomTree resizable pomoci QSplitter
+# - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu?
 #
 # Design:
 # - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
@@ -86,8 +90,6 @@ height = 864
 # - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
-# - [ ] FIX: searching longest path!
-# - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani 'a' zkratku z rodicovske 'o'.
 # - [ ] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
 #
 # Minor issues:
@@ -96,6 +98,7 @@ height = 864
 # - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
 # - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
 # - [ ] Separatni repozitar, hodit na reddit, na RH, kolegum,
+# - [ ] Pridat slovo "EMPTY" do Inbox obrazku
 #
 # TODO: Promyslet:
 # - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
