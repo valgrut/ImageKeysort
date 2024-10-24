@@ -136,3 +136,9 @@ class MediaContainerWidget(QWidget):
 
     def setImageWidget(self):
         self.stackedMediaWidget.setCurrentIndex(0)
+
+    def updateCounterLabelText(self, text):
+        self.image_counter_label.setText(text)
+
+    def updateFilenameLabelText(self, text):
+        self.image_filename_label.setText(text)

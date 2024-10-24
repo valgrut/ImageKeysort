@@ -32,13 +32,9 @@ class GalleryManager(QStackedWidget):
         self.galleryIndex = 0
         self.sourceDirectoryPath = ""
 
-        # TODO: Semka mozna presunout sourceDirLabel a ImageNameLabel.
-
         # Stacked widgets:
         self.emptyInboxWidget = EmptyGalleryImageWidget()
         self.mediaContainerWidget = MediaContainerWidget(self)
-
-        # TODO A tyhle styly nudou genericke, ne jen pro emptyimage... Mozna udelat nejakou factory, ktera by podle podminek davala spravnej objekt sem.
 
         self.EMPTY_INBOX_WIDGET = 0
         self.MEDIA_WIDGET = 1
@@ -120,14 +116,15 @@ class GalleryManager(QStackedWidget):
             return self.images[self.galleryIndex]
         return ""
 
+    def updateCounterLabelText(self):
+        self.mediaContainerWidget.updateCounterLabelText(self.getCounterString())
+
+    def updateFilenameLabelText(self):
+        self.mediaContainerWidget.updateFilenameLabelText(self.getCurrentFilename())
+
     # TODO: previewLabel pryc, misto toho signal-slot
     def updatePreview(self):
         if self.isGalleryEmpty():
-            # TODO: sets something containing clickable board to open and set new source Directory.
-            # self.previewLabel = ...?
-            # previewLabel.setPixmap(self.emptyInboxIcon)
-            # previewLabel.addWidget(self.emptyInboxIcon)
-            # previewLabel = self.getSuitableLabel()
             self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
             return
 
@@ -144,10 +141,11 @@ class GalleryManager(QStackedWidget):
             self.setCurrentIndex(self.MEDIA_WIDGET)
             self.mediaContainerWidget.setImageWidget()
             print("DEBUG:" + str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+
             self.mediaContainerWidget.imageViewWidget.updateImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
 
-        self.mediaContainerWidget.image_filename_label.setText(self.getCurrentFilename())  # TODO: sig-slots
-        self.mediaContainerWidget.image_counter_label.setText(self.getCounterString())  # TODO: sig-slots
+        self.updateFilenameLabelText()  # TODO: sig-slots
+        self.updateCounterLabelText()  # TODO: sig-slots
 
     def getCounterString(self) -> str:
         counter = str(self.galleryIndex + 1) + "/" + str(len(self.images))

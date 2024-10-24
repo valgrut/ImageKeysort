@@ -57,14 +57,14 @@ height = 864
 # - [x] Zprovoznit ikonu aplikace
 # - [x] FIX: searching longest path!
 # - [x] Next/Prev buttons, counter a src a image name se zobrazi jen, kdyz je nactena galerie.
+# - [x] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani zkratku 'a' z rodicovske 'o'.
+# - [x] Prerusit to vetveni x.y.z.f() mezi main.GalleryManager.MediaContainerWidget.f() [Jak to delat lepe, nez ze udelat retezec funkci?]
 #
 #
 # Top priority:
-# - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani zkratku 'a' z rodicovske 'o'.
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno. Celkove resizing a responzivnost posefit.
 # - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
-# - [ ] Prerusit to vetveni x.y.z.f() mezi main.GalleryManager.MediaContainerWidget.f()
 #
 # Features TODO:
 # - [~] ! REFACTORING
@@ -76,7 +76,6 @@ height = 864
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.)
 # - [ ] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
-# - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 # - [ ] Udelat CustomTree resizable pomoci QSplitter
 # - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu?
 #
@@ -99,6 +98,7 @@ height = 864
 # - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
 # - [ ] Separatni repozitar, hodit na reddit, na RH, kolegum,
 # - [ ] Pridat slovo "EMPTY" do Inbox obrazku
+# - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 #
 # TODO: Promyslet:
 # - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
@@ -368,7 +368,7 @@ class MainWindow(QMainWindow):
 
         # vvvvvvvv TODO: Remove. [Just for DEBUG]: Manually setting src dir
         # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
-        # self.galleryManager.setSourcePath(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\test\downloads")
+        # self.galleryManager.setSourcePath(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\testing-data\downloads")
         # self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
         # ^^^^^^^^^
 
@@ -481,8 +481,8 @@ class MainWindow(QMainWindow):
         # Remove current image from the list of images in src directory
         self.galleryManager.addFile(image_name, positionIndex)
 
-        # Update counter label TODO this
-        self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
+        # Update counter label
+        self.galleryManager.updateCounterLabelText()
 
         # Remove last record from history
         if self.mv_history:
@@ -635,33 +635,30 @@ class MainWindow(QMainWindow):
             # ==== EDIT MODE ====
             if self.current_mode == "edit":
                 if event.key() == Qt.Key_Escape:
-                    self.key_seq_history.append(self.key_seq)
+                    # self.key_seq_history.append(self.key_seq)  # What was purpose of this???
                     self.key_seq = ""
                     self.updateKeySequenceLabel()
 
                 # Confirm entered shortcut
                 elif event.key() == Qt.Key_Return:  # "Return" is the "Enter" key in the center of keyboard.
-                    if not self.key_seq:
-                        print("probably empty")
+                    print("ENTER: seq:", self.key_seq)
+                    if len(self.key_seq) == 0:
+                        print(f"probably empty (Key seq: {self.key_seq})")
                         return
 
                     # Check, whether sequence contains '-', and if so
                     # consider this as removing all shortcuts after the '-' character.
                     if "-" in self.key_seq:
-                        # TODO
-                        # self.shortcut_manager.removeShortcutSequence(self.key_seq)
-                        # Jak? Projit od zacatku stringu, jak narazim na -, tak od te doby smazat nasledujici podstrom,
-                        # pokud existuje.
-                        # for key in self.key_seq:
-                        #   if key == "-":
-                        #       ...
+                        self.shortcut_manager.removeShortcutSequence(self.key_seq)
                         self.key_seq = ""
+                        self.update_tree_view()
+                        self.updateKeySequenceLabel()
                         return
 
                     # Add new shortcut sequence
                     for k in self.key_seq:
                         self.shortcut_manager.add_shortcut(self.key_seq)
-                        # if k == self.key_seq[-1]:
+
                     dst_sort_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
                     self.shortcut_manager.add_dst_path(self.key_seq, dst_sort_directory)
                     self.key_seq = ""
@@ -730,8 +727,7 @@ class MainWindow(QMainWindow):
                         self.galleryManager.incrementGalleryIndex()
                         self.statusBarLabel.setText(f"File copied to {dst}.")
 
-                    # Update counter label TODO fix:
-                    self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
+                    self.galleryManager.updateCounterLabelText()
 
                     # Show new image
                     self.galleryManager.updatePreview()
@@ -758,8 +754,7 @@ class MainWindow(QMainWindow):
                     self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
                     self.statusBarLabel.setText(f"File Deleted.")
 
-                    # Update counter label TODO fix:
-                    self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
+                    self.galleryManager.updateCounterLabelText()
 
                     # Show new image
                     self.galleryManager.updatePreview()
@@ -817,7 +812,7 @@ class MainWindow(QMainWindow):
                             self.statusBarLabel.setText(f"File copied to {dst}.")
 
                         # Update counter label TODO fix:
-                        self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
+                        self.galleryManager.updateCounterLabelText()
 
                         # Show new image
                         self.galleryManager.updatePreview()

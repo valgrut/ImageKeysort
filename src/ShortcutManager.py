@@ -1,5 +1,6 @@
 import json
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
+import re
 
 
 class ShortcutManager():
@@ -22,6 +23,7 @@ class ShortcutManager():
     def printShortcuts(self):
         pass
 
+
     def add_shortcut(self, sequence):
         # TODO: toto je potreba dodelat a plnit ten dict behem Edit modu
         for category in sequence:
@@ -41,12 +43,9 @@ class ShortcutManager():
         else:
             print(f"Zkratka {sequence} nebyla nalezena.")
 
-    def removeShortcut(self):
-        pass
-
     def get_dst_for_shortcut(self, sequence):
         print(f"get_dst_for_shortcut: {sequence}")
-        last_key = self._get_last_key_of_sequence(sequence)
+        last_key = self.getLastPossibleKeyOfSequence(sequence)
         if not last_key:
             return None
         # print("last: ", last_key)
@@ -72,7 +71,7 @@ class ShortcutManager():
 
         return pre_current
 
-    def _get_last_key_of_sequence(self, sequence):
+    def getLastPossibleKeyOfSequence(self, sequence):
         current = self.shortcutsData["keys"]  # a, b, x, ...
 
         currentKeyContent = ""
@@ -81,17 +80,36 @@ class ShortcutManager():
                 currentKeyContent = current[key]  # dst_path, keys
                 current = currentKeyContent["keys"]
 
-        # If key exists but does have another sub-keys under the "keys", return False (Not longest match)
+        # If key exists but have another sub-keys under the "keys", return False (Not longest match)
         if "keys" not in currentKeyContent or currentKeyContent["keys"]:
             return False
 
         return currentKeyContent
 
-    def does_shortcut_exist(self, sequence) -> bool:
-        last_key = _return_last_key_of_sequence(sequence)
-        if last_key:
-            return True
-        return False
+    def _get_last_key(self, sequence):
+        """
+        Get last key of sequence and does NOT matter whether the key has children keys under itself.
+        :param sequence:
+        :return:
+        """
+        current = self.shortcutsData["keys"]  # a, b, x, ...
+
+        currentKeyContent = ""
+        for key in sequence:
+            if key in current.keys():
+                currentKeyContent = current[key]  # dst_path, keys
+                current = currentKeyContent["keys"]
+
+        if "keys" not in currentKeyContent:
+            return False
+
+        return currentKeyContent
+
+    # def does_shortcut_exist(self, sequence) -> bool:
+    #     last_key = _return_last_key_of_sequence(sequence)
+    #     if last_key:
+    #         return True
+    #     return False
 
     def askSaveIfChanged(self):
         if not self.areShortcutsModified():
@@ -150,3 +168,49 @@ class ShortcutManager():
         print(f"Saved to {jsonDataFile}.")
 
         return True
+
+    def removeShortcutSequence(self, sequence: str):
+        """
+        Remove subtree marked by '-' in the sequence. For example, for sequence "ac-d",
+        remove 'd' subtree under the "ac".
+
+        :param sequence: Contains key sequence with '-' marking what should be removed from tree.
+        :return:
+        """
+
+        isMatched = re.search("^[a-z]*-[a-z]$", sequence)
+
+        if not isMatched:
+            print(f"DEBUG: Incorrect split string {isMatched}.")
+            return
+
+        sequenceSplit = sequence.split("-")
+        preDelimeter = sequenceSplit[0]
+        # print("Pre", preDelimeter)
+        postDelimeter = sequenceSplit[1]
+        # print("Post", postDelimeter)
+
+        # print(self.shortcutsData)
+
+        lastKey = ""
+        if preDelimeter and postDelimeter:
+            lastKey = self._get_last_key(preDelimeter)
+        else:
+            lastKey = self.shortcutsData
+
+        # print("Last key (pre):", lastKey)
+        if postDelimeter in lastKey["keys"]:
+            if lastKey["keys"].pop(postDelimeter):
+                self.setDataModified()
+
+        # print("Last key (pos):", lastKey)
+
+        # print("Remaining shortcuts", self.shortcutsData)
+
+        return True
+
+# TEST & DEBUG:
+# sm = ShortcutManager("xxx")
+# with open(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\Presets\remove-test.json", 'r', encoding='utf-8') as data:
+#     sm.shortcutsData = json.load(data)
+# print(sm.removeShortcutSequence("ab-b"))
