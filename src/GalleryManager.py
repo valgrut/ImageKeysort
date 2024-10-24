@@ -32,6 +32,10 @@ class GalleryManager(QStackedWidget):
         self.galleryIndex = 0
         self.sourceDirectoryPath = ""
 
+        # self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp', '.gif', '.mp4', '.avi')  # TODO: spravit avi, zprovoznit mp4.
+        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp')
+        self.videoSuffixes = ("gif", "mp4", "avi")
+
         # Stacked widgets:
         self.emptyInboxWidget = EmptyGalleryImageWidget()
         self.mediaContainerWidget = MediaContainerWidget(self)
@@ -46,7 +50,7 @@ class GalleryManager(QStackedWidget):
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
-        self.mainWindow.source_dir_label.setText(path)  # TODO: sig-slots, replace this.
+        self.mediaContainerWidget.source_dir_label.setText(path)  # TODO: sig-slots, replace this.
         # self.setSourceDirLabelTextSignal.emit(path)  # TODO: for this.
         self.loadImagesInDirectory()
 
@@ -70,7 +74,7 @@ class GalleryManager(QStackedWidget):
         # self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
         self.images = [
             f for f in listdir(self.sourceDirectoryPath)
-            if isfile(join(self.sourceDirectoryPath, f)) and f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))
+            if isfile(join(self.sourceDirectoryPath, f)) and f.lower().endswith(self.allowedSuffixes)
         ]
         self.images.sort()
         self.galleryIndex = 0
@@ -85,8 +89,8 @@ class GalleryManager(QStackedWidget):
         """
         returns true if current image is .gif or other video format
         """
-        videoSuffixes = ("gif", "mp4", "avi")
-        if str(self.images[self.galleryIndex]).endswith(videoSuffixes):
+
+        if str(self.images[self.galleryIndex]).endswith(self.videoSuffixes):
             return True
         return False
 
@@ -132,9 +136,15 @@ class GalleryManager(QStackedWidget):
             # It is playable
             self.setCurrentIndex(self.MEDIA_WIDGET)
             self.mediaContainerWidget.setVideoWidget()
-            self.videoViewWidget.setFileName(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            self.videoViewWidget.setMovie(self.videoViewWidget)
-            self.videoViewWidget.start()
+
+            # TODO: Rework!!!
+            # self.mediaContainerWidget.videoViewWidget.videoView.setFileName(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+            # self.mediaContainerWidget.videoViewWidget.videoView.setMovie(self.mediaContainerWidget.videoViewWidget)
+            # self.mediaContainerWidget.videoViewWidget.videoView.start()
+
+            print(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+            self.mediaContainerWidget.updateVideo(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+            # self.mediaContainerWidget.videoViewWidget.playVideo()
 
         else:
             # It is image

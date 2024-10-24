@@ -18,7 +18,7 @@ class MediaContainerWidget(QWidget):
         self.stackedMediaWidget = QStackedWidget()
 
         self.stackedMediaWidget.addWidget(self.imageViewWidget)
-        self.stackedMediaWidget.addWidget(self.videoViewWidget)
+        # self.stackedMediaWidget.addWidget(self.videoViewWidget)  # TODO: zabugovane!
 
         right_layout = QVBoxLayout()
 
@@ -142,3 +142,6 @@ class MediaContainerWidget(QWidget):
 
     def updateFilenameLabelText(self, text):
         self.image_filename_label.setText(text)
+
+    def updateVideo(self, videoPath):
+        self.videoViewWidget.updateVideo(videoPath)
