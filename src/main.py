@@ -56,14 +56,15 @@ height = 864
 # - [x] Po najeti na tlacitka/klikatelne veci, se zmeni kurzor na ruku.
 # - [x] Zprovoznit ikonu aplikace
 # - [x] FIX: searching longest path!
+# - [x] Next/Prev buttons, counter a src a image name se zobrazi jen, kdyz je nactena galerie.
 #
 #
 # Top priority:
-# - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani 'a' zkratku z rodicovske 'o'.
+# - [ ] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani zkratku 'a' z rodicovske 'o'.
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno. Celkove resizing a responzivnost posefit.
 # - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
-# - [ ] Next/Prev buttons, counter a src a image name se zobrazi jen, kdyz je nactena galerie.
+# - [ ] Prerusit to vetveni x.y.z.f() mezi main.GalleryManager.MediaContainerWidget.f()
 #
 # Features TODO:
 # - [~] ! REFACTORING
@@ -72,9 +73,8 @@ height = 864
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
-# - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama).
+# - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.)
 # - [ ] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
-# - [ ] Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
 # - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 # - [ ] Udelat CustomTree resizable pomoci QSplitter
@@ -481,7 +481,7 @@ class MainWindow(QMainWindow):
         # Remove current image from the list of images in src directory
         self.galleryManager.addFile(image_name, positionIndex)
 
-        # Update counter label
+        # Update counter label TODO this
         self.galleryManager.mediaContainerWidget.image_counter_label.setText(self.galleryManager.getCounterString())
 
         # Remove last record from history
@@ -618,9 +618,11 @@ class MainWindow(QMainWindow):
 
             # if self.current_mode == "home":
             if event.key() == Qt.Key_Left:
+                # TODO Fix:
                 self.showPreviousImage()
 
             elif event.key() == Qt.Key_Right:
+                # TODO Fix:
                 self.showNextImage()
 
             elif event.key() == Qt.Key_Delete:
