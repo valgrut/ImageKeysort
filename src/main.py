@@ -203,6 +203,7 @@ class MainWindow(QMainWindow):
         copy_buttonshadowEffect.setBlurRadius(10)
         self.copy_button = QPushButton("&Copy", self)
         self.copy_button.clicked.connect(self.toggleCopyMode)
+        self.copy_button.setFocusPolicy(Qt.NoFocus)
         self.copy_button.setGraphicsEffect(copy_buttonshadowEffect)
         self.copy_button.setToolTip("Toggle copy mode (switch between copy and move operation).")
         self.copy_button.setCursor(QCursor(Qt.PointingHandCursor))
@@ -227,6 +228,7 @@ class MainWindow(QMainWindow):
         edit_buttonshadowEffect.setBlurRadius(10)
         self.edit_button = QPushButton("&Edit", self)
         self.edit_button.clicked.connect(self.set_edit_mode)
+        self.edit_button.setFocusPolicy(Qt.NoFocus)
         self.edit_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.edit_button.setGraphicsEffect(edit_buttonshadowEffect)
         self.edit_button.setStyleSheet(f"""
@@ -249,6 +251,7 @@ class MainWindow(QMainWindow):
         sort_buttonshadowEffect.setBlurRadius(10)
         self.sort_button = QPushButton("&Sort", self)
         self.sort_button.clicked.connect(self.set_sort_mode)
+        self.sort_button.setFocusPolicy(Qt.NoFocus)
         self.sort_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.sort_button.setGraphicsEffect(sort_buttonshadowEffect)
         self.sort_button.setStyleSheet(f"""
@@ -375,6 +378,7 @@ class MainWindow(QMainWindow):
 
         # Sort mode is default mode when app starts
         self.set_sort_mode()
+        self.setFocusPolicy(Qt.NoFocus)
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
@@ -615,16 +619,19 @@ class MainWindow(QMainWindow):
     def keyPressEvent(self, event):
         if isinstance(event, QKeyEvent):
             pressed_key = event.text()
-            print(pressed_key)
+            print("Pressed Key:", pressed_key)
 
             # if self.current_mode == "home":
             if event.key() == Qt.Key_Left:
-                # TODO Fix:
-                self.showPreviousImage()
+                # TODO: de-chain:
+                self.galleryManager.mediaContainerWidget.showPreviousImage()
+                # print("LEFT ARROW")
 
             elif event.key() == Qt.Key_Right:
-                # TODO Fix:
-                self.showNextImage()
+                # TODO de-chain:
+                # self.showNextImage()
+                self.galleryManager.mediaContainerWidget.showNextImage()
+                # print("right ARROW")
 
             elif event.key() == Qt.Key_Delete:
                 pass
@@ -736,7 +743,6 @@ class MainWindow(QMainWindow):
 
                 elif event.key() == Qt.Key_Delete:
                     if self.galleryManager.isGalleryEmpty():
-                        # TODO: set some generic image for background
                         print("Source directory is empty")
                         return
 
@@ -835,9 +841,6 @@ class MainWindow(QMainWindow):
 
     def updateStatusBarLabel(self, src, dst):
         self.statusBarLabel.setText(f"File copied to {dst}.")
-
-    def parse_sequence(self):
-        pass
 
     def dispatcher(self, key_pressed):
         # if hit() then move image from src to dst. and save sequence into history.

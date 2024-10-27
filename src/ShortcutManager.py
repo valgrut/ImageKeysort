@@ -163,7 +163,9 @@ class ShortcutManager():
 
         with open(jsonDataFile[0], 'w', encoding='utf-8') as datafile:
             json.dump(self.shortcutsData, datafile, ensure_ascii=False, indent=4)
+            # TODO: Pridat sem nabizenou cestu
 
+        self.srcPathOfLoadedData = jsonDataFile[0]
         self.setDataUnmodified()
         print(f"Saved to {jsonDataFile}.")
 

@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QCursor, QKeyEvent
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, \
     QVBoxLayout
 
@@ -59,6 +59,7 @@ class MediaContainerWidget(QWidget):
         previousshadowEffect.setBlurRadius(10)
         self.previous_image_button = QPushButton("&Previous", self)
         self.previous_image_button.clicked.connect(self.showPreviousImage)
+        self.previous_image_button.setFocusPolicy(Qt.NoFocus)
         self.previous_image_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.previous_image_button.setFocus(True)
         self.previous_image_button.setGraphicsEffect(previousshadowEffect)
@@ -83,6 +84,7 @@ class MediaContainerWidget(QWidget):
         nextshadowEffect.setBlurRadius(10)
         self.next_image_button = QPushButton("&Next", self)
         self.next_image_button.clicked.connect(self.showNextImage)
+        self.next_image_button.setFocusPolicy(Qt.NoFocus)
         self.next_image_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.next_image_button.setFocus(True)
         self.next_image_button.setGraphicsEffect(nextshadowEffect)
