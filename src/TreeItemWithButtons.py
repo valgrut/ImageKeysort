@@ -20,9 +20,9 @@ class TreeItemWithButtons(QWidget):
         deletePixmap = QPixmap(":/Resources/bin.png")
         deleteIcon = QIcon(deletePixmap)
 
-        edit_button = QPushButton("E", self)
+        editButton = QPushButton("E", self)
         # edit_button.setStyleSheet("max-width: 10px; border: 1px solid black; :hover {background-color: green;};")
-        edit_button.setStyleSheet("""
+        editButton.setStyleSheet("""
             QPushButton {
                 max-width: 13px;
                 width: 13px;
@@ -36,12 +36,12 @@ class TreeItemWithButtons(QWidget):
                 color: white;  /* Change text color on hover */
             }
         """)
-        edit_button.setIcon(editIcon)
-        edit_button.setIconSize(edit_button.size())  # - QSize(5, 5))
+        editButton.setIcon(editIcon)
+        editButton.setIconSize(editButton.size())  # - QSize(5, 5))
 
-        delete_button = QPushButton("D", self)
+        deleteButton = QPushButton("D", self)
         # delete_button.setStyleSheet("max-width: 10px")
-        delete_button.setStyleSheet(
+        deleteButton.setStyleSheet(
         """
             QPushButton {
                 max-width: 13px;
@@ -57,8 +57,8 @@ class TreeItemWithButtons(QWidget):
                 color: white;  /* Change text color on hover */
             }
         """)
-        delete_button.setIcon(deleteIcon)
-        delete_button.setIconSize(delete_button.size())
+        deleteButton.setIcon(deleteIcon)
+        deleteButton.setIconSize(deleteButton.size())
 
         # TODO: this does not work:
         # self.setStyleSheet("background-color: green; border: 1px solid black;")
@@ -79,8 +79,8 @@ class TreeItemWithButtons(QWidget):
         #     }
         # """)
 
-        layout.addWidget(edit_button)
-        layout.addWidget(delete_button)
+        layout.addWidget(editButton)
+        layout.addWidget(deleteButton)
         layout.addStretch()
 
         self.setLayout(layout)

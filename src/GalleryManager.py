@@ -50,7 +50,7 @@ class GalleryManager(QStackedWidget):
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
-        self.mediaContainerWidget.source_dir_label.setText(path)  # TODO: sig-slots, replace this.
+        self.mediaContainerWidget.sourceDirLabel.setText(path)  # TODO: sig-slots, replace this.
         # self.setSourceDirLabelTextSignal.emit(path)  # TODO: for this.
         self.loadImagesInDirectory()
 
@@ -62,7 +62,7 @@ class GalleryManager(QStackedWidget):
         if not srcPath:
             return
         self.sourceDirectoryPath = srcPath
-        self.mediaContainerWidget.source_dir_label.setText(self.sourceDirectoryPath)  # TODO: sig-slots
+        self.mediaContainerWidget.sourceDirLabel.setText(self.sourceDirectoryPath)  # TODO: sig-slots
         self.loadImagesInDirectory()
 
     def loadImagesInDirectory(self):

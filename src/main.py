@@ -95,7 +95,6 @@ height = 864
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 #
 # Minor issues:
-# - [ ] Prepsat vse z CZ do EN
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
 # - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
@@ -110,7 +109,7 @@ height = 864
 # NEBO:
 # zadny interval, ale proste pri sub-sequenci, treba to 'oi', se stejne ceka na dalsi key, pokud obsahuje 'oi' dalsi subkeys, tak proste muzu dat enter, a ono se to tam presune. Takovej "Force" move.
 
-allowed_keys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
+allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
                 Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
                 Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
 
@@ -131,7 +130,7 @@ class MainWindow(QMainWindow):
         """)
 
         # Management objects
-        self.shortcut_manager = ShortcutManager(self)
+        self.shortcutManager = ShortcutManager(self)
         self.galleryManager = GalleryManager(self)
         self.galleryManager.setStyleSheet(f"""
             __width: 150px;
@@ -141,21 +140,21 @@ class MainWindow(QMainWindow):
             background-color: {Styles.widgetsBgColor};
         """)
 
-        main_layout = QHBoxLayout()
-        left_inner_layout = QVBoxLayout()
-        right_inner_layout = QVBoxLayout()
+        mainLayout = QHBoxLayout()
+        leftInnerLayout = QVBoxLayout()
+        rightInnerLayout = QVBoxLayout()
 
-        main_window_widget = QWidget()
-        main_window_widget.setLayout(main_layout)
-        main_window_widget.setFocus(True)
-        self.setCentralWidget(main_window_widget)
+        mainWindowWidget = QWidget()
+        mainWindowWidget.setLayout(mainLayout)
+        mainWindowWidget.setFocus(True)
+        self.setCentralWidget(mainWindowWidget)
 
         # Add sub-layouts into the main layout
-        main_layout.addLayout(left_inner_layout)
-        main_layout.addLayout(right_inner_layout)
+        mainLayout.addLayout(leftInnerLayout)
+        mainLayout.addLayout(rightInnerLayout)
 
         # Right side of the main layout
-        right_inner_layout.addWidget(self.galleryManager)
+        rightInnerLayout.addWidget(self.galleryManager)
 
         self.statusBarLabel = QLabel("Status bar")
         self.statusBarLabel.setGraphicsEffect(Styles.getShadowEffect())
@@ -172,13 +171,13 @@ class MainWindow(QMainWindow):
                 }}
             """)
         self.statusBarLabel.setWordWrap(True)
-        right_inner_layout.addWidget(self.statusBarLabel)
+        rightInnerLayout.addWidget(self.statusBarLabel)
 
         # Left side of the main layout
-        self.key_label = QLabel("Key Sequence Pressed: \nNone")
-        self.key_label.resize(self.key_label.sizeHint())
-        self.key_label.setGraphicsEffect(Styles.getShadowEffect())
-        self.key_label.setStyleSheet(f"""
+        self.keyLabel = QLabel("Key Sequence Pressed: \nNone")
+        self.keyLabel.resize(self.keyLabel.sizeHint())
+        self.keyLabel.setGraphicsEffect(Styles.getShadowEffect())
+        self.keyLabel.setStyleSheet(f"""
             font-size: 16px;
             font-weight: bold;
             height: 20px;
@@ -187,15 +186,15 @@ class MainWindow(QMainWindow):
             color: rgb(171, 110, 3);
             background-color: {Styles.widgetsBgColor};
             """)
-        self.key_label.setAlignment(Qt.AlignCenter)
+        self.keyLabel.setAlignment(Qt.AlignCenter)
 
-        self.copy_button = QPushButton("&Copy", self)
-        self.copy_button.clicked.connect(self.toggleCopyMode)
-        self.copy_button.setFocusPolicy(Qt.NoFocus)
-        self.copy_button.setGraphicsEffect(Styles.getShadowEffect())
-        self.copy_button.setToolTip("Toggle copy mode (switch between copy and move operation).")
-        self.copy_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.copy_button.setStyleSheet(f"""
+        self.copyButton = QPushButton("&Copy", self)
+        self.copyButton.clicked.connect(self.toggleCopyMode)
+        self.copyButton.setFocusPolicy(Qt.NoFocus)
+        self.copyButton.setGraphicsEffect(Styles.getShadowEffect())
+        self.copyButton.setToolTip("Toggle copy mode (switch between copy and move operation).")
+        self.copyButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.copyButton.setStyleSheet(f"""
         QPushButton {{
             width: 150px;
             height: 20px;
@@ -211,12 +210,12 @@ class MainWindow(QMainWindow):
         }}
         """)
 
-        self.edit_button = QPushButton("&Edit", self)
-        self.edit_button.clicked.connect(self.set_edit_mode)
-        self.edit_button.setFocusPolicy(Qt.NoFocus)
-        self.edit_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.edit_button.setGraphicsEffect(Styles.getShadowEffect())
-        self.edit_button.setStyleSheet(f"""
+        self.editButton = QPushButton("&Edit", self)
+        self.editButton.clicked.connect(self.set_edit_mode)
+        self.editButton.setFocusPolicy(Qt.NoFocus)
+        self.editButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.editButton.setGraphicsEffect(Styles.getShadowEffect())
+        self.editButton.setStyleSheet(f"""
         QPushButton {{
             width: 150px;
             border: 1px solid black;
@@ -232,12 +231,12 @@ class MainWindow(QMainWindow):
         """)
 
 
-        self.sort_button = QPushButton("&Sort", self)
-        self.sort_button.clicked.connect(self.set_sort_mode)
-        self.sort_button.setFocusPolicy(Qt.NoFocus)
-        self.sort_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.sort_button.setGraphicsEffect(Styles.getShadowEffect())
-        self.sort_button.setStyleSheet(f"""
+        self.sortButton = QPushButton("&Sort", self)
+        self.sortButton.clicked.connect(self.set_sort_mode)
+        self.sortButton.setFocusPolicy(Qt.NoFocus)
+        self.sortButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.sortButton.setGraphicsEffect(Styles.getShadowEffect())
+        self.sortButton.setStyleSheet(f"""
         QPushButton {{
             __width: 150px;
             border: 1px solid black;
@@ -253,47 +252,47 @@ class MainWindow(QMainWindow):
         """)
         # self.sort_button.setStyleSheet(Styles.getButtonStyles())
 
-        left_inner_button_layout = QHBoxLayout()
-        left_inner_button_layout.addWidget(self.edit_button)
-        left_inner_button_layout.addWidget(self.sort_button)
+        leftInnerButtonLayout = QHBoxLayout()
+        leftInnerButtonLayout.addWidget(self.editButton)
+        leftInnerButtonLayout.addWidget(self.sortButton)
 
-        left_inner_layout.addWidget(self.copy_button)
-        left_inner_layout.addLayout(left_inner_button_layout)
-        left_inner_layout.addWidget(self.key_label)
+        leftInnerLayout.addWidget(self.copyButton)
+        leftInnerLayout.addLayout(leftInnerButtonLayout)
+        leftInnerLayout.addWidget(self.keyLabel)
 
         # vars for history entries
-        self.key_seq_history = []
-        self.mv_history = []
-        self.key_seq = ""
-        self.permanent_key_seq = ""
-        self.current_mode = "home"  # Next options: edit, sort
+        self.keySeqHistory = []
+        self.mvHistory = []
+        self.keySeq = ""
+        self.permanentKeySeq = ""
+        self.currentMode = "home"  # Next options: edit, sort
         self.copyOnly = False
-        print("Mod: " + self.current_mode)
+        print("Mod: " + self.currentMode)
 
         # Register global keyboard shortcuts:
-        set_edit_mode_seq = QKeySequence(Qt.CTRL + Qt.Key_E)
-        self.set_edit_mode_shortcut = QShortcut(set_edit_mode_seq, self)
-        self.set_edit_mode_shortcut.activated.connect(self.set_edit_mode)
+        setEditModeSeq = QKeySequence(Qt.CTRL + Qt.Key_E)
+        self.setEditModeShortcut = QShortcut(setEditModeSeq, self)
+        self.setEditModeShortcut.activated.connect(self.set_edit_mode)
 
-        set_sort_mode_seq = QKeySequence(Qt.CTRL + Qt.Key_R)
-        self.set_sort_mode_shortcut = QShortcut(set_sort_mode_seq, self)
-        self.set_sort_mode_shortcut.activated.connect(self.set_sort_mode)
+        setSortModeSeq = QKeySequence(Qt.CTRL + Qt.Key_R)
+        self.setSortModeShortcut = QShortcut(setSortModeSeq, self)
+        self.setSortModeShortcut.activated.connect(self.set_sort_mode)
 
-        undo_seq = QKeySequence(Qt.CTRL + Qt.Key_Z)
-        self.undo_shortcut = QShortcut(undo_seq, self)
-        self.undo_shortcut.activated.connect(self.undo_last_operation)
+        undoSeq = QKeySequence(Qt.CTRL + Qt.Key_Z)
+        self.undoShortcut = QShortcut(undoSeq, self)
+        self.undoShortcut.activated.connect(self.undo_last_operation)
 
-        save_data_seq = QKeySequence(Qt.CTRL + Qt.Key_S)
-        self.save_data_shortcut = QShortcut(save_data_seq, self)
-        self.save_data_shortcut.activated.connect(self.save_data)
+        saveDataSeq = QKeySequence(Qt.CTRL + Qt.Key_S)
+        self.saveDataShortcut = QShortcut(saveDataSeq, self)
+        self.saveDataShortcut.activated.connect(self.save_data)
 
-        load_data_seq = QKeySequence(Qt.CTRL + Qt.Key_L)
-        self.load_data_shortcut = QShortcut(load_data_seq, self)
-        self.load_data_shortcut.activated.connect(self.load_data)
+        loadDataSeq = QKeySequence(Qt.CTRL + Qt.Key_L)
+        self.loadDataShortcut = QShortcut(loadDataSeq, self)
+        self.loadDataShortcut.activated.connect(self.load_data)
 
-        toggle_copy_seq = QKeySequence(Qt.CTRL + Qt.Key_C)
-        self.toggle_copy_shortcut = QShortcut(toggle_copy_seq, self)
-        self.toggle_copy_shortcut.activated.connect(self.toggleCopyMode)
+        toggleCopySeq = QKeySequence(Qt.CTRL + Qt.Key_C)
+        self.toggleCopyShortcut = QShortcut(toggleCopySeq, self)
+        self.toggleCopyShortcut.activated.connect(self.toggleCopyMode)
 
         # Tree view for user's sorting shortcuts:
         self.tree = CustomTreeWidget()
@@ -335,7 +334,7 @@ class MainWindow(QMainWindow):
 
         self.tree.setGraphicsEffect(Styles.getShadowEffect())
         self.tree.setMaximumWidth(250)
-        left_inner_layout.addWidget(self.tree)
+        leftInnerLayout.addWidget(self.tree)
         self.tree.setColumnCount(3)
         self.tree.setHeaderLabels(["Shortcut", "Directory", "Actions"])
         self.tree.setColumnWidth(0, 90)
@@ -383,8 +382,8 @@ class MainWindow(QMainWindow):
         # TODO: add info about project, add shortcuts
 
     def exitApp(self):
-        if self.shortcut_manager.areShortcutsModified():
-            self.shortcut_manager.save_shortcuts()
+        if self.shortcutManager.areShortcutsModified():
+            self.shortcutManager.saveShortcuts()
 
         print("Exiting")
         sys.exit(0)
@@ -403,17 +402,21 @@ class MainWindow(QMainWindow):
         self.exitAction.triggered.connect(self.exitApp)
 
     # TODO: Telo presunout do CustromTreeWidget a sem pridat pouze volani teze funkce v customtreewidgetu.
-    def update_tree_view(self):
+    def update_tree_view(self, root:str=None):
         # Just flush the whole content of the tree and rebuild it from scratch.
         self.tree.clear()
         items = []
-        shortcuts_data = self.shortcut_manager.get_data()
+        shortcuts_data = self.shortcutManager.getData()
 
         for key_L1, values_L1 in shortcuts_data["keys"].items():
             # print("Key a value", key, values)
+            
+            # TODO: Do not show subtrees except the one starting with the first pressed key.
+            # if root is not None and key_L1 != root:
+            #     continue
+
             dst_path_L1 = values_L1["dst_path"]
             item_L1 = QTreeWidgetItem([key_L1, Path(dst_path_L1).name])
-            # self.tree.expandItem(item)
             for key_L2, values_L2 in values_L1["keys"].items():
                 dst_path_L2 = values_L2["dst_path"]
                 item_L2 = QTreeWidgetItem([key_L2, Path(dst_path_L2).name])
@@ -438,10 +441,10 @@ class MainWindow(QMainWindow):
 
 
     def save_data(self):
-        self.shortcut_manager.save_shortcuts()
+        self.shortcutManager.saveShortcuts()
 
     def load_data(self):
-        if not self.shortcut_manager.load_shortcuts():
+        if not self.shortcutManager.loadShortcuts():
             return
         self.update_tree_view()
 
@@ -449,31 +452,31 @@ class MainWindow(QMainWindow):
         print("Undo last operation")
         # print(self.mv_history)
 
-        if not self.mv_history:
+        if not self.mvHistory:
             print(f"History is Empty!")
             return
 
-        image_name = self.mv_history[-1]["image"]
-        src = self.mv_history[-1]["dst"]
-        dst = self.mv_history[-1]["src"]
-        positionIndex = self.mv_history[-1]["gallery_index"]
+        imageName = self.mvHistory[-1]["image"]
+        src = self.mvHistory[-1]["dst"]
+        dst = self.mvHistory[-1]["src"]
+        positionIndex = self.mvHistory[-1]["gallery_index"]
 
         if not os.path.exists(dst):
             print(f"ERROR: Destination directory {dst} does not exist.")
             return
 
-        shutil.move(src + "/" + image_name, dst + "/" + image_name)
+        shutil.move(src + "/" + imageName, dst + "/" + imageName)
         self.statusBarLabel.setText(f"File moved BACK From: {src}.")
 
         # Remove current image from the list of images in src directory
-        self.galleryManager.addFile(image_name, positionIndex)
+        self.galleryManager.addFile(imageName, positionIndex)
 
         # Update counter label
         self.galleryManager.updateCounterLabelText()
 
         # Remove last record from history
-        if self.mv_history:
-            self.mv_history.pop()
+        if self.mvHistory:
+            self.mvHistory.pop()
 
         # Show new image
         self.galleryManager.updatePreview()
@@ -484,7 +487,7 @@ class MainWindow(QMainWindow):
         if self.copyOnly is False:
             print("Current mode: Copy")
             self.copyOnly = True
-            self.copy_button.setStyleSheet(f"""
+            self.copyButton.setStyleSheet(f"""
             QPushButton {{
                 width: 150px;
                 height: 20px;
@@ -504,7 +507,7 @@ class MainWindow(QMainWindow):
         if self.copyOnly is True:
             print("Current mode: Move")
             self.copyOnly = False
-            self.copy_button.setStyleSheet(f"""
+            self.copyButton.setStyleSheet(f"""
             QPushButton {{
                 width: 150px;
                 height: 20px;
@@ -525,8 +528,8 @@ class MainWindow(QMainWindow):
         # Display a message when the shortcut is activated
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Edit")
-        self.current_mode = "edit"
-        self.edit_button.setStyleSheet(f"""
+        self.currentMode = "edit"
+        self.editButton.setStyleSheet(f"""
             QPushButton {{
                 __width: 100px;
                 height: 20px;
@@ -541,7 +544,7 @@ class MainWindow(QMainWindow):
                 background-color: {Styles.buttonHoverBgColor};
             }}
             """)
-        self.sort_button.setStyleSheet(f"""
+        self.sortButton.setStyleSheet(f"""
             QPushButton {{
                 __width: 100px;
                 height: 20px;
@@ -563,8 +566,8 @@ class MainWindow(QMainWindow):
         # Display a message when the shortcut is activated
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Sort")
-        self.current_mode = "sort"
-        self.edit_button.setStyleSheet(f"""
+        self.currentMode = "sort"
+        self.editButton.setStyleSheet(f"""
             QPushButton {{
                 __width: 150px;
                 height: 20px;
@@ -579,7 +582,7 @@ class MainWindow(QMainWindow):
                 background-color: {Styles.buttonHoverBgColor};
             }}
             """)
-        self.sort_button.setStyleSheet(f"""
+        self.sortButton.setStyleSheet(f"""
             QPushButton {{
                 __width: 150px;
                 height: 20px;
@@ -598,11 +601,11 @@ class MainWindow(QMainWindow):
         self.tree.setEnabled(False)
         self.galleryManager.updatePreview()
 
-    # TODO: Rozbit na mensi kousky:
+    # TODO: Refactor:
     def keyPressEvent(self, event):
         if isinstance(event, QKeyEvent):
-            pressed_key = event.text()
-            print("Pressed Key:", pressed_key)
+            pressedKey = event.text()
+            print("Pressed Key:", pressedKey)
 
             # if self.current_mode == "home":
             if event.key() == Qt.Key_Left:
@@ -624,56 +627,56 @@ class MainWindow(QMainWindow):
 
             # TODO: Refactor following if-else hell:  !!!!!!!!!!!!!
             # ==== EDIT MODE ====
-            if self.current_mode == "edit":
+            if self.currentMode == "edit":
                 if event.key() == Qt.Key_Escape:
                     # self.key_seq_history.append(self.key_seq)  # What was purpose of this???
-                    self.key_seq = ""
+                    self.keySeq = ""
                     self.updateKeySequenceLabel()
 
                 # Confirm entered shortcut
                 elif event.key() == Qt.Key_Return:  # "Return" is the "Enter" key in the center of keyboard.
-                    print("ENTER: seq:", self.key_seq)
-                    if len(self.key_seq) == 0:
-                        print(f"probably empty (Key seq: {self.key_seq})")
+                    print("ENTER: seq:", self.keySeq)
+                    if len(self.keySeq) == 0:
+                        print(f"probably empty (Key seq: {self.keySeq})")
                         return
 
                     # Check, whether sequence contains '-', and if so
                     # consider this as removing all shortcuts after the '-' character.
-                    if "-" in self.key_seq:
-                        self.shortcut_manager.removeShortcutSequence(self.key_seq)
-                        self.key_seq = ""
+                    if "-" in self.keySeq:
+                        self.shortcutManager.removeShortcutSequence(self.keySeq)
+                        self.keySeq = ""
                         self.update_tree_view()
                         self.updateKeySequenceLabel()
                         return
 
                     # Add new shortcut sequence
-                    for k in self.key_seq:
-                        self.shortcut_manager.add_shortcut(self.key_seq)
+                    for k in self.keySeq:
+                        self.shortcutManager.addShortcut(self.keySeq)
 
-                    dst_sort_directory = QFileDialog.getExistingDirectory(self, "Select Directory")
-                    self.shortcut_manager.add_dst_path(self.key_seq, dst_sort_directory)
-                    self.key_seq = ""
+                    dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
+                    self.shortcutManager.addDstPath(self.keySeq, dstSortDirectory)
+                    self.keySeq = ""
                     self.updateKeySequenceLabel()
                     self.update_tree_view()
-                    print(json.dumps(self.shortcut_manager.get_data(), indent=2))
+                    print(json.dumps(self.shortcutManager.getData(), indent=2))
 
                 else:
-                    self.key_seq += pressed_key
+                    self.keySeq += pressedKey
                     self.updateKeySequenceLabel()
 
             # ==== SORT MODE ====
-            elif self.current_mode == "sort":
+            elif self.currentMode == "sort":
                 # Cancel currently started shortcut or escape from the hold partial sequence
                 if event.key() == Qt.Key_Escape:
                     print("ESC")
                     # print("key_seq:", self.key_seq)
                     # print("permanent_key_seq:", self.permanent_key_seq)
-                    if self.key_seq and self.permanent_key_seq:
-                        self.key_seq = ""
-                    elif not self.key_seq and self.permanent_key_seq:
-                        self.permanent_key_seq = ""
-                    elif self.key_seq and not self.permanent_key_seq:
-                        self.key_seq = ""
+                    if self.keySeq and self.permanentKeySeq:
+                        self.keySeq = ""
+                    elif not self.keySeq and self.permanentKeySeq:
+                        self.permanentKeySeq = ""
+                    elif self.keySeq and not self.permanentKeySeq:
+                        self.keySeq = ""
                     else:
                         pass
                     self.updateKeySequenceLabel()
@@ -682,9 +685,9 @@ class MainWindow(QMainWindow):
                 elif event.key() == Qt.Key_Return:  # Key_Return is non-numeric Enter key
                     print("ENTER")
 
-                    if self.key_seq:
-                        self.permanent_key_seq = self.key_seq
-                        self.key_seq = ""
+                    if self.keySeq:
+                        self.permanentKeySeq = self.keySeq
+                        self.keySeq = ""
 
                     self.updateKeySequenceLabel()
 
@@ -692,16 +695,16 @@ class MainWindow(QMainWindow):
                 elif event.key() == Qt.Key_Period:
                     print("Repeat last finished command for current image")
 
-                    if len(self.mv_history) <= 0 or len(self.key_seq_history) <= 0:
+                    if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:
                         print("History is empty.")
                         return
 
-                    print(f"Last history entry: {self.key_seq_history[-1]}")
+                    print(f"Last history entry: {self.keySeqHistory[-1]}")
 
-                    image_name = self.galleryManager.getCurrentFilename()
+                    imageName = self.galleryManager.getCurrentFilename()
 
-                    src = self.mv_history[-1]["src"]
-                    dst = self.mv_history[-1]["dst"]
+                    src = self.mvHistory[-1]["src"]
+                    dst = self.mvHistory[-1]["dst"]
 
                     if not os.path.exists(dst):
                         print(f"ERROR: Destination directory {dst} does not exist.")
@@ -709,12 +712,12 @@ class MainWindow(QMainWindow):
 
                     # Remove current image from the list of images in src directory
                     if not self.copyOnly:
-                        self.galleryManager.removeFile(image_name)
-                        shutil.move(src + "/" + image_name, dst + "/" + image_name)
-                        self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
+                        self.galleryManager.removeFile(imageName)
+                        shutil.move(src + "/" + imageName, dst + "/" + imageName)
+                        self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
                         self.statusBarLabel.setText(f"File moved to {dst}.")
                     else:
-                        shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
+                        shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
                         self.galleryManager.incrementGalleryIndex()
                         self.statusBarLabel.setText(f"File copied to {dst}.")
 
@@ -729,7 +732,7 @@ class MainWindow(QMainWindow):
                         print("Source directory is empty")
                         return
 
-                    image_name = self.galleryManager.getCurrentFilename()
+                    imageName = self.galleryManager.getCurrentFilename()
                     src = self.galleryManager.getSourcePath()
                     dst = src + "/" + "__DELETED__"
 
@@ -739,9 +742,9 @@ class MainWindow(QMainWindow):
                     print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
                     # Remove current image from the list of images in src directory
-                    self.galleryManager.removeFile(image_name)
-                    shutil.move(src + "/" + image_name, dst + "/" + image_name)
-                    self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
+                    self.galleryManager.removeFile(imageName)
+                    shutil.move(src + "/" + imageName, dst + "/" + imageName)
+                    self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
                     self.statusBarLabel.setText(f"File Deleted.")
 
                     self.galleryManager.updateCounterLabelText()
@@ -750,54 +753,56 @@ class MainWindow(QMainWindow):
                     self.galleryManager.updatePreview()
 
                 else:
-                    if event.key() not in allowed_keys:
+                    if event.key() not in allowedKeys:
                         print("not a-z was pressed, nothing to append to shortcuts.")
                         return
 
-                    self.key_seq += pressed_key
+                    self.keySeq += pressedKey
 
-                    full_shortcut = ""
-                    if self.permanent_key_seq:
-                        full_shortcut = self.permanent_key_seq + self.key_seq
+                    # self.update_tree_view(event.key()) # TODO: 
+
+                    fullShortcut = ""
+                    if self.permanentKeySeq:
+                        fullShortcut = self.permanentKeySeq + self.keySeq
                     else:
-                        full_shortcut = self.key_seq
+                        fullShortcut = self.keySeq
 
-                    print("key_seq:", self.key_seq)
-                    print("full key_seq:", full_shortcut)
+                    print("key_seq:", self.keySeq)
+                    print("full key_seq:", fullShortcut)
 
                     # print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(full_shortcut))
-                    if not self.key_seq:
+                    if not self.keySeq:
                         return
 
-                    if self.shortcut_manager.get_dst_for_shortcut(full_shortcut):
+                    if self.shortcutManager.getDstForShortcut(fullShortcut):
                         print("HIT!")
 
                         if self.galleryManager.isGalleryEmpty():
                             print("Source directory is empty")
-                            self.key_seq = ""
+                            self.keySeq = ""
                             self.updateKeySequenceLabel()
                             return
 
-                        image_name = self.galleryManager.getCurrentFilename()
+                        imageName = self.galleryManager.getCurrentFilename()
                         src = self.galleryManager.getSourcePath()
-                        dst = self.shortcut_manager.get_dst_for_shortcut(full_shortcut)
+                        dst = self.shortcutManager.getDstForShortcut(fullShortcut)
 
                         if not os.path.exists(dst):
                             print(f"ERROR: Destination directory {dst} does not exist.")
                             return
 
-                        self.key_seq_history.append(full_shortcut)
+                        self.keySeqHistory.append(fullShortcut)
 
                         print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
                         # Remove current image from the list of images in src directory
                         if not self.copyOnly:
-                            self.galleryManager.removeFile(image_name)
-                            shutil.move(src + "/" + image_name, dst + "/" + image_name)
-                            self.mv_history.append({"src": src, "dst": dst, "image": image_name, "gallery_index": self.galleryManager.getGalleryIndex()})
+                            self.galleryManager.removeFile(imageName)
+                            shutil.move(src + "/" + imageName, dst + "/" + imageName)
+                            self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
                             self.statusBarLabel.setText(f"File moved to {dst}.")
                         else:
-                            shutil.copy2(src + "/" + image_name, dst + "/" + image_name)
+                            shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
                             self.galleryManager.incrementGalleryIndex()
                             self.statusBarLabel.setText(f"File copied to {dst}.")
 
@@ -808,7 +813,7 @@ class MainWindow(QMainWindow):
                         self.galleryManager.updatePreview()
 
                         # Enable temporaly save and reuse partial shortcut
-                        self.key_seq = ""
+                        self.keySeq = ""
                         self.updateKeySequenceLabel()
                     else:
                         self.updateKeySequenceLabel()
@@ -817,10 +822,10 @@ class MainWindow(QMainWindow):
 
     def updateKeySequenceLabel(self):
         separator = "+"
-        if self.permanent_key_seq:
-            self.key_label.setText(f"Key Sequence Pressed: \n{self.permanent_key_seq}{separator}{self.key_seq}")
+        if self.permanentKeySeq:
+            self.keyLabel.setText(f"Key Sequence Pressed: \n{self.permanentKeySeq}{separator}{self.keySeq}")
         else:
-            self.key_label.setText(f"Key Sequence Pressed: \n{self.key_seq}")
+            self.keyLabel.setText(f"Key Sequence Pressed: \n{self.keySeq}")
 
     def updateStatusBarLabel(self, src, dst):
         self.statusBarLabel.setText(f"File copied to {dst}.")
@@ -839,7 +844,7 @@ def main():
     """)
     window = MainWindow()
     window.show()
-    app.aboutToQuit.connect(window.shortcut_manager.askSaveIfChanged)
+    app.aboutToQuit.connect(window.shortcutManager.askSaveIfChanged)
 
     sys.exit(app.exec())
 

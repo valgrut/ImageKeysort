@@ -20,11 +20,11 @@ class MediaContainerWidget(QWidget):
         self.stackedMediaWidget.addWidget(self.imageViewWidget)
         # self.stackedMediaWidget.addWidget(self.videoViewWidget)  # TODO: zabugovane!
 
-        right_layout = QVBoxLayout()
+        rightLayout = QVBoxLayout()
 
-        self.source_dir_label = QLabel("No source directory selected. You can select one by pressing ctrl+L.")
-        self.source_dir_label.setMaximumHeight(30)
-        self.source_dir_label.setStyleSheet(f"""
+        self.sourceDirLabel = QLabel("No source directory selected. You can select one by pressing ctrl+L.")
+        self.sourceDirLabel.setMaximumHeight(30)
+        self.sourceDirLabel.setStyleSheet(f"""
             QLabel {{
                 min-height: 20px;
                 border: 1px solid black;
@@ -35,11 +35,11 @@ class MediaContainerWidget(QWidget):
                 xxmargin: 5px;
                 }}
             """)
-        right_layout.addWidget(self.source_dir_label)
+        rightLayout.addWidget(self.sourceDirLabel)
 
-        self.image_filename_label = QLabel()
-        self.image_filename_label.setMaximumHeight(30)
-        self.image_filename_label.setStyleSheet(f"""
+        self.imageFilenameLabel = QLabel()
+        self.imageFilenameLabel.setMaximumHeight(30)
+        self.imageFilenameLabel.setStyleSheet(f"""
             QLabel {{
                 _min-height: 20px;
                 border: 1px solid black;
@@ -51,16 +51,16 @@ class MediaContainerWidget(QWidget):
                 }}
             """)
 
-        right_layout.addWidget(self.image_filename_label)
-        right_layout.addWidget(self.stackedMediaWidget)
+        rightLayout.addWidget(self.imageFilenameLabel)
+        rightLayout.addWidget(self.stackedMediaWidget)
 
-        self.previous_image_button = QPushButton("&Previous", self)
-        self.previous_image_button.clicked.connect(self.showPreviousImage)
-        self.previous_image_button.setFocusPolicy(Qt.NoFocus)
-        self.previous_image_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.previous_image_button.setFocus(True)
-        self.previous_image_button.setGraphicsEffect(Styles.getShadowEffect())
-        self.previous_image_button.setStyleSheet(f"""
+        self.previousImageButton = QPushButton("&Previous", self)
+        self.previousImageButton.clicked.connect(self.showPreviousImage)
+        self.previousImageButton.setFocusPolicy(Qt.NoFocus)
+        self.previousImageButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.previousImageButton.setFocus(True)
+        self.previousImageButton.setGraphicsEffect(Styles.getShadowEffect())
+        self.previousImageButton.setStyleSheet(f"""
         QPushButton {{
             width: 150px;
             height: 20px;
@@ -76,13 +76,13 @@ class MediaContainerWidget(QWidget):
         }}
         """)
 
-        self.next_image_button = QPushButton("&Next", self)
-        self.next_image_button.clicked.connect(self.showNextImage)
-        self.next_image_button.setFocusPolicy(Qt.NoFocus)
-        self.next_image_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.next_image_button.setFocus(True)
-        self.next_image_button.setGraphicsEffect(Styles.getShadowEffect())
-        self.next_image_button.setStyleSheet(f"""
+        self.nextImageButton = QPushButton("&Next", self)
+        self.nextImageButton.clicked.connect(self.showNextImage)
+        self.nextImageButton.setFocusPolicy(Qt.NoFocus)
+        self.nextImageButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.nextImageButton.setFocus(True)
+        self.nextImageButton.setGraphicsEffect(Styles.getShadowEffect())
+        self.nextImageButton.setStyleSheet(f"""
         QPushButton {{
             width: 150px;
             height: 20px;
@@ -99,33 +99,33 @@ class MediaContainerWidget(QWidget):
         }}
         """)
 
-        self.image_counter_label = QLabel()
-        self.image_counter_label.setStyleSheet("font-size: 20px;")
-        self.image_counter_label.setText("0/0")
+        self.imageCounterLabel = QLabel()
+        self.imageCounterLabel.setStyleSheet("font-size: 20px;")
+        self.imageCounterLabel.setText("0/0")
 
-        right_control_buttons_layout = QHBoxLayout()
-        right_control_buttons_layout.addWidget(self.previous_image_button)
-        right_control_buttons_layout.addStretch()
-        right_control_buttons_layout.addWidget(self.image_counter_label)
-        right_control_buttons_layout.addStretch()
-        right_control_buttons_layout.addWidget(self.next_image_button)
+        rightControlButtonsLayout = QHBoxLayout()
+        rightControlButtonsLayout.addWidget(self.previousImageButton)
+        rightControlButtonsLayout.addStretch()
+        rightControlButtonsLayout.addWidget(self.imageCounterLabel)
+        rightControlButtonsLayout.addStretch()
+        rightControlButtonsLayout.addWidget(self.nextImageButton)
 
-        right_layout.addLayout(right_control_buttons_layout)
+        rightLayout.addLayout(rightControlButtonsLayout)
 
-        self.setLayout(right_layout)
+        self.setLayout(rightLayout)
 
         # Update Counter label
-        self.image_counter_label.setText(self.galleryManager.getCounterString())
+        self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
         self.stackedMediaWidget.setCurrentIndex(0)
 
     def showNextImage(self):
         self.galleryManager.setNextImage()
-        self.image_counter_label.setText(self.galleryManager.getCounterString())
+        self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
     def showPreviousImage(self):
         self.galleryManager.setPreviousImage()
-        self.image_counter_label.setText(self.galleryManager.getCounterString())
+        self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
     def setVideoWidget(self):
         self.stackedMediaWidget.setCurrentIndex(1)
@@ -134,10 +134,10 @@ class MediaContainerWidget(QWidget):
         self.stackedMediaWidget.setCurrentIndex(0)
 
     def updateCounterLabelText(self, text):
-        self.image_counter_label.setText(text)
+        self.imageCounterLabel.setText(text)
 
     def updateFilenameLabelText(self, text):
-        self.image_filename_label.setText(text)
+        self.imageFilenameLabel.setText(text)
 
     def updateVideo(self, videoPath):
         self.videoViewWidget.updateVideo(videoPath)
