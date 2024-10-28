@@ -1,4 +1,4 @@
-
+from PyQt5.QtWidgets import QGraphicsDropShadowEffect
 
 class Styles:
     mainBackground = "rgb(122, 120, 120)"
@@ -29,3 +29,10 @@ class Styles:
             background-color: yellow;
         }}
         """
+    
+    @staticmethod
+    def getShadowEffect():
+        shadowEffect = QGraphicsDropShadowEffect()
+        shadowEffect.setOffset(3, 3)
+        shadowEffect.setBlurRadius(10)
+        return shadowEffect

@@ -34,7 +34,7 @@ class ImageWidget(QWidget):
         self.setLayout(self.layout)
 
     def updateImage(self, img_path):
-        # TODO: Nejake cache?
+        # TODO: Use cache?
         self.pixmap.load(img_path)
-        # self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
+        self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
         self.label.setPixmap(self.pixmap)

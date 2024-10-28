@@ -60,7 +60,10 @@ class TreeItemWithButtons(QWidget):
         delete_button.setIcon(deleteIcon)
         delete_button.setIconSize(delete_button.size())
 
-        self.setStyleSheet("background-color: green; border: 1px solid black;")
+        # TODO: this does not work:
+        # self.setStyleSheet("background-color: green; border: 1px solid black;")
+        self.setStyleSheet("background-color: green;")
+
         # self.setStyleSheet(
         # """
         #     TreeItemWithButtons {

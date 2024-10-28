@@ -22,7 +22,7 @@ class MediaContainerWidget(QWidget):
 
         right_layout = QVBoxLayout()
 
-        self.source_dir_label = QLabel("Not selected")
+        self.source_dir_label = QLabel("No source directory selected. You can select one by pressing ctrl+L.")
         self.source_dir_label.setMaximumHeight(30)
         self.source_dir_label.setStyleSheet(f"""
             QLabel {{
@@ -54,15 +54,12 @@ class MediaContainerWidget(QWidget):
         right_layout.addWidget(self.image_filename_label)
         right_layout.addWidget(self.stackedMediaWidget)
 
-        previousshadowEffect = QGraphicsDropShadowEffect()
-        previousshadowEffect.setOffset(3, 3)
-        previousshadowEffect.setBlurRadius(10)
         self.previous_image_button = QPushButton("&Previous", self)
         self.previous_image_button.clicked.connect(self.showPreviousImage)
         self.previous_image_button.setFocusPolicy(Qt.NoFocus)
         self.previous_image_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.previous_image_button.setFocus(True)
-        self.previous_image_button.setGraphicsEffect(previousshadowEffect)
+        self.previous_image_button.setGraphicsEffect(Styles.getShadowEffect())
         self.previous_image_button.setStyleSheet(f"""
         QPushButton {{
             width: 150px;
@@ -79,15 +76,12 @@ class MediaContainerWidget(QWidget):
         }}
         """)
 
-        nextshadowEffect = QGraphicsDropShadowEffect()
-        nextshadowEffect.setOffset(3, 3)
-        nextshadowEffect.setBlurRadius(10)
         self.next_image_button = QPushButton("&Next", self)
         self.next_image_button.clicked.connect(self.showNextImage)
         self.next_image_button.setFocusPolicy(Qt.NoFocus)
         self.next_image_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.next_image_button.setFocus(True)
-        self.next_image_button.setGraphicsEffect(nextshadowEffect)
+        self.next_image_button.setGraphicsEffect(Styles.getShadowEffect())
         self.next_image_button.setStyleSheet(f"""
         QPushButton {{
             width: 150px;

@@ -59,12 +59,12 @@ height = 864
 # - [x] Next/Prev buttons, counter a src a image name se zobrazi jen, kdyz je nactena galerie.
 # - [x] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani zkratku 'a' z rodicovske 'o'.
 # - [x] Prerusit to vetveni x.y.z.f() mezi main.GalleryManager.MediaContainerWidget.f() [Jak to delat lepe, nez ze udelat retezec funkci?]
+# - [x] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 #
 #
 # Top priority:
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno. Celkove resizing a responzivnost posefit.
 # - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
-# - [ ] Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
 #
 # Features TODO:
@@ -91,6 +91,8 @@ height = 864
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
 # - [ ] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
+# - [ ] Pod posledni prvek kazde sekce udelat tenkou caru jako oddelovac. (Nebo nad kazdou hlavni, bo to je root tak by to bylo jednodussi).
+# - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 #
 # Minor issues:
 # - [ ] Prepsat vse z CZ do EN
@@ -146,7 +148,6 @@ class MainWindow(QMainWindow):
         main_window_widget = QWidget()
         main_window_widget.setLayout(main_layout)
         main_window_widget.setFocus(True)
-        # main_window_widget.setStyleSheet("background-color: rgb(200, 200, 200);")
         self.setCentralWidget(main_window_widget)
 
         # Add sub-layouts into the main layout
@@ -156,16 +157,9 @@ class MainWindow(QMainWindow):
         # Right side of the main layout
         right_inner_layout.addWidget(self.galleryManager)
 
-        statusshadowEffect = QGraphicsDropShadowEffect()
-        statusshadowEffect.setOffset(3, 3)
-        statusshadowEffect.setBlurRadius(10)
         self.statusBarLabel = QLabel("Status bar")
-        self.statusBarLabel.setGraphicsEffect(statusshadowEffect)
+        self.statusBarLabel.setGraphicsEffect(Styles.getShadowEffect())
         self.statusBarLabel.setMaximumHeight(25)
-        # self.statusBarLabel.setStyleSheet("""
-        #     border: 1px solid black;
-        #     border-radius: 5px;
-        # """)
         self.statusBarLabel.setStyleSheet(f"""
             QLabel {{
                 min-height: 20px;
@@ -181,12 +175,9 @@ class MainWindow(QMainWindow):
         right_inner_layout.addWidget(self.statusBarLabel)
 
         # Left side of the main layout
-        key_labelshadowEffect = QGraphicsDropShadowEffect()
-        key_labelshadowEffect.setOffset(3, 3)
-        key_labelshadowEffect.setBlurRadius(10)
         self.key_label = QLabel("Key Sequence Pressed: \nNone")
         self.key_label.resize(self.key_label.sizeHint())
-        self.key_label.setGraphicsEffect(key_labelshadowEffect)
+        self.key_label.setGraphicsEffect(Styles.getShadowEffect())
         self.key_label.setStyleSheet(f"""
             font-size: 16px;
             font-weight: bold;
@@ -198,13 +189,10 @@ class MainWindow(QMainWindow):
             """)
         self.key_label.setAlignment(Qt.AlignCenter)
 
-        copy_buttonshadowEffect = QGraphicsDropShadowEffect()
-        copy_buttonshadowEffect.setOffset(3, 3)
-        copy_buttonshadowEffect.setBlurRadius(10)
         self.copy_button = QPushButton("&Copy", self)
         self.copy_button.clicked.connect(self.toggleCopyMode)
         self.copy_button.setFocusPolicy(Qt.NoFocus)
-        self.copy_button.setGraphicsEffect(copy_buttonshadowEffect)
+        self.copy_button.setGraphicsEffect(Styles.getShadowEffect())
         self.copy_button.setToolTip("Toggle copy mode (switch between copy and move operation).")
         self.copy_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.copy_button.setStyleSheet(f"""
@@ -223,14 +211,11 @@ class MainWindow(QMainWindow):
         }}
         """)
 
-        edit_buttonshadowEffect = QGraphicsDropShadowEffect()
-        edit_buttonshadowEffect.setOffset(3, 3)
-        edit_buttonshadowEffect.setBlurRadius(10)
         self.edit_button = QPushButton("&Edit", self)
         self.edit_button.clicked.connect(self.set_edit_mode)
         self.edit_button.setFocusPolicy(Qt.NoFocus)
         self.edit_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.edit_button.setGraphicsEffect(edit_buttonshadowEffect)
+        self.edit_button.setGraphicsEffect(Styles.getShadowEffect())
         self.edit_button.setStyleSheet(f"""
         QPushButton {{
             width: 150px;
@@ -246,14 +231,12 @@ class MainWindow(QMainWindow):
         }}
         """)
 
-        sort_buttonshadowEffect = QGraphicsDropShadowEffect()
-        sort_buttonshadowEffect.setOffset(3, 3)
-        sort_buttonshadowEffect.setBlurRadius(10)
+
         self.sort_button = QPushButton("&Sort", self)
         self.sort_button.clicked.connect(self.set_sort_mode)
         self.sort_button.setFocusPolicy(Qt.NoFocus)
         self.sort_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.sort_button.setGraphicsEffect(sort_buttonshadowEffect)
+        self.sort_button.setGraphicsEffect(Styles.getShadowEffect())
         self.sort_button.setStyleSheet(f"""
         QPushButton {{
             __width: 150px;
@@ -319,6 +302,7 @@ class MainWindow(QMainWindow):
                 border: 1px solid black;
                 border-radius: 10px;
                 background-color: {Styles.widgetsBgColor};
+                color: black;
                 __padding: 2px;
             }}
             
@@ -348,10 +332,8 @@ class MainWindow(QMainWindow):
                 _min-height: 20px;
             }}
         """)
-        treeshadowEffect = QGraphicsDropShadowEffect()
-        treeshadowEffect.setOffset(3, 3)
-        treeshadowEffect.setBlurRadius(10)
-        self.tree.setGraphicsEffect(treeshadowEffect)
+
+        self.tree.setGraphicsEffect(Styles.getShadowEffect())
         self.tree.setMaximumWidth(250)
         left_inner_layout.addWidget(self.tree)
         self.tree.setColumnCount(3)
@@ -359,7 +341,7 @@ class MainWindow(QMainWindow):
         self.tree.setColumnWidth(0, 90)
         self.tree.setColumnWidth(1, 100)
         self.tree.setColumnWidth(2, 50)
-        # self.tree.setEnabled(False)
+        self.tree.setFocusPolicy(Qt.NoFocus)
         self.update_tree_view()
 
         # Create main Menu bar
@@ -371,7 +353,7 @@ class MainWindow(QMainWindow):
         # self.galleryManager.updatePreview()
 
         # vvvvvvvv TODO: Remove. [Just for DEBUG]: Manually setting src dir
-        # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/test/downloads")
+        # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads")
         # self.galleryManager.setSourcePath(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\testing-data\downloads")
         # self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
         # ^^^^^^^^^
@@ -614,6 +596,7 @@ class MainWindow(QMainWindow):
             """)
         self.tree.setColumnHidden(2, True)
         self.tree.setEnabled(False)
+        self.galleryManager.updatePreview()
 
     # TODO: Rozbit na mensi kousky:
     def keyPressEvent(self, event):
@@ -753,7 +736,7 @@ class MainWindow(QMainWindow):
                     if not os.path.exists(dst):
                         os.makedirs(dst)
 
-                    print(f"Nalezeno, lze presunout z {self.galleryManager.getSourcePath()} do {dst}!")
+                    print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
                     # Remove current image from the list of images in src directory
                     self.galleryManager.removeFile(image_name)
@@ -805,7 +788,7 @@ class MainWindow(QMainWindow):
 
                         self.key_seq_history.append(full_shortcut)
 
-                        print(f"Nalezeno, lze presunout z {self.galleryManager.getSourcePath()} do {dst}!")
+                        print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
                         # Remove current image from the list of images in src directory
                         if not self.copyOnly:
