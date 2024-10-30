@@ -120,7 +120,7 @@ class ShortcutManager():
         if ret == qm.No:
             print("DEBUG: Loading data without saving.")
             return False  # User does not want to save changes, but it is ok.
-            
+
         if self.saveShortcuts():
             return False
         else:
@@ -138,8 +138,14 @@ class ShortcutManager():
             print(f"No file selected.")
             return False
 
-        with open(jsonDataFile[0], 'r', encoding='utf-8') as data:
-            self.shortcutsData = json.load(data)
+        try:
+            with open(jsonDataFile[0], 'r', encoding='utf-8') as data:
+                self.shortcutsData = json.load(data)
+        except ValueError as error:
+            # Prevent loading invalid json data
+            print("DEBUG: Invalid json data!")
+            self.mainWindow.statusBarLabel.setText(f"Error: Invalid json data in {jsonDataFile[0]}!")
+            return False
 
         # Save path of the loaded data
         self.srcPathOfLoadedData = jsonDataFile[0]
@@ -173,8 +179,8 @@ class ShortcutManager():
 
     def removeShortcutSequence(self, sequence: str):
         """
-        Remove subtree marked by '-' in the sequence. 
-        
+        Remove subtree marked by '-' in the sequence.
+
         Example:
         Lets Have following structure:
         a

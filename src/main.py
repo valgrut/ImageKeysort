@@ -304,12 +304,12 @@ class MainWindow(QMainWindow):
                 color: black;
                 __padding: 2px;
             }}
-            
+
             QTreeWidget::header {{
                 background-color: red;
                 min-height: 30px;
             }}
-            
+
             QHeaderView {{
                 background-color: {Styles.widgetsBgColor};
                 color: black;
@@ -318,7 +318,7 @@ class MainWindow(QMainWindow):
                 margin-top: 8px;
                 min-height: 30px;
             }}
-            
+
             QHeaderView::section {{
                 _color: green;
                 font-weight: bold;
@@ -326,7 +326,7 @@ class MainWindow(QMainWindow):
                 _border: 1px solid black;
                 _border-radius: 10px;
                 padding: 3px;
-                
+
                 _margin: 3px;
                 _min-height: 20px;
             }}
@@ -410,7 +410,7 @@ class MainWindow(QMainWindow):
 
         for key_L1, values_L1 in shortcuts_data["keys"].items():
             # print("Key a value", key, values)
-            
+
             # TODO: Do not show subtrees except the one starting with the first pressed key.
             # if root is not None and key_L1 != root:
             #     continue
@@ -759,7 +759,7 @@ class MainWindow(QMainWindow):
 
                     self.keySeq += pressedKey
 
-                    # self.update_tree_view(event.key()) # TODO: 
+                    # self.update_tree_view(event.key()) # TODO:
 
                     fullShortcut = ""
                     if self.permanentKeySeq:
