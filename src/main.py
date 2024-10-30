@@ -18,7 +18,9 @@ from PyQt5.QtWidgets import (
     QShortcut,
     QMenu,
     QAction,
-    QGraphicsDropShadowEffect, QSplitter,
+    QGraphicsDropShadowEffect,
+    QSplitter,
+    QProgressBar
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -188,6 +190,12 @@ class MainWindow(QMainWindow):
             """)
         self.keyLabel.setAlignment(Qt.AlignCenter)
 
+        self.expProgress = QProgressBar()
+        self.expProgress.setStyleSheet(f"""
+            max-width: 250px;
+        """)
+        self.expProgress.setValue(20)
+
         self.copyButton = QPushButton("&Copy", self)
         self.copyButton.clicked.connect(self.toggleCopyMode)
         self.copyButton.setFocusPolicy(Qt.NoFocus)
@@ -256,6 +264,7 @@ class MainWindow(QMainWindow):
         leftInnerButtonLayout.addWidget(self.editButton)
         leftInnerButtonLayout.addWidget(self.sortButton)
 
+        leftInnerLayout.addWidget(self.expProgress)
         leftInnerLayout.addWidget(self.copyButton)
         leftInnerLayout.addLayout(leftInnerButtonLayout)
         leftInnerLayout.addWidget(self.keyLabel)
