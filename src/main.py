@@ -852,6 +852,7 @@ def main():
             background-color: {Styles.mainBackground};
         }}
     """)
+    print(app.focusWidget())
     window = MainWindow()
     window.show()
     app.aboutToQuit.connect(window.shortcutManager.askSaveIfChanged)
