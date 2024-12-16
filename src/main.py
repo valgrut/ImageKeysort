@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import shutil
 import os
+import webbrowser
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
@@ -96,6 +97,9 @@ height = 864
 # - [ ] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
 # - [ ] Pod posledni prvek kazde sekce udelat tenkou caru jako oddelovac. (Nebo nad kazdou hlavni, bo to je root tak by to bylo jednodussi).
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
+# - [ ] Pridat moznost otevrit slozku pri kliknuti na shortcut (Tohle funguje!!!):
+#           webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
+# - [ ] ...
 #
 # Minor issues:
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
@@ -484,7 +488,7 @@ class MainWindow(QMainWindow):
         self.shortcutManager.setDataUnmodified()
         self.shortcutManager.clearShortcuts()
         self.update_tree_view()
-
+        
     def undo_last_operation(self):
         print("Undo last operation")
         # print(self.mv_history)
