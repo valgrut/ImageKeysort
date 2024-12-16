@@ -218,3 +218,6 @@ class ShortcutManager():
                 self.setDataModified()
 
         return True
+
+    def clearShortcuts(self):
+        self.shortcutsData = {"keys": {}}

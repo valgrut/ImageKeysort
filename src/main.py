@@ -353,6 +353,27 @@ class MainWindow(QMainWindow):
         self.tree.setFocusPolicy(Qt.NoFocus)
         self.update_tree_view()
 
+        self.clearButton = QPushButton("&Clear tree", self)
+        self.clearButton.clicked.connect(self.clearShortcuts)
+        self.clearButton.setFocusPolicy(Qt.NoFocus)
+        self.clearButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.clearButton.setGraphicsEffect(Styles.getShadowEffect())
+        self.clearButton.setStyleSheet(f"""
+        QPushButton {{
+            __width: 150px;
+            border: 1px solid black;
+            border-radius: {Styles.buttonBorderRadius}px;
+            padding: 3px;
+            background-color: {Styles.widgetsBgColor};
+            font-weight: bold;
+            font-size: 15px;
+        }}
+        QPushButton:hover {{
+            background-color: red;
+        }}
+        """)
+        leftInnerLayout.addWidget(self.clearButton)
+
         # Create main Menu bar
         self._createActions()
         self._createMenuBar()
@@ -456,6 +477,12 @@ class MainWindow(QMainWindow):
     def load_data(self):
         if not self.shortcutManager.loadShortcuts():
             return
+        self.update_tree_view()
+
+    def clearShortcuts(self):
+        self.shortcutManager.askSaveIfChanged()
+        self.shortcutManager.setDataUnmodified()
+        self.shortcutManager.clearShortcuts()
         self.update_tree_view()
 
     def undo_last_operation(self):
