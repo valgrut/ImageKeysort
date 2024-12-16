@@ -22,6 +22,15 @@ This could help you, just as it helped me!
 4. Select SORT mode (Ctrl+R or click on button)
 5. Write the sequence, and by writing the last key, the image will be moved to the corresponding destination.
 
+### 2.2. Update path of the existing shortcut
+
+1. Select EDIT mode
+2. Just add the same shortcut sequence again and select new path
+
+OR
+
+1. [TBD] Use Edit button beside the shortcut.
+
 ## 3. Features
 
 - Select source directory for the gallery to be sorted
@@ -29,9 +38,9 @@ This could help you, just as it helped me!
 - Create shortcut and set destination directory for it
 - Repeat last src-dst move by hitting '.'
 - Undo the move
-- Temporarily preserve part of the shortcut, so instead of repeating the whole 'ian', you can fix 'ia' and 
+- Temporarily preserve part of the shortcut, so instead of repeating the whole 'ian', you can fix 'ia' and
   then hit just the last part of the sequence: 'n' for naruto, 'd' for deathnote and so on.
-- Create a subset of gallery photos: Select Copy mode and just copy some photos to target directory, for example to 
+- Create a subset of gallery photos: Select Copy mode and just copy some photos to target directory, for example to
   show just subset of photos to your family.
 
 ## 4. How to build the app
@@ -47,7 +56,7 @@ This could help you, just as it helped me!
 ### 4.2. Windows
 
 1.  x
-    
+
     ```
 
     ```
