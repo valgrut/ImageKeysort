@@ -157,6 +157,9 @@ class GalleryManager(QStackedWidget):
         self.updateFilenameLabelText()  # TODO: sig-slots
         self.updateCounterLabelText()  # TODO: sig-slots
 
+        # Set focus to back to Gallery Manager so after adding shortcut, arrows still can be used to show next/previous image.
+        self.setFocus()
+
     def getCounterString(self) -> str:
         counter = str(self.galleryIndex + 1) + "/" + str(len(self.images))
         return counter

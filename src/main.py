@@ -62,10 +62,10 @@ height = 864
 # - [x] Next/Prev buttons, counter a src a image name se zobrazi jen, kdyz je nactena galerie.
 # - [x] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani zkratku 'a' z rodicovske 'o'.
 # - [x] Prerusit to vetveni x.y.z.f() mezi main.GalleryManager.MediaContainerWidget.f() [Jak to delat lepe, nez ze udelat retezec funkci?]
+# - [x] !!! Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 #
 #
 # Top priority:
-# - [~] !!! Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno. Celkove resizing a responzivnost posefit.
 # - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
@@ -396,6 +396,9 @@ class MainWindow(QMainWindow):
         self.set_sort_mode()
         self.setFocusPolicy(Qt.NoFocus)
 
+        # print("Has focus?", self.hasFocus())
+        # print("Focus Widget:", self.focusWidget())
+
     def _createMenuBar(self):
         menuBar = self.menuBar()
 
@@ -488,7 +491,7 @@ class MainWindow(QMainWindow):
         self.shortcutManager.setDataUnmodified()
         self.shortcutManager.clearShortcuts()
         self.update_tree_view()
-        
+
     def undo_last_operation(self):
         print("Undo last operation")
         # print(self.mv_history)
@@ -644,9 +647,13 @@ class MainWindow(QMainWindow):
 
     # TODO: Refactor:
     def keyPressEvent(self, event):
+
         if isinstance(event, QKeyEvent):
             pressedKey = event.text()
             print("Pressed Key:", pressedKey)
+
+            # print("Has focus?", self.hasFocus())
+            # print("Focus Widget:", self.focusWidget())
 
             # if self.current_mode == "home":
             if event.key() == Qt.Key_Left:
@@ -883,7 +890,6 @@ def main():
             background-color: {Styles.mainBackground};
         }}
     """)
-    print(app.focusWidget())
     window = MainWindow()
     window.show()
     app.aboutToQuit.connect(window.shortcutManager.askSaveIfChanged)
