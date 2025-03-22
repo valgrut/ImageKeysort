@@ -115,6 +115,14 @@ class GalleryManager(QStackedWidget):
         self.decrementGalleryIndex()
         self.updatePreview()  # TODO: sig-slots
 
+    def setFirstImage(self):
+        self.galleryIndex = 0
+        self.updatePreview()  # TODO: sig-slots
+
+    def setLastImage(self):
+        self.galleryIndex = len(self.images) - 1
+        self.updatePreview()  # TODO: sig-slots
+
     def getCurrentFilename(self):
         if self.images:
             return self.images[self.galleryIndex]
