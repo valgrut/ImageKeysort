@@ -63,12 +63,21 @@ height = 864
 # - [x] Edit mode: Pridat moznost odstranit nejakou zkratku, podzkratku ... (o-a = 'o' 'minus' 'a') odstrani zkratku 'a' z rodicovske 'o'.
 # - [x] Prerusit to vetveni x.y.z.f() mezi main.GalleryManager.MediaContainerWidget.f() [Jak to delat lepe, nez ze udelat retezec funkci?]
 # - [x] !!! Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
+# - [x] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
+# - [x] Add error message, if the directory does not exist, for which we HIT the shortcut (is in shortcut, but does nto exist on disk)
 #
 #
 # Top priority:
+# - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!! 
+# - [ ] MOZNA: Pridat i znaky jako labely ($, ...)
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno. Celkove resizing a responzivnost posefit.
-# - [ ] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
+# - [~] Empty the shortcuts (or just update the preview?) if HIT && target dir does not exist physically.
+# - [~] Inspect the following: 
+#           - get_dst_for_shortcut: sdfvd
+#           - ERROR: Destination directory G:/Downloads/Fotky/poledance does not exist
+#           Matchuje to, i kdyz mezi 2 zkratkama je x random (neexistujicich) zkratek, jako fxxxxk  (fotky -> kamaradi)
+#
 #
 # Features TODO:
 # - [~] ! REFACTORING
@@ -78,7 +87,7 @@ height = 864
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat).
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.)
-# - [ ] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
+# - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
 # - [ ] Udelat CustomTree resizable pomoci QSplitter
 # - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu?
@@ -90,7 +99,7 @@ height = 864
 # To Fix:
 # - [ ] Crashing when moving the .git bcz process (medium) is used or what...
 #
-# Shortcuts management:
+# Shortcuts management, Shortcut Tree:
 # - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
@@ -99,7 +108,6 @@ height = 864
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 # - [ ] Pridat moznost otevrit slozku pri kliknuti na shortcut (Tohle funguje!!!):
 #           webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
-# - [ ] ...
 #
 # Minor issues:
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
@@ -507,6 +515,9 @@ class MainWindow(QMainWindow):
 
         if not os.path.exists(dst):
             print(f"ERROR: Destination directory {dst} does not exist.")
+            self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
+            self.keySeq = ""
+            self.updateKeySequenceLabel()
             return
 
         shutil.move(src + "/" + imageName, dst + "/" + imageName)
@@ -756,6 +767,9 @@ class MainWindow(QMainWindow):
 
                     if not os.path.exists(dst):
                         print(f"ERROR: Destination directory {dst} does not exist.")
+                        self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
+                        self.keySeq = ""
+                        self.updateKeySequenceLabel()
                         return
 
                     # Remove current image from the list of images in src directory
@@ -837,6 +851,9 @@ class MainWindow(QMainWindow):
 
                         if not os.path.exists(dst):
                             print(f"ERROR: Destination directory {dst} does not exist.")
+                            self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
+                            self.keySeq = ""
+                            self.updateKeySequenceLabel()
                             return
 
                         self.keySeqHistory.append(fullShortcut)

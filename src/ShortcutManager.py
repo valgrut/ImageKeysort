@@ -1,4 +1,5 @@
 import json
+import os
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import re
 
@@ -22,6 +23,46 @@ class ShortcutManager():
 
     def printShortcuts(self):
         pass
+
+    def getAllPaths(self, shortcutsData) -> []:
+        dstPaths = []
+        currentShortcutsLevel = shortcutsData["keys"] # 'a', 'f', ...
+
+        if currentShortcutsLevel is None:
+            return
+
+        for shortcut in currentShortcutsLevel:
+            # print("Shortcut", shortcut)
+
+            dst = currentShortcutsLevel[shortcut]["dst_path"]
+            # print("dst", dst)
+            if dst is not '':
+                dstPaths.append(dst)
+
+            # Process nested shortcuts and add its dst into list
+            nextLevel = currentShortcutsLevel[shortcut]
+            # print("Next level", nextLevel)
+            for returnedPath in self.getAllPaths(nextLevel):
+                dstPaths.append(returnedPath)
+
+        return dstPaths
+
+    def isSomeDstDirectoryMissing(self, shortcutsData):
+        nonexistingPaths = []
+
+        # # DEBUG: Print all found paths
+        # for path in self.getAllPaths(self.shortcutsData):
+        #     print("dstpath", path)
+
+        for path in self.getAllPaths(shortcutsData):
+            if not os.path.exists(path):
+                nonexistingPaths.append(path)
+
+        if nonexistingPaths:
+            return nonexistingPaths
+
+        return False
+
 
     def addShortcut(self, sequence):
         # TODO: toto je potreba dodelat a plnit ten dict behem Edit modu
@@ -147,6 +188,20 @@ class ShortcutManager():
             self.mainWindow.statusBarLabel.setText(f"Error: Invalid json data in {jsonDataFile[0]}!")
             return False
 
+        # Check that all destination directories exist for all loaded shortcuts
+        nonexistingPaths = self.isSomeDstDirectoryMissing(self.shortcutsData)
+        if nonexistingPaths:
+            # TODO: Mozna jen warning do logu a zvyraznit cervene v Tree.
+            for path in nonexistingPaths:
+                # TODO: zde bude casem _append_ a pujde scrollovat tim logem.
+                self.mainWindow.statusBarLabel.setText(f"Warning: One or more destination directories do not exist!")
+                # TODO: Highlight all dst dirs that do not exist
+            # return False
+
+        # Print nonexisting paths:
+        for path in nonexistingPaths:
+            print("E: Directory does not exist: ", path)
+
         # Save path of the loaded data
         self.srcPathOfLoadedData = jsonDataFile[0]
 
@@ -197,7 +252,7 @@ class ShortcutManager():
         :return:
         """
 
-        isMatched = re.search("^[a-z]*-[a-z]$", sequence)
+        isMatched = re.search("^[a-zA-Z1-9]*-[a-zA-Z1-9]$", sequence)
 
         if not isMatched:
             print(f"DEBUG: Incorrect split string {isMatched}.")
