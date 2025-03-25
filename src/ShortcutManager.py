@@ -17,9 +17,13 @@ class ShortcutManager():
     def setDataModified(self):
         self.dataModified = True
         print("MODIFIED")
+        # TODO: tu se nastavi nekde '*' jako indikator ze data jsou modifikovana. Zatim:
+        self.mainWindow.setWindowTitle("*"+self.mainWindow.appTitle)
 
     def setDataUnmodified(self):
         self.dataModified = False
+        # TODO: tu se odnastavi nekde '*' jako indikator ze data nejsou zatim modifikovana. Zatim:
+        self.mainWindow.setWindowTitle(self.mainWindow.appTitle)
 
     def printShortcuts(self):
         pass

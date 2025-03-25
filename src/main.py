@@ -68,14 +68,14 @@ height = 864
 # - [x] Fix: HIT is detected even for sequences containing intermediate nonexisting keys: fxxxxk, oxa, ...
 # - [x] Empty the shortcuts (or just update the preview?) if HIT && target dir does not exist physically.
 # - [x] Resize image in label to fill the label while keeping ratio and even during the window resizing.
+# - [x~] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
 #
 #
 # Top priority:
-# - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!! 
+# - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 # - [ ] MOZNA: Pridat i nektere znaky jako labely ($, ...)
-# - [ ] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
-# - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto zkratka treba nehitla porad).
+# - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
 #
 #
 # Features TODO:
@@ -133,7 +133,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Image Keysort")
+        self.appTitle = "Image Keysort"
+        self.setWindowTitle(self.appTitle)
         self.setWindowIcon(QIcon(':Resources/icon.jpg'))
         self.setMinimumWidth(width)
         self.setMinimumHeight(height)
