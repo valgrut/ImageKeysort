@@ -114,17 +114,21 @@ class ShortcutManager():
     def getLastPossibleKeyOfSequence(self, sequence):
         current = self.shortcutsData["keys"]  # a, b, x, ...
 
-        currentKeyContent = ""
+        availableShortcuts = ""
         for key in sequence:
+            print("Key", key)
             if key in current.keys():
-                currentKeyContent = current[key]  # dst_path, keys
-                current = currentKeyContent["keys"]
+                availableShortcuts = current[key]  # dst_path, keys
+                print(key, "content", availableShortcuts)
+                current = availableShortcuts["keys"]
+            else:
+                return False
 
         # If key exists but have another sub-keys under the "keys", return False (Not longest match)
-        if "keys" not in currentKeyContent or currentKeyContent["keys"]:
+        if "keys" not in availableShortcuts or availableShortcuts["keys"]:
             return False
 
-        return currentKeyContent
+        return availableShortcuts
 
     def _getLastKey(self, sequence):
         """
@@ -139,9 +143,11 @@ class ShortcutManager():
             if key in current.keys():
                 currentKeyContent = current[key]  # dst_path, keys
                 current = currentKeyContent["keys"]
+            else:
+                return False
 
-        if "keys" not in currentKeyContent:
-            return False
+        # if "keys" not in currentKeyContent:
+        #     return False
 
         return currentKeyContent
 
@@ -268,11 +274,13 @@ class ShortcutManager():
         else:
             lastKey = self.shortcutsData
 
-        if postDelimeter in lastKey["keys"]:
+        if lastKey and (postDelimeter in lastKey["keys"]):
             if lastKey["keys"].pop(postDelimeter):
                 self.setDataModified()
 
+        # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
         return True
 
     def clearShortcuts(self):
         self.shortcutsData = {"keys": {}}
+

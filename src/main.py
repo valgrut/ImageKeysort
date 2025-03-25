@@ -65,18 +65,16 @@ height = 864
 # - [x] !!! Fix focus, abych mohl pouzivat sipky pro prochazeni obrazku !!!
 # - [x] !! Pridat cudliky na Jump to start of the gallery a na Jump to end of gallery. Dat je vedle Previous a Next image.
 # - [x] Add error message, if the directory does not exist, for which we HIT the shortcut (is in shortcut, but does nto exist on disk)
+# - [x] Fix: HIT is detected even for sequences containing intermediate nonexisting keys: fxxxxk, oxa, ...
+# - [x] Empty the shortcuts (or just update the preview?) if HIT && target dir does not exist physically.
 #
 #
 # Top priority:
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!! 
-# - [ ] MOZNA: Pridat i znaky jako labely ($, ...)
+# - [ ] MOZNA: Pridat i nektere znaky jako labely ($, ...)
 # - [ ] !!! Obrazek (label) by se mel zvetsit tak, aby zaplnil celou obrazovku, pokud zvetsim okno. Celkove resizing a responzivnost posefit.
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
-# - [~] Empty the shortcuts (or just update the preview?) if HIT && target dir does not exist physically.
-# - [~] Inspect the following: 
-#           - get_dst_for_shortcut: sdfvd
-#           - ERROR: Destination directory G:/Downloads/Fotky/poledance does not exist
-#           Matchuje to, i kdyz mezi 2 zkratkama je x random (neexistujicich) zkratek, jako fxxxxk  (fotky -> kamaradi)
+# - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto zkratka treba nehitla porad).
 #
 #
 # Features TODO:
