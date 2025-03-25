@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QSizePolicy
 
 from Styles import Styles
 
@@ -18,6 +18,7 @@ class ImageWidget(QWidget):
 
         self.label = QLabel(self)
         self.label.setAlignment(Qt.AlignCenter)
+        self.label.setScaledContents(False)
         # self.label.setStyleSheet("""
         #     background-color: yellow;
         #     border: 1px solid black;
@@ -25,7 +26,6 @@ class ImageWidget(QWidget):
         #     padding: 3px;
         #     """)
         # self.label.resize(900, 780)
-        # self.pixmap = QPixmap(img_path)
         self.pixmap = QPixmap()
         self.label.setPixmap(self.pixmap)
 
@@ -36,5 +36,13 @@ class ImageWidget(QWidget):
     def updateImage(self, img_path):
         # TODO: Use cache?
         self.pixmap.load(img_path)
-        self.pixmap = self.pixmap.scaled(900, 770, Qt.KeepAspectRatio)
-        self.label.setPixmap(self.pixmap)
+        self.updateScaledPixmap()
+
+    def resizeEvent(self, event):
+        self.updateScaledPixmap()
+        super().resizeEvent(event)
+
+    def updateScaledPixmap(self):
+        if self.pixmap:
+            scaledPixmap = self.pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.label.setPixmap(scaledPixmap)
