@@ -656,114 +656,173 @@ class MainWindow(QMainWindow):
         self.tree.setEnabled(False)
         self.galleryManager.updatePreview()
 
-    # TODO: Refactor:
-    def keyPressEvent(self, event):
+    def handleEditMode(self, event):
+        pressedKey = event.text()
+        match event.key():
+            case Qt.Key_Escape:
+                # self.key_seq_history.append(self.key_seq)  # What was purpose of this???
+                self.keySeq = ""
+                self.updateKeySequenceLabel()
 
-        if isinstance(event, QKeyEvent):
-            pressedKey = event.text()
-            print("Pressed Key:", pressedKey)
+            # Confirm entered shortcut
+            case Qt.Key_Return:  # "Return" is the "Enter" key in the center of keyboard.
+                print("ENTER: seq:", self.keySeq)
+                if len(self.keySeq) == 0:
+                    print(f"probably empty (Key seq: {self.keySeq})")
+                    return
 
-            # print("Has focus?", self.hasFocus())
-            # print("Focus Widget:", self.focusWidget())
+                # Check, whether sequence contains '-', and if so
+                # consider this as removing all shortcuts after the '-' character.
+                if "-" in self.keySeq:
+                    self.shortcutManager.removeShortcutSequence(self.keySeq)
+                    self.keySeq = ""
+                    self.update_tree_view()
+                    self.updateKeySequenceLabel()
+                    self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
+                    return
 
-            # if self.current_mode == "home":
-            if event.key() == Qt.Key_Left:
-                # TODO: de-chain:
-                self.galleryManager.mediaContainerWidget.showPreviousImage()
-                # print("LEFT ARROW")
+                # Add new shortcut sequence
+                for k in self.keySeq:
+                    self.shortcutManager.addShortcut(self.keySeq)
 
-            elif event.key() == Qt.Key_Right:
-                # TODO de-chain:
-                # self.showNextImage()
-                self.galleryManager.mediaContainerWidget.showNextImage()
-                # print("right ARROW")
+                dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
+                self.shortcutManager.addDstPath(self.keySeq, dstSortDirectory)
+                self.keySeq = ""
+                self.updateKeySequenceLabel()
+                self.update_tree_view()
+                print(json.dumps(self.shortcutManager.getData(), indent=2))
+                self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 
-            elif event.key() == Qt.Key_Delete:
-                pass
+            case _:
+                self.keySeq += pressedKey
+                self.updateKeySequenceLabel()
 
-            else:
-                super().keyPressEvent(event)
+    def handleSortMode(self, event):
+        pressedKey = event.text()
+        # Cancel currently started shortcut or escape from the hold partial sequence
+        match event.key():
+            case Qt.Key_Escape:
+                print("ESC")
+                # print("key_seq:", self.key_seq)
+                # print("permanent_key_seq:", self.permanent_key_seq)
+                if self.keySeq and self.permanentKeySeq:
+                    self.keySeq = ""
+                elif not self.keySeq and self.permanentKeySeq:
+                    self.permanentKeySeq = ""
+                elif self.keySeq and not self.permanentKeySeq:
+                    self.keySeq = ""
+                else:
+                    pass
+                self.updateKeySequenceLabel()
 
-            # TODO: Refactor following if-else hell:  !!!!!!!!!!!!!
-            # ==== EDIT MODE ====
-            if self.currentMode == "edit":
-                if event.key() == Qt.Key_Escape:
-                    # self.key_seq_history.append(self.key_seq)  # What was purpose of this???
+            # Hold current shortcut and use it as default for upcoming sequences until escape
+            case Qt.Key_Return:  # Key_Return is non-numeric Enter key
+                print("ENTER")
+
+                if self.keySeq:
+                    self.permanentKeySeq = self.keySeq
+                    self.keySeq = ""
+
+                self.updateKeySequenceLabel()
+
+            # Repeat last move from src to dst of current image.
+            case Qt.Key_Period:
+                print("Repeat last finished command for current image")
+
+                if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:
+                    print("History is empty.")
+                    return
+
+                print(f"Last history entry: {self.keySeqHistory[-1]}")
+
+                imageName = self.galleryManager.getCurrentFilename()
+
+                src = self.mvHistory[-1]["src"]
+                dst = self.mvHistory[-1]["dst"]
+
+                if not os.path.exists(dst):
+                    print(f"ERROR: Destination directory {dst} does not exist.")
+                    self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
                     self.keySeq = ""
                     self.updateKeySequenceLabel()
+                    return
 
-                # Confirm entered shortcut
-                elif event.key() == Qt.Key_Return:  # "Return" is the "Enter" key in the center of keyboard.
-                    print("ENTER: seq:", self.keySeq)
-                    if len(self.keySeq) == 0:
-                        print(f"probably empty (Key seq: {self.keySeq})")
-                        return
+                # Remove current image from the list of images in src directory
+                if not self.copyOnly:
+                    self.galleryManager.removeFile(imageName)
+                    shutil.move(src + "/" + imageName, dst + "/" + imageName)
+                    self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
+                    self.statusBarLabel.setText(f"File moved to {dst}.")
+                else:
+                    shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+                    self.galleryManager.incrementGalleryIndex()
+                    self.statusBarLabel.setText(f"File copied to {dst}.")
 
-                    # Check, whether sequence contains '-', and if so
-                    # consider this as removing all shortcuts after the '-' character.
-                    if "-" in self.keySeq:
-                        self.shortcutManager.removeShortcutSequence(self.keySeq)
+                self.galleryManager.updateCounterLabelText()
+
+                # Show new image
+                self.galleryManager.updatePreview()
+
+
+            case Qt.Key_Delete:
+                if self.galleryManager.isGalleryEmpty():
+                    print("Source directory is empty")
+                    return
+
+                imageName = self.galleryManager.getCurrentFilename()
+                src = self.galleryManager.getSourcePath()
+                dst = src + "/" + "__DELETED__"
+
+                if not os.path.exists(dst):
+                    os.makedirs(dst)
+
+                print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
+
+                # Remove current image from the list of images in src directory
+                self.galleryManager.removeFile(imageName)
+                shutil.move(src + "/" + imageName, dst + "/" + imageName)
+                self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
+                self.statusBarLabel.setText(f"File Deleted.")
+
+                self.galleryManager.updateCounterLabelText()
+
+                # Show new image
+                self.galleryManager.updatePreview()
+
+            case _: # Other keys
+                if event.key() not in allowedKeys:
+                    print("not a-z was pressed, nothing to append to shortcuts.")
+                    return
+
+                self.keySeq += pressedKey
+
+                # self.update_tree_view(event.key()) # TODO:
+
+                fullShortcut = ""
+                if self.permanentKeySeq:
+                    fullShortcut = self.permanentKeySeq + self.keySeq
+                else:
+                    fullShortcut = self.keySeq
+
+                print("key_seq:", self.keySeq)
+                print("full key_seq:", fullShortcut)
+
+                # print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(full_shortcut))
+                if not self.keySeq:
+                    return
+
+                if self.shortcutManager.getDstForShortcut(fullShortcut):
+                    print("HIT!")
+
+                    if self.galleryManager.isGalleryEmpty():
+                        print("Source directory is empty")
                         self.keySeq = ""
-                        self.update_tree_view()
                         self.updateKeySequenceLabel()
                         return
 
-                    # Add new shortcut sequence
-                    for k in self.keySeq:
-                        self.shortcutManager.addShortcut(self.keySeq)
-
-                    dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
-                    self.shortcutManager.addDstPath(self.keySeq, dstSortDirectory)
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
-                    self.update_tree_view()
-                    print(json.dumps(self.shortcutManager.getData(), indent=2))
-
-                else:
-                    self.keySeq += pressedKey
-                    self.updateKeySequenceLabel()
-
-            # ==== SORT MODE ====
-            elif self.currentMode == "sort":
-                # Cancel currently started shortcut or escape from the hold partial sequence
-                if event.key() == Qt.Key_Escape:
-                    print("ESC")
-                    # print("key_seq:", self.key_seq)
-                    # print("permanent_key_seq:", self.permanent_key_seq)
-                    if self.keySeq and self.permanentKeySeq:
-                        self.keySeq = ""
-                    elif not self.keySeq and self.permanentKeySeq:
-                        self.permanentKeySeq = ""
-                    elif self.keySeq and not self.permanentKeySeq:
-                        self.keySeq = ""
-                    else:
-                        pass
-                    self.updateKeySequenceLabel()
-
-                # Hold current shortcut and use it as default for upcoming sequences until escape
-                elif event.key() == Qt.Key_Return:  # Key_Return is non-numeric Enter key
-                    print("ENTER")
-
-                    if self.keySeq:
-                        self.permanentKeySeq = self.keySeq
-                        self.keySeq = ""
-
-                    self.updateKeySequenceLabel()
-
-                # Repeat last move from src to dst of current image.
-                elif event.key() == Qt.Key_Period:
-                    print("Repeat last finished command for current image")
-
-                    if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:
-                        print("History is empty.")
-                        return
-
-                    print(f"Last history entry: {self.keySeqHistory[-1]}")
-
                     imageName = self.galleryManager.getCurrentFilename()
-
-                    src = self.mvHistory[-1]["src"]
-                    dst = self.mvHistory[-1]["dst"]
+                    src = self.galleryManager.getSourcePath()
+                    dst = self.shortcutManager.getDstForShortcut(fullShortcut)
 
                     if not os.path.exists(dst):
                         print(f"ERROR: Destination directory {dst} does not exist.")
@@ -771,6 +830,10 @@ class MainWindow(QMainWindow):
                         self.keySeq = ""
                         self.updateKeySequenceLabel()
                         return
+
+                    self.keySeqHistory.append(fullShortcut)
+
+                    print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
                     # Remove current image from the list of images in src directory
                     if not self.copyOnly:
@@ -783,107 +846,52 @@ class MainWindow(QMainWindow):
                         self.galleryManager.incrementGalleryIndex()
                         self.statusBarLabel.setText(f"File copied to {dst}.")
 
+                    # Update counter label TODO fix:
                     self.galleryManager.updateCounterLabelText()
 
                     # Show new image
                     self.galleryManager.updatePreview()
 
-
-                elif event.key() == Qt.Key_Delete:
-                    if self.galleryManager.isGalleryEmpty():
-                        print("Source directory is empty")
-                        return
-
-                    imageName = self.galleryManager.getCurrentFilename()
-                    src = self.galleryManager.getSourcePath()
-                    dst = src + "/" + "__DELETED__"
-
-                    if not os.path.exists(dst):
-                        os.makedirs(dst)
-
-                    print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
-
-                    # Remove current image from the list of images in src directory
-                    self.galleryManager.removeFile(imageName)
-                    shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
-                    self.statusBarLabel.setText(f"File Deleted.")
-
-                    self.galleryManager.updateCounterLabelText()
-
-                    # Show new image
-                    self.galleryManager.updatePreview()
-
+                    # Enable temporaly save and reuse partial shortcut
+                    self.keySeq = ""
+                    self.updateKeySequenceLabel()
                 else:
-                    if event.key() not in allowedKeys:
-                        print("not a-z was pressed, nothing to append to shortcuts.")
-                        return
+                    self.updateKeySequenceLabel()
 
-                    self.keySeq += pressedKey
 
-                    # self.update_tree_view(event.key()) # TODO:
+    def keyPressEvent(self, event):
+        if not isinstance(event, QKeyEvent):
+            return
+        
+        pressedKey = event.text()
+        print("Pressed Key:", pressedKey)
 
-                    fullShortcut = ""
-                    if self.permanentKeySeq:
-                        fullShortcut = self.permanentKeySeq + self.keySeq
-                    else:
-                        fullShortcut = self.keySeq
+        # Key binding working in both modes:
+        match event.key():
+            case Qt.Key_Left:
+                # TODO: de-chain: 
+                # self.showPreviousImage()
+                self.galleryManager.mediaContainerWidget.showPreviousImage()
 
-                    print("key_seq:", self.keySeq)
-                    print("full key_seq:", fullShortcut)
+            case Qt.Key_Right:
+                # TODO de-chain:
+                # self.showNextImage()
+                self.galleryManager.mediaContainerWidget.showNextImage()
 
-                    # print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(full_shortcut))
-                    if not self.keySeq:
-                        return
-
-                    if self.shortcutManager.getDstForShortcut(fullShortcut):
-                        print("HIT!")
-
-                        if self.galleryManager.isGalleryEmpty():
-                            print("Source directory is empty")
-                            self.keySeq = ""
-                            self.updateKeySequenceLabel()
-                            return
-
-                        imageName = self.galleryManager.getCurrentFilename()
-                        src = self.galleryManager.getSourcePath()
-                        dst = self.shortcutManager.getDstForShortcut(fullShortcut)
-
-                        if not os.path.exists(dst):
-                            print(f"ERROR: Destination directory {dst} does not exist.")
-                            self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
-                            self.keySeq = ""
-                            self.updateKeySequenceLabel()
-                            return
-
-                        self.keySeqHistory.append(fullShortcut)
-
-                        print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
-
-                        # Remove current image from the list of images in src directory
-                        if not self.copyOnly:
-                            self.galleryManager.removeFile(imageName)
-                            shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                            self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
-                            self.statusBarLabel.setText(f"File moved to {dst}.")
-                        else:
-                            shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-                            self.galleryManager.incrementGalleryIndex()
-                            self.statusBarLabel.setText(f"File copied to {dst}.")
-
-                        # Update counter label TODO fix:
-                        self.galleryManager.updateCounterLabelText()
-
-                        # Show new image
-                        self.galleryManager.updatePreview()
-
-                        # Enable temporaly save and reuse partial shortcut
-                        self.keySeq = ""
-                        self.updateKeySequenceLabel()
-                    else:
-                        self.updateKeySequenceLabel()
-            else:
+            case Qt.Key_Delete:
                 pass
+
+            case _: # Default case
+                super().keyPressEvent(event)
+
+        if self.currentMode == "edit":
+            self.handleEditMode(event)
+
+        elif self.currentMode == "sort":
+            self.handleSortMode(event)
+        
+        else: # Unknown mode
+            pass
 
     def updateKeySequenceLabel(self):
         separator = "+"
