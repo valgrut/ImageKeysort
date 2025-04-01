@@ -76,10 +76,12 @@ height = 864
 # - [ ] MOZNA: Pridat i nektere znaky jako labely ($, ...)
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
 # - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
+# - [ ] Prochazet TODO v souborech a udelat je.
 #
 #
 # Features TODO:
 # - [~] ! REFACTORING
+# - [ ] Tridit zkratky abecedne?
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [~] Pridat testy (make test)
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
