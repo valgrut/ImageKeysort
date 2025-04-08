@@ -79,6 +79,12 @@ height = 864
 # - [ ] Prochazet TODO v souborech a udelat je.
 #
 #
+# - [ ] Fix crash, when manipulating image, which is removed outside of program, while source directory is loaded.
+#       pr. Odstranim/presunu rucne obrazek ve slozce, ktera je otevrena v programu. Kdyz na obrazek (ktery v poli ale porad existuje) sipkama dojdu a zkusim ho odstranit, program crashne.
+#       - [ ] Pridat file exist check pri manipulaci s obrazkem (pri mv, copy, del) !!!! If does not exist, remove from list.
+# - [ ] CHECK: co kdyz presunu do dst picture s nazvem Xyz, ale obrazek s timto nazvem jiz ve slozce je? Neprepise se doufam...
+#
+#
 # Features TODO:
 # - [~] ! REFACTORING
 # - [ ] Tridit zkratky abecedne?
