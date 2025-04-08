@@ -69,6 +69,10 @@ height = 864
 # - [x] Empty the shortcuts (or just update the preview?) if HIT && target dir does not exist physically.
 # - [x] Resize image in label to fill the label while keeping ratio and even during the window resizing.
 # - [x~] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
+# - [x] Fix crash, when manipulating image, which is removed outside of program, while source directory is loaded.
+#   - Kontext: Odstranim/presunu rucne obrazek ve slozce, ktera je otevrena v programu. Kdyz na obrazek (ktery v poli ale porad existuje) sipkama dojdu a zkusim ho odstranit, program crashne.
+#   - [x] Pridat file exist check pri manipulaci s obrazkem (pri mv, copy, del) !!!! If does not exist, remove from list.
+# - [x] CHECK: co kdyz presunu do dst picture s nazvem Xyz, ale obrazek s timto nazvem jiz ve slozce je? Neprepise se doufam...
 #
 #
 # Top priority:
@@ -77,12 +81,8 @@ height = 864
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
 # - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
 # - [ ] Prochazet TODO v souborech a udelat je.
+# - [ ] !!!! Napsat unit testy !!!!
 #
-#
-# - [ ] Fix crash, when manipulating image, which is removed outside of program, while source directory is loaded.
-#       pr. Odstranim/presunu rucne obrazek ve slozce, ktera je otevrena v programu. Kdyz na obrazek (ktery v poli ale porad existuje) sipkama dojdu a zkusim ho odstranit, program crashne.
-#       - [ ] Pridat file exist check pri manipulaci s obrazkem (pri mv, copy, del) !!!! If does not exist, remove from list.
-# - [ ] CHECK: co kdyz presunu do dst picture s nazvem Xyz, ale obrazek s timto nazvem jiz ve slozce je? Neprepise se doufam...
 #
 #
 # Features TODO:
@@ -528,6 +528,28 @@ class MainWindow(QMainWindow):
             self.updateKeySequenceLabel()
             return
 
+        # Check that image was not removed from outside of an app
+        if not os.path.exists(src + "/" + imageName):
+            self.galleryManager.removeFile(imageName)
+            self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+            self.galleryManager.updateCounterLabelText()
+            self.galleryManager.updatePreview()
+            # Remove last record from history
+            if self.mvHistory:
+                self.mvHistory.pop()
+            self.keySeq = ""
+            self.updateKeySequenceLabel()
+            return
+
+        # Prevent override of an image in dst, if file with same name exist there.
+        if os.path.exists(dst + "/" + imageName):
+            self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+            # TODO: Add random suffix number to the filename (and update name in the list!)
+            # for now:
+            self.keySeq = ""
+            self.updateKeySequenceLabel()
+            return
+
         shutil.move(src + "/" + imageName, dst + "/" + imageName)
         self.statusBarLabel.setText(f"File moved BACK From: {src}.")
 
@@ -755,6 +777,25 @@ class MainWindow(QMainWindow):
                     self.updateKeySequenceLabel()
                     return
 
+                # Check that image was not removed from outside of an app
+                if not os.path.exists(src + "/" + imageName):
+                    self.galleryManager.removeFile(imageName)
+                    self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+                    self.galleryManager.updateCounterLabelText()
+                    self.galleryManager.updatePreview()
+                    self.keySeq = ""
+                    self.updateKeySequenceLabel()
+                    return
+
+                # Prevent override of an image in dst, if file with same name exist there.
+                if os.path.exists(dst + "/" + imageName):
+                    self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                    # TODO: Add random suffix number to the filename (and update name in the list!)
+                    # for now:
+                    self.keySeq = ""
+                    self.updateKeySequenceLabel()
+                    return
+
                 # Remove current image from the list of images in src directory
                 if not self.copyOnly:
                     self.galleryManager.removeFile(imageName)
@@ -783,6 +824,25 @@ class MainWindow(QMainWindow):
 
                 if not os.path.exists(dst):
                     os.makedirs(dst)
+
+                # Check that image was not removed from outside of an app
+                if not os.path.exists(src + "/" + imageName):
+                    self.galleryManager.removeFile(imageName)
+                    self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+                    self.galleryManager.updateCounterLabelText()
+                    self.galleryManager.updatePreview()
+                    self.keySeq = ""
+                    self.updateKeySequenceLabel()
+                    return
+
+                # Prevent override of an image in dst, if file with same name exist there.
+                if os.path.exists(dst + "/" + imageName):
+                    self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                    # TODO: Add random suffix number to the filename (and update name in the list!)
+                    # for now:
+                    self.keySeq = ""
+                    self.updateKeySequenceLabel()
+                    return
 
                 print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
@@ -839,6 +899,25 @@ class MainWindow(QMainWindow):
                         self.updateKeySequenceLabel()
                         return
 
+                    # Check that image was not removed from outside of an app
+                    if not os.path.exists(src + "/" + imageName):
+                        self.galleryManager.removeFile(imageName)
+                        self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+                        self.galleryManager.updateCounterLabelText()
+                        self.galleryManager.updatePreview()
+                        self.keySeq = ""
+                        self.updateKeySequenceLabel()
+                        return
+
+                    # Prevent override of an image in dst, if file with same name exist there.
+                    if os.path.exists(dst + "/" + imageName):
+                        self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                        # TODO: Add random suffix number to the filename (and update name in the list!)
+                        # for now:
+                        self.keySeq = ""
+                        self.updateKeySequenceLabel()
+                        return
+
                     self.keySeqHistory.append(fullShortcut)
 
                     print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
@@ -887,6 +966,7 @@ class MainWindow(QMainWindow):
                 self.galleryManager.mediaContainerWidget.showNextImage()
 
             case Qt.Key_Delete:
+                # TODO
                 pass
 
             case _: # Default case
