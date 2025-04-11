@@ -88,6 +88,9 @@ height = 864
 # Features TODO:
 # - [~] ! REFACTORING
 # - [ ] Tridit zkratky abecedne?
+# - [ ] Pridat klavesovou zkratku pro Na konec a Na zacatek - home a end klavesy.
+# - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
+# - [ ] FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat.
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [~] Pridat testy (make test)
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
@@ -99,6 +102,9 @@ height = 864
 # - [ ] Udelat CustomTree resizable pomoci QSplitter
 # - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu?
 # - [ ] Vyresit ? pomale nacitani velkych obrazku (6MB+)
+# - [ ] Zmenit border color okna s obrazkama, kdyz je aktivni COPY mode, aby to bylo jasnejsi (uz jsem na nej parkrat zapomenul, ze je aktivni).
+# - [ ] Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
+# - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 #
 # Design:
 # - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
