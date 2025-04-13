@@ -80,7 +80,7 @@ height = 864
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 # - [ ] MOZNA: Pridat i nektere znaky jako labely ($, ...)
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
-# - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
+# - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi). [SETTINGS]
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy
 #
@@ -88,7 +88,7 @@ height = 864
 # Settings:
 # - [ ] How many columns of shortcuts to show (1-5)
 # - [ ] ! Pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
-# - [ ] Settings save and load.
+# - [ ] Settings saving and loading.
 # - [ ] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
 #
 #
@@ -96,45 +96,51 @@ height = 864
 # - [~] ! REFACTORING
 # - [ ] Tridit zkratky abecedne?
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
-# - [ ] FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat.
-# - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
-# - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
-# - [ ] MAYBE: Pridat AI advices based on keywords on image.
+# - [ ] ! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [SETTINGS]
+# - [~] Pridat moznost zobrazovat i gify (videoWidget misto imageWidgetu)
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.)
-# - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
-# - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
-# - [ ] Udelat CustomTree resizable pomoci QSplitter
-# - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu?
-# - [ ] Vyresit ? pomale nacitani velkych obrazku (6MB+)
 # - [~] ! Zmenit border color okna s obrazkama, kdyz je aktivni COPY mode, aby to bylo jasnejsi (uz jsem na nej parkrat zapomenul, ze je aktivni).
-# - [ ] Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
+# - [ ] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu.
+# - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
+# - [ ]
+#
 #
 # Design:
 # - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
 #
 # To Fix:
 # - [ ] Crashing when moving the .git bcz process (medium) is used or what...
+# - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
+#
 #
 # Shortcuts management, Shortcut Tree:
+# - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu? [SETTINGS]
+# - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
+# - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
+# - [ ] Udelat CustomTree resizable pomoci QSplitter
 # - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
 # - [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
+# - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
 # - [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
 # - [ ] Pod posledni prvek kazde sekce udelat tenkou caru jako oddelovac. (Nebo nad kazdou hlavni, bo to je root tak by to bylo jednodussi).
-# - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 # - [ ] Pridat moznost otevrit slozku pri kliknuti na shortcut (Tohle funguje!!!):
 #           webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
 #
-# Minor issues:
+#
+# Minor issues, future features:
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
 # - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
+# - [ ] Vyresit ? pomale nacitani velkych obrazku (6MB+)
 # - [ ] Separatni repozitar, hodit na reddit, na RH, kolegum,
 # - [ ] Pridat slovo "EMPTY" do Inbox obrazku
 # - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 # - [~] Dodelat progress widget
+# - [ ] MAYBE: Pridat AI advices based on keywords on image.
+#
 #
 # TODO: Promyslet:
 # - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
