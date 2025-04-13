@@ -73,6 +73,7 @@ height = 864
 #   - Kontext: Odstranim/presunu rucne obrazek ve slozce, ktera je otevrena v programu. Kdyz na obrazek (ktery v poli ale porad existuje) sipkama dojdu a zkusim ho odstranit, program crashne.
 #   - [x] Pridat file exist check pri manipulaci s obrazkem (pri mv, copy, del) !!!! If does not exist, remove from list.
 # - [x] CHECK: co kdyz presunu do dst picture s nazvem Xyz, ale obrazek s timto nazvem jiz ve slozce je? Neprepise se doufam...
+# - [x] Pridat klavesovou zkratku pro Na konec a Na zacatek - home a end klavesy.
 #
 #
 # Top priority:
@@ -81,19 +82,22 @@ height = 864
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
 # - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
 # - [ ] Prochazet TODO v souborech a udelat je.
-# - [ ] !!!! Napsat unit testy !!!!
+# - [~] ! Napsat unit testy
 #
+#
+# Settings:
+# - [ ] How many columns of shortcuts to show (1-5)
+# - [ ] ! Pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
+# - [ ] Settings save and load.
+# - [ ] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
 #
 #
 # Features TODO:
 # - [~] ! REFACTORING
 # - [ ] Tridit zkratky abecedne?
-# - [ ] Pridat klavesovou zkratku pro Na konec a Na zacatek - home a end klavesy.
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
 # - [ ] FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat.
-#       - Nebo pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
-# - [~] Pridat testy (make test)
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
@@ -106,6 +110,7 @@ height = 864
 # - [~] ! Zmenit border color okna s obrazkama, kdyz je aktivni COPY mode, aby to bylo jasnejsi (uz jsem na nej parkrat zapomenul, ze je aktivni).
 # - [ ] Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
+# - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu.
 #
 # Design:
 # - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
@@ -129,7 +134,7 @@ height = 864
 # - [ ] Separatni repozitar, hodit na reddit, na RH, kolegum,
 # - [ ] Pridat slovo "EMPTY" do Inbox obrazku
 # - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
-# - [ ] Dodelat progress widget
+# - [~] Dodelat progress widget
 #
 # TODO: Promyslet:
 # - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
@@ -976,6 +981,14 @@ class MainWindow(QMainWindow):
                 # TODO de-chain:
                 # self.showNextImage()
                 self.galleryManager.mediaContainerWidget.showNextImage()
+
+            case Qt.Key_Home:
+                # TODO: de-chain:
+                self.galleryManager.mediaContainerWidget.showFirstImage()
+
+            case Qt.Key_End:
+                # TODO de-chain:
+                self.galleryManager.mediaContainerWidget.showLastImage()
 
             case Qt.Key_Delete:
                 # TODO
