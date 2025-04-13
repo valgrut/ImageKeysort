@@ -92,7 +92,7 @@ height = 864
 # - [ ] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
 #
 #
-# Features TODO:
+# Important features TODO:
 # - [~] ! REFACTORING
 # - [ ] Tridit zkratky abecedne?
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
@@ -105,7 +105,9 @@ height = 864
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu.
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
-# - [ ]
+# - [ ] Vyresit cekani na zkratku, kdyz x, aj xy obsahuje cestu. Kdyz chci poslat img do 'x', nic se nedeje, bo y obsahuje cestu taky. Mozna Timer nebo treba mezernik jako potvrzeni.
+# - [ ] ! Kdyz pridavam zkratku pod nejakou jinou, nabidnout primarne cestu teto vyssi zkratky, nebo zkratky paralelne k teto, pokud takova existuje.
+# - [ ] ! zmacknutim mezerniku (if Sort mode AND pokud neni namacknuta zadna zkratka), otevre okno s vyberem slozky, kam jednorazove poslat aktualni obrazek.
 #
 #
 # Design:
@@ -117,6 +119,7 @@ height = 864
 #
 #
 # Shortcuts management, Shortcut Tree:
+# - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
 # - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu? [SETTINGS]
 # - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
@@ -140,6 +143,7 @@ height = 864
 # - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 # - [~] Dodelat progress widget
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
+# - [ ] Po dotrideni inboxu zobrazit tabulku s gratulaci, treba poctem setridenych obrazku, mozna animace famfar.
 #
 #
 # TODO: Promyslet:
