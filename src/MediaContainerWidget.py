@@ -166,6 +166,18 @@ class MediaContainerWidget(QWidget):
 
         self.stackedMediaWidget.setCurrentIndex(0)
 
+    def setCopyModeBorderHighlight(self):
+        print(self.stackedMediaWidget.currentWidget().styleSheet())
+        self.stackedMediaWidget.currentWidget().setStyleSheet(f"""
+            border: 5px solid orange;
+        """)
+
+    def unsetCopyModeBorderHighlight(self):
+        self.stackedMediaWidget.currentWidget().setStyleSheet(f"""
+            border: none;
+        """)
+
+
     def showNextImage(self):
         self.galleryManager.setNextImage()
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())

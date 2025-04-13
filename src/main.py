@@ -91,6 +91,7 @@ height = 864
 # - [ ] Pridat klavesovou zkratku pro Na konec a Na zacatek - home a end klavesy.
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
 # - [ ] FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat.
+#       - Nebo pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
 # - [~] Pridat moznost zobrazovat i gify (movie widget misto imageWidgetu)
 # - [~] Pridat testy (make test)
 # - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
@@ -102,7 +103,7 @@ height = 864
 # - [ ] Udelat CustomTree resizable pomoci QSplitter
 # - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu?
 # - [ ] Vyresit ? pomale nacitani velkych obrazku (6MB+)
-# - [ ] Zmenit border color okna s obrazkama, kdyz je aktivni COPY mode, aby to bylo jasnejsi (uz jsem na nej parkrat zapomenul, ze je aktivni).
+# - [~] ! Zmenit border color okna s obrazkama, kdyz je aktivni COPY mode, aby to bylo jasnejsi (uz jsem na nej parkrat zapomenul, ze je aktivni).
 # - [ ] Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 #
@@ -136,6 +137,7 @@ height = 864
 # uz nic nepujde dat do Anime, ale pouze do dalsi podslozky? Pripadne, pridat moznost do configu nastavit casovy interval, po ktery pujde stisknout dodatecna klavesa, jinak se to presune do 'oa' ?
 # NEBO:
 # zadny interval, ale proste pri sub-sequenci, treba to 'oi', se stejne ceka na dalsi key, pokud obsahuje 'oi' dalsi subkeys, tak proste muzu dat enter, a ono se to tam presune. Takovej "Force" move.
+# Ne to nepujde, protoze enterem se v Sort modu aktivuje Zarazka (+).
 
 allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
                 Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
@@ -593,6 +595,8 @@ class MainWindow(QMainWindow):
                 background-color: {Styles.buttonHoverBgColor};
             }}
             """)
+
+            self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
             return
 
         if self.copyOnly is True:
@@ -613,6 +617,8 @@ class MainWindow(QMainWindow):
                 background-color: {Styles.buttonHoverBgColor};
             }}
             """)
+
+            self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
             return
 
     def set_edit_mode(self):
