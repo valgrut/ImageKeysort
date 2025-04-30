@@ -28,7 +28,7 @@ class ShortcutManager():
     def printShortcuts(self):
         pass
 
-    def getAllPaths(self, shortcutsData) -> []:
+    def getAllPaths(self, shortcutsData) -> [str]: # type: ignore
         dstPaths = []
         currentShortcutsLevel = shortcutsData["keys"] # 'a', 'f', ...
 
