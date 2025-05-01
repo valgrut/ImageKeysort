@@ -177,7 +177,6 @@ class MediaContainerWidget(QWidget):
             border: none;
         """)
 
-
     def showNextImage(self):
         self.galleryManager.setNextImage()
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
@@ -208,3 +207,9 @@ class MediaContainerWidget(QWidget):
 
     def updateVideo(self, videoPath):
         self.videoViewWidget.updateVideo(videoPath)
+
+    def setSourceDirLabelText(self, path: str):
+        self.sourceDirLabel.setText(path)
+
+    def updatePreviewImage(self, path):
+        self.imageViewWidget.updateImage(path)

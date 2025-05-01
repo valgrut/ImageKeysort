@@ -21,7 +21,8 @@ from PyQt5.QtWidgets import (
     QAction,
     QGraphicsDropShadowEffect,
     QSplitter,
-    QProgressBar
+    QProgressBar,
+    QTreeWidget
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 

@@ -48,8 +48,7 @@ class GalleryManager(QStackedWidget):
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
-        self.mediaContainerWidget.sourceDirLabel.setText(path)  # TODO: sig-slots, replace this.
-        # self.setSourceDirLabelTextSignal.emit(path)  # TODO: for this.
+        self.mediaContainerWidget.setSourceDirLabelText(path)
         self.loadImagesInDirectory()
 
     def getSourcePath(self) -> str:
@@ -60,7 +59,7 @@ class GalleryManager(QStackedWidget):
         if not srcPath:
             return
         self.sourceDirectoryPath = srcPath
-        self.mediaContainerWidget.sourceDirLabel.setText(self.sourceDirectoryPath)  # TODO: sig-slots
+        self.mediaContainerWidget.setSourceDirLabelText(self.sourceDirectoryPath)
         self.loadImagesInDirectory()
 
     def loadImagesInDirectory(self):
@@ -132,7 +131,6 @@ class GalleryManager(QStackedWidget):
     def updateFilenameLabelText(self):
         self.mediaContainerWidget.updateFilenameLabelText(self.getCurrentFilename())
 
-    # TODO: previewLabel pryc, misto toho signal-slot
     def updatePreview(self):
         if self.isGalleryEmpty():
             self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
@@ -158,13 +156,14 @@ class GalleryManager(QStackedWidget):
             self.mediaContainerWidget.setImageWidget()
             print("DEBUG:" + str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
 
-            self.mediaContainerWidget.imageViewWidget.updateImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+            self.mediaContainerWidget.updatePreviewImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
 
         self.updateFilenameLabelText()  # TODO: sig-slots
         self.updateCounterLabelText()  # TODO: sig-slots
 
         # Set focus to back to Gallery Manager so after adding shortcut, arrows still can be used to show next/previous image.
         self.setFocus()
+
 
     def getCounterString(self) -> str:
         counter = str(self.galleryIndex + 1) + "/" + str(len(self.images))
