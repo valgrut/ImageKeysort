@@ -95,7 +95,7 @@ height = 864
 #
 # Important features TODO:
 # - [~] ! REFACTORING
-# - [ ] Tridit zkratky abecedne?
+# - [ ] Tridit zkratky abecedne? (Mozna settings option?)
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
 # - [ ] ! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [SETTINGS]
 # - [~] Pridat moznost zobrazovat i gify (videoWidget misto imageWidgetu)
