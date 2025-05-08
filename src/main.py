@@ -106,7 +106,7 @@ height = 864
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu.
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
-# - [ ] Vyresit cekani na zkratku, kdyz x, aj xy obsahuje cestu. Kdyz chci poslat img do 'x', nic se nedeje, bo y obsahuje cestu taky. Mozna Timer nebo treba mezernik jako potvrzeni.
+# - [ ] Vyresit cekani na zkratku, kdyz x, aj xy obsahuje cestu. Kdyz chci poslat img do 'x', nic se nedeje, bo y obsahuje cestu taky. Mozna Timer nebo treba >>>mezernik<<< jako potvrzeni. !!!!!!
 # - [ ] ! Kdyz pridavam zkratku pod nejakou jinou, nabidnout primarne cestu teto vyssi zkratky, nebo zkratky paralelne k teto, pokud takova existuje.
 # - [ ] ! zmacknutim mezerniku (if Sort mode AND pokud neni namacknuta zadna zkratka), otevre okno s vyberem slozky, kam jednorazove poslat aktualni obrazek.
 #
@@ -782,6 +782,62 @@ class MainWindow(QMainWindow):
                     self.keySeq = ""
 
                 self.updateKeySequenceLabel()
+
+            # Single-time move file
+            case Qt.Key_Space:
+                print("Select destination directory just for the current image.")
+
+                # TODO:
+                # If shorcut is not empty:
+                #   TODO... dst directory is chosen from the current non-terminal shortcut, if some dst path exists there.
+                # else:  # Shortcut is empty - select single-use dst dir:
+
+                singleUseDstDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
+                # Check that some directory was selected
+                if not singleUseDstDirectory:
+                    self.statusBarLabel.setText(f"No directory was selected.")
+                    return
+
+                print(singleUseDstDirectory)
+
+                dst = singleUseDstDirectory
+                src = self.galleryManager.getSourcePath()
+                imageName = self.galleryManager.getCurrentFilename()
+
+                # Check that image was not removed from outside of an app
+                if not os.path.exists(src + "/" + imageName):
+                    self.galleryManager.removeFile(imageName)
+                    self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+                    self.galleryManager.updateCounterLabelText()
+                    self.galleryManager.updatePreview()
+                    self.keySeq = ""
+                    self.updateKeySequenceLabel()
+                    return
+
+                # Prevent override of an image in dst, if file with same name exist there.
+                if os.path.exists(dst + "/" + imageName):
+                    self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                    # TODO: Add random suffix number to the filename (and update name in the list!)
+                    # for now:
+                    self.keySeq = ""
+                    self.updateKeySequenceLabel()
+                    return
+
+                # Remove current image from the list of images in src directory
+                if not self.copyOnly:
+                    self.galleryManager.removeFile(imageName)
+                    shutil.move(src + "/" + imageName, dst + "/" + imageName)
+                    self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
+                    self.statusBarLabel.setText(f"File moved to {dst}.")
+                else:
+                    shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+                    self.galleryManager.decrementGalleryIndex()
+                    self.statusBarLabel.setText(f"File copied to {dst}.")
+
+                self.galleryManager.updateCounterLabelText()
+
+                # Show new image
+                self.galleryManager.updatePreview()
 
             # Repeat last move from src to dst of current image.
             case Qt.Key_Period:
