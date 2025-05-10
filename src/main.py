@@ -83,7 +83,7 @@ height = 864
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
 # - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi). [SETTINGS]
 # - [ ] Prochazet TODO v souborech a udelat je.
-# - [~] ! Napsat unit testy
+# - [~] ! Napsat unit testy !!
 #
 #
 # Settings:
@@ -106,9 +106,9 @@ height = 864
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu.
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
-# - [ ] Vyresit cekani na zkratku, kdyz x, aj xy obsahuje cestu. Kdyz chci poslat img do 'x', nic se nedeje, bo y obsahuje cestu taky. Mozna Timer nebo treba >>>mezernik<<< jako potvrzeni. !!!!!!
+# - [x] Vyresit cekani na zkratku, kdyz x, aj xy obsahuje cestu. Kdyz chci poslat img do 'x', nic se nedeje, bo y obsahuje cestu taky. Mozna Timer nebo treba >>>mezernik<<< jako potvrzeni. !!!!!!
 # - [ ] ! Kdyz pridavam zkratku pod nejakou jinou, nabidnout primarne cestu teto vyssi zkratky, nebo zkratky paralelne k teto, pokud takova existuje.
-# - [ ] ! zmacknutim mezerniku (if Sort mode AND pokud neni namacknuta zadna zkratka), otevre okno s vyberem slozky, kam jednorazove poslat aktualni obrazek.
+# - [x] zmacknutim mezerniku (if Sort mode AND pokud neni namacknuta zadna zkratka), otevre okno s vyberem slozky, kam jednorazove poslat aktualni obrazek.
 #
 #
 # Design:
@@ -119,7 +119,7 @@ height = 864
 # - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
 #
 #
-# Shortcuts management, Shortcut Tree:
+# Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
 # - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu? [SETTINGS]
 # - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
@@ -146,14 +146,6 @@ height = 864
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Po dotrideni inboxu zobrazit tabulku s gratulaci, treba poctem setridenych obrazku, mozna animace famfar.
 #
-#
-# TODO: Promyslet:
-# - Kdyz mam oi, kde je 'n', tak se bud provede vzdy az 'n', nebo pouze oi. Jak to udelat, aby bylo an vyber? Bude takova moznost?
-# ze jakmile vytvorim podslozku, tak uz nepujde nic priradit do rodicovske slozky teto slozky? Jakoze, kdyz budu mit slozku Naruto ve slozce Anime, tak
-# uz nic nepujde dat do Anime, ale pouze do dalsi podslozky? Pripadne, pridat moznost do configu nastavit casovy interval, po ktery pujde stisknout dodatecna klavesa, jinak se to presune do 'oa' ?
-# NEBO:
-# zadny interval, ale proste pri sub-sequenci, treba to 'oi', se stejne ceka na dalsi key, pokud obsahuje 'oi' dalsi subkeys, tak proste muzu dat enter, a ono se to tam presune. Takovej "Force" move.
-# Ne to nepujde, protoze enterem se v Sort modu aktivuje Zarazka (+).
 
 allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
                 Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
@@ -787,25 +779,40 @@ class MainWindow(QMainWindow):
             case Qt.Key_Space:
                 print("Select destination directory just for the current image.")
 
-                # TODO:
-                # If shorcut is not empty:
-                #   TODO... dst directory is chosen from the current non-terminal shortcut, if some dst path exists there.
-                # else:  # Shortcut is empty - select single-use dst dir:
+                dst = ""
 
-                singleUseDstDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
-                # Check that some directory was selected
-                if not singleUseDstDirectory:
-                    self.statusBarLabel.setText(f"No directory was selected.")
-                    return
+                # TODO: Refactor:
+                # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
+                # and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
+                if self.keySeq:
+                    print(f"keySeq is not empty ('{self.keySeq}')")
+                    nonTerminalKey = self.shortcutManager._getLastKey(self.keySeq)
+                    if nonTerminalKey:
+                        dst = nonTerminalKey["dst_path"]
+                        if not os.path.exists(dst):
+                            print(f"Shortcut probably does not contain dst_path ({dst}).")
+                            return
+                        print("middle_path", dst)
+                    else:
+                        print(f"Shortcut sequence {self.keySeq} does not exist.")
+                        return
 
-                print(singleUseDstDirectory)
+                else:  # KeySeq is empty
+                    singleUseDstDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
 
-                dst = singleUseDstDirectory
+                    # Check that some directory was selected
+                    if not singleUseDstDirectory:
+                        self.statusBarLabel.setText(f"No directory was selected.")
+                        return
+
+                    print(singleUseDstDirectory)
+                    dst = singleUseDstDirectory
+
                 src = self.galleryManager.getSourcePath()
                 imageName = self.galleryManager.getCurrentFilename()
 
                 # Check that image was not removed from outside of an app
-                if not os.path.exists(src + "/" + imageName):
+                if not imageName or not os.path.exists(src + "/" + imageName):
                     self.galleryManager.removeFile(imageName)
                     self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
                     self.galleryManager.updateCounterLabelText()
@@ -834,6 +841,8 @@ class MainWindow(QMainWindow):
                     self.galleryManager.decrementGalleryIndex()
                     self.statusBarLabel.setText(f"File copied to {dst}.")
 
+                self.keySeq = ""
+                self.updateKeySequenceLabel()
                 self.galleryManager.updateCounterLabelText()
 
                 # Show new image
