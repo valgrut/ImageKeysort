@@ -1,0 +1,18 @@
+ROOT_DIR=./
+NAME=main.py
+
+run: 
+	python3 -m src.main
+
+test:
+	python3 -m unittest tests.shortcutManagerTest
+
+clean:
+	rm -rf dist
+	rm -rf build
+	rm image-keysort.spec
+	rm -rf venv
+	find . -type d -name "__pycache__" -exec rm -r {} +
+	find . -name "*.pyc" -delete
+
+phony: config, run, test, build, clean

@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QSizePolicy
 
-from Styles import Styles
+from src.Styles import Styles
 
 class ImageWidget(QWidget):
     def __init__(self):

@@ -3,9 +3,9 @@ from PyQt5.QtGui import QCursor, QKeyEvent
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, \
     QVBoxLayout
 
-from ImageWidget import ImageWidget
-from VideoWidget import VideoWidget
-from Styles import Styles
+from src.ImageWidget import ImageWidget
+from src.VideoWidget import VideoWidget
+from src.Styles import Styles
 
 
 class MediaContainerWidget(QWidget):

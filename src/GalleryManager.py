@@ -5,8 +5,8 @@ from pathlib import Path
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
 
-from EmptyGalleryWidget import EmptyGalleryImageWidget
-from MediaContainerWidget import MediaContainerWidget
+from src.EmptyGalleryWidget import EmptyGalleryImageWidget
+from src.MediaContainerWidget import MediaContainerWidget
 
 
 class GalleryManager(QStackedWidget):

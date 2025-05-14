@@ -2,8 +2,8 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QPixmap, QCursor
 from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout
 
-import resources_rc
-from Styles import Styles
+import src.resources_rc
+from src.Styles import Styles
 
 class EmptyGalleryImageWidget(QWidget):
 

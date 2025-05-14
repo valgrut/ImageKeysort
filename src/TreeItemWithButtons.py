@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize
 
-import resources_rc
+import src.resources_rc
 
 class TreeItemWithButtons(QWidget):
     """

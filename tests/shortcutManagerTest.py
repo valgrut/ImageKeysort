@@ -3,11 +3,12 @@ from PyQt5.QtWidgets import QApplication, QPushButton
 from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
 
-from main import MainWindow  # Import main.py from the src package
+from src.main import MainWindow  # Import main.py from the src package
+from src.ShortcutManager import ShortcutManager  # Import the ShortcutManager class
 
 app = QApplication([])  # needed for the app to work during testing
 
-class TestMyApp(unittest.TestCase):
+class TestShortcutManager(unittest.TestCase):
     def setUp(self):
         # Create the application window and button (the GUI to be tested)
         self.window = MainWindow()  # Replace with your actual window class

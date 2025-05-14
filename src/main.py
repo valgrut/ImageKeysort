@@ -29,11 +29,11 @@ from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 # pip3 install pyqt5
 # pip3 install keyboard
 
-from GalleryManager import GalleryManager
-from ShortcutManager import ShortcutManager
-from TreeItemWithButtons import TreeItemWithButtons
-from CustomTreeWidget import CustomTreeWidget
-from Styles import Styles
+from src.GalleryManager import GalleryManager
+from src.ShortcutManager import ShortcutManager
+from src.TreeItemWithButtons import TreeItemWithButtons
+from src.CustomTreeWidget import CustomTreeWidget
+from src.Styles import Styles
 
 width = 1152
 height = 864
