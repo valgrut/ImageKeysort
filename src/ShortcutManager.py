@@ -27,6 +27,8 @@ class ShortcutManager():
         pass
 
     def getAllPaths(self, shortcutsData) -> [str]: # type: ignore
+        """
+        """
         dstPaths = []
         currentShortcutsLevel = shortcutsData["keys"] # 'a', 'f', ...
 
@@ -50,6 +52,8 @@ class ShortcutManager():
         return dstPaths
 
     def isSomeDstDirectoryMissing(self, shortcutsData):
+        """
+        """
         nonexistingPaths = []
 
         # # DEBUG: Print all found paths
@@ -67,6 +71,8 @@ class ShortcutManager():
 
 
     def addShortcut(self, sequence):
+        """
+        """
         for category in sequence:
             if category in self.shortcutsData:
                 self.shortcutsData.update({category: self.subcategory})
@@ -77,6 +83,8 @@ class ShortcutManager():
         return self.shortcutsData
 
     def addDstPath(self, sequence, dst_path):
+        """
+        """
         lastKey = self._getLastKeyOfSequenceAndUpdate(sequence)
         print("last_key:", lastKey)
         if lastKey:
@@ -85,6 +93,8 @@ class ShortcutManager():
             print(f"Shortcut {sequence} has not been found.")
 
     def getDstForShortcut(self, sequence):
+        """
+        """
         print(f"get_dst_for_shortcut: {sequence}")
         lastKey = self.getLastPossibleKeyOfSequence(sequence)
         if not lastKey:
@@ -93,10 +103,15 @@ class ShortcutManager():
         return lastKey["dst_path"]
 
     def addKeyUnderCurrent(self, currentKeyRef, new_key):
+        """
+        """
         currentKeyRef.update({new_key: {"dst_path": "", "keys": {}}})
         self.setDataModified()
 
     def _getLastKeyOfSequenceAndUpdate(self, sequence):
+        """
+        Get last key of sequence and if some keys are missing, add them to the tree.
+        """
         preCurrent = self.shortcutsData["keys"]
         current = self.shortcutsData["keys"]
         # print("Current: ", current)
@@ -113,6 +128,8 @@ class ShortcutManager():
         return preCurrent
 
     def getLastPossibleKeyOfSequence(self, sequence):
+        """
+        """
         current = self.shortcutsData["keys"]  # a, b, x, ...
 
         availableShortcuts = ""

@@ -78,6 +78,7 @@ height = 864
 #
 #
 # Top priority:
+# - [ ] !!! Pridat CLI argumenty pro spusteni aplikace s preddefinovanymi parametry (napr. --src-dir, --dst-dir, --load-data, --save-data, ...)
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 # - [ ] MOZNA: Pridat i nektere znaky jako labely ($, ...)
 # - [~] VideoWidget: spravit avi, zprovoznit mp4, nextImage stopne video if current is video, prev to same.
