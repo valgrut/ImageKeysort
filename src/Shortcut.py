@@ -1,4 +1,5 @@
 class Shortcut():
     def __init__(self):
-        self.shortcut = ""
+        self.key = ""
         self.dstPath = ""
+        self.subkeys = {}

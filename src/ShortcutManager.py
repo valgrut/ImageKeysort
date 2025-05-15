@@ -3,10 +3,12 @@ import os
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import re
 
+# shortcut = "fbcd"
+# sequence = "f-b-c-d"
 
 class ShortcutManager():
     def __init__(self, mainWindow):
-        self.shortcutsData = {"keys": {}}
+        self.shortcutTree = {"keys": {}}
         self.mainWindow = mainWindow
         self.dataModified = False
         self.srcPathOfLoadedData = ""
@@ -18,47 +20,48 @@ class ShortcutManager():
         self.dataModified = True
         print("MODIFIED")
         self.mainWindow.setWindowTitle("*"+self.mainWindow.appTitle)
+       # TODO: zrovna tady by se mel spis poslat signal, nez primo modifikovat title.
 
     def setDataUnmodified(self):
         self.dataModified = False
         self.mainWindow.setWindowTitle(self.mainWindow.appTitle)
+        # TODO: zrovna tady by se mel spis poslat signal, nez primo modifikovat title.
 
     def printShortcuts(self):
         pass
 
     def getAllPaths(self, shortcutsData) -> [str]: # type: ignore
         """
+        Recursively returns all dst_paths from the shortcutsData tree.
         """
-        dstPaths = []
-        currentShortcutsLevel = shortcutsData["keys"] # 'a', 'f', ...
+        dstPathsList = []
+        currentShortcutLevel = shortcutsData["keys"] # 'a', 'f', ...
 
-        if currentShortcutsLevel is None:
+        if currentShortcutLevel is None:
             return
 
-        for shortcut in currentShortcutsLevel:
-            # print("Shortcut", shortcut)
+        for key in currentShortcutLevel:
+            # Add dst_path of the root key of this level into the list.
+            dstPath = currentShortcutLevel[key]["dst_path"]
+            if dstPath is not '':
+                dstPathsList.append(dstPath)
 
-            dst = currentShortcutsLevel[shortcut]["dst_path"]
-            # print("dst", dst)
-            if dst is not '':
-                dstPaths.append(dst)
-
-            # Process nested shortcuts and add its dst into list
-            nextLevel = currentShortcutsLevel[shortcut]
-            # print("Next level", nextLevel)
+            # Add dst paths of the sub-keys of the root key of this level.
+            nextLevel = currentShortcutLevel[key]
             for returnedPath in self.getAllPaths(nextLevel):
-                dstPaths.append(returnedPath)
+                dstPathsList.append(returnedPath)
 
-        return dstPaths
+        return dstPathsList
+
 
     def isSomeDstDirectoryMissing(self, shortcutsData):
         """
+        Check if all non-empty destination directories exist for all shortcuts.
+
+        :param shortcutsData:
+        :return: List of all non-existing paths.
         """
         nonexistingPaths = []
-
-        # # DEBUG: Print all found paths
-        # for path in self.getAllPaths(self.shortcutsData):
-        #     print("dstpath", path)
 
         for path in self.getAllPaths(shortcutsData):
             if not os.path.exists(path):
@@ -70,20 +73,30 @@ class ShortcutManager():
         return False
 
 
+    def getData(self) -> dict[str, dict]:
+        """
+        Returns shortcuts data in the form of dictionary.
+        """
+        return self.shortcutTree
+
+
     def addShortcut(self, sequence):
         """
+        Adds new shortcut into the shortcutsData tree.
         """
-        for category in sequence:
-            if category in self.shortcutsData:
-                self.shortcutsData.update({category: self.subcategory})
+        currentNestLevel = self.shortcutTree
+        for key in sequence:
+            if key in currentNestLevel:
+                self.shortcutTree.update({key: self.subcategory})
                 self.setDataModified()
-        print(self.shortcutsData)
+        print(self.shortcutTree)
 
-    def getData(self):
-        return self.shortcutsData
 
-    def addDstPath(self, sequence, dst_path):
+    def addDstPathForShortcut(self, sequence, dst_path):
         """
+        Adds dst_path to the last key of the given sequence.
+
+        Effectively it means that for the given sequence, dst_path is target path.
         """
         lastKey = self._getLastKeyOfSequenceAndUpdate(sequence)
         print("last_key:", lastKey)
@@ -92,31 +105,65 @@ class ShortcutManager():
         else:
             print(f"Shortcut {sequence} has not been found.")
 
-    def getDstForShortcut(self, sequence):
-        """
-        """
-        print(f"get_dst_for_shortcut: {sequence}")
-        lastKey = self.getLastPossibleKeyOfSequence(sequence)
-        if not lastKey:
-            return None
-        # print("last: ", last_key)
-        return lastKey["dst_path"]
-
+    
     def addKeyUnderCurrent(self, currentKeyRef, new_key):
         """
+        Adds new key under given key in the shortcutsData tree.
+
+        :param currentKeyRef: Reference to the key under which the new key should be added.
+        :param new_key: New key to be added.
         """
         currentKeyRef.update({new_key: {"dst_path": "", "keys": {}}})
         self.setDataModified()
+
+
+    def getDstPathForShortcut(self, sequence):
+        """
+        Returns dst_path for the last key of the given sequence.
+        """
+        print(f"get_dst_for_shortcut: {sequence}")
+        lastKey = self.isSequenceLongestMatch(sequence)
+        if not lastKey:
+            print("DEBUG: such sequence does not exist or dst_path is empty.")
+            return None
+        # print("last: ", last_key)
+        return lastKey["dst_path"]
+    
+    
+    def isSequenceLongestMatch(self, sequence):
+        """
+        Return True only if the sequence is longest match, otherwise False.
+        
+        Example:
+        lets have following structure:
+        a
+            b
+                c
+                    x
+
+        We need to return True only if the sequence is "abc" and not "ab" or "a".
+        Sequence is written by the user and for each key pressed, we need to check if the sequence is longest match.
+        
+        If it is not, user can "force" the usage of non-longest match by pressing "space" key.
+        """
+        lastKeyContent = self.getLastKeyContentOfSequence(sequence)
+
+        # If key exists but have another sub-keys under the "keys", return False (Not longest match)
+        # uz vim, proc to je- kdyz pisu zkratku, tak potrebuju, aby se to HITlo ne v prubehu, ale az kdyz 
+        # uz zkratka konci, ne treba u tretiho pismena z 5.
+        if not lastKeyContent or lastKeyContent["keys"]:
+            return False
+
+        return lastKeyContent
+
 
     def _getLastKeyOfSequenceAndUpdate(self, sequence):
         """
         Get last key of sequence and if some keys are missing, add them to the tree.
         """
-        preCurrent = self.shortcutsData["keys"]
-        current = self.shortcutsData["keys"]
-        # print("Current: ", current)
+        preCurrent = self.shortcutTree["keys"]
+        current = self.shortcutTree["keys"]
         for key in sequence:
-            # print("Sequence: ", sequence, "key:", key)
             if key not in current.keys():
                 print(f"Key {key} has not been found. Adding it.")
                 self.addKeyUnderCurrent(current, key)
@@ -127,138 +174,35 @@ class ShortcutManager():
 
         return preCurrent
 
-    def getLastPossibleKeyOfSequence(self, sequence):
-        """
-        """
-        current = self.shortcutsData["keys"]  # a, b, x, ...
 
-        availableShortcuts = ""
+    def getLastKeyContentOfSequence(self, sequence):
+        """
+        Get last key of sequence and does NOT matter whether the last key has children keys under itself.
+
+        :param sequence:
+        :return: Returns content of the last key of the sequence or False if the sequence does not exist.
+        """
+        nextAvailableKeys = self.shortcutTree["keys"]  # "keys": {a:, b:, x:}
+        currentKeyContent = ""
+
         for key in sequence:
             print("Key", key)
-            if key in current.keys():
-                availableShortcuts = current[key]  # dst_path, keys
-                print(key, "content", availableShortcuts)
-                current = availableShortcuts["keys"]
+            if key in nextAvailableKeys.keys():
+                currentKeyContent = nextAvailableKeys[key]  # Content = {dst_path, keys:{}}
+                nextAvailableKeys = currentKeyContent["keys"]
             else:
+                print(f"DEBUG: such sequence does not exist.")
                 return False
-
-        # If key exists but have another sub-keys under the "keys", return False (Not longest match)
-        if "keys" not in availableShortcuts or availableShortcuts["keys"]:
-            return False
-
-        return availableShortcuts
-
-    def _getLastKey(self, sequence):
-        """
-        Get last key of sequence and does NOT matter whether the key has children keys under itself.
-        :param sequence:
-        :return:
-        """
-        current = self.shortcutsData["keys"]  # a, b, x, ...
-
-        currentKeyContent = ""
-        for key in sequence:
-            if key in current.keys():
-                currentKeyContent = current[key]  # dst_path, keys
-                current = currentKeyContent["keys"]
-            else:
-                return False
-
-        # if "keys" not in currentKeyContent:
-        #     return False
 
         return currentKeyContent
 
-    # def does_shortcut_exist(self, sequence) -> bool:
-    #     last_key = _return_last_key_of_sequence(sequence)
-    #     if last_key:
-    #         return True
-    #     return False
-
-    def askSaveIfChanged(self):
-        if not self.areShortcutsModified():
-            return False
-
-        qm = QMessageBox()
-        ret = qm.question(self.mainWindow, '', "Do you want to save changes in shortcuts?", qm.Yes | qm.No)
-
-        if ret == qm.No:
-            print("DEBUG: Loading data without saving.")
-            return False  # User does not want to save changes, but it is ok.
-
-        if self.saveShortcuts():
-            return False
-        else:
-            print("DEBUG: Save was not successful.")
-            return True
-
-
-    def loadShortcuts(self) -> bool:
-        if self.askSaveIfChanged():
-            return False
-
-        jsonDataFile = QFileDialog.getOpenFileName(self.mainWindow, "Select file with shortcuts data to load.", self.srcPathOfLoadedData)
-
-        if not jsonDataFile[0]:
-            print(f"No file selected.")
-            return False
-
-        try:
-            with open(jsonDataFile[0], 'r', encoding='utf-8') as data:
-                self.shortcutsData = json.load(data)
-        except ValueError as error:
-            # Prevent loading invalid json data
-            print("DEBUG: Invalid json data!")
-            self.mainWindow.statusBarLabel.setText(f"Error: Invalid json data in {jsonDataFile[0]}!")
-            return False
-
-        # Check that all destination directories exist for all loaded shortcuts
-        nonexistingPaths = self.isSomeDstDirectoryMissing(self.shortcutsData)
-        if nonexistingPaths:
-            # TODO: Mozna jen warning do logu a zvyraznit cervene v Tree.
-            for path in nonexistingPaths:
-                # TODO: zde bude casem _append_ a pujde scrollovat tim logem.
-                self.mainWindow.statusBarLabel.setText(f"Warning: One or more destination directories do not exist!")
-                # TODO: Highlight all dst dirs that do not exist
-            # return False
-
-        # Print nonexisting paths:
-        for path in nonexistingPaths:
-            print("E: Directory does not exist: ", path)
-
-        # Save path of the loaded data
-        self.srcPathOfLoadedData = jsonDataFile[0]
-
-        self.setDataUnmodified()
-        print(f"Data loaded from {jsonDataFile}.")
-
-        return True
-
-    def saveShortcuts(self) -> bool:
-        """
-        User can save current shortcuts config any time. Whether they are modified or not does not matter.
-        Because user could want to save current shortcuts just under different name.
-        :return:
-        """
-        jsonDataFile = QFileDialog.getSaveFileName(self.mainWindow, "Select file or filename to save data into.", self.srcPathOfLoadedData)
-
-        if not jsonDataFile[0]:
-            print(f"No file selected.")
-            return False
-
-        with open(jsonDataFile[0], 'w', encoding='utf-8') as datafile:
-            json.dump(self.shortcutsData, datafile, ensure_ascii=False, indent=4)
-            # TODO: check jestli se spravne nabizi ta cesta po prvnim ulozeni pri dalsich ulozenich.
-
-        self.srcPathOfLoadedData = jsonDataFile[0]
-        self.setDataUnmodified()
-        print(f"Saved to {jsonDataFile}.")
-
-        return True
 
     def removeShortcutSequence(self, sequence: str):
         """
         Remove subtree marked by '-' in the sequence.
+
+        Syntax of the remove sequence:
+        [a-z]*-[a-z]
 
         Example:
         Lets Have following structure:
@@ -266,6 +210,7 @@ class ShortcutManager():
             b
             c
                 x
+        
         Following options are possible:
         -a Removes the whole 'a' tree
         a-b Removes 'b' from the 'a' tree
@@ -288,9 +233,9 @@ class ShortcutManager():
 
         lastKey = ""
         if preDelimeter and postDelimeter:
-            lastKey = self._getLastKey(preDelimeter)
+            lastKey = self.getLastKeyContentOfSequence(preDelimeter)
         else:
-            lastKey = self.shortcutsData
+            lastKey = self.shortcutTree
 
         if lastKey and (postDelimeter in lastKey["keys"]):
             if lastKey["keys"].pop(postDelimeter):
@@ -299,6 +244,108 @@ class ShortcutManager():
         # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
         return True
 
+
     def clearShortcuts(self):
-        self.shortcutsData = {"keys": {}}
+        """
+        Clears all shortcuts data.
+        """
+        self.shortcutTree = {"keys": {}}
+
+
+    # def does_shortcut_exist(self, sequence) -> bool:
+    #     last_key = _return_last_key_of_sequence(sequence)
+    #     if last_key:
+    #         return True
+    #     return False
+
+
+    def askSaveIfChanged(self):
+        """
+        Asks user whether he wants to save changes in shortcuts if they are modified.
+        """
+        if not self.areShortcutsModified():
+            return False
+
+        qm = QMessageBox()
+        ret = qm.question(self.mainWindow, '', "Do you want to save changes in shortcuts?", qm.Yes | qm.No)
+
+        if ret == qm.No:
+            print("DEBUG: Loading data without saving.")
+            return False  # User does not want to save changes, but it is ok.
+
+        if self.saveShortcuts():
+            return False
+        else:
+            print("DEBUG: Save was not successful.")
+            return True
+
+
+    def loadShortcuts(self) -> bool:
+        """
+        Load shortcuts from json file.
+        """
+        if self.askSaveIfChanged():
+            return False
+
+        jsonDataFile = QFileDialog.getOpenFileName(self.mainWindow, "Select file with shortcuts data to load.", self.srcPathOfLoadedData)
+
+        if not jsonDataFile[0]:
+            print(f"No file selected.")
+            return False
+
+        try:
+            with open(jsonDataFile[0], 'r', encoding='utf-8') as data:
+                self.shortcutTree = json.load(data)
+        except ValueError as error:
+            # Prevent loading invalid json data
+            print("DEBUG: Invalid json data!")
+            self.mainWindow.statusBarLabel.setText(f"Error: Invalid json data in {jsonDataFile[0]}!")
+            return False
+
+        # Check that all destination directories exist for all loaded shortcuts
+        nonexistingPaths = self.isSomeDstDirectoryMissing(self.shortcutTree)
+        if nonexistingPaths:
+            # TODO: Mozna jen warning do logu a zvyraznit cervene v Tree.
+            for path in nonexistingPaths:
+                # TODO: zde bude casem _append_ a pujde scrollovat tim logem.
+                self.mainWindow.statusBarLabel.setText(f"Warning: One or more destination directories do not exist!")
+                # TODO: Highlight all dst dirs that do not exist
+            # return False
+
+        # Print nonexisting paths:
+        for path in nonexistingPaths:
+            print("E: Directory does not exist: ", path)
+
+        # Save path of the loaded data
+        self.srcPathOfLoadedData = jsonDataFile[0]
+
+        self.setDataUnmodified()
+        print(f"Data loaded from {jsonDataFile}.")
+
+        return True
+
+
+    def saveShortcuts(self) -> bool:
+        """
+        User can save current shortcuts config any time. Whether they are modified or not does not matter.
+        Because user could want to save current shortcuts just under different name.
+
+        :return: True if saving was successful, False otherwise.
+        """
+        jsonDataFile = QFileDialog.getSaveFileName(self.mainWindow, "Select file or filename to save data into.", self.srcPathOfLoadedData)
+
+        if not jsonDataFile[0]:
+            print(f"No file selected.")
+            return False
+
+        with open(jsonDataFile[0], 'w', encoding='utf-8') as datafile:
+            json.dump(self.shortcutTree, datafile, ensure_ascii=False, indent=4)
+            # TODO: check jestli se spravne nabizi ta cesta po prvnim ulozeni pri dalsich ulozenich.
+
+        self.srcPathOfLoadedData = jsonDataFile[0]
+        self.setDataUnmodified()
+        print(f"Saved to {jsonDataFile}.")
+
+        return True
+
 

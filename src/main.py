@@ -737,7 +737,7 @@ class MainWindow(QMainWindow):
                     self.shortcutManager.addShortcut(self.keySeq)
 
                 dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
-                self.shortcutManager.addDstPath(self.keySeq, dstSortDirectory)
+                self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
                 self.keySeq = ""
                 self.updateKeySequenceLabel()
                 self.update_tree_view()
@@ -787,7 +787,7 @@ class MainWindow(QMainWindow):
                 # and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
                 if self.keySeq:
                     print(f"keySeq is not empty ('{self.keySeq}')")
-                    nonTerminalKey = self.shortcutManager._getLastKey(self.keySeq)
+                    nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq)
                     if nonTerminalKey:
                         dst = nonTerminalKey["dst_path"]
                         if not os.path.exists(dst):
@@ -973,7 +973,8 @@ class MainWindow(QMainWindow):
                 if not self.keySeq:
                     return
 
-                if self.shortcutManager.getDstForShortcut(fullShortcut):
+                dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
+                if dstPath:
                     print("HIT!")
 
                     if self.galleryManager.isGalleryEmpty():
@@ -984,7 +985,7 @@ class MainWindow(QMainWindow):
 
                     imageName = self.galleryManager.getCurrentFilename()
                     src = self.galleryManager.getSourcePath()
-                    dst = self.shortcutManager.getDstForShortcut(fullShortcut)
+                    dst = dstPath
 
                     if not os.path.exists(dst):
                         print(f"ERROR: Destination directory {dst} does not exist.")
