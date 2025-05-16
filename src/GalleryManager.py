@@ -4,6 +4,8 @@ from pathlib import Path
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 from src.EmptyGalleryWidget import EmptyGalleryImageWidget
 from src.MediaContainerWidget import MediaContainerWidget
@@ -26,13 +28,13 @@ class GalleryManager(QStackedWidget):
         # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
 
         # Variables:
-        self.images = []
+        self.availableMediaFiles = []
         self.galleryIndex = 0
         self.sourceDirectoryPath = ""
 
-        # self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp', '.gif', '.mp4', '.avi')  # TODO: spravit avi, zprovoznit mp4.
-        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp')
-        self.videoSuffixes = ("gif", "mp4", "avi")
+        #self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp')
+        self.videoSuffixes = ("gif", "mp4", "avi", "mkv", "mov", "wmv", "flv", "webm")  # TODO: spravit avi, zprovoznit mp4.
+        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp') + self.videoSuffixes  # TODO: spravit avi, zprovoznit mp4.
 
         # Stacked widgets:
         self.emptyInboxWidget = EmptyGalleryImageWidget()
@@ -45,6 +47,7 @@ class GalleryManager(QStackedWidget):
         self.addWidget(self.mediaContainerWidget)
 
         self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
+        print(f"[INIT] mediaContainerWidget: {id(self.mediaContainerWidget)}")
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
@@ -67,18 +70,18 @@ class GalleryManager(QStackedWidget):
             print("DEBUG: Error, src dir path is empty")
             return
 
-        self.images = []
+        self.availableMediaFiles = []
         # self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
-        self.images = [
+        self.availableMediaFiles = [
             f for f in listdir(self.sourceDirectoryPath)
             if isfile(join(self.sourceDirectoryPath, f)) and f.lower().endswith(self.allowedSuffixes)
         ]
-        self.images.sort()
+        self.availableMediaFiles.sort()
         self.galleryIndex = 0
         self.updatePreview()  # TODO
 
     def isGalleryEmpty(self):
-        if not self.images:
+        if not self.availableMediaFiles:
             return True
         return False
 
@@ -87,7 +90,7 @@ class GalleryManager(QStackedWidget):
         returns true if current image is .gif or other video format
         """
 
-        if str(self.images[self.galleryIndex]).endswith(self.videoSuffixes):
+        if str(self.availableMediaFiles[self.galleryIndex]).endswith(self.videoSuffixes):
             return True
         return False
 
@@ -95,14 +98,14 @@ class GalleryManager(QStackedWidget):
         return self.galleryIndex
 
     def incrementGalleryIndex(self):
-        if self.galleryIndex < len(self.images) -1:
+        if self.galleryIndex < len(self.availableMediaFiles) -1:
             self.galleryIndex += 1
-        print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.images) - 1}")
+        print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
 
     def decrementGalleryIndex(self):
         if self.galleryIndex >= 1:
             self.galleryIndex -= 1
-        print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.images) - 1}")
+        print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
 
     def setNextImage(self):
         self.incrementGalleryIndex()
@@ -117,12 +120,12 @@ class GalleryManager(QStackedWidget):
         self.updatePreview()  # TODO: sig-slots
 
     def setLastImage(self):
-        self.galleryIndex = len(self.images) - 1
+        self.galleryIndex = len(self.availableMediaFiles) - 1
         self.updatePreview()  # TODO: sig-slots
 
     def getCurrentFilename(self):
-        if self.images:
-            return self.images[self.galleryIndex]
+        if self.availableMediaFiles:
+            return self.availableMediaFiles[self.galleryIndex]
         return ""
 
     def updateCounterLabelText(self):
@@ -132,31 +135,31 @@ class GalleryManager(QStackedWidget):
         self.mediaContainerWidget.updateFilenameLabelText(self.getCurrentFilename())
 
     def updatePreview(self):
+        # Cleanup current media
+        # self.mediaContainerWidget.cleanupCurrentMedia()
+
+        print(f"[CALL] GM: Updating mediaContainerWidget: {id(self.mediaContainerWidget)}")
+
         if self.isGalleryEmpty():
-            self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
+            self.setCurrentWidget(self.emptyInboxWidget)
             return
 
         if self.isCurrentVideo():
+            print("DEBUG: Current file is video")
             # It is playable
-            self.setCurrentIndex(self.MEDIA_WIDGET)
+            self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setVideoWidget()
 
-            # TODO: Rework!!!
-            # self.mediaContainerWidget.videoViewWidget.videoView.setFileName(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            # self.mediaContainerWidget.videoViewWidget.videoView.setMovie(self.mediaContainerWidget.videoViewWidget)
-            # self.mediaContainerWidget.videoViewWidget.videoView.start()
-
-            print(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            self.mediaContainerWidget.updateVideo(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
-            # self.mediaContainerWidget.videoViewWidget.playVideo()
-
+            videoPath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
+            self.mediaContainerWidget.updateVideo(videoPath) # Mozna spis prejmenovat na showVideo()
         else:
+            print("DEBUG: Current file is an Image")
             # It is image
-            self.setCurrentIndex(self.MEDIA_WIDGET)
+            self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setImageWidget()
-            print("DEBUG:" + str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
 
-            self.mediaContainerWidget.updatePreviewImage(str(Path(self.sourceDirectoryPath + "/" + self.images[self.galleryIndex])))
+            imagePath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
+            self.mediaContainerWidget.updatePreviewImage(imagePath) # Mozna spis prejmenovat na showImage()
 
         self.updateFilenameLabelText()  # TODO: sig-slots
         self.updateCounterLabelText()  # TODO: sig-slots
@@ -166,15 +169,15 @@ class GalleryManager(QStackedWidget):
 
 
     def getCounterString(self) -> str:
-        counter = str(self.galleryIndex + 1) + "/" + str(len(self.images))
+        counter = str(self.galleryIndex + 1) + "/" + str(len(self.availableMediaFiles))
         return counter
 
     def addFile(self, fileName, positionIndex=0):
-        self.images.insert(positionIndex, fileName)
+        self.availableMediaFiles.insert(positionIndex, fileName)
 
     def removeFile(self, fileName):
-        if fileName in self.images:
-            self.images.remove(fileName)
+        if fileName in self.availableMediaFiles:
+            self.availableMediaFiles.remove(fileName)
 
-        if self.galleryIndex >= len(self.images):
-            self.galleryIndex = len(self.images) - 1
+        if self.galleryIndex >= len(self.availableMediaFiles):
+            self.galleryIndex = len(self.availableMediaFiles) - 1
