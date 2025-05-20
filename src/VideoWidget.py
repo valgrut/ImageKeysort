@@ -85,6 +85,7 @@ class VideoWidget(QWidget):
         self.setLayout(layout)
 
         # TODO: Pridat hlasitost / mute / unmute
+        # TODO: fix size videa, aby se roztahlo pres cely rodicovsky widget, se zachovanim pomeru stran.
 
         self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
