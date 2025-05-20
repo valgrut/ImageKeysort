@@ -163,7 +163,6 @@ class MediaContainerWidget(QWidget):
 
         # Update Counter label
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
-
         # self.stackedMediaWidget.setCurrentWidget(self.imageViewWidget)
 
 
@@ -185,15 +184,12 @@ class MediaContainerWidget(QWidget):
 
     def showNextImage(self):
         self.cleanupCurrentMedia()
-        
         self.galleryManager.setNextImage()
         # self.imageCounterLabel.setText(self.galleryManager.getCounterString())
-        # self.repaint()
-        # self.galleryManager.repaint()
+
 
     def showPreviousImage(self):
         self.cleanupCurrentMedia()
-
         self.galleryManager.setPreviousImage()
         # self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
@@ -207,12 +203,12 @@ class MediaContainerWidget(QWidget):
 
     def setVideoWidget(self):
         # self.stackedMediaWidget.setCurrentIndex(1)
-        self.stackedMediaWidget.setCurrentWidget(self.videoViewWidget)
-        # self.stackedMediaWidget.repaint()
+        self.stackedMediaWidget.setCurrentWidget(self.videoViewWidget)        
 
     def setImageWidget(self):
         self.stackedMediaWidget.setCurrentWidget(self.imageViewWidget)
-        # self.stackedMediaWidget.repaint()
+        # self.stackedMediaWidget.setCurrentIndex(0)
+
 
     def updateCounterLabelText(self, text):
         self.imageCounterLabel.setText(text)
@@ -224,11 +220,7 @@ class MediaContainerWidget(QWidget):
         self.sourceDirLabel.setText(path)
 
     def updateVideo(self, videoPath):
-        # self.imageViewWidget.hide()
         self.videoViewWidget.updateVideo(videoPath)
-        self.repaint()
 
     def updatePreviewImage(self, path):
-        # self.videoViewWidget.hide()
         self.imageViewWidget.updateImage(path)
-        # self.repaint()

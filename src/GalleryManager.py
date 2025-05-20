@@ -3,7 +3,7 @@ from os.path import isfile, join
 from pathlib import Path
 
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
+from PyQt5.QtWidgets import QApplication, QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
@@ -47,7 +47,7 @@ class GalleryManager(QStackedWidget):
         self.addWidget(self.mediaContainerWidget)
 
         self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
-        print(f"[INIT] mediaContainerWidget: {id(self.mediaContainerWidget)}")
+        # print(f"[INIT] mediaContainerWidget: {id(self.mediaContainerWidget)}")
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
@@ -100,12 +100,12 @@ class GalleryManager(QStackedWidget):
     def incrementGalleryIndex(self):
         if self.galleryIndex < len(self.availableMediaFiles) -1:
             self.galleryIndex += 1
-        print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
+        # print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
 
     def decrementGalleryIndex(self):
         if self.galleryIndex >= 1:
             self.galleryIndex -= 1
-        print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
+        # print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
 
     def setNextImage(self):
         self.incrementGalleryIndex()
@@ -138,22 +138,18 @@ class GalleryManager(QStackedWidget):
         # Cleanup current media
         # self.mediaContainerWidget.cleanupCurrentMedia()
 
-        print(f"[CALL] GM: Updating mediaContainerWidget: {id(self.mediaContainerWidget)}")
-
         if self.isGalleryEmpty():
             self.setCurrentWidget(self.emptyInboxWidget)
             return
 
         if self.isCurrentVideo():
-            print("DEBUG: Current file is video")
             # It is playable
             self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setVideoWidget()
-
+            
             videoPath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
             self.mediaContainerWidget.updateVideo(videoPath) # Mozna spis prejmenovat na showVideo()
         else:
-            print("DEBUG: Current file is an Image")
             # It is image
             self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setImageWidget()

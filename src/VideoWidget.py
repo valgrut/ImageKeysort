@@ -1,8 +1,8 @@
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import QDir, Qt, QUrl, QSize, pyqtSlot
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
-from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget, QStatusBar)
+from PyQt5.QtMultimediaWidgets import QVideoWidget, QGraphicsVideoItem
+from PyQt5.QtWidgets import (QGraphicsScene, QGraphicsView, QApplication, QFileDialog, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget, QStatusBar)
 
 from src.Styles import Styles
 
@@ -10,38 +10,42 @@ from src.Styles import Styles
 # VideoViewWidget (Nic spolecneho s QVideoWidget)
 class VideoWidget(QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self):
         super().__init__()
 
-        self.setStyleSheet(f"""
-            width: 100px;
-            border: 1px solid black;
-            border-radius: {Styles.widgetBorderRadius}px;
-            padding: 3px;
-            background-color: rgb(100, 100, 189);
-        """)
+        # self.setStyleSheet(f"""
+        #     width: 100px;
+        #     border: 1px solid black;
+        #     border-radius: {Styles.widgetBorderRadius}px;
+        #     padding: 3px;
+        #     background-color: rgb(100, 100, 189);
+        # """)
 
         self.videoURL = ""
 
+        scene = QGraphicsScene()
+        graphicsView = QGraphicsView(scene)
+        videoItem = QGraphicsVideoItem()
+        graphicsView.setStyleSheet("border: 2px solid black;")
+        # videoItem.setAspectRatioMode(Qt.KeepAspectRatio)
+        scene.addItem(videoItem)
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.qVideoWidget = QVideoWidget()
-        self.qVideoWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.mediaPlayer.setVideoOutput(self.qVideoWidget)
+        self.mediaPlayer.setVideoOutput(videoItem)
+
+        # self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        #self.qVideoWidget = QVideoWidget()
+        # self.qVideoWidget.setAttribute(Qt.WA_OpaquePaintEvent, False)
+        # self.qVideoWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        #self.mediaPlayer.setVideoOutput(self.qVideoWidget)
         
         layoutQVideoWidget = QVBoxLayout()
-        layoutQVideoWidget.addWidget(self.qVideoWidget, stretch=1)
+        # layoutQVideoWidget.addWidget(self.qVideoWidget, stretch=1)
         
-
+        # TODO This causes problem, when uncommented:
+        # layoutQVideoWidget.addWidget(self.qVideoWidget)
+        layoutQVideoWidget.addWidget(graphicsView)
+        
         btnSize = QSize(16, 16)
-
-        # openButton = QPushButton("Open Video")
-        # openButton.setToolTip("Open Video File")
-        # openButton.setStatusTip("Open Video File")
-        # openButton.setFixedHeight(24)
-        # openButton.setIconSize(btnSize)
-        # openButton.setFont(QFont("Noto Sans", 8))
-        # openButton.setIcon(QIcon.fromTheme("document-open", QIcon("D:/_Qt/img/open.png")))
-        # openButton.clicked.connect(self.abrir)
 
         self.playButton = QPushButton("Play")
         self.playButton.setEnabled(False)
@@ -52,11 +56,11 @@ class VideoWidget(QWidget):
 
         self.positionSlider = QSlider(Qt.Horizontal)
         self.positionSlider.setRange(0, 0)
-        self.positionSlider.setMinimumHeight(20)
+        # self.positionSlider.setMinimumHeight(20)
         # self.positionSlider.setMinimumWidth(100)
         # self.positionSlider.setTracking(False)
-        self.positionSlider.setTickInterval(5)
-        self.positionSlider.setTickPosition(QSlider.TicksBelow)
+        # self.positionSlider.setTickInterval(5)
+        # self.positionSlider.setTickPosition(QSlider.TicksBelow)
         self.positionSlider.setToolTip("Video Progress")
         # self.positionSlider.valueChanged.connect(self.mediaPlayer.position)
         self.positionSlider.sliderMoved.connect(self.setPosition)
@@ -80,12 +84,13 @@ class VideoWidget(QWidget):
 
         self.setLayout(layout)
 
+        # TODO: Pridat hlasitost / mute / unmute
+
         self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
         self.mediaPlayer.durationChanged.connect(self.durationChanged)
-        # self.mediaPlayer.playbackRateChanged.connect
         
-        # self.mediaPlayer.error.connect(self.handleError)
+        self.mediaPlayer.error.connect(self.handleError)
         self.statusBar.showMessage("Ready")
 
     def playVideo(self):
@@ -100,13 +105,16 @@ class VideoWidget(QWidget):
         """
         fileName = videoPath
 
-        if fileName != '':
-            self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)))
-            self.playButton.setEnabled(True)
-            self.statusBar.showMessage(fileName)
+        if not fileName:
+            return
+        
+        self.mediaPlayer.stop()
+        self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)))
+        self.playButton.setEnabled(True)
+        self.statusBar.showMessage(fileName)
 
-            self.togglePlayPause()
-            # self.mediaPlayer.play()
+        self.togglePlayPause()
+        self.positionSlider.setValue(0) # Reset the slider to 0
 
     def togglePlayPause(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
@@ -140,7 +148,21 @@ class VideoWidget(QWidget):
     def cleanup(self):
         print("Cleanup VideoWidget")
         self.mediaPlayer.stop()
-        self.mediaPlayer.setMedia(QMediaContent())
+        # self.mediaPlayer.setMedia(QMediaContent())
         # self.videoWidget.close()
         # self.videoWidget.deleteLater()
         self.positionSlider.setValue(0)
+        self.playButton.setIcon(
+            self.style().standardIcon(QStyle.SP_MediaPlay)
+        )
+    
+    def handleError(self):
+        self.playButton.setEnabled(False)
+        self.statusBar.showMessage("Error: " + self.mediaPlayer.errorString())
+        self.mediaPlayer.stop()
+        print(f"Error: " + self.mediaPlayer.errorString())
+
+    # def resizeEvent(self, event):
+    #     # self.updateScaledPixmap()
+    #     super().resizeEvent(event)
+    #     self.repaint()

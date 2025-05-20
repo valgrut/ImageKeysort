@@ -92,6 +92,7 @@ height = 864
 # - [ ] ! Pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
 # - [ ] Settings saving and loading.
 # - [ ] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
+# - [ ] Settings - ovladani hlasitosti - mute by default???
 #
 #
 # Important features TODO:
@@ -118,7 +119,7 @@ height = 864
 # To Fix:
 # - [ ] Crashing when moving the .git bcz process (medium) is used or what...
 # - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
-#
+#   
 #
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
