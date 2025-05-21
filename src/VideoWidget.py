@@ -23,16 +23,18 @@ class VideoWidget(QWidget):
 
         self.videoURL = ""
 
+        self.defaultVolume = 50
+
         scene = QGraphicsScene()
         self.graphicsView = QGraphicsView(scene)
         self.videoItem = QGraphicsVideoItem()
         self.graphicsView.setStyleSheet("border: 2px solid black;")
-        # videoItem.setAspectRatioMode(Qt.KeepAspectRatio)
         scene.addItem(self.videoItem)
-        self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.mediaPlayer.setVideoOutput(self.videoItem)
         size = self.graphicsView.size()
         self.videoItem.setSize(QSizeF(size.width()-30, size.height()-30))
+
+        self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        self.mediaPlayer.setVideoOutput(self.videoItem)
         
         layoutQVideoWidget = QVBoxLayout()
         layoutQVideoWidget.addWidget(self.graphicsView)
@@ -48,13 +50,23 @@ class VideoWidget(QWidget):
 
         self.positionSlider = QSlider(Qt.Horizontal)
         self.positionSlider.setRange(0, 0)
-        # self.positionSlider.setTracking(False)
-        self.positionSlider.setTickInterval(5)
-        # self.positionSlider.setTickPosition(QSlider.TicksBelow)
+        # self.positionSlider.setTickInterval(3)
+        # self.positionSlider.setTickPosition(QSlider.TicksLeft)
         self.positionSlider.setToolTip("Video Progress")
-        # self.positionSlider.valueChanged.connect(self.mediaPlayer.position)
         self.positionSlider.sliderMoved.connect(self.setPosition)
         self.positionSlider.sliderReleased.connect(lambda: self.setPosition(self.positionSlider.value()))
+
+        # Create a QSlider for controlling the volume
+        self.volumeSlider = QSlider(Qt.Horizontal)
+        self.volumeSlider.setRange(0, 100)
+        self.volumeSlider.setFixedWidth(100)
+        self.volumeSlider.setValue(self.defaultVolume)
+        self.volumeSlider.sliderMoved.connect(self.set_volume)
+
+        # Create a QPushButton for toggling mute/unmute sound
+        self.muteUnmuteBtn = QPushButton()
+        self.muteUnmuteBtn.clicked.connect(self.toggle_mute_unmute)
+        self.muteUnmuteBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
 
         self.statusBar = QStatusBar()
         self.statusBar.setFont(QFont("Noto Sans", 7))
@@ -62,20 +74,17 @@ class VideoWidget(QWidget):
 
         controlLayout = QHBoxLayout()
         controlLayout.setContentsMargins(0, 0, 0, 0)
-        # controlLayout.addWidget(openButton)
         controlLayout.addWidget(self.playButton)
         controlLayout.addWidget(self.positionSlider)
+        controlLayout.addWidget(self.volumeSlider)
+        controlLayout.addWidget(self.muteUnmuteBtn)
 
         layout = QVBoxLayout()
-        # layout.addWidget(self.qVideoWidget)
         layout.addLayout(layoutQVideoWidget)
         layout.addLayout(controlLayout)
         layout.addWidget(self.statusBar)
 
         self.setLayout(layout)
-
-        # TODO: Pridat hlasitost / mute / unmute
-        # TODO: fix size videa, aby se roztahlo pres cely rodicovsky widget, a se zachovanim pomeru stran.
 
         self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
@@ -105,7 +114,7 @@ class VideoWidget(QWidget):
         self.statusBar.showMessage(fileName)
 
         self.togglePlayPause()
-        self.positionSlider.setValue(0) # Reset the slider to 0
+        self.positionSlider.setValue(0)
 
     def togglePlayPause(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
@@ -144,6 +153,22 @@ class VideoWidget(QWidget):
             self.style().standardIcon(QStyle.SP_MediaPlay)
         )
     
+    def set_volume(self, volume):
+        self.mediaPlayer.setVolume(volume)
+
+    def toggle_mute_unmute(self):
+        if self.mediaPlayer.volume() > 0:
+            self.currentVolume = self.mediaPlayer.volume()
+            self.mediaPlayer.setVolume(0)
+            self.volumeSlider.setValue(0)
+            self.muteUnmuteBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolumeMuted))
+            return
+        else:
+            self.mediaPlayer.setVolume(self.currentVolume)
+            self.volumeSlider.setValue(self.currentVolume)
+            self.muteUnmuteBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
+            return
+        
     def handleError(self):
         self.playButton.setEnabled(False)
         self.statusBar.showMessage("Error: " + self.mediaPlayer.errorString())
