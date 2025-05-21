@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtCore import QDir, Qt, QUrl, QSize, pyqtSlot
+from PyQt5.QtCore import QDir, Qt, QUrl, QSize, pyqtSlot, QSizeF
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget, QGraphicsVideoItem
 from PyQt5.QtWidgets import (QGraphicsScene, QGraphicsView, QApplication, QFileDialog, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget, QStatusBar)
@@ -24,26 +24,18 @@ class VideoWidget(QWidget):
         self.videoURL = ""
 
         scene = QGraphicsScene()
-        graphicsView = QGraphicsView(scene)
-        videoItem = QGraphicsVideoItem()
-        graphicsView.setStyleSheet("border: 2px solid black;")
+        self.graphicsView = QGraphicsView(scene)
+        self.videoItem = QGraphicsVideoItem()
+        self.graphicsView.setStyleSheet("border: 2px solid black;")
         # videoItem.setAspectRatioMode(Qt.KeepAspectRatio)
-        scene.addItem(videoItem)
+        scene.addItem(self.videoItem)
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.mediaPlayer.setVideoOutput(videoItem)
-
-        # self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        #self.qVideoWidget = QVideoWidget()
-        # self.qVideoWidget.setAttribute(Qt.WA_OpaquePaintEvent, False)
-        # self.qVideoWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        #self.mediaPlayer.setVideoOutput(self.qVideoWidget)
+        self.mediaPlayer.setVideoOutput(self.videoItem)
+        size = self.graphicsView.size()
+        self.videoItem.setSize(QSizeF(size.width()-30, size.height()-30))
         
         layoutQVideoWidget = QVBoxLayout()
-        # layoutQVideoWidget.addWidget(self.qVideoWidget, stretch=1)
-        
-        # TODO This causes problem, when uncommented:
-        # layoutQVideoWidget.addWidget(self.qVideoWidget)
-        layoutQVideoWidget.addWidget(graphicsView)
+        layoutQVideoWidget.addWidget(self.graphicsView)
         
         btnSize = QSize(16, 16)
 
@@ -56,10 +48,8 @@ class VideoWidget(QWidget):
 
         self.positionSlider = QSlider(Qt.Horizontal)
         self.positionSlider.setRange(0, 0)
-        # self.positionSlider.setMinimumHeight(20)
-        # self.positionSlider.setMinimumWidth(100)
         # self.positionSlider.setTracking(False)
-        # self.positionSlider.setTickInterval(5)
+        self.positionSlider.setTickInterval(5)
         # self.positionSlider.setTickPosition(QSlider.TicksBelow)
         self.positionSlider.setToolTip("Video Progress")
         # self.positionSlider.valueChanged.connect(self.mediaPlayer.position)
@@ -149,9 +139,6 @@ class VideoWidget(QWidget):
     def cleanup(self):
         print("Cleanup VideoWidget")
         self.mediaPlayer.stop()
-        # self.mediaPlayer.setMedia(QMediaContent())
-        # self.videoWidget.close()
-        # self.videoWidget.deleteLater()
         self.positionSlider.setValue(0)
         self.playButton.setIcon(
             self.style().standardIcon(QStyle.SP_MediaPlay)
@@ -163,7 +150,7 @@ class VideoWidget(QWidget):
         self.mediaPlayer.stop()
         print(f"Error: " + self.mediaPlayer.errorString())
 
-    # def resizeEvent(self, event):
-    #     # self.updateScaledPixmap()
-    #     super().resizeEvent(event)
-    #     self.repaint()
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        size = self.graphicsView.size()
+        self.videoItem.setSize(QSizeF(size.width()-30, size.height()-30))

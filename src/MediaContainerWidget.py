@@ -18,7 +18,7 @@ class MediaContainerWidget(QWidget):
         self.stackedMediaWidget = QStackedWidget()
 
         self.stackedMediaWidget.addWidget(self.imageViewWidget)
-        self.stackedMediaWidget.addWidget(self.videoViewWidget)  # TODO: vse zabugovane, kdyz se to odkomentuje.
+        self.stackedMediaWidget.addWidget(self.videoViewWidget)
 
         rightLayout = QVBoxLayout()
 
@@ -202,13 +202,10 @@ class MediaContainerWidget(QWidget):
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
     def setVideoWidget(self):
-        # self.stackedMediaWidget.setCurrentIndex(1)
         self.stackedMediaWidget.setCurrentWidget(self.videoViewWidget)        
 
     def setImageWidget(self):
         self.stackedMediaWidget.setCurrentWidget(self.imageViewWidget)
-        # self.stackedMediaWidget.setCurrentIndex(0)
-
 
     def updateCounterLabelText(self, text):
         self.imageCounterLabel.setText(text)
