@@ -163,6 +163,8 @@ class MediaContainerWidget(QWidget):
 
         # Update Counter label
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
+
+        # Show ImageViewWidget by default
         # self.stackedMediaWidget.setCurrentWidget(self.imageViewWidget)
 
 
@@ -187,17 +189,18 @@ class MediaContainerWidget(QWidget):
         self.galleryManager.setNextImage()
         # self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
-
     def showPreviousImage(self):
         self.cleanupCurrentMedia()
         self.galleryManager.setPreviousImage()
         # self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
     def showFirstImage(self):
+        self.cleanupCurrentMedia()
         self.galleryManager.setFirstImage()
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
     def showLastImage(self):
+        self.cleanupCurrentMedia()
         self.galleryManager.setLastImage()
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
