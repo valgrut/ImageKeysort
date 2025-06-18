@@ -63,5 +63,5 @@ OR
 
 ## 5. Known issues:
 
-- Focus is not on the next/prev buttons, so arrow keys do not work.
+- Videos on Windows are playing, but are not shown in the player. Missing codecs/driver?
 
