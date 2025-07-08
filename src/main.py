@@ -89,6 +89,8 @@ height = 864
 # - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi). [SETTINGS]
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
+# - [ ] !!!!! Clicking on the image (or pressing some shortcut, for example '~' or something, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
+# - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 #
 #
 # Settings:
