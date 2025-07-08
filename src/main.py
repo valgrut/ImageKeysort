@@ -123,6 +123,7 @@ height = 864
 #
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
+# - [ ] Sort shortcuts alphabetically (a, A, c, G, x) and option2 sort target directories alphabetically.
 # - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu? [SETTINGS]
 # - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
