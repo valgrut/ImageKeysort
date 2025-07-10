@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QKeyEvent
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, \
-    QVBoxLayout
+    QVBoxLayout, QLineEdit
 
 from src.ImageWidget import ImageWidget
 from src.VideoWidget import VideoWidget
@@ -37,7 +37,7 @@ class MediaContainerWidget(QWidget):
             """)
         rightLayout.addWidget(self.sourceDirLabel)
 
-        self.imageFilenameLabel = QLabel()
+        self.imageFilenameLabel = QLineEdit()
         self.imageFilenameLabel.setMaximumHeight(30)
         self.imageFilenameLabel.setStyleSheet(f"""
             QLabel {{
