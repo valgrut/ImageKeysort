@@ -100,11 +100,12 @@ height = 864
 # - [ ] Settings saving and loading.
 # - [ ] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
 # - [ ] Settings - ovladani hlasitosti - mute by default???
+# - [~] Tridit zkratky abecedne? (Mozna settings option?)
 #
 #
 # Important features TODO:
 # - [~] ! REFACTORING
-# - [ ] Tridit zkratky abecedne? (Mozna settings option?)
+# - [~] Tridit zkratky abecedne? (Mozna settings option?)
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
 # - [ ] ! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [??SETTINGS]
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
