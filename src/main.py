@@ -80,6 +80,7 @@ height = 864
 # - [x] ! Zmenit border color okna s obrazkama, kdyz je aktivni COPY mode, aby to bylo jasnejsi (uz jsem na nej parkrat zapomenul, ze je aktivni).
 # - [x] Vyresit cekani na zkratku, kdyz x, aj xy obsahuje cestu. Kdyz chci poslat img do 'x', nic se nedeje, bo y obsahuje cestu taky. Mozna Timer nebo treba >>>mezernik<<< jako potvrzeni. !!!!!!
 # - [x] zmacknutim mezerniku (if Sort mode AND pokud neni namacknuta zadna zkratka), otevre okno s vyberem slozky, kam jednorazove poslat aktualni obrazek.
+# - [x] Kdyz pridavam zkratku pod nejakou jinou, nabidnout primarne cestu v rodicovske zkratce (napr. fotky->akce, nova: fotky->narozky, formular zobrazi adresar Fotky jako vychozi)
 #
 #
 # Top priority:
@@ -110,9 +111,8 @@ height = 864
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.)
 # - [ ] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
-# - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu.
+# - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
-# - [ ] ! Kdyz pridavam zkratku pod nejakou jinou, nabidnout primarne cestu teto vyssi zkratky, nebo zkratky paralelne k teto, pokud takova existuje.
 #
 #
 # Design:
@@ -739,8 +739,19 @@ class MainWindow(QMainWindow):
                 # Add new shortcut sequence
                 for k in self.keySeq:
                     self.shortcutManager.addShortcut(self.keySeq)
+                
+                # set parent's path as default for the dialogue when nesting shortcut
+                # Usually when nesting shortcuts, they mirror directories, so it is better to show
+                # parent's directory for the new shortcut, because it is probable that target directory is there.
+                print("Parents path: Get path for shortcut: ", self.keySeq, self.keySeq[:-1])
+                # parentPathAdvice = self.shortcutManager.getDstPathForShortcut(self.keySeq[:-1])
+                parentPathAdvice = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq[:-1])
+                parentPath = ""
+                if "dst_path" in parentPathAdvice:
+                    print("Parent's path: ", parentPathAdvice["dst_path"])
+                    parentPath = parentPathAdvice["dst_path"]
 
-                dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
+                dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory", parentPath)
                 self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
                 self.keySeq = ""
                 self.updateKeySequenceLabel()

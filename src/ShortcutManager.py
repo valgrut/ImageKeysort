@@ -105,7 +105,7 @@ class ShortcutManager():
         else:
             print(f"Shortcut {sequence} has not been found.")
 
-    
+
     def addKeyUnderCurrent(self, currentKeyRef, new_key):
         """
         Adds new key under given key in the shortcutsData tree.
@@ -128,12 +128,12 @@ class ShortcutManager():
             return None
         # print("last: ", last_key)
         return lastKey["dst_path"]
-    
-    
+
+
     def isSequenceLongestMatch(self, sequence):
         """
         Return True only if the sequence is longest match, otherwise False.
-        
+
         Example:
         lets have following structure:
         a
@@ -143,13 +143,13 @@ class ShortcutManager():
 
         We need to return True only if the sequence is "abc" and not "ab" or "a".
         Sequence is written by the user and for each key pressed, we need to check if the sequence is longest match.
-        
+
         If it is not, user can "force" the usage of non-longest match by pressing "space" key.
         """
         lastKeyContent = self.getLastKeyContentOfSequence(sequence)
 
         # If key exists but have another sub-keys under the "keys", return False (Not longest match)
-        # uz vim, proc to je- kdyz pisu zkratku, tak potrebuju, aby se to HITlo ne v prubehu, ale az kdyz 
+        # uz vim, proc to je- kdyz pisu zkratku, tak potrebuju, aby se to HITlo ne v prubehu, ale az kdyz
         # uz zkratka konci, ne treba u tretiho pismena z 5.
         if not lastKeyContent or lastKeyContent["keys"]:
             return False
@@ -210,7 +210,7 @@ class ShortcutManager():
             b
             c
                 x
-        
+
         Following options are possible:
         -a Removes the whole 'a' tree
         a-b Removes 'b' from the 'a' tree
