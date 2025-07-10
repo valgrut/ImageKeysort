@@ -89,8 +89,12 @@ class ShortcutManager():
             if key in currentNestLevel:
                 self.shortcutTree.update({key: self.subcategory})
                 self.setDataModified()
-        print(self.shortcutTree)
+        print(json.dumps(self.shortcutTree))
 
+        # Print nice json formatted TODO
+        # print(self.shortcutTree["keys"])
+        # print(json.dumps(self.shortcutTree))
+        # print(json.dumps(sorted(self.shortcutTree, key=lambda x: x['keys'])))
 
     def addDstPathForShortcut(self, sequence, dst_path):
         """
