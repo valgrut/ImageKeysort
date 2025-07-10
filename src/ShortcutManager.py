@@ -312,9 +312,9 @@ class ShortcutManager():
                 # TODO: Highlight all dst dirs that do not exist
             # return False
 
-        # Print nonexisting paths:
-        for path in nonexistingPaths:
-            print("E: Directory does not exist: ", path)
+            # Print nonexisting paths:
+            for path in nonexistingPaths:
+                print("E: Directory does not exist: ", path)
 
         # Save path of the loaded data
         self.srcPathOfLoadedData = jsonDataFile[0]
