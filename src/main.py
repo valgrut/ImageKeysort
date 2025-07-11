@@ -104,6 +104,7 @@ height = 864
 #
 #
 # Important features TODO:
+# - [ ] !! Pri nacteni zkratek ze souboru ulozit cestu, ze ktere se soubor bral, aby pri nacitani treba jinych zkratek program zase nabidl tuhle cestu.
 # - [~] ! REFACTORING
 # - [~] Tridit zkratky abecedne? (Mozna settings option?)
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
