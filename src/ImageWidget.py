@@ -1,4 +1,5 @@
 import pytesseract
+import os
 from PIL import Image
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
@@ -11,7 +12,9 @@ from src.Styles import Styles
 # Windows: Installed from: https://github.com/UB-Mannheim/tesseract/wiki
 # (https://github.com/tesseract-ocr/tesseract/releases/download/5.5.0/tesseract-ocr-w64-setup-5.5.0.20241111.exe)
 # Installed into 'C:\Program Files\Tesseract-OCR\'
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+if os.name == "nt":
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 class ImageWidget(QWidget):
