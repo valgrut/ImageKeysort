@@ -105,7 +105,6 @@ height = 864
 #
 #
 # Important features TODO:
-# - [ ] !! Pri nacteni zkratek ze souboru ulozit cestu, ze ktere se soubor bral, aby pri nacitani treba jinych zkratek program zase nabidl tuhle cestu.
 # - [~] ! REFACTORING
 # - [~] Tridit zkratky abecedne? (Mozna settings option?)
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
@@ -117,6 +116,8 @@ height = 864
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 # - [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou tree a image.
+# - [ ] Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
+# - [ ] Pridat feedback ohledne prevodu obrazku na text, treba hned po kliknuti zobrazit nacitani, ktere se prerusi po te, co proces prevodu dobehne. Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola. Misto kliknuti na obrazek mozna pridat tlacitko.
 #
 #
 # Design:
@@ -126,6 +127,7 @@ height = 864
 # To Fix:
 # - [x] Crashing when moving the .git bcz process (medium) is used or what...
 # - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
+# - [ ] r -> cesta. c-f -> cesta -> crash !!! Fix.Parents path: Get path for shortcut:  cf c -> Key c -> DEBUG: such sequence does not exist.
 #
 #
 # Shortcuts management, Shortcut Tree (GUI):
