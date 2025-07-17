@@ -81,6 +81,7 @@ height = 864
 # - [x] Vyresit cekani na zkratku, kdyz x, aj xy obsahuje cestu. Kdyz chci poslat img do 'x', nic se nedeje, bo y obsahuje cestu taky. Mozna Timer nebo treba >>>mezernik<<< jako potvrzeni. !!!!!!
 # - [x] zmacknutim mezerniku (if Sort mode AND pokud neni namacknuta zadna zkratka), otevre okno s vyberem slozky, kam jednorazove poslat aktualni obrazek.
 # - [x] Kdyz pridavam zkratku pod nejakou jinou, nabidnout primarne cestu v rodicovske zkratce (napr. fotky->akce, nova: fotky->narozky, formular zobrazi adresar Fotky jako vychozi)
+#
 # - [~] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
 #
 #
@@ -117,13 +118,15 @@ height = 864
 # - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 # - [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou tree a image.
 #
+#
 # Design:
 # - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
+#
 #
 # To Fix:
 # - [x] Crashing when moving the .git bcz process (medium) is used or what...
 # - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
-#   
+#
 #
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
@@ -741,7 +744,7 @@ class MainWindow(QMainWindow):
                 # Add new shortcut sequence
                 for k in self.keySeq:
                     self.shortcutManager.addShortcut(self.keySeq)
-                
+
                 # set parent's path as default for the dialogue when nesting shortcut
                 # Usually when nesting shortcuts, they mirror directories, so it is better to show
                 # parent's directory for the new shortcut, because it is probable that target directory is there.
@@ -1061,14 +1064,14 @@ class MainWindow(QMainWindow):
     def keyPressEvent(self, event):
         if not isinstance(event, QKeyEvent):
             return
-        
+
         pressedKey = event.text()
         print("Pressed Key:", pressedKey)
 
         # Key binding working in both modes:
         match event.key():
             case Qt.Key_Left:
-                # TODO: de-chain: 
+                # TODO: de-chain:
                 # self.showPreviousImage()
                 self.galleryManager.mediaContainerWidget.showPreviousImage()
 
@@ -1097,7 +1100,7 @@ class MainWindow(QMainWindow):
 
         elif self.currentMode == "sort":
             self.handleSortMode(event)
-        
+
         else: # Unknown mode
             pass
 
