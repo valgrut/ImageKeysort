@@ -144,6 +144,7 @@ height = 864
 # - [ ] Pod posledni prvek kazde sekce udelat tenkou caru jako oddelovac. (Nebo nad kazdou hlavni, bo to je root tak by to bylo jednodussi).
 # - [ ] Pridat moznost otevrit slozku pri kliknuti na shortcut (Tohle funguje!!!):
 #           webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
+# - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
 #
 #
 # Minor issues, future features:
@@ -157,6 +158,10 @@ height = 864
 # - [~] Dodelat progress widget
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Po dotrideni inboxu zobrazit tabulku s gratulaci, treba poctem setridenych obrazku, mozna animace famfar.
+#
+#
+# GIT README.md
+# - pridat tam, ze vyhoda je, ze tridime pouze 1 photo at a time! No distraction. No paralysis.
 #
 
 allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
