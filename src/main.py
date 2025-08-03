@@ -93,6 +93,7 @@ height = 864
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
+# - [ ] Fix videos on Windows
 #
 #
 # Settings:
