@@ -149,6 +149,7 @@ height = 864
 #
 #
 # Minor issues, future features:
+# - [ ] Otevrit a tridit remote slozku - napr. Google Drive a pod ?
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
 # - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
