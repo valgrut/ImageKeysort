@@ -8,6 +8,7 @@ And even the thought of the repetitive sequence of opening the image, resolve wh
 
 This could help you, just as it helped me!
 
+
 ## 2. Tutorial
 
 ### 2.1. Add shortcut
@@ -31,6 +32,7 @@ OR
 
 1. [TBD] Use Edit button beside the shortcut.
 
+
 ## 3. Features
 
 - Select source directory for the gallery to be sorted
@@ -42,6 +44,7 @@ OR
   then hit just the last part of the sequence: 'n' for naruto, 'd' for deathnote and so on.
 - Create a subset of gallery photos: Select Copy mode and just copy some photos to target directory, for example to
   show just subset of photos to your family.
+
 
 ## 4. How to build the app
 
@@ -65,3 +68,9 @@ OR
 
 - Videos on Windows are playing, but are not shown in the player. Missing codecs/driver?
 
+
+## 6. Dependencies
+
+```
+sudo dnf install python3-qt5
+```
