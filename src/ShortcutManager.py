@@ -179,7 +179,7 @@ class ShortcutManager():
         return preCurrent
 
 
-    def getLastKeyContentOfSequence(self, sequence):
+    def getLastKeyContentOfSequence(self, sequence) -> str | None:
         """
         Get last key of sequence and does NOT matter whether the last key has children keys under itself.
 
@@ -196,7 +196,7 @@ class ShortcutManager():
                 nextAvailableKeys = currentKeyContent["keys"]
             else:
                 print(f"DEBUG: such sequence does not exist.")
-                return False
+                return None
 
         return currentKeyContent
 

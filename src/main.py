@@ -94,6 +94,7 @@ height = 864
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 # - [ ] Fix videos on Windows
+# - [ ] Pridat Type hints ( -> int, myvar: str, ...)
 #
 #
 # Settings:
@@ -762,7 +763,7 @@ class MainWindow(QMainWindow):
                 # parentPathAdvice = self.shortcutManager.getDstPathForShortcut(self.keySeq[:-1])
                 parentPathAdvice = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq[:-1])
                 parentPath = ""
-                if "dst_path" in parentPathAdvice:
+                if parentPathAdvice is not None and "dst_path" in parentPathAdvice:
                     print("Parent's path: ", parentPathAdvice["dst_path"])
                     parentPath = parentPathAdvice["dst_path"]
 
