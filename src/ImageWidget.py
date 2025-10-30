@@ -55,6 +55,7 @@ class ImageWidget(QWidget):
         self.currentImgPath = img_path
         self.updateScaledPixmap()
 
+    # def resizeEvent(self, QKeyEvent: event):
     def resizeEvent(self, event):
         self.updateScaledPixmap()
         super().resizeEvent(event)
