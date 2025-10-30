@@ -323,7 +323,11 @@ class MainWindow(QMainWindow):
         # print("Has focus?", self.hasFocus())
         # print("Focus Widget:", self.focusWidget())
 
-        self.settings = SettingsDialog()
+
+    def open_settings(self):
+        dlg = SettingsDialog(self)
+        # dlg.settingsChanged.connect(self.apply_settings)
+        dlg.exec_()
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
@@ -337,6 +341,12 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(self.loadAction)
         fileMenu.addAction(self.saveAction)
         fileMenu.addAction(self.exitAction)
+
+        act_settings = QAction("Settings...", self)
+        # act_settings.setShortcut("Ctrl+,")  # common on mac; still nice on others
+        act_settings.triggered.connect(self.open_settings)
+        fileMenu.addAction(act_settings)
+
 
         editMenu = menuBar.addMenu("&Edit")
 
