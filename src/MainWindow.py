@@ -33,7 +33,7 @@ from src.ShortcutManager import ShortcutManager
 from src.TreeItemWithButtons import TreeItemWithButtons
 from src.CustomTreeWidget import CustomTreeWidget
 from src.Styles import Styles
-
+from src.SettingsDialog import SettingsDialog
 
 screenWidth = 1152
 screenHeight = 864
@@ -322,6 +322,8 @@ class MainWindow(QMainWindow):
 
         # print("Has focus?", self.hasFocus())
         # print("Focus Widget:", self.focusWidget())
+
+        self.settings = SettingsDialog()
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
