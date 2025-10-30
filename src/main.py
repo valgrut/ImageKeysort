@@ -38,7 +38,6 @@ from src.Styles import Styles
 width = 1152
 height = 864
 
-# TODO: Translate DONE and TODO to EN:
 # Features DONE:
 # - [x] Pridat nekam, jaka src slozka je aktualne nastavena
 # - [x] Pridat zobrazeni i 3. vnoreni zkratek
@@ -89,7 +88,7 @@ height = 864
 # - [ ] !!! Pridat CLI argumenty pro spusteni aplikace s preddefinovanymi parametry (napr. --src-dir, --dst-dir, --load-data, --save-data, ...)
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 # - [ ] MOZNA: Pridat i nektere znaky jako labely ($, ...)
-# - [ ] Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi). [SETTINGS]
+# - [ ] !!! Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi). [SETTINGS]
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
@@ -116,10 +115,12 @@ height = 864
 # - [ ] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
-# - [ ] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
+# - [x] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 # - [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou tree a image.
 # - [ ] Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
 # - [ ] Pridat feedback ohledne prevodu obrazku na text, treba hned po kliknuti zobrazit nacitani, ktere se prerusi po te, co proces prevodu dobehne. Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola. Misto kliknuti na obrazek mozna pridat tlacitko.
+# - [ ] Mozna nejakou animaci, ze blikne statusbar, kdyz se tam objevi nova zprava, nebo pridat datum a cas zpravy, aby bylo jasne, ze aktualni zprava se tyka treba posledni operace.
+# - [ ] TODO: Translate all done tasks and translate todo ideas to EN:
 #
 #
 # Design:
@@ -129,7 +130,7 @@ height = 864
 # To Fix:
 # - [x] Crashing when moving the .git bcz process (medium) is used or what...
 # - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
-# - [ ] r -> cesta. c-f -> cesta -> crash !!! Fix.Parents path: Get path for shortcut:  cf c -> Key c -> DEBUG: such sequence does not exist.
+# - [x] r -> cesta. c-f -> cesta -> crash !!! Fix.Parents path: Get path for shortcut:  cf c -> Key c -> DEBUG: such sequence does not exist.
 #
 #
 # Shortcuts management, Shortcut Tree (GUI):
@@ -775,6 +776,11 @@ class MainWindow(QMainWindow):
                 print(json.dumps(self.shortcutManager.getData(), indent=2))
                 self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 
+            case Qt.Key_Backspace:
+                if len(self.keySeq) >= 1:
+                    self.keySeq = self.keySeq[:-1]
+                    self.updateKeySequenceLabel()
+
             case _:
                 self.keySeq += pressedKey
                 self.updateKeySequenceLabel()
@@ -796,6 +802,11 @@ class MainWindow(QMainWindow):
                 else:
                     pass
                 self.updateKeySequenceLabel()
+
+            case Qt.Key_Backspace:
+                if len(self.keySeq) >= 1:
+                    self.keySeq = self.keySeq[:-1]
+                    self.updateKeySequenceLabel()
 
             # Hold current shortcut and use it as default for upcoming sequences until escape
             case Qt.Key_Return:  # Key_Return is non-numeric Enter key
@@ -866,7 +877,14 @@ class MainWindow(QMainWindow):
                 if not self.copyOnly:
                     self.galleryManager.removeFile(imageName)
                     shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
+                    self.mvHistory.append(
+                        {
+                            "src": src,
+                            "dst": dst,
+                            "image": imageName,
+                            "gallery_index": self.galleryManager.getGalleryIndex()
+                        }
+                    )
                     self.statusBarLabel.setText(f"File moved to {dst}.")
                 else:
                     shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
@@ -925,7 +943,14 @@ class MainWindow(QMainWindow):
                 if not self.copyOnly:
                     self.galleryManager.removeFile(imageName)
                     shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
+                    self.mvHistory.append(
+                        {
+                            "src": src,
+                            "dst": dst,
+                            "image": imageName,
+                            "gallery_index": self.galleryManager.getGalleryIndex()
+                        }
+                    )
                     self.statusBarLabel.setText(f"File moved to {dst}.")
                 else:
                     shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
@@ -974,7 +999,14 @@ class MainWindow(QMainWindow):
                 # Remove current image from the list of images in src directory
                 self.galleryManager.removeFile(imageName)
                 shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
+                self.mvHistory.append(
+                    {
+                        "src": src,
+                        "dst": dst,
+                        "image": imageName,
+                        "gallery_index": self.galleryManager.getGalleryIndex()
+                    }
+                )
                 self.statusBarLabel.setText(f"File Deleted.")
 
                 self.galleryManager.updateCounterLabelText()
@@ -1052,7 +1084,14 @@ class MainWindow(QMainWindow):
                     if not self.copyOnly:
                         self.galleryManager.removeFile(imageName)
                         shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                        self.mvHistory.append({"src": src, "dst": dst, "image": imageName, "gallery_index": self.galleryManager.getGalleryIndex()})
+                        self.mvHistory.append(
+                            {
+                                "src": src,
+                                "dst": dst,
+                                "image": imageName,
+                                "gallery_index": self.galleryManager.getGalleryIndex()
+                            }
+                        )
                         self.statusBarLabel.setText(f"File moved to {dst}.")
                     else:
                         shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
