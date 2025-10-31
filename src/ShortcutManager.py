@@ -284,26 +284,40 @@ class ShortcutManager():
             return True
 
 
-    def loadShortcuts(self) -> bool:
-        """
-        Load shortcuts from json file.
-        """
+    def loadShortcutsFromFile(self, presetsFilePath) -> bool:
+        if self.askSaveIfChanged():
+            return False #TODO fix
+
+        self._loadShortcuts(presetsFilePath)
+        return True
+
+
+    def loadShortcutsFromDialogue(self) -> bool:
         if self.askSaveIfChanged():
             return False
 
         jsonDataFile = QFileDialog.getOpenFileName(self.mainWindow, "Select file with shortcuts data to load.", self.srcPathOfLoadedData)
 
-        if not jsonDataFile[0]:
+        self._loadShortcuts(jsonDataFile[0])
+        return True
+
+
+    def _loadShortcuts(self, presetsFilePath) -> bool:
+        """
+        Load shortcuts from json file.
+        """
+
+        if not presetsFilePath:
             print(f"No file selected.")
             return False
 
         try:
-            with open(jsonDataFile[0], 'r', encoding='utf-8') as data:
+            with open(presetsFilePath, 'r', encoding='utf-8') as data:
                 self.shortcutTree = json.load(data)
         except ValueError as error:
             # Prevent loading invalid json data
             print("DEBUG: Invalid json data!")
-            self.mainWindow.statusBarLabel.setText(f"Error: Invalid json data in {jsonDataFile[0]}!")
+            self.mainWindow.statusBarLabel.setText(f"Error: Invalid json data in {presetsFilePath}!")
             return False
 
         # Check that all destination directories exist for all loaded shortcuts
@@ -321,10 +335,10 @@ class ShortcutManager():
                 print("E: Directory does not exist: ", path)
 
         # Save path of the loaded data
-        self.srcPathOfLoadedData = jsonDataFile[0]
+        self.srcPathOfLoadedData = presetsFilePath
 
         self.setDataUnmodified()
-        print(f"Data loaded from {jsonDataFile}.")
+        print(f"Data loaded from {presetsFilePath}.")
 
         return True
 

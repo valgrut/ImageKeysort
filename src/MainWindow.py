@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import shutil
 import os
+import argparse
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
@@ -48,6 +49,24 @@ allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Ke
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        # CLI argument parsing
+        parser = argparse.ArgumentParser(
+                    prog='Image Keysort',
+                    description='Shortcut based image sorter.',
+                    epilog='For CLI options, please refer to the documentation.')
+        # parser.add_argument('-v', '--verbose', action='store_true')  # on/off flag
+        parser.add_argument('--src-path', type=str, required=False, help='Path to the source directory')
+        parser.add_argument('--presets-path', type=str, required=False, help='Preset file name path')
+
+        args = parser.parse_args()
+
+        srcPathArg = args.src_path
+        presetsArg = args.presets_path
+
+        # Example usage
+        print(f"Source path: {srcPathArg}")
+        print(f"Presets: {presetsArg}")
 
         self.appTitle = "Image Keysort"
         self.setWindowTitle(self.appTitle)
@@ -308,13 +327,20 @@ class MainWindow(QMainWindow):
         self._connectActions()
 
         self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)
-        # self.galleryManager.updatePreview()
 
-        # vvvvvvvv TODO: Remove. [Just for DEBUG]: Manually setting src dir
-        # self.galleryManager.setSourcePath("/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads")
-        # self.galleryManager.setSourcePath(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\testing-data\downloads")
-        # self.source_dir_label.setText(f"Source directory: {self.galleryManager.getSourcePath()}")
-        # ^^^^^^^^^
+        # Set src path from CLI, if some provided
+        if srcPathArg:
+            self.galleryManager.setSourcePath(srcPathArg)
+        else:
+            print("Empty or invalid arg srcDir path")
+
+        # Set shortcuts preset from CLI, if some provided
+        if presetsArg:
+            self.shortcutManager.loadShortcutsFromFile(presetsArg)
+            self.update_tree_view()
+        else:
+            print("Empty or invalid arg shortcuts path")
+
 
         # Sort mode is default mode when app starts
         self.set_sort_mode()
@@ -418,7 +444,7 @@ class MainWindow(QMainWindow):
         self.shortcutManager.saveShortcuts()
 
     def load_data(self):
-        if not self.shortcutManager.loadShortcuts():
+        if not self.shortcutManager.loadShortcutsFromDialogue():
             return
         self.update_tree_view()
 

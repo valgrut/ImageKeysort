@@ -3,6 +3,9 @@ NAME=main.py
 
 run: 
 	python3 -m src.main
+	# python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Repositories/WorkstationSetup/scripts/image-sorter/presets/data.json
+	# python3 -m src.main --src-path /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads
+	# python3 -m src.main --src-path C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\testing-data\downloads
 
 test:
 	# python3 -m unittest discover
