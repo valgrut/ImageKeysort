@@ -48,8 +48,9 @@ from src.MainWindow import MainWindow
 # - [NE] WONT_DO Pridat i nektere znaky jako labely ($, ...)
 #
 # - [~] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
-#
-#
+#       - [ ] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
+
+
 # Top priority:
 # - [~] !!! Pridat CLI argumenty pro spusteni aplikace s preddefinovanymi parametry (napr. --src-dir, --dst-dir, --load-data, --save-data, ...)
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
@@ -59,8 +60,8 @@ from src.MainWindow import MainWindow
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 # - [ ] Fix videos on Windows
 # - [ ] Pridat Type hints ( -> int, myvar: str, ...)
-#
-#
+
+
 # Settings:
 # - [~] How many columns of shortcuts to show (1-5)
 # - [~] ! Pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
@@ -69,8 +70,8 @@ from src.MainWindow import MainWindow
 # - [~] Settings - ovladani hlasitosti - mute by default???
 # - [ ] Tridit zkratky abecedne? (Mozna settings option?)
 # - [ ] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
-#
-#
+
+
 # Important features TODO:
 # - [~] ! REFACTORING
 # - [~] Tridit zkratky abecedne? (Mozna settings option?)
@@ -87,19 +88,19 @@ from src.MainWindow import MainWindow
 # - [ ] Pridat feedback ohledne prevodu obrazku na text, treba hned po kliknuti zobrazit nacitani, ktere se prerusi po te, co proces prevodu dobehne. Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola. Misto kliknuti na obrazek mozna pridat tlacitko.
 # - [ ] Mozna nejakou animaci, ze blikne statusbar, kdyz se tam objevi nova zprava, nebo pridat datum a cas zpravy, aby bylo jasne, ze aktualni zprava se tyka treba posledni operace.
 # - [ ] TODO: Translate all done tasks and translate todo ideas to EN:
-#
-#
+# - [ ] Zmenit barvy pozadi v menu !
+
 # Design:
 # - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
-#
-#
+
+
 # To Fix:
 # - [x] Crashing when moving the .git bcz process (medium) is used or what...
 # - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
 # - [x] r -> cesta. c-f -> cesta -> crash !!! Fix.Parents path: Get path for shortcut:  cf c -> Key c -> DEBUG: such sequence does not exist.
 # - [ ] !!! Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
-#
-#
+
+
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
 # - [ ] Sort shortcuts alphabetically (a, A, c, G, x) and option2 sort target directories alphabetically.
@@ -115,8 +116,8 @@ from src.MainWindow import MainWindow
 # - [ ] Pridat moznost otevrit slozku pri kliknuti na shortcut (Tohle funguje!!!):
 #           webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
-#
-#
+
+
 # Minor issues, future features:
 # - [ ] Otevrit a tridit remote slozku - napr. Google Drive a pod ?
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
@@ -130,8 +131,8 @@ from src.MainWindow import MainWindow
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Po dotrideni inboxu zobrazit tabulku s gratulaci, treba poctem setridenych obrazku, mozna animace famfar.
 # - [ ] Ctrl+F Otevre search bar, a kdyz zadam cast nejake slozky, zobrazi se matchnute slozky s jejich zkratkami. (hlavne kdyz se preset rozroste, tak to muze byt uzitecne)
-#
-#
+
+
 # GIT README.md
 # - pridat tam, ze vyhoda je, ze tridime pouze 1 photo at a time! No distraction. No paralysis.
 #
