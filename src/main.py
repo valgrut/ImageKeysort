@@ -51,7 +51,7 @@ from src.MainWindow import MainWindow
 #
 #
 # Top priority:
-# - [ ] !!! Pridat CLI argumenty pro spusteni aplikace s preddefinovanymi parametry (napr. --src-dir, --dst-dir, --load-data, --save-data, ...)
+# - [~] !!! Pridat CLI argumenty pro spusteni aplikace s preddefinovanymi parametry (napr. --src-dir, --dst-dir, --load-data, --save-data, ...)
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 # - [ ] !!! Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi). [SETTINGS]
 # - [ ] Prochazet TODO v souborech a udelat je.
@@ -62,12 +62,13 @@ from src.MainWindow import MainWindow
 #
 #
 # Settings:
-# - [ ] How many columns of shortcuts to show (1-5)
-# - [ ] ! Pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
-# - [ ] Settings saving and loading.
-# - [ ] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
-# - [ ] Settings - ovladani hlasitosti - mute by default???
-# - [~] Tridit zkratky abecedne? (Mozna settings option?)
+# - [~] How many columns of shortcuts to show (1-5)
+# - [~] ! Pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
+# - [~] Settings saving and loading.
+#   - [ ] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
+# - [~] Settings - ovladani hlasitosti - mute by default???
+# - [ ] Tridit zkratky abecedne? (Mozna settings option?)
+# - [ ] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
 #
 #
 # Important features TODO:
@@ -77,12 +78,12 @@ from src.MainWindow import MainWindow
 # - [ ] ! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [??SETTINGS]
 # - [ ] Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.)
-# - [ ] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
+# - [~] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
 # - [ ] Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
 # - [x] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 # - [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou tree a image.
-# - [ ] Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
+# - [ ] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
 # - [ ] Pridat feedback ohledne prevodu obrazku na text, treba hned po kliknuti zobrazit nacitani, ktere se prerusi po te, co proces prevodu dobehne. Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola. Misto kliknuti na obrazek mozna pridat tlacitko.
 # - [ ] Mozna nejakou animaci, ze blikne statusbar, kdyz se tam objevi nova zprava, nebo pridat datum a cas zpravy, aby bylo jasne, ze aktualni zprava se tyka treba posledni operace.
 # - [ ] TODO: Translate all done tasks and translate todo ideas to EN:
