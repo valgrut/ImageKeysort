@@ -321,6 +321,24 @@ class MainWindow(QMainWindow):
         """)
         leftInnerLayout.addWidget(self.clearButton)
 
+
+        self.newAction = QAction(self)
+        self.newAction.setText("&New")
+        self.newAction.setIcon(QIcon(":file-new.svg"))
+        self.openAction = QAction(QIcon(":file-open.svg"), "&Open...", self)
+        self.saveAction = QAction(QIcon(":file-save.svg"), "&Save", self)
+
+        # Context menu - right click to open options
+        # Setting contextMenuPolicy
+        # WIP TODO: A melo by to byt aktivni hlavne po kliknuti pravym na obrazek
+        # WIP TODO: prave by nemelo delat to samo, co leve. Omezit "Otevrit slozku" pouze na leve tlacitko.
+        # WIP TODO: Kdyz EMPTY, pridat tooltip: Left click to open dir.
+        mainWindowWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
+        # Populating the widget with actions
+        mainWindowWidget.addAction(self.newAction)
+        mainWindowWidget.addAction(self.openAction)
+        mainWindowWidget.addAction(self.saveAction)
+
         # Create main Menu bar
         self._createActions()
         self._createMenuBar()
@@ -360,7 +378,6 @@ class MainWindow(QMainWindow):
 
         # Creating menus using a QMenu object
         fileMenu = QMenu("&File", self)
-        # TODO: add "open source directory" option under File
         menuBar.addMenu(fileMenu)
 
         fileMenu.addAction(self.openDirectoryAction)
@@ -373,13 +390,11 @@ class MainWindow(QMainWindow):
         act_settings.triggered.connect(self.open_settings)
         fileMenu.addAction(act_settings)
 
-
         editMenu = menuBar.addMenu("&Edit")
-
-        # TODO: add "save / load" options for the data.json loading and saving
 
         helpMenu = menuBar.addMenu("&Help")
         # TODO: add info about project, add shortcuts
+        # about
 
     def exitApp(self):
         if self.shortcutManager.areShortcutsModified():
@@ -390,10 +405,10 @@ class MainWindow(QMainWindow):
         exit(0)
 
     def _createActions(self):
-        self.openDirectoryAction = QAction("&open", self)
-        self.saveAction = QAction("&save", self)
-        self.loadAction = QAction("&load", self)
-        self.exitAction = QAction("&exit", self)
+        self.openDirectoryAction = QAction("&Open directory", self)
+        self.saveAction = QAction("&Save shortcuts", self)
+        self.loadAction = QAction("&Load shortcuts", self)
+        self.exitAction = QAction("&Exit", self)
 
     def _connectActions(self):
         self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)

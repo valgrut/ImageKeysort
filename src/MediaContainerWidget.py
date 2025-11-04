@@ -163,7 +163,6 @@ class MediaContainerWidget(QWidget):
 
         # Update Counter label
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
-        # TODO: Tady by melo byt pouze emit()
 
         # Show ImageViewWidget by default
         # self.stackedMediaWidget.setCurrentWidget(self.imageViewWidget)
@@ -199,13 +198,11 @@ class MediaContainerWidget(QWidget):
         self.cleanupCurrentMedia()
         self.galleryManager.setFirstImage()
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
-        # TODO: Tady by melo byt pouze emit()
 
     def showLastImage(self):
         self.cleanupCurrentMedia()
         self.galleryManager.setLastImage()
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
-        # TODO: Tady by melo byt pouze emit()
 
     def setVideoWidget(self):
         self.stackedMediaWidget.setCurrentWidget(self.videoViewWidget)
