@@ -5,7 +5,7 @@ import shutil
 import os
 import argparse
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -92,6 +92,8 @@ class MainWindow(QMainWindow):
             background-color: {Styles.widgetsBgColor};
         """)
 
+        self.shortcutManager.updateMainWindowTitleSignal.connect(self.updateWindowTitle)
+
 
         # ========== Layout ==========
         mainLayout = QHBoxLayout()
@@ -149,88 +151,34 @@ class MainWindow(QMainWindow):
         self.expProgress.setValue(20)
 
         self.copyButton = QPushButton("&Copy", self)
+        # self.copyButton.setCheckable(True)  # TODO pouzit misto switchovani 2 ruznych styles
         self.copyButton.clicked.connect(self.toggleCopyMode)
         self.copyButton.setFocusPolicy(Qt.NoFocus)
         self.copyButton.setGraphicsEffect(Styles.getShadowEffect())
         self.copyButton.setToolTip("Toggle copy mode (switch between copy and move operation).")
         self.copyButton.setCursor(QCursor(Qt.PointingHandCursor))
-        self.copyButton.setStyleSheet(f"""
-        QPushButton {{
-            width: 150px;
-            height: 20px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-        }}
-        _QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
+        self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
 
         self.editButton = QPushButton("&Edit", self)
         self.editButton.clicked.connect(self.set_edit_mode)
         self.editButton.setFocusPolicy(Qt.NoFocus)
         self.editButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.editButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.editButton.setStyleSheet(f"""
-        QPushButton {{
-            width: 150px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-        }}
-        _QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
-
+        self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
 
         self.sortButton = QPushButton("&Sort", self)
         self.sortButton.clicked.connect(self.set_sort_mode)
         self.sortButton.setFocusPolicy(Qt.NoFocus)
         self.sortButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.sortButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.sortButton.setStyleSheet(f"""
-        QPushButton {{
-            __width: 150px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-        }}
-        QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
-        # self.sort_button.setStyleSheet(Styles.getButtonStyles())
+        self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
 
         self.clearButton = QPushButton("&Clear tree", self)
         self.clearButton.clicked.connect(self.clearShortcuts)
         self.clearButton.setFocusPolicy(Qt.NoFocus)
         self.clearButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.clearButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.clearButton.setStyleSheet(f"""
-        QPushButton {{
-            __width: 150px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-        }}
-        QPushButton:hover {{
-            background-color: red;
-        }}
-        """)
+        self.clearButton.setStyleSheet(Styles.getDefaultButtonStyles())
 
         leftInnerButtonLayout = QHBoxLayout()
         leftInnerButtonLayout.addWidget(self.editButton)
@@ -380,6 +328,9 @@ class MainWindow(QMainWindow):
         # print("Has focus?", self.hasFocus())
         # print("Focus Widget:", self.focusWidget())
 
+    @pyqtSlot(str)
+    def updateWindowTitle(self, newTitle):
+        self.setWindowTitle(newTitle)
 
     def open_settings(self):
         dlg = SettingsDialog(self)
@@ -546,44 +497,14 @@ class MainWindow(QMainWindow):
         if self.copyOnly is False:
             print("Current mode: Copy")
             self.copyOnly = True
-            self.copyButton.setStyleSheet(f"""
-            QPushButton {{
-                width: 150px;
-                height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                padding: 3px;
-                background-color: {Styles.buttonActivatedBgColor};
-                font-weight: bold;
-                font-size: 15px;
-            }}
-            _QPushButton:hover {{
-                background-color: {Styles.buttonHoverBgColor};
-            }}
-            """)
-
+            self.copyButton.setStyleSheet(Styles.getActiveButtonStyles())
             self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
             return
 
         if self.copyOnly is True:
             print("Current mode: Move")
             self.copyOnly = False
-            self.copyButton.setStyleSheet(f"""
-            QPushButton {{
-                width: 150px;
-                height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                padding: 3px;
-                background-color: {Styles.buttonBgColor};
-                font-weight: bold;
-                font-size: 15px;
-            }}
-            _QPushButton:hover {{
-                background-color: {Styles.buttonHoverBgColor};
-            }}
-            """)
-
+            self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
             self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
             return
 
@@ -592,36 +513,8 @@ class MainWindow(QMainWindow):
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Edit")
         self.currentMode = "edit"
-        self.editButton.setStyleSheet(f"""
-            QPushButton {{
-                __width: 100px;
-                height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                padding: 3px;
-                background-color: {Styles.buttonActivatedBgColor};
-                font-weight: bold;
-                font-size: 15px;
-            }}
-            QPushButton:hover {{
-                background-color: {Styles.buttonHoverBgColor};
-            }}
-            """)
-        self.sortButton.setStyleSheet(f"""
-            QPushButton {{
-                __width: 100px;
-                height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                padding: 3px;
-                background-color: {Styles.buttonBgColor};
-                font-weight: bold;
-                font-size: 15px;
-            }}
-            QPushButton:hover {{
-                background-color: {Styles.buttonHoverBgColor};
-            }}
-            """)
+        self.editButton.setStyleSheet(Styles.getActiveButtonStyles())
+        self.sortButton.setStyleSheet(Styles.getDefaultButtonStyles())
         self.tree.setColumnHidden(2, False)
         self.tree.setEnabled(True)
 
@@ -630,36 +523,8 @@ class MainWindow(QMainWindow):
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Sort")
         self.currentMode = "sort"
-        self.editButton.setStyleSheet(f"""
-            QPushButton {{
-                __width: 150px;
-                height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                padding: 3px;
-                background-color: {Styles.buttonBgColor};
-                font-weight: bold;
-                font-size: 15px;
-            }}
-            QPushButton:hover {{
-                background-color: {Styles.buttonHoverBgColor};
-            }}
-            """)
-        self.sortButton.setStyleSheet(f"""
-            QPushButton {{
-                __width: 150px;
-                height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                padding: 3px;
-                background-color: {Styles.buttonActivatedBgColor};
-                font-weight: bold;
-                font-size: 15px;
-            }}
-            QPushButton:hover {{
-                background-color: {Styles.buttonHoverBgColor};
-            }}
-            """)
+        self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
+        self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
         self.tree.setColumnHidden(2, True)
         self.tree.setEnabled(False)
         self.galleryManager.updatePreview()

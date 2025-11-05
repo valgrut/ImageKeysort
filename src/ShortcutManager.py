@@ -1,13 +1,20 @@
 import json
 import os
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5.QtCore import pyqtSignal, QObject
 import re
 
 # shortcut = "fbcd"
 # sequence = "f-b-c-d"
 
-class ShortcutManager():
-    def __init__(self, mainWindow):
+
+# QObject is required for the Signals.
+class ShortcutManager(QObject):
+
+    updateMainWindowTitleSignal = pyqtSignal(str)
+
+    def __init__(self, mainWindow, parent=None):
+        super().__init__(parent)
         self.shortcutTree = {"keys": {}}
         self.mainWindow = mainWindow
         self.dataModified = False
@@ -19,18 +26,16 @@ class ShortcutManager():
     def setDataModified(self):
         self.dataModified = True
         print("MODIFIED")
-        self.mainWindow.setWindowTitle("*"+self.mainWindow.appTitle)
-       # TODO: zrovna tady by se mel spis poslat signal, nez primo modifikovat title.
+        self.updateMainWindowTitleSignal.emit("*"+self.mainWindow.appTitle)
 
     def setDataUnmodified(self):
         self.dataModified = False
-        self.mainWindow.setWindowTitle(self.mainWindow.appTitle)
-        # TODO: zrovna tady by se mel spis poslat signal, nez primo modifikovat title.
+        self.updateMainWindowTitleSignal.emit(self.mainWindow.appTitle)
 
     def printShortcuts(self):
         pass
 
-    def getAllPaths(self, shortcutsData) -> [str]: # type: ignore
+    def getAllPaths(self, shortcutsData) -> [str]:  # type: ignore
         """
         Recursively returns all dst_paths from the shortcutsData tree.
         """
