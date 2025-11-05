@@ -4,8 +4,9 @@ from pathlib import Path
 import shutil
 import os
 import argparse
+import datetime
 
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject
 from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -46,8 +47,15 @@ allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Ke
 
 
 # Subclass QMainWindow to customize your application's main window
-class MainWindow(QMainWindow):
-    def __init__(self):
+class MainWindow(QMainWindow, QObject):
+
+    previousImageRequestedSignal = pyqtSignal()
+    nextImageRequestedSignal = pyqtSignal()
+    firstImageRequestedSignal = pyqtSignal()
+    lastImageRequestedSignal = pyqtSignal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
         super().__init__()
 
         # ========== CLI argument parsing ==========
@@ -304,7 +312,11 @@ class MainWindow(QMainWindow):
 
 
         # ========== Signal connections ==========
-        self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)
+        self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)  # TODO: do it better
+        self.previousImageRequestedSignal.connect(self.galleryManager.setPreviousImage)
+        self.nextImageRequestedSignal.connect(self.galleryManager.setNextImage)
+        self.firstImageRequestedSignal.connect(self.galleryManager.setFirstImage)
+        self.lastImageRequestedSignal.connect(self.galleryManager.setLastImage)
 
 
         # ========== Apply the provided CLI options, if any ==========
@@ -870,7 +882,8 @@ class MainWindow(QMainWindow):
 
                     # Prevent override of an image in dst, if file with same name exist there.
                     if os.path.exists(dst + "/" + imageName):
-                        self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                        # self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                        self.updateStatusBarLabel("File with that name already exists in the dst directory.")
                         # TODO: Add random suffix number to the filename (and update name in the list!)
                         # for now:
                         self.keySeq = ""
@@ -922,22 +935,16 @@ class MainWindow(QMainWindow):
         # Key binding working in both modes:
         match event.key():
             case Qt.Key_Left:
-                # TODO: de-chain:
-                # self.showPreviousImage()
-                self.galleryManager.mediaContainerWidget.showPreviousImage()
+                self.previousImageRequestedSignal.emit()
 
             case Qt.Key_Right:
-                # TODO de-chain:
-                # self.showNextImage()
-                self.galleryManager.mediaContainerWidget.showNextImage()
+                self.nextImageRequestedSignal.emit()
 
             case Qt.Key_Home:
-                # TODO: de-chain:
-                self.galleryManager.mediaContainerWidget.showFirstImage()
+                self.firstImageRequestedSignal.emit()
 
             case Qt.Key_End:
-                # TODO de-chain:
-                self.galleryManager.mediaContainerWidget.showLastImage()
+                self.lastImageRequestedSignal.emit()
 
             case Qt.Key_Delete:
                 # TODO
@@ -962,8 +969,11 @@ class MainWindow(QMainWindow):
         else:
             self.keyLabel.setText(f"Key Sequence Pressed: \n{self.keySeq}")
 
-    def updateStatusBarLabel(self, src, dst):
-        self.statusBarLabel.setText(f"File copied to {dst}.")
+    @pyqtSlot(str)
+    def updateStatusBarLabel(self, message):
+        dateNowStr = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.statusBarLabel.setText(f"[{dateNowStr}]: {message}.")
+        # TODO: Change into scrollable history of status bar, add date adn time. Change to the signal-slots.
 
     def dispatcher(self, key_pressed):
         # if hit() then move image from src to dst. and save sequence into history.

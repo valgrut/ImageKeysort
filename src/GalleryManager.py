@@ -2,7 +2,7 @@ from os import listdir
 from os.path import isfile, join
 from pathlib import Path
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -107,18 +107,22 @@ class GalleryManager(QStackedWidget):
             self.galleryIndex -= 1
         # print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
 
+    @pyqtSlot()
     def setNextImage(self):
         self.incrementGalleryIndex()
         self.updatePreview()  # TODO: sig-slots
 
+    @pyqtSlot()
     def setPreviousImage(self):
         self.decrementGalleryIndex()
         self.updatePreview()  # TODO: sig-slots
 
+    @pyqtSlot()
     def setFirstImage(self):
         self.galleryIndex = 0
         self.updatePreview()  # TODO: sig-slots
 
+    @pyqtSlot()
     def setLastImage(self):
         self.galleryIndex = len(self.availableMediaFiles) - 1
         self.updatePreview()  # TODO: sig-slots
