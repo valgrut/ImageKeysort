@@ -74,6 +74,7 @@ from src.MainWindow import MainWindow
 
 # Important features TODO:
 # - [~] ! REFACTORING
+#   - [ ] !!!!!!!!!! Mozna GalleryManager nemit jako Widget a dat tam primo MediaContainerWidget. GalleryManager mit jako ShortcutManager bokem.
 # - [~] Tridit zkratky abecedne? (Mozna settings option?)
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
 # - [ ] ! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [??SETTINGS]

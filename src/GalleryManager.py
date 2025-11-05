@@ -152,14 +152,14 @@ class GalleryManager(QStackedWidget):
             self.mediaContainerWidget.setVideoWidget()
             
             videoPath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
-            self.mediaContainerWidget.updateVideo(videoPath) # Mozna spis prejmenovat na showVideo()
+            self.mediaContainerWidget.updateVideo(videoPath)  # Mozna spis prejmenovat na showVideo()
         else:
             # It is image
             self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setImageWidget()
 
             imagePath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
-            self.mediaContainerWidget.updatePreviewImage(imagePath) # Mozna spis prejmenovat na showImage()
+            self.mediaContainerWidget.updatePreviewImage(imagePath)  # Mozna spis prejmenovat na showImage()
 
         self.updateFilenameLabelText()  # TODO: sig-slots
         self.updateCounterLabelText()  # TODO: sig-slots
