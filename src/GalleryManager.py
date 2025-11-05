@@ -169,7 +169,7 @@ class GalleryManager(QStackedWidget):
 
 
     def getCounterString(self) -> str:
-        counter = str(self.galleryIndex + 1) + "/" + str(len(self.availableMediaFiles))
+        counter: str = str(self.galleryIndex + 1) + "/" + str(len(self.availableMediaFiles))
         return counter
 
     def addFile(self, fileName, positionIndex=0):

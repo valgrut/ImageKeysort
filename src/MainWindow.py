@@ -181,7 +181,7 @@ class MainWindow(QMainWindow, QObject):
         self.sortButton.setGraphicsEffect(Styles.getShadowEffect())
         self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
 
-        self.clearButton = QPushButton("&Clear tree", self)
+        self.clearButton = QPushButton("&Clear treeViewWidget", self)
         self.clearButton.clicked.connect(self.clearShortcuts)
         self.clearButton.setFocusPolicy(Qt.NoFocus)
         self.clearButton.setCursor(QCursor(Qt.PointingHandCursor))
@@ -235,8 +235,8 @@ class MainWindow(QMainWindow, QObject):
 
 
         # ========== User's Shortcuts Tree Structure and Viewer ==========
-        self.tree = CustomTreeWidget()
-        self.tree.setStyleSheet(f"""
+        self.treeViewWidget = CustomTreeWidget()
+        self.treeViewWidget.setStyleSheet(f"""
             QTreeWidget {{
                 border: 1px solid black;
                 border-radius: 10px;
@@ -272,15 +272,15 @@ class MainWindow(QMainWindow, QObject):
             }}
         """)
 
-        self.tree.setGraphicsEffect(Styles.getShadowEffect())
-        self.tree.setMaximumWidth(250)
-        leftInnerLayout.addWidget(self.tree)
-        self.tree.setColumnCount(3)
-        self.tree.setHeaderLabels(["Shortcut", "Directory", "Actions"])
-        self.tree.setColumnWidth(0, 90)
-        self.tree.setColumnWidth(1, 100)
-        self.tree.setColumnWidth(2, 50)
-        self.tree.setFocusPolicy(Qt.NoFocus)
+        self.treeViewWidget.setGraphicsEffect(Styles.getShadowEffect())
+        self.treeViewWidget.setMaximumWidth(250)
+        leftInnerLayout.addWidget(self.treeViewWidget)
+        self.treeViewWidget.setColumnCount(3)
+        self.treeViewWidget.setHeaderLabels(["Shortcut", "Directory", "Actions"])
+        self.treeViewWidget.setColumnWidth(0, 90)
+        self.treeViewWidget.setColumnWidth(1, 100)
+        self.treeViewWidget.setColumnWidth(2, 50)
+        self.treeViewWidget.setFocusPolicy(Qt.NoFocus)
         self.update_tree_view()
 
         # Add clear button below the Tree
@@ -317,6 +317,7 @@ class MainWindow(QMainWindow, QObject):
         self.nextImageRequestedSignal.connect(self.galleryManager.setNextImage)
         self.firstImageRequestedSignal.connect(self.galleryManager.setFirstImage)
         self.lastImageRequestedSignal.connect(self.galleryManager.setLastImage)
+        self.shortcutManager.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
 
 
         # ========== Apply the provided CLI options, if any ==========
@@ -394,8 +395,8 @@ class MainWindow(QMainWindow, QObject):
 
     # TODO: Telo presunout do CustromTreeWidget a sem pridat pouze volani teze funkce v customtreewidgetu.
     def update_tree_view(self, root:str=None):
-        # Just flush the whole content of the tree and rebuild it from scratch.
-        self.tree.clear()
+        # Just flush the whole content of the treeViewWidget and rebuild it from scratch.
+        self.treeViewWidget.clear()
         items = []
         shortcuts_data = self.shortcutManager.getData()
 
@@ -423,12 +424,12 @@ class MainWindow(QMainWindow, QObject):
         newItem = QTreeWidgetItem(["test"])
         items.append(newItem)
 
-        self.tree.insertTopLevelItems(0, items)
+        self.treeViewWidget.insertTopLevelItems(0, items)
 
         myWidget = TreeItemWithButtons()
-        self.tree.setItemWidget(newItem, 2, myWidget)
+        self.treeViewWidget.setItemWidget(newItem, 2, myWidget)
 
-        self.tree.expandAll()
+        self.treeViewWidget.expandAll()
 
 
     def save_data(self):
@@ -468,7 +469,7 @@ class MainWindow(QMainWindow, QObject):
         # Check that image was not removed from outside of an app
         if not os.path.exists(src + "/" + imageName):
             self.galleryManager.removeFile(imageName)
-            self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+            self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
             self.galleryManager.updateCounterLabelText()
             self.galleryManager.updatePreview()
             # Remove last record from history
@@ -480,7 +481,7 @@ class MainWindow(QMainWindow, QObject):
 
         # Prevent override of an image in dst, if file with same name exist there.
         if os.path.exists(dst + "/" + imageName):
-            self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+            self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
             # TODO: Add random suffix number to the filename (and update name in the list!)
             # for now:
             self.keySeq = ""
@@ -488,7 +489,7 @@ class MainWindow(QMainWindow, QObject):
             return
 
         shutil.move(src + "/" + imageName, dst + "/" + imageName)
-        self.statusBarLabel.setText(f"File moved BACK From: {src}.")
+        self.updateStatusBarLabel(f"File moved BACK From: {src}.")
 
         # Remove current image from the list of images in src directory
         self.galleryManager.addFile(imageName, positionIndex)
@@ -527,8 +528,8 @@ class MainWindow(QMainWindow, QObject):
         self.currentMode = "edit"
         self.editButton.setStyleSheet(Styles.getActiveButtonStyles())
         self.sortButton.setStyleSheet(Styles.getDefaultButtonStyles())
-        self.tree.setColumnHidden(2, False)
-        self.tree.setEnabled(True)
+        self.treeViewWidget.setColumnHidden(2, False)
+        self.treeViewWidget.setEnabled(True)
 
     def set_sort_mode(self):
         # Display a message when the shortcut is activated
@@ -537,8 +538,8 @@ class MainWindow(QMainWindow, QObject):
         self.currentMode = "sort"
         self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
         self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
-        self.tree.setColumnHidden(2, True)
-        self.tree.setEnabled(False)
+        self.treeViewWidget.setColumnHidden(2, True)
+        self.treeViewWidget.setEnabled(False)
         self.galleryManager.updatePreview()
 
     def handleEditMode(self, event):
@@ -658,7 +659,7 @@ class MainWindow(QMainWindow, QObject):
 
                     # Check that some directory was selected
                     if not singleUseDstDirectory:
-                        self.statusBarLabel.setText(f"No directory was selected.")
+                        self.updateStatusBarLabel(f"No directory was selected.")
                         return
 
                     print(singleUseDstDirectory)
@@ -670,7 +671,7 @@ class MainWindow(QMainWindow, QObject):
                 # Check that image was not removed from outside of an app
                 if not imageName or not os.path.exists(src + "/" + imageName):
                     self.galleryManager.removeFile(imageName)
-                    self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+                    self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
                     self.galleryManager.updateCounterLabelText()
                     self.galleryManager.updatePreview()
                     self.keySeq = ""
@@ -679,7 +680,7 @@ class MainWindow(QMainWindow, QObject):
 
                 # Prevent override of an image in dst, if file with same name exist there.
                 if os.path.exists(dst + "/" + imageName):
-                    self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                    self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
                     # TODO: Add random suffix number to the filename (and update name in the list!)
                     # for now:
                     self.keySeq = ""
@@ -698,11 +699,11 @@ class MainWindow(QMainWindow, QObject):
                             "gallery_index": self.galleryManager.getGalleryIndex()
                         }
                     )
-                    self.statusBarLabel.setText(f"File moved to {dst}.")
+                    self.updateStatusBarLabel(f"File moved to {dst}.")
                 else:
                     shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
                     self.galleryManager.decrementGalleryIndex()
-                    self.statusBarLabel.setText(f"File copied to {dst}.")
+                    self.updateStatusBarLabel(f"File copied to {dst}.")
 
                 self.keySeq = ""
                 self.updateKeySequenceLabel()
@@ -728,7 +729,7 @@ class MainWindow(QMainWindow, QObject):
 
                 if not os.path.exists(dst):
                     print(f"ERROR: Destination directory {dst} does not exist.")
-                    self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
+                    self.updateStatusBarLabel(f"ERROR: Destination directory {dst} does not exist.")
                     self.keySeq = ""
                     self.updateKeySequenceLabel()
                     return
@@ -736,7 +737,7 @@ class MainWindow(QMainWindow, QObject):
                 # Check that image was not removed from outside of an app
                 if not os.path.exists(src + "/" + imageName):
                     self.galleryManager.removeFile(imageName)
-                    self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+                    self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
                     self.galleryManager.updateCounterLabelText()
                     self.galleryManager.updatePreview()
                     self.keySeq = ""
@@ -745,7 +746,7 @@ class MainWindow(QMainWindow, QObject):
 
                 # Prevent override of an image in dst, if file with same name exist there.
                 if os.path.exists(dst + "/" + imageName):
-                    self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                    self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
                     # TODO: Add random suffix number to the filename (and update name in the list!)
                     # for now:
                     self.keySeq = ""
@@ -764,11 +765,11 @@ class MainWindow(QMainWindow, QObject):
                             "gallery_index": self.galleryManager.getGalleryIndex()
                         }
                     )
-                    self.statusBarLabel.setText(f"File moved to {dst}.")
+                    self.updateStatusBarLabel(f"File moved to {dst}.")
                 else:
                     shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
                     self.galleryManager.incrementGalleryIndex()
-                    self.statusBarLabel.setText(f"File copied to {dst}.")
+                    self.updateStatusBarLabel(f"File copied to {dst}.")
 
                 self.galleryManager.updateCounterLabelText()
 
@@ -791,7 +792,7 @@ class MainWindow(QMainWindow, QObject):
                 # Check that image was not removed from outside of an app
                 if not os.path.exists(src + "/" + imageName):
                     self.galleryManager.removeFile(imageName)
-                    self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+                    self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
                     self.galleryManager.updateCounterLabelText()
                     self.galleryManager.updatePreview()
                     self.keySeq = ""
@@ -800,7 +801,7 @@ class MainWindow(QMainWindow, QObject):
 
                 # Prevent override of an image in dst, if file with same name exist there.
                 if os.path.exists(dst + "/" + imageName):
-                    self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
+                    self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
                     # TODO: Add random suffix number to the filename (and update name in the list!)
                     # for now:
                     self.keySeq = ""
@@ -820,7 +821,7 @@ class MainWindow(QMainWindow, QObject):
                         "gallery_index": self.galleryManager.getGalleryIndex()
                     }
                 )
-                self.statusBarLabel.setText(f"File Deleted.")
+                self.updateStatusBarLabel(f"File Deleted.")
 
                 self.galleryManager.updateCounterLabelText()
 
@@ -865,7 +866,7 @@ class MainWindow(QMainWindow, QObject):
 
                     if not os.path.exists(dst):
                         print(f"ERROR: Destination directory {dst} does not exist.")
-                        self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
+                        self.updateStatusBarLabel(f"ERROR: Destination directory {dst} does not exist.")
                         self.keySeq = ""
                         self.updateKeySequenceLabel()
                         return
@@ -873,7 +874,7 @@ class MainWindow(QMainWindow, QObject):
                     # Check that image was not removed from outside of an app
                     if not os.path.exists(src + "/" + imageName):
                         self.galleryManager.removeFile(imageName)
-                        self.statusBarLabel.setText(f"File was not found. Probably was removed outside of the app.")
+                        self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
                         self.galleryManager.updateCounterLabelText()
                         self.galleryManager.updatePreview()
                         self.keySeq = ""
@@ -906,11 +907,11 @@ class MainWindow(QMainWindow, QObject):
                                 "gallery_index": self.galleryManager.getGalleryIndex()
                             }
                         )
-                        self.statusBarLabel.setText(f"File moved to {dst}.")
+                        self.updateStatusBarLabel(f"File moved to {dst}.")
                     else:
                         shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
                         self.galleryManager.incrementGalleryIndex()
-                        self.statusBarLabel.setText(f"File copied to {dst}.")
+                        self.updateStatusBarLabel(f"File copied to {dst}.")
 
                     # Update counter label TODO fix:
                     self.galleryManager.updateCounterLabelText()
@@ -973,7 +974,7 @@ class MainWindow(QMainWindow, QObject):
     def updateStatusBarLabel(self, message):
         dateNowStr = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.statusBarLabel.setText(f"[{dateNowStr}]: {message}.")
-        # TODO: Change into scrollable history of status bar, add date adn time. Change to the signal-slots.
+        # TODO: Change into scrollable history of status bar. Change to the signal-slots.
 
     def dispatcher(self, key_pressed):
         # if hit() then move image from src to dst. and save sequence into history.

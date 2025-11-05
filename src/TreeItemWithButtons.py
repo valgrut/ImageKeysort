@@ -7,7 +7,7 @@ import src.resources_rc
 
 class TreeItemWithButtons(QWidget):
     """
-    tree item containing buttons to remove or edit item
+    treeViewWidget item containing buttons to remove or edit item
     """
 
     def __init__(self, parent=None):

@@ -12,6 +12,7 @@ import re
 class ShortcutManager(QObject):
 
     updateMainWindowTitleSignal = pyqtSignal(str)
+    updateStatusBarLabelSignal = pyqtSignal(str)
 
     def __init__(self, mainWindow, parent=None):
         super().__init__(parent)
@@ -37,7 +38,7 @@ class ShortcutManager(QObject):
 
     def getAllPaths(self, shortcutsData) -> [str]:  # type: ignore
         """
-        Recursively returns all dst_paths from the shortcutsData tree.
+        Recursively returns all dst_paths from the shortcutsData treeViewWidget.
         """
         dstPathsList = []
         currentShortcutLevel = shortcutsData["keys"] # 'a', 'f', ...
@@ -87,7 +88,7 @@ class ShortcutManager(QObject):
 
     def addShortcut(self, sequence):
         """
-        Adds new shortcut into the shortcutsData tree.
+        Adds new shortcut into the shortcutsData treeViewWidget.
         """
         currentNestLevel = self.shortcutTree
         for key in sequence:
@@ -117,7 +118,7 @@ class ShortcutManager(QObject):
 
     def addKeyUnderCurrent(self, currentKeyRef, new_key):
         """
-        Adds new key under given key in the shortcutsData tree.
+        Adds new key under given key in the shortcutsData treeViewWidget.
 
         :param currentKeyRef: Reference to the key under which the new key should be added.
         :param new_key: New key to be added.
@@ -168,7 +169,7 @@ class ShortcutManager(QObject):
 
     def _getLastKeyOfSequenceAndUpdate(self, sequence):
         """
-        Get last key of sequence and if some keys are missing, add them to the tree.
+        Get last key of sequence and if some keys are missing, add them to the treeViewWidget.
         """
         preCurrent = self.shortcutTree["keys"]
         current = self.shortcutTree["keys"]
@@ -221,12 +222,12 @@ class ShortcutManager(QObject):
                 x
 
         Following options are possible:
-        -a Removes the whole 'a' tree
-        a-b Removes 'b' from the 'a' tree
+        -a Removes the whole 'a' treeViewWidget
+        a-b Removes 'b' from the 'a' treeViewWidget
         ac-x Removes 'x' from the 'c'.
         a-c Removes whole subtree of the 'c' key including the 'c'.
 
-        :param sequence: Contains key sequence with '-' marking what should be removed from tree.
+        :param sequence: Contains key sequence with '-' marking what should be removed from treeViewWidget.
         :return:
         """
 
@@ -322,7 +323,7 @@ class ShortcutManager(QObject):
         except ValueError as error:
             # Prevent loading invalid json data
             print("DEBUG: Invalid json data!")
-            self.mainWindow.statusBarLabel.setText(f"Error: Invalid json data in {presetsFilePath}!")
+            self.updateStatusBarLabelSignal.emit(f"Error: Invalid json data in {presetsFilePath}!")
             return False
 
         # Check that all destination directories exist for all loaded shortcuts
@@ -330,8 +331,7 @@ class ShortcutManager(QObject):
         if nonexistingPaths:
             # TODO: Mozna jen warning do logu a zvyraznit cervene v Tree.
             for path in nonexistingPaths:
-                # TODO: zde bude casem _append_ a pujde scrollovat tim logem.
-                self.mainWindow.statusBarLabel.setText(f"Warning: One or more destination directories do not exist!")
+                self.updateStatusBarLabelSignal.emit(f"Warning: One or more destination directories do not exist!")
                 # TODO: Highlight all dst dirs that do not exist
             # return False
 
