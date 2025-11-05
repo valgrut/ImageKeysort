@@ -131,11 +131,13 @@ from src.MainWindow import MainWindow
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Po dotrideni inboxu zobrazit tabulku s gratulaci, treba poctem setridenych obrazku, mozna animace famfar.
 # - [ ] Ctrl+F Otevre search bar, a kdyz zadam cast nejake slozky, zobrazi se matchnute slozky s jejich zkratkami. (hlavne kdyz se preset rozroste, tak to muze byt uzitecne)
+# - [ ] Jazykova podpora ?
 
 
 # GIT README.md
 # - pridat tam, ze vyhoda je, ze tridime pouze 1 photo at a time! No distraction. No paralysis.
-#
+
+
 
 def main():
     app = QApplication(sys.argv)

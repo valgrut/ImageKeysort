@@ -50,7 +50,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # CLI argument parsing
+        # ========== CLI argument parsing ==========
         parser = argparse.ArgumentParser(
                     prog='Image Keysort',
                     description='Shortcut based image sorter.',
@@ -64,10 +64,11 @@ class MainWindow(QMainWindow):
         srcPathArg = args.src_path
         presetsArg = args.presets_path
 
-        # Example usage
         print(f"Source path: {srcPathArg}")
         print(f"Presets: {presetsArg}")
 
+
+        # ========== Main App Window parameters ==========
         self.appTitle = "Image Keysort"
         self.setWindowTitle(self.appTitle)
         self.setWindowIcon(QIcon(':Resources/icon.jpg'))
@@ -79,7 +80,8 @@ class MainWindow(QMainWindow):
             }
         """)
 
-        # Management objects
+
+        # ========== Management Objects instantiation ==========
         self.shortcutManager = ShortcutManager(self)
         self.galleryManager = GalleryManager(self)
         self.galleryManager.setStyleSheet(f"""
@@ -90,6 +92,8 @@ class MainWindow(QMainWindow):
             background-color: {Styles.widgetsBgColor};
         """)
 
+
+        # ========== Layout ==========
         mainLayout = QHBoxLayout()
         leftInnerLayout = QVBoxLayout()
         rightInnerLayout = QVBoxLayout()
@@ -208,6 +212,26 @@ class MainWindow(QMainWindow):
         """)
         # self.sort_button.setStyleSheet(Styles.getButtonStyles())
 
+        self.clearButton = QPushButton("&Clear tree", self)
+        self.clearButton.clicked.connect(self.clearShortcuts)
+        self.clearButton.setFocusPolicy(Qt.NoFocus)
+        self.clearButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.clearButton.setGraphicsEffect(Styles.getShadowEffect())
+        self.clearButton.setStyleSheet(f"""
+        QPushButton {{
+            __width: 150px;
+            border: 1px solid black;
+            border-radius: {Styles.buttonBorderRadius}px;
+            padding: 3px;
+            background-color: {Styles.widgetsBgColor};
+            font-weight: bold;
+            font-size: 15px;
+        }}
+        QPushButton:hover {{
+            background-color: red;
+        }}
+        """)
+
         leftInnerButtonLayout = QHBoxLayout()
         leftInnerButtonLayout.addWidget(self.editButton)
         leftInnerButtonLayout.addWidget(self.sortButton)
@@ -217,7 +241,8 @@ class MainWindow(QMainWindow):
         leftInnerLayout.addLayout(leftInnerButtonLayout)
         leftInnerLayout.addWidget(self.keyLabel)
 
-        # vars for history entries
+
+        # ========== Default variables and behaviour ==========
         self.keySeqHistory = []
         self.mvHistory = []
         self.keySeq = ""
@@ -226,7 +251,8 @@ class MainWindow(QMainWindow):
         self.copyOnly = False
         print("Mod: " + self.currentMode)
 
-        # Register global keyboard shortcuts:
+
+        # ========== Register global keyboard shortcuts ==========
         setEditModeSeq = QKeySequence(Qt.CTRL + Qt.Key_E)
         self.setEditModeShortcut = QShortcut(setEditModeSeq, self)
         self.setEditModeShortcut.activated.connect(self.set_edit_mode)
@@ -251,7 +277,8 @@ class MainWindow(QMainWindow):
         self.toggleCopyShortcut = QShortcut(toggleCopySeq, self)
         self.toggleCopyShortcut.activated.connect(self.toggleCopyMode)
 
-        # Tree view for user's sorting shortcuts:
+
+        # ========== User's Shortcuts Tree Structure and Viewer ==========
         self.tree = CustomTreeWidget()
         self.tree.setStyleSheet(f"""
             QTreeWidget {{
@@ -300,28 +327,11 @@ class MainWindow(QMainWindow):
         self.tree.setFocusPolicy(Qt.NoFocus)
         self.update_tree_view()
 
-        self.clearButton = QPushButton("&Clear tree", self)
-        self.clearButton.clicked.connect(self.clearShortcuts)
-        self.clearButton.setFocusPolicy(Qt.NoFocus)
-        self.clearButton.setCursor(QCursor(Qt.PointingHandCursor))
-        self.clearButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.clearButton.setStyleSheet(f"""
-        QPushButton {{
-            __width: 150px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-        }}
-        QPushButton:hover {{
-            background-color: red;
-        }}
-        """)
+        # Add clear button below the Tree
         leftInnerLayout.addWidget(self.clearButton)
 
 
+        # ========== Menu Bar ==========
         self.newAction = QAction(self)
         self.newAction.setText("&New")
         self.newAction.setIcon(QIcon(":file-new.svg"))
@@ -344,9 +354,12 @@ class MainWindow(QMainWindow):
         self._createMenuBar()
         self._connectActions()
 
+
+        # ========== Signal connections ==========
         self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)
 
-        # Set src path from CLI, if some provided
+
+        # ========== Apply the provided CLI options, if any ==========
         if srcPathArg:
             self.galleryManager.setSourcePath(srcPathArg)
         else:
@@ -360,7 +373,7 @@ class MainWindow(QMainWindow):
             print("Empty or invalid arg shortcuts path")
 
 
-        # Sort mode is default mode when app starts
+        # ========== Start the App with the Sort mode as default ==========
         self.set_sort_mode()
         self.setFocusPolicy(Qt.NoFocus)
 
