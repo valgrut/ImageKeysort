@@ -23,7 +23,7 @@ from PyQt5.QtWidgets import (
     QGraphicsDropShadowEffect,
     QSplitter,
     QProgressBar,
-    QTreeWidget
+    QTreeWidget, QMessageBox
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -99,8 +99,6 @@ class MainWindow(QMainWindow, QObject):
             padding: 3px;
             background-color: {Styles.widgetsBgColor};
         """)
-
-        self.shortcutManager.updateMainWindowTitleSignal.connect(self.updateWindowTitle)
 
 
         # ========== Layout ==========
@@ -293,6 +291,7 @@ class MainWindow(QMainWindow, QObject):
         self.newAction.setIcon(QIcon(":file-new.svg"))
         self.openAction = QAction(QIcon(":file-open.svg"), "&Open...", self)
         self.saveAction = QAction(QIcon(":file-save.svg"), "&Save", self)
+        self.aboutAction = QAction(QIcon(":file-save.svg"), "&About", self)
 
         # Context menu - right click to open options
         # Setting contextMenuPolicy
@@ -318,6 +317,7 @@ class MainWindow(QMainWindow, QObject):
         self.firstImageRequestedSignal.connect(self.galleryManager.setFirstImage)
         self.lastImageRequestedSignal.connect(self.galleryManager.setLastImage)
         self.shortcutManager.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
+        self.shortcutManager.updateMainWindowTitleSignal.connect(self.updateWindowTitle)
 
 
         # ========== Apply the provided CLI options, if any ==========
@@ -341,6 +341,7 @@ class MainWindow(QMainWindow, QObject):
         # print("Has focus?", self.hasFocus())
         # print("Focus Widget:", self.focusWidget())
 
+
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):
         self.setWindowTitle(newTitle)
@@ -350,10 +351,22 @@ class MainWindow(QMainWindow, QObject):
         # dlg.settingsChanged.connect(self.apply_settings)
         dlg.exec_()
 
+
+    @pyqtSlot()
+    def apply_settings(self, s: dict):
+        print(s)
+        pass
+
+    def showAbout(self):
+        # TODO: Change to reflect the Image Keysort app description. Repo link, Author, Version, keyboard shortcuts.
+        QMessageBox.about(self, "About Application", "The <b>Application</b> example demonstrates how to "
+                             "write modern GUI applications using Qt, with a menu bar, "
+                             "toolbars, and a status bar.")
+
     def _createMenuBar(self):
         menuBar = self.menuBar()
 
-        # Creating menus using a QMenu object
+        # File menu
         fileMenu = QMenu("&File", self)
         menuBar.addMenu(fileMenu)
 
@@ -367,15 +380,25 @@ class MainWindow(QMainWindow, QObject):
         act_settings.triggered.connect(self.open_settings)
         fileMenu.addAction(act_settings)
 
-        editMenu = menuBar.addMenu("&Edit")
 
-        helpMenu = menuBar.addMenu("&Help")
-        # TODO: add info about project, add shortcuts
-        # about
+        # Edit menu
+        editMenu = QMenu("&Edit", self)
+        menuBar.addMenu(editMenu)
+
+
+        # Help menu
+        helpMenu = QMenu("&Help", self)
+        menuBar.addMenu(helpMenu)
+        showAboutAction = QAction("About", self)
+        showAboutAction.triggered.connect(self.showAbout)
+        helpMenu.addAction(showAboutAction)
+
 
     def exitApp(self):
         if self.shortcutManager.areShortcutsModified():
             self.shortcutManager.saveShortcuts()
+        # writeSettings()
+        # event.accept()
 
         print("Exiting")
         sys.exit(0)

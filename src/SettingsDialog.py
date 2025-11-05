@@ -11,6 +11,7 @@ import sys
 ORG = "JP"
 APP = "ImageKeysort"
 
+
 class SettingsDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -69,6 +70,8 @@ class SettingsDialog(QDialog):
         # Load settings on open
         self.load_settings()
 
+        # print(QSettings(ORG, APP).allKeys())  # AHAAA, takhle. To je opravdu globalne pristupne!!! TODO pouzit.
+
     # ---------- Persistence ----------
     def load_settings(self):
         s = QSettings(ORG, APP)
@@ -80,6 +83,8 @@ class SettingsDialog(QDialog):
         self.cb_other_opt2.setChecked(s.value("copy/otherOpt2", "false") == "true")
 
         self.cb_mute_videos.setChecked(s.value("video/muteDefault", "false") == "true")
+
+        # settings = QSettings("/home/petra/misc/myapp.ini", QSettings.IniFormat)
 
     def save_settings(self):
         s = QSettings(ORG, APP)
