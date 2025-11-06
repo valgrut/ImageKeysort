@@ -128,7 +128,7 @@ from src.MainWindow import MainWindow
 # - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
 # - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
 # - [ ] Vyresit ? pomale nacitani velkych obrazku (6MB+)
-# - [ ] Separatni repozitar, hodit na reddit, na RH, kolegum,
+# - [~] Separatni repozitar, hodit na reddit, na RH, kolegum,
 # - [ ] Pridat slovo "EMPTY" do Inbox obrazku
 # - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 # - [~] Dodelat progress widget

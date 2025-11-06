@@ -468,24 +468,51 @@ class MainWindow(QMainWindow, QObject):
         items = []
         shortcuts_data = self.shortcutManager.getData()
 
+        # TODO: Do not show subtrees except the one starting with the first pressed key.
+        # if root is not None and key_L1 != root:
+        #     continue
+
+        # TODO: !!!!!!!!!!!!!!!!! priority!!!!!
+        # rename "keys" to "children" or "next"
+        # rename key to key_char
+        # ....
+
+        # TODO: Prepsat, aby slo urcit (viz settings), jak moc zanorovat.
+        # 1. dojdu do Urovne N a pridam items do N-1.
+        # 2. delat az do N = 0
+        maxLevel = 2
+        def iterativeLevels(itemsInLevel, currentLevel):
+            if not itemsInLevel:
+                return None
+            for key_char, properties in itemsInLevel:
+                # last level to be shown (leaf items)
+                if currentLevel < maxLevel:
+                    dst_path = properties["dst_path"]
+                    tree_level_item = QTreeWidgetItem([key_char, Path(dst_path).name])
+                    what = iterativeLevels(properties["keys"].items(), currentlevel + 1)
+                    # WIP: Jsem v Level3, a premyslim, jak ted pokracovat.
+                    # Musim pridat do addChild, a vratit se o 1 zpet.
+                tree_level_item.addChild(what)
+
+
+        what = iterativeLevels(shortcuts_data["keys"].items(), 0)
+
+
         for key_L1, values_L1 in shortcuts_data["keys"].items():
             # print("Key a value", key, values)
-
-            # TODO: Do not show subtrees except the one starting with the first pressed key.
-            # if root is not None and key_L1 != root:
-            #     continue
-
             dst_path_L1 = values_L1["dst_path"]
             item_L1 = QTreeWidgetItem([key_L1, Path(dst_path_L1).name])
+
             for key_L2, values_L2 in values_L1["keys"].items():
                 dst_path_L2 = values_L2["dst_path"]
                 item_L2 = QTreeWidgetItem([key_L2, Path(dst_path_L2).name])
+
                 for key_L3, values_L3 in values_L2["keys"].items():
-                    item_L3 = QTreeWidgetItem([key_L3])
                     dst_path_L3 = values_L3["dst_path"]
+                    # item_L3 = QTreeWidgetItem([key_L3])
+
                     child = QTreeWidgetItem([key_L3, Path(dst_path_L3).name])
                     item_L2.addChild(child)
-                    print(f"DBD: L3 val: {values_L3}")
                 item_L1.addChild(item_L2)
             items.append(item_L1)
 
