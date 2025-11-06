@@ -86,8 +86,11 @@ class SettingsDialog(QDialog):
         settings = QSettings()
 
         settings.beginGroup("shortcuts")
-        self.sp_nested_levels.setValue(int(settings.value("nestedLevels", type=int)))
         self.cb_allow_no_dest.setChecked(settings.value("allowNoDest") == "true")
+        settings.endGroup()
+
+        settings.beginGroup("treeview")
+        self.sp_nested_levels.setValue(int(settings.value("nestedLevels", type=int)))
         settings.endGroup()
 
         settings.beginGroup("copy")
@@ -107,8 +110,11 @@ class SettingsDialog(QDialog):
         # based on that the "true" of "false" string is selected and saved.
         settings = QSettings()
         settings.beginGroup("shortcuts")
-        settings.setValue("nestedLevels", self.sp_nested_levels.value())
         settings.setValue("allowNoDest", "true" if self.cb_allow_no_dest.isChecked() else "false")
+        settings.endGroup()
+
+        settings.beginGroup("treeview")
+        settings.setValue("nestedLevels", self.sp_nested_levels.value())
         settings.endGroup()
 
         settings.beginGroup("copy")
@@ -146,11 +152,11 @@ class SettingsDialog(QDialog):
 
     @staticmethod
     def settingsGetNestingLevels() -> int:
-        return SettingsDialog.checkSetting("general/nestedLevels")
+        return SettingsDialog.checkSetting("treeview/nestedLevels")
 
     @staticmethod
     def settingsGetAllowNoDest() -> bool:
-        return SettingsDialog.checkSetting("general/allowNoDest")
+        return SettingsDialog.checkSetting("shortcuts/allowNoDest")
 
     @staticmethod
     def settingsGetAutoNextAfterCopy() -> bool:
