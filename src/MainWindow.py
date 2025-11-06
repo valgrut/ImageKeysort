@@ -351,7 +351,7 @@ class MainWindow(QMainWindow, QObject):
     def open_settings(self):
         dlg = SettingsDialog(self)
         # dlg.settingsChanged.connect(self.apply_settings)
-        dlg.exec_()
+        dlg.exec()
 
 
     @pyqtSlot()
@@ -362,16 +362,54 @@ class MainWindow(QMainWindow, QObject):
     def showAbout(self):
         # TODO: Change to reflect the Image Keysort app description. Repo link, Author, Version, keyboard shortcuts.
         aboutBox = QMessageBox(self)
-        aboutBox.setText("About Application<br>" + "The <b>Application</b> example demonstrates how to "
-                             "write modern GUI applications using Qt, with a menu bar, "
-                             "toolbars, and a status bar.")
+        aboutBox.setWindowTitle("About Image Keysort")
+        aboutBox.setTextFormat(Qt.RichText)
+        aboutBox.setText(
+            """
+            <h3>Image Keysort</h3>
+            <p><b>Author:</b> Jiri Peska</p>
+            <p>
+                Image Keysort is a keyboard-driven tool for fast sorting and organizing images and videos.
+                It lets you define shortcut sequences that map sources to destinations, then fly through
+                large folders using only the keyboard.
+            </p>
+            <p><b>Available shortcuts:</b></p>
+            <ul>
+                <li><b>[a-zA-Z]+</b> – Add shortcut (Edit mode) / Use shortcut (Sort mode)</li>
+                <li><b>Ctrl+C</b> – Toggle copy mode</li>
+                <li><b>Ctrl+E</b> – Set Edit mode</li>
+                <li><b>Ctrl+R</b> – Set Sort mode</li>
+                <li><b>.</b> – Repeat last source → destination transition</li>
+                <li><b>Space</b> – One-time move/copy of current item even without a full shortcut sequence</li>
+                <li><b>Ctrl+Z</b> – Undo last operation (swap src/dst and re-execute)</li>
+                <li><b>Ctrl+L</b> – Load predefined shortcuts</li>
+                <li><b>Ctrl+O</b> – Open and load directory as source</li>
+                <li><b>Delete</b> – Delete current image/video</li>
+                <li><b>Esc</b> – Clear current shortcut sequence</li>
+                <li><b>Enter</b> – Insert sentinel (“+”) at current position in the shortcut sequence.<br/>
+                    Example: <code>ab&lt;Enter&gt;</code> → <code>ab+</code>, then <code>cd</code> → <code>ab+cd</code>.<br/>
+                    Pressing <b>Esc</b> removes only the part after the sentinel, keeping <code>ab+</code> instead of clearing the whole sequence.
+                </li>
+                <li><b>Ctrl+,</b> – Open settings</li>
+            </ul>
+            <p>
+                <b>GitHub:</b>
+                <a href="https://github.com/valgrut/image-keysort" target="_blank">
+                    github.com/valgrut/image-keysort
+                </a>
+            </p>
+            """
+        )
         aboutBox.setStyleSheet(f"""
             background-color: {Styles.widgetsBgColor};
         """)
-        aboutBox.exec_()
+        aboutBox.exec()
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
+        menuBar.setStyleSheet(f"""
+            background-color: {Styles.widgetsBgColor};
+        """)
 
         # File menu
         fileMenu = QMenu("&File", self)
@@ -382,8 +420,8 @@ class MainWindow(QMainWindow, QObject):
         fileMenu.addAction(self.saveAction)
         fileMenu.addAction(self.exitAction)
 
-        act_settings = QAction("Settings...", self)
-        # act_settings.setShortcut("Ctrl+,")  # common on mac; still nice on others
+        act_settings = QAction("Settings", self)
+        act_settings.setShortcut("Ctrl+,")  # common on mac
         act_settings.triggered.connect(self.open_settings)
         fileMenu.addAction(act_settings)
 

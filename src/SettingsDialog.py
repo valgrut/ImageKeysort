@@ -94,8 +94,6 @@ class SettingsDialog(QDialog):
         # Load settings on open
         self.load_settings()
 
-        # print(QSettings(ORG, APP).allKeys())  # AHAAA, takhle. To je opravdu globalne pristupne!!! TODO pouzit.
-
     # ---------- Persistence ----------
     def load_settings(self):
         # Values have to be saved as a string, so the form state is restored
@@ -119,8 +117,6 @@ class SettingsDialog(QDialog):
         settings.beginGroup("video")
         self.cb_mute_videos.setChecked(settings.value("muteDefault") == "true")
         settings.endGroup()
-
-        # settings = QSettings("/home/petra/misc/myapp.ini", QSettings.IniFormat)
 
     def save_settings(self):
         # Values have to be saved as a string, so checking form state, and
