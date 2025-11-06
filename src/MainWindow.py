@@ -63,14 +63,14 @@ class MainWindow(QMainWindow, QObject):
                     prog='Image Keysort',
                     description='Shortcut based image sorter.',
                     epilog='For CLI options, please refer to the documentation.')
-        # parser.add_argument('-v', '--verbose', action='store_true')  # on/off flag
+        parser.add_argument('-c', '--set-copy-mode', action='store_true')  # on/off flag
         parser.add_argument('--src-path', type=str, required=False, help='Path to the source directory')
         parser.add_argument('--presets-path', type=str, required=False, help='Preset file name path')
-        # TODO: Add --set-copy-mode True / False
         args = parser.parse_args()
 
         srcPathArg = args.src_path
         presetsArg = args.presets_path
+        setCopyModeArg = args.set_copy_mode
 
         print(f"Source path: {srcPathArg}")
         print(f"Presets: {presetsArg}")
@@ -337,11 +337,11 @@ class MainWindow(QMainWindow, QObject):
         # ========== Start the App with the Sort mode as default ==========
         self.set_sort_mode()
         self.setFocusPolicy(Qt.NoFocus)
+        if setCopyModeArg is True:  # --set-copy-mode
+            self.setCopyMode()
 
         # print("Has focus?", self.hasFocus())
         # print("Focus Widget:", self.focusWidget())
-
-        # print("Setting: ", SettingsDialog.checkSetting("general/allowNoDest"))
 
 
     @pyqtSlot(str)
@@ -361,9 +361,14 @@ class MainWindow(QMainWindow, QObject):
 
     def showAbout(self):
         # TODO: Change to reflect the Image Keysort app description. Repo link, Author, Version, keyboard shortcuts.
-        QMessageBox.about(self, "About Application", "The <b>Application</b> example demonstrates how to "
+        aboutBox = QMessageBox(self)
+        aboutBox.setText("About Application<br>" + "The <b>Application</b> example demonstrates how to "
                              "write modern GUI applications using Qt, with a menu bar, "
                              "toolbars, and a status bar.")
+        aboutBox.setStyleSheet(f"""
+            background-color: {Styles.widgetsBgColor};
+        """)
+        aboutBox.exec_()
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
@@ -530,20 +535,28 @@ class MainWindow(QMainWindow, QObject):
         self.galleryManager.updatePreview()
         # print(self.images)
 
+    def setCopyMode(self):
+        print("Current mode: Copy")
+        self.copyOnly = True
+        self.copyButton.setStyleSheet(Styles.getActiveButtonStyles())
+        self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
+        return
+
+    def unsetCopyMode(self):
+        print("Current mode: Move")
+        self.copyOnly = False
+        self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
+        self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
+        return
+
     def toggleCopyMode(self):
         # self.next_image_button.setFocus()
         if self.copyOnly is False:
-            print("Current mode: Copy")
-            self.copyOnly = True
-            self.copyButton.setStyleSheet(Styles.getActiveButtonStyles())
-            self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
+            self.setCopyMode()
             return
 
         if self.copyOnly is True:
-            print("Current mode: Move")
-            self.copyOnly = False
-            self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
-            self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
+            self.unsetCopyMode()
             return
 
     def set_edit_mode(self):

@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout, QToolButton
 )
 import sys
+from src.Styles import Styles
 
 # Development notes:
 #   When I tried to use "general" category, in the file, it was changed into
@@ -16,6 +17,10 @@ class SettingsDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Settings")
         self.setModal(True)
+
+        self.setStyleSheet(f"""
+            background-color: {Styles.widgetsBgColor};
+        """)
 
         # Note: Do not use "General" category. Reserved by INI format.
 
