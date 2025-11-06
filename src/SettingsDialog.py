@@ -17,20 +17,31 @@ class SettingsDialog(QDialog):
         self.setWindowTitle("Settings")
         self.setModal(True)
 
+        # Note: Do not use "General" category. Reserved by INI format.
+
         # --------- Widgets ---------
-        # General
+        # treeview behaviour
         # Options
         self.sp_nested_levels = QSpinBox()
         self.sp_nested_levels.setRange(1, 5)
         self.sp_nested_levels.setToolTip("How many nested shortcut folders to show in the UI.")
+
+        # Form
+        treeview_box = QGroupBox("Treeview behavior")
+        treeview_form = QFormLayout()
+        treeview_form.addRow("Shortcuts nested levels to show:", self.sp_nested_levels)
+        treeview_box.setLayout(treeview_form)
+
+
+        # shortcuts behaviour
+        # options
         self.cb_allow_no_dest = QCheckBox("Allow shortcut to be added without selected destination path")
 
         # Form
-        general_box = QGroupBox("General settings")
-        gen_form = QFormLayout()
-        gen_form.addRow("Shortcuts nested levels to show:", self.sp_nested_levels)
-        gen_form.addRow(self.cb_allow_no_dest)
-        general_box.setLayout(gen_form)
+        shortcuts_box = QGroupBox("Shortcuts behavior")
+        shortcuts_form = QFormLayout()
+        shortcuts_form.addRow(self.cb_allow_no_dest)
+        shortcuts_box.setLayout(shortcuts_form)
 
 
         # Copy behaviour
@@ -68,7 +79,8 @@ class SettingsDialog(QDialog):
 
         # Layout
         root = QVBoxLayout()
-        root.addWidget(general_box)
+        root.addWidget(treeview_box)
+        root.addWidget(shortcuts_box)
         root.addWidget(copy_box)
         root.addWidget(video_box)
         root.addWidget(self.buttons)
