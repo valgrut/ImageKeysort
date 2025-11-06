@@ -66,7 +66,7 @@ class MainWindow(QMainWindow, QObject):
         # parser.add_argument('-v', '--verbose', action='store_true')  # on/off flag
         parser.add_argument('--src-path', type=str, required=False, help='Path to the source directory')
         parser.add_argument('--presets-path', type=str, required=False, help='Preset file name path')
-
+        # TODO: Add --set-copy-mode True / False
         args = parser.parse_args()
 
         srcPathArg = args.src_path
@@ -340,6 +340,8 @@ class MainWindow(QMainWindow, QObject):
 
         # print("Has focus?", self.hasFocus())
         # print("Focus Widget:", self.focusWidget())
+
+        # print("Setting: ", SettingsDialog.checkSetting("general/allowNoDest"))
 
 
     @pyqtSlot(str)
@@ -661,7 +663,7 @@ class MainWindow(QMainWindow, QObject):
 
                 dst = ""
 
-                # TODO: Refactor:
+                # TODO: Refactor celou tuhle hruzu::::::
                 # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
                 # and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
                 if self.keySeq:
@@ -725,7 +727,9 @@ class MainWindow(QMainWindow, QObject):
                     self.updateStatusBarLabel(f"File moved to {dst}.")
                 else:
                     shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-                    self.galleryManager.decrementGalleryIndex()
+                    if SettingsDialog.settingsGetAutoNextAfterCopy():
+                        self.galleryManager.decrementGalleryIndex()
+
                     self.updateStatusBarLabel(f"File copied to {dst}.")
 
                 self.keySeq = ""
@@ -791,7 +795,9 @@ class MainWindow(QMainWindow, QObject):
                     self.updateStatusBarLabel(f"File moved to {dst}.")
                 else:
                     shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-                    self.galleryManager.incrementGalleryIndex()
+                    if SettingsDialog.settingsGetAutoNextAfterCopy():
+                        self.galleryManager.incrementGalleryIndex()
+
                     self.updateStatusBarLabel(f"File copied to {dst}.")
 
                 self.galleryManager.updateCounterLabelText()
@@ -933,7 +939,9 @@ class MainWindow(QMainWindow, QObject):
                         self.updateStatusBarLabel(f"File moved to {dst}.")
                     else:
                         shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-                        self.galleryManager.incrementGalleryIndex()
+                        if SettingsDialog.settingsGetAutoNextAfterCopy():
+                            self.galleryManager.incrementGalleryIndex()
+
                         self.updateStatusBarLabel(f"File copied to {dst}.")
 
                     # Update counter label TODO fix:

@@ -1,6 +1,7 @@
 import sys
 from src.Styles import Styles
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import QCoreApplication
 from src.MainWindow import MainWindow
 
 # Features DONE:
@@ -143,6 +144,10 @@ from src.MainWindow import MainWindow
 
 
 def main():
+    QCoreApplication.setOrganizationName("JP")
+    QCoreApplication.setOrganizationDomain("wogon.cz")
+    QCoreApplication.setApplicationName("Image Keysort")
+
     app = QApplication(sys.argv)
     app.setStyleSheet(f"""
         QWidget {{

@@ -6,11 +6,10 @@ from PyQt5.QtWidgets import (
 )
 import sys
 
-## TODO: check, rewrite by myself...
-
-ORG = "JP"
-APP = "ImageKeysort"
-
+# Development notes:
+#   When I tried to use "general" category, in the file, it was changed into
+#   "%General" because of the internal "ini" file behaviour.
+#   That caused, that Value could not be retrieved with "general".
 
 class SettingsDialog(QDialog):
     def __init__(self, parent=None):
@@ -20,22 +19,27 @@ class SettingsDialog(QDialog):
 
         # --------- Widgets ---------
         # General
+        # Options
         self.sp_nested_levels = QSpinBox()
         self.sp_nested_levels.setRange(1, 5)
         self.sp_nested_levels.setToolTip("How many nested shortcut folders to show in the UI.")
         self.cb_allow_no_dest = QCheckBox("Allow shortcut to be added without selected destination path")
 
+        # Form
         general_box = QGroupBox("General settings")
         gen_form = QFormLayout()
         gen_form.addRow("Shortcuts nested levels to show:", self.sp_nested_levels)
         gen_form.addRow(self.cb_allow_no_dest)
         general_box.setLayout(gen_form)
 
+
         # Copy behaviour
+        # Options
         self.cb_auto_next_after_copy = QCheckBox("Go to next image after copy")
         self.cb_other_opt1 = QCheckBox("Some other option 1")
         self.cb_other_opt2 = QCheckBox("Some other option 2")
 
+        # Form
         copy_box = QGroupBox("Copy behaviour")
         copy_form = QFormLayout()
         copy_form.addRow(self.cb_auto_next_after_copy)
@@ -43,9 +47,12 @@ class SettingsDialog(QDialog):
         copy_form.addRow(self.cb_other_opt2)
         copy_box.setLayout(copy_form)
 
+
         # Video
+        # Options
         self.cb_mute_videos = QCheckBox("Mute videos by default")
 
+        # Form
         video_box = QGroupBox("Video settings")
         video_form = QFormLayout()
         video_form.addRow(self.cb_mute_videos)
@@ -74,28 +81,45 @@ class SettingsDialog(QDialog):
 
     # ---------- Persistence ----------
     def load_settings(self):
-        s = QSettings(ORG, APP)
-        self.sp_nested_levels.setValue(int(s.value("general/nestedLevels", 2)))
-        self.cb_allow_no_dest.setChecked(s.value("general/allowNoDest", "false") == "true")
+        # Values have to be saved as a string, so the form state is restored
+        # from the config file based on the saved "true" or "false" strings.
+        settings = QSettings()
 
-        self.cb_auto_next_after_copy.setChecked(s.value("copy/autoNextAfterCopy", "true") == "true")
-        self.cb_other_opt1.setChecked(s.value("copy/otherOpt1", "false") == "true")
-        self.cb_other_opt2.setChecked(s.value("copy/otherOpt2", "false") == "true")
+        settings.beginGroup("shortcuts")
+        self.sp_nested_levels.setValue(int(settings.value("nestedLevels", type=int)))
+        self.cb_allow_no_dest.setChecked(settings.value("allowNoDest") == "true")
+        settings.endGroup()
 
-        self.cb_mute_videos.setChecked(s.value("video/muteDefault", "false") == "true")
+        settings.beginGroup("copy")
+        self.cb_auto_next_after_copy.setChecked(settings.value("autoNextAfterCopy") == "true")
+        self.cb_other_opt1.setChecked(settings.value("otherOpt1") == "true")
+        self.cb_other_opt2.setChecked(settings.value("otherOpt2") == "true")
+        settings.endGroup()
+
+        settings.beginGroup("video")
+        self.cb_mute_videos.setChecked(settings.value("muteDefault") == "true")
+        settings.endGroup()
 
         # settings = QSettings("/home/petra/misc/myapp.ini", QSettings.IniFormat)
 
     def save_settings(self):
-        s = QSettings(ORG, APP)
-        s.setValue("general/nestedLevels", self.sp_nested_levels.value())
-        s.setValue("general/allowNoDest", "true" if self.cb_allow_no_dest.isChecked() else "false")
+        # Values have to be saved as a string, so checking form state, and
+        # based on that the "true" of "false" string is selected and saved.
+        settings = QSettings()
+        settings.beginGroup("shortcuts")
+        settings.setValue("nestedLevels", self.sp_nested_levels.value())
+        settings.setValue("allowNoDest", "true" if self.cb_allow_no_dest.isChecked() else "false")
+        settings.endGroup()
 
-        s.setValue("copy/autoNextAfterCopy", "true" if self.cb_auto_next_after_copy.isChecked() else "false")
-        s.setValue("copy/otherOpt1", "true" if self.cb_other_opt1.isChecked() else "false")
-        s.setValue("copy/otherOpt2", "true" if self.cb_other_opt2.isChecked() else "false")
+        settings.beginGroup("copy")
+        settings.setValue("autoNextAfterCopy", "true" if self.cb_auto_next_after_copy.isChecked() else "false")
+        settings.setValue("otherOpt1", "true" if self.cb_other_opt1.isChecked() else "false")
+        settings.setValue("otherOpt2", "true" if self.cb_other_opt2.isChecked() else "false")
+        settings.endGroup()
 
-        s.setValue("video/muteDefault", "true" if self.cb_mute_videos.isChecked() else "false")
+        settings.beginGroup("video")
+        settings.setValue("muteDefault", "true" if self.cb_mute_videos.isChecked() else "false")
+        settings.endGroup()
 
     def restore_defaults(self):
         # Define your app’s sensible defaults here
@@ -110,5 +134,31 @@ class SettingsDialog(QDialog):
     def accept(self):
         self.save_settings()
         super().accept()
+
+    @staticmethod
+    def checkSetting(optionToRetrieve: str):
+        settings = QSettings()
+        if settings.contains(optionToRetrieve):
+            return settings.value(optionToRetrieve)
+        else:
+            print(f"Setting {optionToRetrieve} does not exist in the Settings")
+            return None
+
+    @staticmethod
+    def settingsGetNestingLevels() -> int:
+        return SettingsDialog.checkSetting("general/nestedLevels")
+
+    @staticmethod
+    def settingsGetAllowNoDest() -> bool:
+        return SettingsDialog.checkSetting("general/allowNoDest")
+
+    @staticmethod
+    def settingsGetAutoNextAfterCopy() -> bool:
+        return SettingsDialog.checkSetting("copy/autoNextAfterCopy")
+
+    @staticmethod
+    def settingsGetMuteDefault() -> bool:
+        return SettingsDialog.checkSetting("video/muteDefault")
+
 
 
