@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt, QSettings
+from PyQt5.QtCore import Qt, QSettings, pyqtSignal
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QAction, QToolBar, QStyle, QDialog, QDialogButtonBox,
     QWidget, QVBoxLayout, QGroupBox, QFormLayout, QSpinBox, QCheckBox, QLabel,
@@ -13,6 +13,9 @@ from src.Styles import Styles
 #   That caused, that Value could not be retrieved with "general".
 
 class SettingsDialog(QDialog):
+
+    settingsChangedSignal = pyqtSignal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Settings")
@@ -106,6 +109,7 @@ class SettingsDialog(QDialog):
 
         settings.beginGroup("treeview")
         self.sp_nested_levels.setValue(int(settings.value("nestedLevels", type=int)))
+        print(self.sp_nested_levels)
         settings.endGroup()
 
         settings.beginGroup("copy")
@@ -127,7 +131,7 @@ class SettingsDialog(QDialog):
         settings.endGroup()
 
         settings.beginGroup("treeview")
-        settings.setValue("nestedLevels", self.sp_nested_levels.value())
+        settings.setValue("nestedLevels", int(self.sp_nested_levels.value()))
         settings.endGroup()
 
         settings.beginGroup("copy")
@@ -153,6 +157,7 @@ class SettingsDialog(QDialog):
     def accept(self):
         self.save_settings()
         super().accept()
+        self.settingsChangedSignal.emit()
 
     @staticmethod
     def checkSetting(optionToRetrieve: str):
@@ -165,7 +170,7 @@ class SettingsDialog(QDialog):
 
     @staticmethod
     def settingsGetNestingLevels() -> int:
-        return SettingsDialog.checkSetting("treeview/nestedLevels")
+        return int(SettingsDialog.checkSetting("treeview/nestedLevels"))
 
     @staticmethod
     def settingsGetAllowNoDest() -> bool:

@@ -350,6 +350,7 @@ class MainWindow(QMainWindow, QObject):
 
     def open_settings(self):
         dlg = SettingsDialog(self)
+        dlg.settingsChangedSignal.connect(self.update_tree_view)
         # dlg.settingsChanged.connect(self.apply_settings)
         dlg.exec()
 
@@ -462,6 +463,7 @@ class MainWindow(QMainWindow, QObject):
         self.exitAction.triggered.connect(self.exitApp)
 
     # TODO: Telo presunout do CustromTreeWidget a sem pridat pouze volani teze funkce v customtreewidgetu.
+    @pyqtSlot()
     def update_tree_view(self, root:str=None):
         # Just flush the whole content of the treeViewWidget and rebuild it from scratch.
         self.treeViewWidget.clear()
@@ -472,58 +474,35 @@ class MainWindow(QMainWindow, QObject):
         # if root is not None and key_L1 != root:
         #     continue
 
-        # TODO: !!!!!!!!!!!!!!!!! priority!!!!!
-        # rename "keys" to "children" or "next"
-        # rename key to key_char
-        # ....
+        maxLevel = SettingsDialog.settingsGetNestingLevels()
 
-        # TODO: Prepsat, aby slo urcit (viz settings), jak moc zanorovat.
-        # 1. dojdu do Urovne N a pridam items do N-1.
-        # 2. delat az do N = 0
-        maxLevel = 2
-        def iterativeLevels(itemsInLevel, currentLevel):
+        def buildTreeView(parent_key_char: QTreeWidgetItem, itemsInLevel, currentLevel):
+            # No more keys under current level exist
             if not itemsInLevel:
                 return None
             for key_char, properties in itemsInLevel:
                 # last level to be shown (leaf items)
                 if currentLevel < maxLevel:
                     dst_path = properties["dst_path"]
-                    tree_level_item = QTreeWidgetItem([key_char, Path(dst_path).name])
-                    what = iterativeLevels(properties["keys"].items(), currentlevel + 1)
-                    # WIP: Jsem v Level3, a premyslim, jak ted pokracovat.
-                    # Musim pridat do addChild, a vratit se o 1 zpet.
-                tree_level_item.addChild(what)
+                    current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
+                    parent_key_char.addChild(current_key_char_tree_item)
 
+                    # Process current key_char's children
+                    buildTreeView(current_key_char_tree_item, properties["keys"].items(), currentLevel + 1)
 
-        what = iterativeLevels(shortcuts_data["keys"].items(), 0)
+        firstItem = QTreeWidgetItem(["level0"])
+        buildTreeView(firstItem, shortcuts_data["keys"].items(), 0)
 
+        # newItem = QTreeWidgetItem(["test"])
+        # items.append(newItem)
 
-        for key_L1, values_L1 in shortcuts_data["keys"].items():
-            # print("Key a value", key, values)
-            dst_path_L1 = values_L1["dst_path"]
-            item_L1 = QTreeWidgetItem([key_L1, Path(dst_path_L1).name])
+        # Test of custom items with buttons:
+        # myWidget = TreeItemWithButtons()
+        # self.treeViewWidget.setItemWidget(newItem, 2, myWidget)
 
-            for key_L2, values_L2 in values_L1["keys"].items():
-                dst_path_L2 = values_L2["dst_path"]
-                item_L2 = QTreeWidgetItem([key_L2, Path(dst_path_L2).name])
-
-                for key_L3, values_L3 in values_L2["keys"].items():
-                    dst_path_L3 = values_L3["dst_path"]
-                    # item_L3 = QTreeWidgetItem([key_L3])
-
-                    child = QTreeWidgetItem([key_L3, Path(dst_path_L3).name])
-                    item_L2.addChild(child)
-                item_L1.addChild(item_L2)
-            items.append(item_L1)
-
-        newItem = QTreeWidgetItem(["test"])
-        items.append(newItem)
-
+        # Retrieve list of children to fill 'items' list
+        items = firstItem.takeChildren()
         self.treeViewWidget.insertTopLevelItems(0, items)
-
-        myWidget = TreeItemWithButtons()
-        self.treeViewWidget.setItemWidget(newItem, 2, myWidget)
-
         self.treeViewWidget.expandAll()
 
 
