@@ -44,11 +44,15 @@ class SettingsDialog(QDialog):
         # shortcuts behaviour
         # options
         self.cb_allow_no_dest = QCheckBox("Allow shortcut to be added without selected destination path")
+        self.cfg_confirm_to_override = QCheckBox("Ask for confirmation before overwriting the existing shortcut's destination path")
+        self.cfg_sort_shortcuts = QCheckBox("Sort shortcuts alphabetically. Default: by insertion order")
 
         # Form
         shortcuts_box = QGroupBox("Shortcuts behavior")
         shortcuts_form = QFormLayout()
         shortcuts_form.addRow(self.cb_allow_no_dest)
+        shortcuts_form.addRow(self.cfg_confirm_to_override)
+        shortcuts_form.addRow(self.cfg_sort_shortcuts)
         shortcuts_box.setLayout(shortcuts_form)
 
 
@@ -59,7 +63,7 @@ class SettingsDialog(QDialog):
         self.cb_other_opt2 = QCheckBox("Some other option 2")
 
         # Form
-        copy_box = QGroupBox("Copy behaviour")
+        copy_box = QGroupBox("Copy-mode behaviour")
         copy_form = QFormLayout()
         copy_form.addRow(self.cb_auto_next_after_copy)
         copy_form.addRow(self.cb_other_opt1)
@@ -105,11 +109,12 @@ class SettingsDialog(QDialog):
 
         settings.beginGroup("shortcuts")
         self.cb_allow_no_dest.setChecked(settings.value("allowNoDest") == "true")
+        self.cfg_confirm_to_override.setChecked(settings.value("confirmToOverride") == "true")
+        self.cfg_sort_shortcuts.setChecked(settings.value("sortShortcuts") == "true")
         settings.endGroup()
 
         settings.beginGroup("treeview")
         self.sp_nested_levels.setValue(int(settings.value("nestedLevels", type=int)))
-        print(self.sp_nested_levels)
         settings.endGroup()
 
         settings.beginGroup("copy")
@@ -128,6 +133,8 @@ class SettingsDialog(QDialog):
         settings = QSettings()
         settings.beginGroup("shortcuts")
         settings.setValue("allowNoDest", "true" if self.cb_allow_no_dest.isChecked() else "false")
+        settings.setValue("confirmToOverride", "true" if self.cfg_confirm_to_override.isChecked() else "false")
+        settings.setValue("sortShortcuts", "true" if self.cfg_sort_shortcuts.isChecked() else "false")
         settings.endGroup()
 
         settings.beginGroup("treeview")
@@ -148,6 +155,8 @@ class SettingsDialog(QDialog):
         # Define your app’s sensible defaults here
         self.sp_nested_levels.setValue(2)
         self.cb_allow_no_dest.setChecked(False)
+        self.cfg_confirm_to_override.setChecked(True)
+        self.cfg_sort_shortcuts.setChecked(True)
         self.cb_auto_next_after_copy.setChecked(True)
         self.cb_other_opt1.setChecked(False)
         self.cb_other_opt2.setChecked(False)
@@ -162,6 +171,7 @@ class SettingsDialog(QDialog):
     @staticmethod
     def checkSetting(optionToRetrieve: str):
         settings = QSettings()
+
         if settings.contains(optionToRetrieve):
             return settings.value(optionToRetrieve)
         else:
@@ -174,15 +184,32 @@ class SettingsDialog(QDialog):
 
     @staticmethod
     def settingsGetAllowNoDest() -> bool:
-        return SettingsDialog.checkSetting("shortcuts/allowNoDest")
+        # return SettingsDialog.checkSetting("shortcuts/allowNoDest")
+        return True if SettingsDialog.checkSetting("shortcuts/allowNoDest") == "true" else False
+
+    @staticmethod
+    def settingsGetConfirmToOverride() -> bool:
+        # return SettingsDialog.checkSetting("shortcuts/confirmToOverride")
+        return True if SettingsDialog.checkSetting("shortcuts/confirmToOverride") == "true" else False
+
+    @staticmethod
+    def settingsGetSortShortcuts() -> bool:
+        # return SettingsDialog.checkSetting("shortcuts/sortShortcuts")
+        return True if SettingsDialog.checkSetting("shortcuts/sortShortcuts") == "true" else False
 
     @staticmethod
     def settingsGetAutoNextAfterCopy() -> bool:
-        return SettingsDialog.checkSetting("copy/autoNextAfterCopy")
+        # return SettingsDialog.checkSetting("copy/autoNextAfterCopy")
+        return True if SettingsDialog.checkSetting("copy/autoNextAfterCopy") == "true" else False
 
     @staticmethod
     def settingsGetMuteDefault() -> bool:
-        return SettingsDialog.checkSetting("video/muteDefault")
+        # TODO: Sakra, takhle to nebude fungovat, protoze to vraci ten string
+        # Prozatimni reseni. Mozna udelat druhou tridu jako Config, ze ktere se
+        # to pak bude brat. Ta bude staticka a staticky se zavola i to
+        # load_config().
+        return True if SettingsDialog.checkSetting("video/muteDefault") == "true" else False
+        # return self.cb_mute_videos
 
 
 

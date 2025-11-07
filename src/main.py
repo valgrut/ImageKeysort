@@ -47,30 +47,30 @@ from src.MainWindow import MainWindow
 # - [x] zmacknutim mezerniku (if Sort mode AND pokud neni namacknuta zadna zkratka), otevre okno s vyberem slozky, kam jednorazove poslat aktualni obrazek.
 # - [x] Kdyz pridavam zkratku pod nejakou jinou, nabidnout primarne cestu v rodicovske zkratce (napr. fotky->akce, nova: fotky->narozky, formular zobrazi adresar Fotky jako vychozi)
 # - [NE] WONT_DO Pridat i nektere znaky jako labely ($, ...)
-#
-# - [~] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
-#       - [ ] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
+# - [X] Pridat CLI argumenty pro spusteni aplikace s preddefinovanymi parametry (napr. --src-dir, --dst-dir, --load-data, --save-data, ...)
+# - [X] How many columns of shortcuts to show (1-5) [Settings]
+# - [X] Settings saving and loading.
+#   - [X] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
+# - [X] Settings - ovladani hlasitosti - mute by default.
+# - [X] Tridit zkratky abecedne? (Mozna settings option?)
 
 
 # Top priority:
-# - [X] Pridat CLI argumenty pro spusteni aplikace s preddefinovanymi parametry (napr. --src-dir, --dst-dir, --load-data, --save-data, ...)
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
-# - [~] !!! Vypisuji se jen 3 urovne zkratek. Oznacit ale nejak, ze (a pokud) tam je dalsi uroven, (proto sekvence treba neHITla, bo se tam skryvaly dalsi). [SETTINGS]
+# - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 # - [ ] Fix videos on Windows
 # - [ ] Pridat Type hints ( -> int, myvar: str, ...)
+# - [ ] Fix Ctrl+O to open new source directory
+# - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!!
 
 
 # Settings:
-# - [~] How many columns of shortcuts to show (1-5)
-# - [~] ! Pridat Settings - kde pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
-# - [X] Settings saving and loading.
-#   - [X] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
-# - [~] Settings - ovladani hlasitosti - mute by default???
-# - [ ] Tridit zkratky abecedne? (Mozna settings option?)
-# - [~] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
+# - [~] ! Pridat Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
+# - [~] ! v Edit mode: Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
+# - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 
 
 # Important features TODO:
@@ -92,7 +92,8 @@ from src.MainWindow import MainWindow
 # - [ ] TODO: Translate all done tasks and translate todo ideas to EN:
 # - [ ] Zmenit barvy pozadi v menu !
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
-
+# - [~] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
+#       - [ ] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
 
 # Design:
 # - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
@@ -107,7 +108,7 @@ from src.MainWindow import MainWindow
 
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
-# - [ ] Sort shortcuts alphabetically (a, A, c, G, x) and option2 sort target directories alphabetically.
+# - [ ] Sort shortcuts alphabetically (a, A, c, G, x) and option2 sort target directories alphabetically. [Settings]!
 # - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu? [SETTINGS]
 # - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
@@ -120,6 +121,8 @@ from src.MainWindow import MainWindow
 # - [ ] Pridat moznost otevrit slozku pri kliknuti na shortcut (Tohle funguje!!!):
 #           webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
+# - [ ] Nejak mit moznost zmenit key_char bez toho, abych musel pridat novy a odstranit predchozi. (treba neco jako "abx/abc" - nahradi x za c)
+# - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 
 
 # Minor issues, future features:

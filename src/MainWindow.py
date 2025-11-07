@@ -361,7 +361,6 @@ class MainWindow(QMainWindow, QObject):
         pass
 
     def showAbout(self):
-        # TODO: Change to reflect the Image Keysort app description. Repo link, Author, Version, keyboard shortcuts.
         aboutBox = QMessageBox(self)
         aboutBox.setWindowTitle("About Image Keysort")
         aboutBox.setTextFormat(Qt.RichText)
@@ -377,11 +376,13 @@ class MainWindow(QMainWindow, QObject):
             <p><b>Available shortcuts:</b></p>
             <ul>
                 <li><b>[a-zA-Z]+</b> – Add shortcut (Edit mode) / Use shortcut (Sort mode)</li>
+                <li><b>[a-zA-Z]?-[a-zA-Z]</b> - Remove key after '-' from key before '-'</li>
                 <li><b>Ctrl+C</b> – Toggle copy mode</li>
                 <li><b>Ctrl+E</b> – Set Edit mode</li>
                 <li><b>Ctrl+R</b> – Set Sort mode</li>
                 <li><b>.</b> – Repeat last source → destination transition</li>
                 <li><b>Space</b> – One-time move/copy of current item even without a full shortcut sequence</li>
+                <li><b>Left/Right arrow</b> – Go to next/previous image in selected directory.</li>
                 <li><b>Ctrl+Z</b> – Undo last operation (swap src/dst and re-execute)</li>
                 <li><b>Ctrl+L</b> – Load predefined shortcuts</li>
                 <li><b>Ctrl+O</b> – Open and load directory as source</li>
@@ -392,6 +393,14 @@ class MainWindow(QMainWindow, QObject):
                     Pressing <b>Esc</b> removes only the part after the sentinel, keeping <code>ab+</code> instead of clearing the whole sequence.
                 </li>
                 <li><b>Ctrl+,</b> – Open settings</li>
+            </ul>
+            <p><b>Example use-case:</b></p>
+            <ul>
+                <li>1. <b>Ctrl + E</b> - set edit mode</li>
+                <li>2. <b>ic ENTER</b> - add shortcut 'i+c' (Images/Cats) and select target directory for it.</li>
+                <li>3. <b>Ctrl + R</b> - set Sort mode</li>
+                <li>4. <b>Ctrl + O</b> - Select directory, which you want to sort.</li>
+                <li>5. <b>ic</b> - Current image will be moved into directory selected for 'ic' shortcut.</li>
             </ul>
             <p>
                 <b>GitHub:</b>
@@ -488,10 +497,27 @@ class MainWindow(QMainWindow, QObject):
                     parent_key_char.addChild(current_key_char_tree_item)
 
                     # Process current key_char's children
-                    buildTreeView(current_key_char_tree_item, properties["keys"].items(), currentLevel + 1)
+                    nextItems = []
+                    if not SettingsDialog.settingsGetSortShortcuts():
+                        nextItems = properties["keys"].items()  # Do not sort - insert order
+                    else:
+                        nextItems = sorted(properties["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
+                        # nextitems = sorted(properties["keys"].items()), 0)  # Sort alphabetically (case sensitive)
+
+                    # buildTreeView(current_key_char_tree_item, properties["keys"].items(), currentLevel + 1)
+                    buildTreeView(current_key_char_tree_item, nextItems, currentLevel + 1)
+
 
         firstItem = QTreeWidgetItem(["level0"])
-        buildTreeView(firstItem, shortcuts_data["keys"].items(), 0)
+
+        nextItems = []
+        if not SettingsDialog.settingsGetSortShortcuts():
+            nextItems = shortcuts_data["keys"].items()  # Do not sort - insert order
+        else:
+            nextItems = sorted(shortcuts_data["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
+            # nextitems = sorted(shortcuts_data["keys"].items()), 0)  # Sort alphabetically (case sensitive)
+
+        buildTreeView(firstItem, nextItems, 0)
 
         # newItem = QTreeWidgetItem(["test"])
         # items.append(newItem)
@@ -625,6 +651,7 @@ class MainWindow(QMainWindow, QObject):
         self.galleryManager.updatePreview()
 
     def handleEditMode(self, event):
+        # TODO: Refactor!!!!!
         pressedKey = event.text()
         match event.key():
             case Qt.Key_Escape:
@@ -665,7 +692,16 @@ class MainWindow(QMainWindow, QObject):
                     parentPath = parentPathAdvice["dst_path"]
 
                 dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory", parentPath)
+                # WIP: TODO: Zde asi povolit podle Settings. Chci vlastne
+                # zabranit i pridani zkratek, takze zpetne je odstranit zase?
+                # nebo je pridat az po tom, co se potvrdi, ze je slozka
+                # vybrana (neprazdna)?
+                # print("DST DIR:", dstSortDirectory)
+                # if dstSortDirectory is "" and SettingsDialog.settingsGetAllowNoDest():
                 self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
+                # else:
+                    # self.shortcutManager.addDstPathForShortcut(self.keySeq, "!PRAZDNA")
+
                 self.keySeq = ""
                 self.updateKeySequenceLabel()
                 self.update_tree_view()
@@ -682,6 +718,7 @@ class MainWindow(QMainWindow, QObject):
                 self.updateKeySequenceLabel()
 
     def handleSortMode(self, event):
+        # TODO: Refactor!!!!!
         pressedKey = event.text()
         # Cancel currently started shortcut or escape from the hold partial sequence
         match event.key():
