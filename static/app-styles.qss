@@ -47,6 +47,7 @@ QPushButton:hover {
 QPushButton:checked {
   background-color: orange; }
 
+/***** MediaContainerWidget *****/
 MediaContainerWidget QPushButton {
   width: 150px; }
 
@@ -57,8 +58,18 @@ MediaContainerWidget QLabel {
   font-weight: normal;
   font-size: 20px; }
 
+QStackedWidget QWidget[copyMode="false"],
+QStackedWidget QWidget[copyMode="0"],
+QStackedWidget QWidget:not([copyMode]) {
+  border: none; }
+
+QStackedWidget QWidget[copyMode="true"],
+QStackedWidget QWidget[copyMode="1"] {
+  border: 4px solid orange; }
+
 /***** QTreeWidget - Shortcuts tree *****/
 QTreeWidget {
+  width: 200px;
   border: 1px solid black;
   border-radius: 10px;
   background-color: #bfbdbd;

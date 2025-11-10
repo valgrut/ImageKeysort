@@ -178,15 +178,20 @@ class MediaContainerWidget(QWidget):
 
 
     def setCopyModeBorderHighlight(self):
-        print(self.stackedMediaWidget.currentWidget().styleSheet())
+        # print(self.stackedMediaWidget.currentWidget().styleSheet())
         self.stackedMediaWidget.currentWidget().setStyleSheet(f"""
             border: 5px solid orange;
         """)
+        # self.stackedMediaWidget.currentWidget().setProperty("copyMode", True)
+        # self.stackedMediaWidget.currentWidget().style().unpolish(self.stackedMediaWidget.currentWidget())
+        # self.stackedMediaWidget.currentWidget().style().polish(self.stackedMediaWidget.currentWidget())
+        # self.stackedMediaWidget.update()
 
     def unsetCopyModeBorderHighlight(self):
         self.stackedMediaWidget.currentWidget().setStyleSheet(f"""
             border: none;
         """)
+        # self.stackedMediaWidget.currentWidget().setProperty("copyMode", False)
 
     def cleanupCurrentMedia(self):
         current = self.stackedMediaWidget.currentWidget()
