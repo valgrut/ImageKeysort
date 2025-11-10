@@ -19,7 +19,7 @@ from src.Styles import Styles
 class MediaContainerWidget(QWidget):
     def __init__(self, galleryManager):
         super().__init__()
-        self.galleryManager = galleryManager # toto dat pryc... nahradit za emit()
+        self.galleryManager = galleryManager  # toto dat pryc... nahradit za emit()
 
         self.imageViewWidget = ImageWidget()  # for .png, .jpg, ...
         self.videoViewWidget = VideoWidget()  # for .gif and such

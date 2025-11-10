@@ -67,18 +67,19 @@ MediaContainerWidget QPushButton:hover {
 MediaContainerWidget QLabel {
     font-weight: normal;
     font-size: 20px;
-}
+}/*
 QStackedWidget QWidget[copyMode="false"],
 QStackedWidget QWidget[copyMode="0"],
 QStackedWidget QWidget:not([copyMode]) {
   border: none;
-}
+}*/
 
 // Copy mode active → highlight border
+/*
 QStackedWidget QWidget[copyMode="true"],
 QStackedWidget QWidget[copyMode="1"] {
   border: 4px solid orange;
-}
+}*/
 
 /***** QTreeWidget - Shortcuts tree *****/
 QTreeWidget {
@@ -151,10 +152,12 @@ QMessageBox * {
 QMenuBar {
     background-color: $widget-background-color;
 }
-QMenuBar QAction {
+QMenu {
     background-color: $widget-background-color;
 }
-QMenuBar QAction:hover {
+QMenu:hover {
     background-color: orange;
+    color: red;
 }
+
 

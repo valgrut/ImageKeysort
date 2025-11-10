@@ -166,6 +166,7 @@ def main():
     QCoreApplication.setApplicationName("Image Keysort")
 
     # Build qss file on the start (in case app started without Makefile)
+    # TODO: Does not work:
     # import qtsass
     # scss_path = pathlib.Path("static/app-styles.scss")
     # qss_path = pathlib.Path("static/app-styles.qss")
