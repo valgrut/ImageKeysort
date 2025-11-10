@@ -31,7 +31,7 @@ test: config
 	# PYTHONPATH=${ROOT_DIR}/src pytest -v tests/; \
 
 qss:
-    qtsass $(SCSS_STYLES) -o $(QSS_STYLES)
+	qtsass $(SCSS_STYLES) -o $(QSS_STYLES)
 
 build:
 	pyinstaller --onefile ${ROOT_DIR}/${NAME}

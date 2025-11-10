@@ -16,7 +16,7 @@ test:
 	python3 -m unittest tests.shortcutManagerTest
 
 qss:
-    qtsass $(SCSS_STYLES) -o $(QSS_STYLES)
+	qtsass $(SCSS_STYLES) -o $(QSS_STYLES)
 
 clean:
 	rm -rf dist
