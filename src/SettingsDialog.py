@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt, QSettings, pyqtSignal
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QAction, QToolBar, QStyle, QDialog, QDialogButtonBox,
     QWidget, QVBoxLayout, QGroupBox, QFormLayout, QSpinBox, QCheckBox, QLabel,
-    QHBoxLayout, QToolButton
+    QHBoxLayout, QToolButton, QComboBox
 )
 import sys
 from src.Styles import Styles
@@ -21,9 +21,9 @@ class SettingsDialog(QDialog):
         self.setWindowTitle("Settings")
         self.setModal(True)
 
-        self.setStyleSheet(f"""
-            background-color: {Styles.widgetsBgColor};
-        """)
+        # self.setStyleSheet(f"""
+        #     background-color: {Styles.widgetsBgColor};
+        # """)
 
         # Note: Do not use "General" category. Reserved by INI format.
 
@@ -85,13 +85,17 @@ class SettingsDialog(QDialog):
 
 
         # Stylesheets
-        self.cfg_light_mode = QCheckBox("Set Light theme")
-        self.cfg_dark_mode = QCheckBox("Set Dark theme")
+        self.cfg_app_theme = QComboBox()
+        self.cfg_app_theme.addItem("Light theme")
+        self.cfg_app_theme.addItem("Dark theme")
+        self.cfg_app_theme.addItem("some other theme 1 ?")
+        self.cfg_app_theme.addItem("some other theme 2 ?")
+        # TODO: Maybe, load themes from some directory so users can add custom themes without requiring code change.
+
         # Form
         themes_box = QGroupBox("Themes settings")
         themes_form = QFormLayout()
-        themes_form.addRow(self.cfg_light_mode)
-        themes_form.addRow(self.cfg_dark_mode)
+        themes_form.addRow(self.cfg_app_theme)
         themes_box.setLayout(themes_form)
 
         # Buttons
@@ -140,6 +144,7 @@ class SettingsDialog(QDialog):
         settings.beginGroup("video")
         self.cb_mute_videos.setChecked(settings.value("muteDefault") == "true")
         settings.endGroup()
+        # TODO: Add Theme and load last presets
 
     def save_settings(self):
         # Values have to be saved as a string, so checking form state, and
@@ -164,6 +169,7 @@ class SettingsDialog(QDialog):
         settings.beginGroup("video")
         settings.setValue("muteDefault", "true" if self.cb_mute_videos.isChecked() else "false")
         settings.endGroup()
+        # TODO: Add Theme and load last presets
 
     def restore_defaults(self):
         # Define your app’s sensible defaults here
@@ -175,6 +181,7 @@ class SettingsDialog(QDialog):
         self.cb_other_opt1.setChecked(False)
         self.cb_other_opt2.setChecked(False)
         self.cb_mute_videos.setChecked(False)
+        # TODO: Add Theme and load last presets
 
     # Make sure clicking OK persists
     def accept(self):

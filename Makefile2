@@ -1,7 +1,9 @@
 ROOT_DIR=./
 NAME=main.py
+SCSS_STYLES=static/app-styles.scss
+QSS_STYLES=static/app-styles.qss
 
-run: 
+run: qss
 	# python3 -m src.main
 	# python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Pictures/test_options.json
 	python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Pictures/test_options.json --set-copy-mode
@@ -13,6 +15,9 @@ test:
 	# python3 -m unittest discover
 	python3 -m unittest tests.shortcutManagerTest
 
+qss:
+    qtsass $(SCSS_STYLES) -o $(QSS_STYLES)
+
 clean:
 	rm -rf dist
 	rm -rf build
@@ -21,4 +26,4 @@ clean:
 	find . -type d -name "__pycache__" -exec rm -r {} +
 	find . -name "*.pyc" -delete
 
-phony: config, run, test, build, clean
+phony: config, run, test, build, clean, qss

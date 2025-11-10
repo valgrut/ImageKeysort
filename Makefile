@@ -1,5 +1,7 @@
 ROOT_DIR=./
 NAME=main.py
+SCSS_STYLES=static/app-styles.scss
+QSS_STYLES=static/app-styles.qss
 
 config:
 	( \
@@ -12,7 +14,7 @@ config:
 	# - at the start makes makefile to ignore the potential error:
 	- pyrcc5.exe ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py
 
-run: config
+run: config qss
 	( \
 	source ${ROOT_DIR}/venv/bin/activate; \
 	pyrcc5 ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py; \
@@ -28,6 +30,9 @@ test: config
 	)
 	# PYTHONPATH=${ROOT_DIR}/src pytest -v tests/; \
 
+qss:
+    qtsass $(SCSS_STYLES) -o $(QSS_STYLES)
+
 build:
 	pyinstaller --onefile ${ROOT_DIR}/${NAME}
 
@@ -39,4 +44,4 @@ clean:
 	find . -type d -name "__pycache__" -exec rm -r {} +
 	find . -name "*.pyc" -delete
 
-phony: config, run, test, build, clean
+phony: config, run, test, build, clean, qss

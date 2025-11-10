@@ -82,23 +82,11 @@ class MainWindow(QMainWindow, QObject):
         self.setWindowIcon(QIcon(':Resources/icon.jpg'))
         self.setMinimumWidth(screenWidth)
         self.setMinimumHeight(screenHeight)
-        self.setStyleSheet("""
-            QWidget {
-                font-family: "Inter";
-            }
-        """)
 
 
         # ========== Management Objects instantiation ==========
         self.shortcutManager = ShortcutManager(self)
         self.galleryManager = GalleryManager(self)
-        self.galleryManager.setStyleSheet(f"""
-            __width: 150px;
-            border: 1px solid black;
-            border-radius: {Styles.widgetBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-        """)
 
 
         # ========== Layout ==========
@@ -121,17 +109,6 @@ class MainWindow(QMainWindow, QObject):
         self.statusBarLabel = QLabel("Status bar")
         self.statusBarLabel.setGraphicsEffect(Styles.getShadowEffect())
         self.statusBarLabel.setMaximumHeight(25)
-        self.statusBarLabel.setStyleSheet(f"""
-            QLabel {{
-                min-height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                background-color: {Styles.widgetsBgColor};
-                font-weight: bold;
-                font-size: 15px;
-                xxmargin: 5px;
-                }}
-            """)
         self.statusBarLabel.setWordWrap(True)
         rightInnerLayout.addWidget(self.statusBarLabel)
 
@@ -139,52 +116,39 @@ class MainWindow(QMainWindow, QObject):
         self.keyLabel = QLabel("Key Sequence Pressed: \nNone")
         self.keyLabel.resize(self.keyLabel.sizeHint())
         self.keyLabel.setGraphicsEffect(Styles.getShadowEffect())
-        self.keyLabel.setStyleSheet(f"""
-            font-size: 16px;
-            font-weight: bold;
-            height: 20px;
-            border: 1px solid black;
-            border-radius: {Styles.widgetBorderRadius}px;
-            color: rgb(171, 110, 3);
-            background-color: {Styles.widgetsBgColor};
-            """)
+        self.keyLabel.setObjectName("keyLabel")
         self.keyLabel.setAlignment(Qt.AlignCenter)
 
         self.expProgress = QProgressBar()
-        self.expProgress.setStyleSheet(f"""
-            max-width: 250px;
-        """)
         self.expProgress.setValue(20)
 
         self.copyButton = QPushButton("&Copy", self)
-        # self.copyButton.setCheckable(True)  # TODO pouzit misto switchovani 2 ruznych styles
+        self.copyButton.setCheckable(True)
         self.copyButton.clicked.connect(self.toggleCopyMode)
         self.copyButton.setFocusPolicy(Qt.NoFocus)
         self.copyButton.setGraphicsEffect(Styles.getShadowEffect())
         self.copyButton.setToolTip("Toggle copy mode (switch between copy and move operation).")
         self.copyButton.setCursor(QCursor(Qt.PointingHandCursor))
-        self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
 
         self.editButton = QPushButton("&Edit", self)
+        self.editButton.setCheckable(True)
         self.editButton.clicked.connect(self.set_edit_mode)
         self.editButton.setFocusPolicy(Qt.NoFocus)
         self.editButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.editButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
 
         self.sortButton = QPushButton("&Sort", self)
+        self.sortButton.setCheckable(True)
         self.sortButton.clicked.connect(self.set_sort_mode)
         self.sortButton.setFocusPolicy(Qt.NoFocus)
         self.sortButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.sortButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
 
         self.clearButton = QPushButton("&Clear treeViewWidget", self)
         self.clearButton.clicked.connect(self.clearShortcuts)
         self.clearButton.setFocusPolicy(Qt.NoFocus)
         self.clearButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.clearButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.clearButton.setStyleSheet(Styles.getDefaultButtonStyles())
 
         leftInnerButtonLayout = QHBoxLayout()
         leftInnerButtonLayout.addWidget(self.editButton)
@@ -234,42 +198,6 @@ class MainWindow(QMainWindow, QObject):
 
         # ========== User's Shortcuts Tree Structure and Viewer ==========
         self.treeViewWidget = CustomTreeWidget()
-        self.treeViewWidget.setStyleSheet(f"""
-            QTreeWidget {{
-                border: 1px solid black;
-                border-radius: 10px;
-                background-color: {Styles.widgetsBgColor};
-                color: black;
-                __padding: 2px;
-            }}
-
-            QTreeWidget::header {{
-                background-color: red;
-                min-height: 30px;
-            }}
-
-            QHeaderView {{
-                background-color: {Styles.widgetsBgColor};
-                color: black;
-                border: 0px solid black;
-                border-radius: 10px;
-                margin-top: 8px;
-                min-height: 30px;
-            }}
-
-            QHeaderView::section {{
-                _color: green;
-                font-weight: bold;
-                background-color: rgb(214, 137, 60);
-                _border: 1px solid black;
-                _border-radius: 10px;
-                padding: 3px;
-
-                _margin: 3px;
-                _min-height: 20px;
-            }}
-        """)
-
         self.treeViewWidget.setGraphicsEffect(Styles.getShadowEffect())
         self.treeViewWidget.setMaximumWidth(250)
         leftInnerLayout.addWidget(self.treeViewWidget)
@@ -363,6 +291,7 @@ class MainWindow(QMainWindow, QObject):
     def showAbout(self):
         aboutBox = QMessageBox(self)
         aboutBox.setWindowTitle("About Image Keysort")
+        aboutBox.setObjectName("AboutMessageBox")
         aboutBox.setTextFormat(Qt.RichText)
         aboutBox.setText(
             """
@@ -410,16 +339,10 @@ class MainWindow(QMainWindow, QObject):
             </p>
             """
         )
-        aboutBox.setStyleSheet(f"""
-            background-color: {Styles.widgetsBgColor};
-        """)
         aboutBox.exec()
 
     def _createMenuBar(self):
         menuBar = self.menuBar()
-        menuBar.setStyleSheet(f"""
-            background-color: {Styles.widgetsBgColor};
-        """)
 
         # File menu
         fileMenu = QMenu("&File", self)
@@ -608,14 +531,16 @@ class MainWindow(QMainWindow, QObject):
     def setCopyMode(self):
         print("Current mode: Copy")
         self.copyOnly = True
-        self.copyButton.setStyleSheet(Styles.getActiveButtonStyles())
+        self.copyButton.setChecked(True)
+        # self.copyButton.setStyleSheet(Styles.getActiveButtonStyles())
         self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
         return
 
     def unsetCopyMode(self):
         print("Current mode: Move")
         self.copyOnly = False
-        self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
+        self.copyButton.setChecked(False)
+        # self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
         self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
         return
 
@@ -634,8 +559,10 @@ class MainWindow(QMainWindow, QObject):
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Edit")
         self.currentMode = "edit"
-        self.editButton.setStyleSheet(Styles.getActiveButtonStyles())
-        self.sortButton.setStyleSheet(Styles.getDefaultButtonStyles())
+        self.editButton.setChecked(True)
+        self.sortButton.setChecked(False)
+        # self.editButton.setStyleSheet(Styles.getActiveButtonStyles())
+        # self.sortButton.setStyleSheet(Styles.getDefaultButtonStyles())
         self.treeViewWidget.setColumnHidden(2, False)
         self.treeViewWidget.setEnabled(True)
 
@@ -644,8 +571,10 @@ class MainWindow(QMainWindow, QObject):
         # self.message_label.setText("You pressed Ctrl+M!")
         print("New mode: Sort")
         self.currentMode = "sort"
-        self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
-        self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
+        self.editButton.setChecked(False)
+        self.sortButton.setChecked(True)
+        # self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
+        # self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
         self.treeViewWidget.setColumnHidden(2, True)
         self.treeViewWidget.setEnabled(False)
         self.galleryManager.updatePreview()

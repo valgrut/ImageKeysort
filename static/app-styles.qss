@@ -1,0 +1,127 @@
+* {
+  color: black; }
+
+QWidget {
+  background-color: #7a7878;
+  font-family: "Inter";
+  _background-color: palette(Background); }
+
+GalleryManager {
+  __width: 150px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 3px;
+  background-color: #bfbdbd; }
+
+QLabel {
+  min-height: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #bfbdbd;
+  font-weight: bold;
+  font-size: 15px;
+  font-family: "Inter";
+  xxmargin: 5px; }
+
+QLabel#keyLabel {
+  font-size: 16px;
+  border-radius: 10px;
+  color: #ab6e03; }
+
+QProgressBar {
+  max-width: 250px; }
+
+QPushButton {
+  __width: 150px;
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 3px;
+  background-color: #bfbdbd;
+  font-weight: bold;
+  font-size: 15px; }
+
+QPushButton:hover {
+  background-color: #fcba77; }
+
+QPushButton:checked {
+  background-color: orange; }
+
+MediaContainerWidget QPushButton {
+  width: 150px; }
+
+MediaContainerWidget QPushButton:hover {
+  background-color: #fcba77; }
+
+MediaContainerWidget QLabel {
+  font-weight: normal;
+  font-size: 20px; }
+
+/***** QTreeWidget - Shortcuts tree *****/
+QTreeWidget {
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: #bfbdbd;
+  color: black;
+  __padding: 2px; }
+
+QTreeWidget::header {
+  background-color: red;
+  min-height: 30px; }
+
+QHeaderView {
+  background-color: #bfbdbd;
+  color: black;
+  border: 0px solid black;
+  border-radius: 10px;
+  margin-top: 8px;
+  min-height: 30px; }
+
+QHeaderView::section {
+  _color: green;
+  font-weight: bold;
+  background-color: #d6893c;
+  _border: 1px solid black;
+  _border-radius: 10px;
+  padding: 3px;
+  _margin: 3px;
+  _min-height: 20px; }
+
+/***** Settings Dialog styles *****/
+SettingsDialog {
+  border: 0;
+  background-color: #bfbdbd;
+  font-weight: normal; }
+
+SettingsDialog * {
+  background-color: #bfbdbd; }
+
+SettingsDialog QFormLayout {
+  background-color: #bfbdbd;
+  border: 0; }
+
+SettingsDialog QGroupBox {
+  font-weight: bold; }
+
+SettingsDialog QLabel {
+  border: 0;
+  font-weight: normal;
+  font-size: 12px; }
+
+/***** MenuBar, menu items *****/
+QMessageBox {
+  background-color: #bfbdbd; }
+
+QMessageBox * {
+  background-color: #bfbdbd;
+  border: 0;
+  font-weight: normal; }
+
+QMenuBar {
+  background-color: #bfbdbd; }
+
+QMenuBar QAction {
+  background-color: #bfbdbd; }
+
+QMenuBar QAction:hover {
+  background-color: orange; }

@@ -164,18 +164,18 @@ def main():
     QCoreApplication.setOrganizationName("JP")
     QCoreApplication.setOrganizationDomain("wogon.cz")
     QCoreApplication.setApplicationName("Image Keysort")
-    from PyQt5.QtGui import QPalette, QColor
+
+    # Build qss file on the start (in case app started without Makefile)
+    # import qtsass
+    # scss_path = pathlib.Path("static/app-styles.scss")
+    # qss_path = pathlib.Path("static/app-styles.qss")
+    # qss = qtsass.compile(scss_path.read_text(encoding="utf-8"))
+    # qss_path.write_text(qss, encoding="utf-8")
+
+    # Create app and apply theme
     app = QApplication(sys.argv)
-    # app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text())
-    defaultPalette = QPalette()
-    defaultPalette.setColor(QPalette.Background, QColor("red"))
-    app.setPalette(defaultPalette)
-    app.setStyleSheet(pathlib.Path('static/app-styles.scss').read_text())
-    # app.setStyleSheet(f"""
-    #     QWidget {{
-    #         background-color: {Styles.mainBackground};
-    #     }}
-    # """)
+    app.setPalette(Styles.get_default_palette())
+    app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
     window = MainWindow()
     window.show()
     app.aboutToQuit.connect(window.shortcutManager.askSaveIfChanged)

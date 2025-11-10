@@ -32,33 +32,33 @@ class MediaContainerWidget(QWidget):
 
         self.sourceDirLabel = QLabel("No source directory selected. You can select one by pressing ctrl+L.")
         self.sourceDirLabel.setMaximumHeight(30)
-        self.sourceDirLabel.setStyleSheet(f"""
-            QLabel {{
-                min-height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                background-color: {Styles.widgetsBgColor};
-                font-weight: bold;
-                font-size: 15px;
-                xxmargin: 5px;
-                }}
-            """)
+        # self.sourceDirLabel.setStyleSheet(f"""
+        #     QLabel {{
+        #         min-height: 20px;
+        #         border: 1px solid black;
+        #         border-radius: {Styles.buttonBorderRadius}px;
+        #         background-color: {Styles.widgetsBgColor};
+        #         font-weight: bold;
+        #         font-size: 15px;
+        #         xxmargin: 5px;
+        #         }}
+        #     """)
         rightLayout.addWidget(self.sourceDirLabel)
 
         # TODO: Zde zmeny!
         self.imageFilenameLabel = QLineEdit()
         self.imageFilenameLabel.setMaximumHeight(30)
-        self.imageFilenameLabel.setStyleSheet(f"""
-            QLabel {{
-                _min-height: 20px;
-                border: 1px solid black;
-                border-radius: {Styles.buttonBorderRadius}px;
-                background-color: {Styles.widgetsBgColor};
-                font-weight: bold;
-                font-size: 15px;
-                xxmargin: 5px;
-                }}
-            """)
+        # self.imageFilenameLabel.setStyleSheet(f"""
+        #     QLabel {{
+        #         _min-height: 20px;
+        #         border: 1px solid black;
+        #         border-radius: {Styles.buttonBorderRadius}px;
+        #         background-color: {Styles.widgetsBgColor};
+        #         font-weight: bold;
+        #         font-size: 15px;
+        #         xxmargin: 5px;
+        #         }}
+        #     """)
 
         rightLayout.addWidget(self.imageFilenameLabel)
         rightLayout.addWidget(self.stackedMediaWidget)
@@ -69,21 +69,21 @@ class MediaContainerWidget(QWidget):
         self.previousImageButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.previousImageButton.setFocus(True)
         self.previousImageButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.previousImageButton.setStyleSheet(f"""
-        QPushButton {{
-            width: 150px;
-            height: 20px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-        }}
-        QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
+        # self.previousImageButton.setStyleSheet(f"""
+        # QPushButton {{
+        #     width: 150px;
+        #     height: 20px;
+        #     border: 1px solid black;
+        #     border-radius: {Styles.buttonBorderRadius}px;
+        #     padding: 3px;
+        #     background-color: {Styles.widgetsBgColor};
+        #     font-weight: bold;
+        #     font-size: 15px;
+        # }}
+        # QPushButton:hover {{
+        #     background-color: {Styles.buttonHoverBgColor};
+        # }}
+        # """)
 
         self.nextImageButton = QPushButton("&Next", self)
         self.nextImageButton.clicked.connect(self.showNextImage)
@@ -91,22 +91,22 @@ class MediaContainerWidget(QWidget):
         self.nextImageButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.nextImageButton.setFocus(True)
         self.nextImageButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.nextImageButton.setStyleSheet(f"""
-        QPushButton {{
-            width: 150px;
-            height: 20px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-
-        }}
-        QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
+        # self.nextImageButton.setStyleSheet(f"""
+        # QPushButton {{
+        #     width: 150px;
+        #     height: 20px;
+        #     border: 1px solid black;
+        #     border-radius: {Styles.buttonBorderRadius}px;
+        #     padding: 3px;
+        #     background-color: {Styles.widgetsBgColor};
+        #     font-weight: bold;
+        #     font-size: 15px;
+        #
+        # }}
+        # QPushButton:hover {{
+        #     background-color: {Styles.buttonHoverBgColor};
+        # }}
+        # """)
 
         self.firstImageButton = QPushButton("&|<<", self)
         self.firstImageButton.clicked.connect(self.showFirstImage)
@@ -114,22 +114,22 @@ class MediaContainerWidget(QWidget):
         self.firstImageButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.firstImageButton.setFocus(True)
         self.firstImageButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.firstImageButton.setStyleSheet(f"""
-        QPushButton {{
-            width: 150px;
-            height: 20px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-
-        }}
-        QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
+        # self.firstImageButton.setStyleSheet(f"""
+        # QPushButton {{
+        #     width: 150px;
+        #     height: 20px;
+        #     border: 1px solid black;
+        #     border-radius: {Styles.buttonBorderRadius}px;
+        #     padding: 3px;
+        #     background-color: {Styles.widgetsBgColor};
+        #     font-weight: bold;
+        #     font-size: 15px;
+        #
+        # }}
+        # QPushButton:hover {{
+        #     background-color: {Styles.buttonHoverBgColor};
+        # }}
+        # """)
 
         self.lastImageButton = QPushButton("&>>|", self)
         self.lastImageButton.clicked.connect(self.showLastImage)
@@ -137,24 +137,24 @@ class MediaContainerWidget(QWidget):
         self.lastImageButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.lastImageButton.setFocus(True)
         self.lastImageButton.setGraphicsEffect(Styles.getShadowEffect())
-        self.lastImageButton.setStyleSheet(f"""
-        QPushButton {{
-            width: 150px;
-            height: 20px;
-            border: 1px solid black;
-            border-radius: {Styles.buttonBorderRadius}px;
-            padding: 3px;
-            background-color: {Styles.widgetsBgColor};
-            font-weight: bold;
-            font-size: 15px;
-        }}
-        QPushButton:hover {{
-            background-color: {Styles.buttonHoverBgColor};
-        }}
-        """)
+        # self.lastImageButton.setStyleSheet(f"""
+        # QPushButton {{
+        #     width: 150px;
+        #     height: 20px;
+        #     border: 1px solid black;
+        #     border-radius: {Styles.buttonBorderRadius}px;
+        #     padding: 3px;
+        #     background-color: {Styles.widgetsBgColor};
+        #     font-weight: bold;
+        #     font-size: 15px;
+        # }}
+        # QPushButton:hover {{
+        #     background-color: {Styles.buttonHoverBgColor};
+        # }}
+        # """)
 
         self.imageCounterLabel = QLabel()
-        self.imageCounterLabel.setStyleSheet("font-size: 20px;")
+        # self.imageCounterLabel.setStyleSheet("font-size: 20px;")
         self.imageCounterLabel.setText("0/0")
 
         rightControlButtonsLayout = QHBoxLayout()
