@@ -1,4 +1,5 @@
 import sys
+import pathlib
 from src.Styles import Styles
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QCoreApplication
@@ -94,9 +95,21 @@ from src.MainWindow import MainWindow
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
 # - [~] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
 #       - [ ] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
+# - [ ] !!! Presunout veskere styly do app-styles.scss a separovat layoutovani do buildUI() method.
+# - [ ] Add do Settings: Otevrit presets z minula
+# - [ ] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu.
+
+
+# Installation, Building
+# - [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
+# - [ ] Zakomponovat qtsass (pip3 install qtsass --break-system-packages)
+#   - [ ] `qtsass src/styles/app-styles.scss -o src/styles/app-styles.qss`
+# - [ ] Do kontext menu na Windows (prave kliknuti) ve slozce pridat moznost otevrit ji jako src v Image Keysort.
+#   - [ ] Do instalace pridat spusteni registr scriptuu (add-image-keysort.reg), ktery to prida do toho kontext menu.
+
 
 # Design:
-# - [~] Udelat nejakou stylovaci tridu, kde pujde menit treba shadow offset na jednom miste pro vse...
+# - [~] Implementovat jednoduchy light a dark mode + option do nastaveni.
 
 
 # To Fix:
@@ -151,13 +164,18 @@ def main():
     QCoreApplication.setOrganizationName("JP")
     QCoreApplication.setOrganizationDomain("wogon.cz")
     QCoreApplication.setApplicationName("Image Keysort")
-
+    from PyQt5.QtGui import QPalette, QColor
     app = QApplication(sys.argv)
-    app.setStyleSheet(f"""
-        QWidget {{
-            background-color: {Styles.mainBackground};
-        }}
-    """)
+    # app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text())
+    defaultPalette = QPalette()
+    defaultPalette.setColor(QPalette.Background, QColor("red"))
+    app.setPalette(defaultPalette)
+    app.setStyleSheet(pathlib.Path('static/app-styles.scss').read_text())
+    # app.setStyleSheet(f"""
+    #     QWidget {{
+    #         background-color: {Styles.mainBackground};
+    #     }}
+    # """)
     window = MainWindow()
     window.show()
     app.aboutToQuit.connect(window.shortcutManager.askSaveIfChanged)

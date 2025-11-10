@@ -1,12 +1,20 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor, QKeyEvent
-from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, \
+from PyQt5.QtGui import QCursor, QKeyEvent, QMouseEvent
+from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QMessageBox, \
     QVBoxLayout, QLineEdit
 
 from src.ImageWidget import ImageWidget
 from src.VideoWidget import VideoWidget
 from src.Styles import Styles
 
+# class ClickableLabel(QLabel):
+#     def __init__(self, parent):
+#         super().__init__(parent)
+#
+#     def mousePressEvent(self, event):
+#         if not isinstance(event, QMouseEvent):
+#             return
+#         QMessageBox.about(self, "Hello!")
 
 class MediaContainerWidget(QWidget):
     def __init__(self, galleryManager):
@@ -37,6 +45,7 @@ class MediaContainerWidget(QWidget):
             """)
         rightLayout.addWidget(self.sourceDirLabel)
 
+        # TODO: Zde zmeny!
         self.imageFilenameLabel = QLineEdit()
         self.imageFilenameLabel.setMaximumHeight(30)
         self.imageFilenameLabel.setStyleSheet(f"""

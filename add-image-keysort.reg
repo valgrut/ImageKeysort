@@ -1,0 +1,31 @@
+Windows Registry Editor Version 5.00
+
+; Note: !!! Windows Registry Editor Version... must be the first line!
+
+; To show in the new Win11 top-level menu you’d need a compiled
+; shell extension (IExplorerCommand) — the simple registry method below goes to the classic menu.
+
+
+; Right-click ON a folder
+[HKEY_CLASSES_ROOT\Directory\shell\ImageKeysort]
+@="Open in Image Keysort"
+"Icon"="\"C:\\Program Files\\ImageKeysort\\ImageKeysort.exe\",0"
+
+[HKEY_CLASSES_ROOT\Directory\shell\ImageKeysort\command]
+@="\"C:\\Program Files\\ImageKeysort\\ImageKeysort.exe\" \"%1\""
+
+; Right-click INSIDE a folder (background of File Explorer)
+[HKEY_CLASSES_ROOT\Directory\Background\shell\ImageKeysort]
+@="Open in Image Keysort"
+"Icon"="\"C:\\Program Files\\ImageKeysort\\ImageKeysort.exe\",0"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\ImageKeysort\command]
+@="\"C:\\Program Files\\ImageKeysort\\ImageKeysort.exe\" \"%V\""
+
+; Optional: right-click on a drive root
+[HKEY_CLASSES_ROOT\Drive\shell\ImageKeysort]
+@="Open in Image Keysort"
+"Icon"="\"C:\\Program Files\\ImageKeysort\\ImageKeysort.exe\",0"
+
+[HKEY_CLASSES_ROOT\Drive\shell\ImageKeysort\command]
+@="\"C:\\Program Files\\ImageKeysort\\ImageKeysort.exe\" \"%1\""

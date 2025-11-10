@@ -1,0 +1,6 @@
+@import "app-styles-variables";
+
+QWidget {
+    _background-color: $mycolor;
+    background-color: palette(Background);
+}

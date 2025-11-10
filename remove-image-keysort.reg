@@ -1,0 +1,5 @@
+Windows Registry Editor Version 5.00
+
+[-HKEY_CLASSES_ROOT\Directory\shell\ImageKeysort]
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\ImageKeysort]
+[-HKEY_CLASSES_ROOT\Drive\shell\ImageKeysort]
