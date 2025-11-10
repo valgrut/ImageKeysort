@@ -33,11 +33,13 @@ class SettingsDialog(QDialog):
         self.sp_nested_levels = QSpinBox()
         self.sp_nested_levels.setRange(1, 5)
         self.sp_nested_levels.setToolTip("How many nested shortcut folders to show in the UI.")
+        self.cfg_load_last_preset = QCheckBox("Load preset from the last session on start.")
 
         # Form
         treeview_box = QGroupBox("Treeview behavior")
         treeview_form = QFormLayout()
         treeview_form.addRow("Shortcuts nested levels to show:", self.sp_nested_levels)
+        treeview_form.addRow(self.cfg_load_last_preset)
         treeview_box.setLayout(treeview_form)
 
 
@@ -81,6 +83,17 @@ class SettingsDialog(QDialog):
         video_form.addRow(self.cb_mute_videos)
         video_box.setLayout(video_form)
 
+
+        # Stylesheets
+        self.cfg_light_mode = QCheckBox("Set Light theme")
+        self.cfg_dark_mode = QCheckBox("Set Dark theme")
+        # Form
+        themes_box = QGroupBox("Themes settings")
+        themes_form = QFormLayout()
+        themes_form.addRow(self.cfg_light_mode)
+        themes_form.addRow(self.cfg_dark_mode)
+        themes_box.setLayout(themes_form)
+
         # Buttons
         self.buttons = QDialogButtonBox(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel | QDialogButtonBox.RestoreDefaults
@@ -95,6 +108,7 @@ class SettingsDialog(QDialog):
         root.addWidget(shortcuts_box)
         root.addWidget(copy_box)
         root.addWidget(video_box)
+        root.addWidget(themes_box)
         root.addWidget(self.buttons)
         self.setLayout(root)
 
