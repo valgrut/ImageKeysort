@@ -647,7 +647,9 @@ class MainWindow(QMainWindow, QObject):
                 self.updateKeySequenceLabel()
 
     def handleSortMode(self, event):
-        # TODO: Refactor!!!!!
+        # TODO: Refactor!!!!! - extrahvoat do separatni classy, kde se bude
+        # parsovat to, co user napsal a zjistovat, jestli chce copy, move >,
+        # repeat (.), delete (-), a pod.
         pressedKey = event.text()
         # Cancel currently started shortcut or escape from the hold partial sequence
         match event.key():
