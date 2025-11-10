@@ -605,6 +605,14 @@ class MainWindow(QMainWindow, QObject):
                     self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
                     return
 
+                if ">" in self.keySeq:
+                    print("Note: move key_char elsewhere.")
+                    # TODO
+
+                if "/" in self.keySeq:
+                    print("Note: change key_char X for key_char Y.")
+                    # TODO
+
                 # Add new shortcut sequence
                 for k in self.keySeq:
                     self.shortcutManager.addShortcut(self.keySeq)
