@@ -12,13 +12,13 @@ class EmptyGalleryImageWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setStyleSheet(f"""
-            width: 100px;
-            border: 1px solid black;
-            border-radius: {Styles.widgetBorderRadius}px;
-            padding: 3px;
-            background-color: rgb(100, 189, 189);
-        """)
+        # self.setStyleSheet(f"""
+        #     width: 100px;
+        #     border: 1px solid black;
+        #     border-radius: {Styles.widgetBorderRadius}px;
+        #     padding: 3px;
+        #     background-color: rgb(100, 189, 189);
+        # """)
 
         icon = QPixmap(":/Resources/empty-inbox.png")
         icon = icon.scaled(200, 200, Qt.KeepAspectRatio)

@@ -23,24 +23,10 @@ class ImageWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setStyleSheet(f"""
-            width: 100px;
-            border: 1px solid black;
-            border-radius: {Styles.widgetBorderRadius}px;
-            padding: 3px;
-            background-color: rgb(100, 100, 189);
-        """)
-
         self.label = QLabel(self)
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setScaledContents(False)
-        # self.label.setStyleSheet("""
-        #     background-color: yellow;
-        #     border: 1px solid black;
-        #     border-radius: 20px;
-        #     padding: 3px;
-        #     """)
-        # self.label.resize(900, 780)
+
         self.currentImgPath = ""
         self.pixmap = QPixmap()
         self.label.setPixmap(self.pixmap)

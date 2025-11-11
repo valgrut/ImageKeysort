@@ -14,14 +14,6 @@ class VideoWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        # self.setStyleSheet(f"""
-        #     width: 100px;
-        #     border: 1px solid black;
-        #     border-radius: {Styles.widgetBorderRadius}px;
-        #     padding: 3px;
-        #     background-color: rgb(100, 100, 189);
-        # """)
-
         self.videoURL = ""
 
         self.defaultVolume = 50
@@ -29,7 +21,6 @@ class VideoWidget(QWidget):
         scene = QGraphicsScene()
         self.graphicsView = QGraphicsView(scene)
         self.videoItem = QGraphicsVideoItem()
-        self.graphicsView.setStyleSheet("border: 2px solid black;")
         scene.addItem(self.videoItem)
         size = self.graphicsView.size()
         self.videoItem.setSize(QSizeF(size.width()-30, size.height()-30))

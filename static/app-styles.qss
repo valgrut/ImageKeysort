@@ -139,3 +139,23 @@ QMenu {
 QMenu:hover {
   background-color: orange;
   color: red; }
+
+/***** EmptyGalleryWidget *****/
+EmptyGalleryWidget {
+  width: 100px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 3px;
+  background-color: #64bdbd; }
+
+/***** ImageWidget *****/
+ImageWidget {
+  width: 100px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 3px;
+  background-color: #6464bd; }
+
+/***** VideoWidget *****/
+QGraphicsView {
+  border: 2px solid black; }

@@ -160,4 +160,28 @@ QMenu:hover {
     color: red;
 }
 
+/***** EmptyGalleryWidget *****/
+EmptyGalleryWidget {
+    width: 100px;
+    border: 1px solid black;
+    border-radius: $widget-border-radius;
+    padding: 3px;
+    background-color: rgb(100, 189, 189);
+}
+
+
+/***** ImageWidget *****/
+ImageWidget {
+    width: 100px;
+    border: 1px solid black;
+    border-radius: $widget-border-radius;
+    padding: 3px;
+    background-color: rgb(100, 100, 189);
+}
+
+/***** VideoWidget *****/
+QGraphicsView {
+    border: 2px solid black;
+}
+
 
