@@ -395,56 +395,6 @@ class MainWindow(QMainWindow, QObject):
         self.loadAction.triggered.connect(self.load_data)
         self.exitAction.triggered.connect(self.exitApp)
 
-    # TODO: Telo presunout do CustromTreeWidget a sem pridat pouze volani teze funkce v customtreewidgetu.
-    # @pyqtSlot()
-    # def update_tree_view(self, root:str=None):
-    #     # Just flush the whole content of the treeViewWidget and rebuild it from scratch.
-    #     self.treeViewWidget.clear()
-    #     items = []
-    #     shortcuts_data = self.shortcutManager.getData()
-
-    #     # TODO: Do not show subtrees except the one starting with the first pressed key.
-    #     # if root is not None and key_L1 != root:
-    #     #     continue
-
-    #     maxLevel = SettingsDialog.settingsGetNestingLevels()
-
-    #     def buildTreeView(parent_key_char: QTreeWidgetItem, itemsInLevel, currentLevel):
-    #         # No more keys under current level exist
-    #         if not itemsInLevel:
-    #             return None
-    #         for key_char, properties in itemsInLevel:
-    #             # last level to be shown (leaf items)
-    #             if currentLevel < maxLevel:
-    #                 dst_path = properties["dst_path"]
-    #                 current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
-    #                 parent_key_char.addChild(current_key_char_tree_item)
-
-    #                 # Process current key_char's children
-    #                 nextItems = []
-    #                 if not SettingsDialog.settingsGetSortShortcuts():
-    #                     nextItems = properties["keys"].items()  # Do not sort - insert order
-    #                 else:
-    #                     nextItems = sorted(properties["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
-    #                     # nextitems = sorted(properties["keys"].items()), 0)  # Sort alphabetically (case sensitive)
-
-    #                 # buildTreeView(current_key_char_tree_item, properties["keys"].items(), currentLevel + 1)
-    #                 buildTreeView(current_key_char_tree_item, nextItems, currentLevel + 1)
-
-
-    #     firstItem = QTreeWidgetItem(["level0"])
-
-    #     nextItems = []
-    #     if not SettingsDialog.settingsGetSortShortcuts():
-    #         nextItems = shortcuts_data["keys"].items()  # Do not sort - insert order
-    #     else:
-    #         nextItems = sorted(shortcuts_data["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
-    #         # nextitems = sorted(shortcuts_data["keys"].items()), 0)  # Sort alphabetically (case sensitive)
-
-    #     buildTreeView(firstItem, nextItems, 0)
-
-    #     # newItem = QTreeWidgetItem(["test"])
-
     def save_data(self):
         self.shortcutManager.saveShortcuts()
 
@@ -457,7 +407,58 @@ class MainWindow(QMainWindow, QObject):
         self.shortcutManager.clearShortcuts()
         self.treeViewWidget.update_tree_view() # TODO: emit signal?  Mozna nahradit toto volani za emit signalu pro update_tree_viw()
 
-    # TODO: move into shortcutManager
+    def setCopyMode(self):
+        print("Current mode: Copy")
+        self.copyOnly = True
+        self.copyButton.setChecked(True)
+        # self.copyButton.setStyleSheet(Styles.getActiveButtonStyles())
+        self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
+        return
+
+    def unsetCopyMode(self):
+        print("Current mode: Move")
+        self.copyOnly = False
+        self.copyButton.setChecked(False)
+        # self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
+        self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
+        return
+
+    def toggleCopyMode(self):
+        # self.next_image_button.setFocus()
+        if self.copyOnly is False:
+            self.setCopyMode()
+            return
+
+        if self.copyOnly is True:
+            self.unsetCopyMode()
+            return
+
+    def set_edit_mode(self):
+        # Display a message when the shortcut is activated
+        # self.message_label.setText("You pressed Ctrl+M!")
+        print("New mode: Edit")
+        self.currentMode = "edit"
+        self.editButton.setChecked(True)
+        self.sortButton.setChecked(False)
+        # self.editButton.setStyleSheet(Styles.getActiveButtonStyles())
+        # self.sortButton.setStyleSheet(Styles.getDefaultButtonStyles())
+        self.treeViewWidget.setColumnHidden(2, False)
+        self.treeViewWidget.setEnabled(True)
+
+    def set_sort_mode(self):
+        # Display a message when the shortcut is activated
+        # self.message_label.setText("You pressed Ctrl+M!")
+        print("New mode: Sort")
+        self.currentMode = "sort"
+        self.editButton.setChecked(False)
+        self.sortButton.setChecked(True)
+        # self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
+        # self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
+        self.treeViewWidget.setColumnHidden(2, True)
+        self.treeViewWidget.setEnabled(False)
+        self.galleryManager.updatePreview()
+
+    # TODO: Move do specialni nove tridy pro tyhle move operace
     def undo_last_operation(self):
         print("Undo last operation")
         # print(self.mv_history)
@@ -517,58 +518,8 @@ class MainWindow(QMainWindow, QObject):
         self.galleryManager.updatePreview()
         # print(self.images)
 
-    def setCopyMode(self):
-        print("Current mode: Copy")
-        self.copyOnly = True
-        self.copyButton.setChecked(True)
-        # self.copyButton.setStyleSheet(Styles.getActiveButtonStyles())
-        self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
-        return
-
-    def unsetCopyMode(self):
-        print("Current mode: Move")
-        self.copyOnly = False
-        self.copyButton.setChecked(False)
-        # self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
-        self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
-        return
-
-    def toggleCopyMode(self):
-        # self.next_image_button.setFocus()
-        if self.copyOnly is False:
-            self.setCopyMode()
-            return
-
-        if self.copyOnly is True:
-            self.unsetCopyMode()
-            return
-
-    def set_edit_mode(self):
-        # Display a message when the shortcut is activated
-        # self.message_label.setText("You pressed Ctrl+M!")
-        print("New mode: Edit")
-        self.currentMode = "edit"
-        self.editButton.setChecked(True)
-        self.sortButton.setChecked(False)
-        # self.editButton.setStyleSheet(Styles.getActiveButtonStyles())
-        # self.sortButton.setStyleSheet(Styles.getDefaultButtonStyles())
-        self.treeViewWidget.setColumnHidden(2, False)
-        self.treeViewWidget.setEnabled(True)
-
-    def set_sort_mode(self):
-        # Display a message when the shortcut is activated
-        # self.message_label.setText("You pressed Ctrl+M!")
-        print("New mode: Sort")
-        self.currentMode = "sort"
-        self.editButton.setChecked(False)
-        self.sortButton.setChecked(True)
-        # self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
-        # self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
-        self.treeViewWidget.setColumnHidden(2, True)
-        self.treeViewWidget.setEnabled(False)
-        self.galleryManager.updatePreview()
-
-    # TODO: move into soem other class
+    # TODO: move (nejakou cast) into shortcutManager. Upravuju strukturu zkratek, nic
+    # nepresouvam (obrazky).
     def handleEditMode(self, event):
         # TODO: Refactor!!!!!
         pressedKey = event.text()
@@ -644,7 +595,11 @@ class MainWindow(QMainWindow, QObject):
                 self.keySeq += pressedKey
                 self.updateKeySequenceLabel()
 
-    # TODO: move into soem other class
+    # TODO: Move do specialni nove tridy pro tyhle move operace (alespon to
+    # move obrazek x do y). V nove tride udelat metody pro presuny obrazkuuu a
+    # odpovidajici kontroly.
+    # !!!!! Nebo alespon proste vypreparovat veskere move, bo to je tam asi 6x to
+    # same. Takze to extrahovat ven do 1 metody.
     def handleSortMode(self, event):
         # TODO: Refactor!!!!! - extrahvoat do separatni classy, kde se bude
         # parsovat to, co user napsal a zjistovat, jestli chce copy, move >,
