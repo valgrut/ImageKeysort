@@ -595,6 +595,9 @@ class MainWindow(QMainWindow, QObject):
                 self.keySeq += pressedKey
                 self.updateKeySequenceLabel()
 
+    def moveImageFromTo(self, src, dst):
+        pass
+
     # TODO: Move do specialni nove tridy pro tyhle move operace (alespon to
     # move obrazek x do y). V nove tride udelat metody pro presuny obrazkuuu a
     # odpovidajici kontroly.
@@ -611,6 +614,8 @@ class MainWindow(QMainWindow, QObject):
                 print("ESC")
                 # print("key_seq:", self.key_seq)
                 # print("permanent_key_seq:", self.permanent_key_seq)
+                # TODO: Refactor this: pridat flag sentinelExists, bude to
+                # srozumitelnejsi.
                 if self.keySeq and self.permanentKeySeq:
                     self.keySeq = ""
                 elif not self.keySeq and self.permanentKeySeq:
