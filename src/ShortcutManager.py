@@ -206,6 +206,47 @@ class ShortcutManager(QObject):
 
         return currentKeyContent
 
+    def moveShortcut(self, sequence: str):
+        """
+        Move key_char under different sub-tree.
+
+        Syntax:
+        [a-zA-Z]+>[a-zA-Z]*
+
+        Example:
+        Lets Have following structure:
+        a
+            b
+            c
+                x
+
+        1. Move 'x' to the same level as 'a'
+        acx>
+
+        2. Move 'b' (and its subtree) under 'c'
+        ab>ac
+
+        """
+        pass
+
+    def changeShortcut(self, sequence: str):
+        """
+        Move key_char under different sub-tree.
+
+        Syntax:
+        [a-zA-Z]+/[a-zA-Z]
+
+        Example:
+        Lets Have following structure:
+        a
+            b
+            c
+                x
+
+        1. Change 'x' to 'f'
+        acx/f
+        """
+        pass
 
     def removeShortcutSequence(self, sequence: str):
         """
@@ -259,6 +300,8 @@ class ShortcutManager(QObject):
         """
         Clears all shortcuts data.
         """
+        self.askSaveIfChanged()
+        self.setDataUnmodified()
         self.shortcutTree = {"keys": {}}
 
 

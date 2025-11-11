@@ -23,7 +23,8 @@ from PyQt5.QtWidgets import (
     QGraphicsDropShadowEffect,
     QSplitter,
     QProgressBar,
-    QTreeWidget, QMessageBox
+    QTreeWidget,
+    QMessageBox
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -197,7 +198,7 @@ class MainWindow(QMainWindow, QObject):
 
 
         # ========== User's Shortcuts Tree Structure and Viewer ==========
-        self.treeViewWidget = CustomTreeWidget()
+        self.treeViewWidget = CustomTreeWidget(self.shortcutManager)
         self.treeViewWidget.setGraphicsEffect(Styles.getShadowEffect())
         self.treeViewWidget.setMaximumWidth(250)
         leftInnerLayout.addWidget(self.treeViewWidget)
@@ -207,7 +208,7 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setColumnWidth(1, 100)
         self.treeViewWidget.setColumnWidth(2, 50)
         self.treeViewWidget.setFocusPolicy(Qt.NoFocus)
-        self.update_tree_view()
+        self.treeViewWidget.update_tree_view() # TODO: emit signal?
 
         # Add clear button below the Tree
         leftInnerLayout.addWidget(self.clearButton)
@@ -257,7 +258,7 @@ class MainWindow(QMainWindow, QObject):
         # Set shortcuts preset from CLI, if some provided
         if presetsArg:
             self.shortcutManager.loadShortcutsFromFile(presetsArg)
-            self.update_tree_view()
+            self.treeViewWidget.update_tree_view()  # TODO: emit signal?
         else:
             print("Empty or invalid arg shortcuts path")
 
@@ -278,7 +279,7 @@ class MainWindow(QMainWindow, QObject):
 
     def open_settings(self):
         dlg = SettingsDialog(self)
-        dlg.settingsChangedSignal.connect(self.update_tree_view)
+        dlg.settingsChangedSignal.connect(self.treeViewWidget.update_tree_view)
         # dlg.settingsChanged.connect(self.apply_settings)
         dlg.exec()
 
@@ -395,65 +396,54 @@ class MainWindow(QMainWindow, QObject):
         self.exitAction.triggered.connect(self.exitApp)
 
     # TODO: Telo presunout do CustromTreeWidget a sem pridat pouze volani teze funkce v customtreewidgetu.
-    @pyqtSlot()
-    def update_tree_view(self, root:str=None):
-        # Just flush the whole content of the treeViewWidget and rebuild it from scratch.
-        self.treeViewWidget.clear()
-        items = []
-        shortcuts_data = self.shortcutManager.getData()
+    # @pyqtSlot()
+    # def update_tree_view(self, root:str=None):
+    #     # Just flush the whole content of the treeViewWidget and rebuild it from scratch.
+    #     self.treeViewWidget.clear()
+    #     items = []
+    #     shortcuts_data = self.shortcutManager.getData()
 
-        # TODO: Do not show subtrees except the one starting with the first pressed key.
-        # if root is not None and key_L1 != root:
-        #     continue
+    #     # TODO: Do not show subtrees except the one starting with the first pressed key.
+    #     # if root is not None and key_L1 != root:
+    #     #     continue
 
-        maxLevel = SettingsDialog.settingsGetNestingLevels()
+    #     maxLevel = SettingsDialog.settingsGetNestingLevels()
 
-        def buildTreeView(parent_key_char: QTreeWidgetItem, itemsInLevel, currentLevel):
-            # No more keys under current level exist
-            if not itemsInLevel:
-                return None
-            for key_char, properties in itemsInLevel:
-                # last level to be shown (leaf items)
-                if currentLevel < maxLevel:
-                    dst_path = properties["dst_path"]
-                    current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
-                    parent_key_char.addChild(current_key_char_tree_item)
+    #     def buildTreeView(parent_key_char: QTreeWidgetItem, itemsInLevel, currentLevel):
+    #         # No more keys under current level exist
+    #         if not itemsInLevel:
+    #             return None
+    #         for key_char, properties in itemsInLevel:
+    #             # last level to be shown (leaf items)
+    #             if currentLevel < maxLevel:
+    #                 dst_path = properties["dst_path"]
+    #                 current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
+    #                 parent_key_char.addChild(current_key_char_tree_item)
 
-                    # Process current key_char's children
-                    nextItems = []
-                    if not SettingsDialog.settingsGetSortShortcuts():
-                        nextItems = properties["keys"].items()  # Do not sort - insert order
-                    else:
-                        nextItems = sorted(properties["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
-                        # nextitems = sorted(properties["keys"].items()), 0)  # Sort alphabetically (case sensitive)
+    #                 # Process current key_char's children
+    #                 nextItems = []
+    #                 if not SettingsDialog.settingsGetSortShortcuts():
+    #                     nextItems = properties["keys"].items()  # Do not sort - insert order
+    #                 else:
+    #                     nextItems = sorted(properties["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
+    #                     # nextitems = sorted(properties["keys"].items()), 0)  # Sort alphabetically (case sensitive)
 
-                    # buildTreeView(current_key_char_tree_item, properties["keys"].items(), currentLevel + 1)
-                    buildTreeView(current_key_char_tree_item, nextItems, currentLevel + 1)
+    #                 # buildTreeView(current_key_char_tree_item, properties["keys"].items(), currentLevel + 1)
+    #                 buildTreeView(current_key_char_tree_item, nextItems, currentLevel + 1)
 
 
-        firstItem = QTreeWidgetItem(["level0"])
+    #     firstItem = QTreeWidgetItem(["level0"])
 
-        nextItems = []
-        if not SettingsDialog.settingsGetSortShortcuts():
-            nextItems = shortcuts_data["keys"].items()  # Do not sort - insert order
-        else:
-            nextItems = sorted(shortcuts_data["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
-            # nextitems = sorted(shortcuts_data["keys"].items()), 0)  # Sort alphabetically (case sensitive)
+    #     nextItems = []
+    #     if not SettingsDialog.settingsGetSortShortcuts():
+    #         nextItems = shortcuts_data["keys"].items()  # Do not sort - insert order
+    #     else:
+    #         nextItems = sorted(shortcuts_data["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
+    #         # nextitems = sorted(shortcuts_data["keys"].items()), 0)  # Sort alphabetically (case sensitive)
 
-        buildTreeView(firstItem, nextItems, 0)
+    #     buildTreeView(firstItem, nextItems, 0)
 
-        # newItem = QTreeWidgetItem(["test"])
-        # items.append(newItem)
-
-        # Test of custom items with buttons:
-        # myWidget = TreeItemWithButtons()
-        # self.treeViewWidget.setItemWidget(newItem, 2, myWidget)
-
-        # Retrieve list of children to fill 'items' list
-        items = firstItem.takeChildren()
-        self.treeViewWidget.insertTopLevelItems(0, items)
-        self.treeViewWidget.expandAll()
-
+    #     # newItem = QTreeWidgetItem(["test"])
 
     def save_data(self):
         self.shortcutManager.saveShortcuts()
@@ -461,14 +451,13 @@ class MainWindow(QMainWindow, QObject):
     def load_data(self):
         if not self.shortcutManager.loadShortcutsFromDialogue():
             return
-        self.update_tree_view()
+        self.treeViewWidget.update_tree_view() # TODO: emit signal?
 
     def clearShortcuts(self):
-        self.shortcutManager.askSaveIfChanged()
-        self.shortcutManager.setDataUnmodified()
         self.shortcutManager.clearShortcuts()
-        self.update_tree_view()
+        self.treeViewWidget.update_tree_view() # TODO: emit signal?  Mozna nahradit toto volani za emit signalu pro update_tree_viw()
 
+    # TODO: move into shortcutManager
     def undo_last_operation(self):
         print("Undo last operation")
         # print(self.mv_history)
@@ -579,6 +568,7 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setEnabled(False)
         self.galleryManager.updatePreview()
 
+    # TODO: move into soem other class
     def handleEditMode(self, event):
         # TODO: Refactor!!!!!
         pressedKey = event.text()
@@ -600,7 +590,7 @@ class MainWindow(QMainWindow, QObject):
                 if "-" in self.keySeq:
                     self.shortcutManager.removeShortcutSequence(self.keySeq)
                     self.keySeq = ""
-                    self.update_tree_view()
+                    self.treeViewWidget.update_tree_view() # TODO: emit signal?
                     self.updateKeySequenceLabel()
                     self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
                     return
@@ -641,7 +631,7 @@ class MainWindow(QMainWindow, QObject):
 
                 self.keySeq = ""
                 self.updateKeySequenceLabel()
-                self.update_tree_view()
+                self.treeViewWidget.update_tree_view() # TODO: emit signal?
                 print(json.dumps(self.shortcutManager.getData(), indent=2))
                 self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 
@@ -654,6 +644,7 @@ class MainWindow(QMainWindow, QObject):
                 self.keySeq += pressedKey
                 self.updateKeySequenceLabel()
 
+    # TODO: move into soem other class
     def handleSortMode(self, event):
         # TODO: Refactor!!!!! - extrahvoat do separatni classy, kde se bude
         # parsovat to, co user napsal a zjistovat, jestli chce copy, move >,
@@ -1040,7 +1031,4 @@ class MainWindow(QMainWindow, QObject):
         self.statusBarLabel.setText(f"[{dateNowStr}]: {message}.")
         # TODO: Change into scrollable history of status bar. Change to the signal-slots.
 
-    def dispatcher(self, key_pressed):
-        # if hit() then move image from src to dst. and save sequence into history.
-        pass
 
