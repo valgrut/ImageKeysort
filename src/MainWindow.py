@@ -407,7 +407,7 @@ class MainWindow(QMainWindow, QObject):
         self.exitAction.triggered.connect(self.exitApp)
         # self.exitAction.setShortcut('Ctrl+Q')
 
-        self.undoAction = QAction("&Undo last operation", self)
+        self.undoAction = QAction("&Undo", self)
         self.undoAction.setShortcut('Ctrl+Z')
         self.undoAction.setStatusTip("Undo last move/copy operation")
         self.undoAction.triggered.connect(self.undo_last_operation)

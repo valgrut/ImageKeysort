@@ -138,21 +138,17 @@ QMenuBar {
 QMenu {
   background: #969696;
   /* Or any color you prefer for hover */
-  color: #830101;
+  color: black;
   /* Hover text color */
   border: 1px solid transparent;
-  border-radius: 4px;
-  position: static;
-  left: -20px; }
+  border-radius: 4px; }
 
 QMenu::item {
   background-color: green;
   padding: 2px 25px 2px 20px;
   border-radius: 4px;
   border: 1px solid transparent;
-  /* reserve space for selection border */
-  position: static;
-  left: -20px; }
+  /* reserve space for selection border */ }
 
 QMenu::item:selected {
   border-color: darkblue;
