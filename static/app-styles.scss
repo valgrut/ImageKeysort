@@ -28,6 +28,9 @@ QLabel {
     font-family: "Inter";
     xxmargin: 5px;
 }
+QLabel#statusBarLabel {
+    min-height: 26px;
+}
 
 QLabel#keyLabel {
     font-size: 16px;
@@ -54,6 +57,9 @@ QPushButton:hover {
 }
 QPushButton:checked {
     background-color: $button-background-active-color;
+}
+QPushButton#clearTreeButton:hover {
+    background-color: red;
 }
 
 
@@ -139,7 +145,21 @@ SettingsDialog QLabel {
     font-size: 12px;
 }
 
+
 /***** About dialog *****/
+SettingsDialog QPushButton {
+    border: 1px solid black;
+}
+
+/***** Ask save message *****/
+QMessageBox QPushButton {
+    border: 1px solid black;
+}
+QMessageBox QPushButton:hover {
+    background-color: $button-background-hover-color;
+}
+
+/***** About message *****/
 QMessageBox {
     background-color: $widget-background-color;
 }
@@ -175,7 +195,6 @@ QMenu::item {
     // position: static;
     // left: -20px;
 }
-
 QMenu::item:selected {
     border-color: darkblue;
     border-radius: 4px;
