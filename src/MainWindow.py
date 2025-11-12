@@ -108,8 +108,8 @@ class MainWindow(QMainWindow, QObject):
         rightInnerLayout.addWidget(self.galleryManager)
 
         self.statusBarLabel = QLabel("Status bar")
+        self.statusBarLabel.setObjectName("statusBarLabel")
         self.statusBarLabel.setGraphicsEffect(Styles.getShadowEffect())
-        self.statusBarLabel.setMaximumHeight(25)
         self.statusBarLabel.setWordWrap(True)
         rightInnerLayout.addWidget(self.statusBarLabel)
 
@@ -146,6 +146,7 @@ class MainWindow(QMainWindow, QObject):
         self.sortButton.setGraphicsEffect(Styles.getShadowEffect())
 
         self.clearButton = QPushButton("&Clear treeViewWidget", self)
+        self.clearButton.setObjectName("clearTreeButton")
         self.clearButton.clicked.connect(self.clearShortcuts)
         self.clearButton.setFocusPolicy(Qt.NoFocus)
         self.clearButton.setCursor(QCursor(Qt.PointingHandCursor))
