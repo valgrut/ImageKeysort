@@ -131,19 +131,28 @@ QMessageBox * {
   font-weight: normal; }
 
 /***** MenuBar, menu items *****/
+QMenuBar {
+  background-color: #bfbdbd;
+  min-height: 30px; }
+
 QMenu {
-  background-color: orange;
+  background: #969696;
   /* Or any color you prefer for hover */
   color: #830101;
   /* Hover text color */
-  border: 1px solid black;
-  border-radius: 4px; }
+  border: 1px solid transparent;
+  border-radius: 4px;
+  position: static;
+  left: -20px; }
 
 QMenu::item {
+  background-color: green;
   padding: 2px 25px 2px 20px;
   border-radius: 4px;
   border: 1px solid transparent;
-  /* reserve space for selection border */ }
+  /* reserve space for selection border */
+  position: static;
+  left: -20px; }
 
 QMenu::item:selected {
   border-color: darkblue;

@@ -150,24 +150,30 @@ QMessageBox * {
 }
 
 /***** MenuBar, menu items *****/
-// QMenuBar {
-//     background-color: $widget-background-color;
-// }
+QMenuBar {
+    background-color: $widget-background-color;
+    min-height: 30px;
+}
 // QMenuBar {
 //     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2:1, stop:0 lightgray, stop:1 darkgray);
 //     spacing: 3px; /* spacing between menu bar items */
 // }
 
 QMenu {
-    background-color: orange;  /* Or any color you prefer for hover */
+    background: rgb(150, 150, 150);  /* Or any color you prefer for hover */
     color: rgb(131, 1, 1);  /* Hover text color */
-    border: 1px solid black;
+    border: 1px solid transparent;
     border-radius: 4px;
+    // position: static;
+    // left: -20px;
 }
 QMenu::item {
+    background-color: green;
     padding: 2px 25px 2px 20px;
     border-radius: 4px;
     border: 1px solid transparent; /* reserve space for selection border */
+    // position: static;
+    // left: -20px;
 }
 
 QMenu::item:selected {
@@ -175,14 +181,6 @@ QMenu::item:selected {
     border-radius: 4px;
     background: rgba(100, 100, 100, 150);
 }
-
-// QMenu::content:hover {
-//     background-color: rgb(245, 184, 92);  /* Or any color you prefer for hover */
-//     color: red;  /* Hover text color */
-//     border: 1px solid black;
-//     border-radius: 4px;
-// }
-
 
 
 /***** EmptyGalleryWidget *****/
