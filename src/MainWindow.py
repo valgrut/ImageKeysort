@@ -482,12 +482,8 @@ class MainWindow(QMainWindow, QObject):
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
-        if os.path.exists(dst + "/" + imageName):
-            self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
-            # TODO: Add random suffix number to the filename (and update name in the list!)
-            # for now:
-            self.keySeq = ""
-            self.updateKeySequenceLabel()
+        if self.srcImageExistsInDst(dst, imageName):
+            self.handleExistingImageInDst()
             return
 
         shutil.move(src + "/" + imageName, dst + "/" + imageName)
@@ -584,14 +580,24 @@ class MainWindow(QMainWindow, QObject):
                 self.keySeq += pressedKey
                 self.updateKeySequenceLabel()
 
+
     def srcImageStillExists(self, src, imageName) -> bool:
+        """
+        Check that source Image still exists in Src directory.
+        This prevents operations on the Image in case the Image was removed from outside
+        of the app (for example directly through file manager).
+        """
         # if not imageName or not os.path.exists(src + "/" + imageName): # TODO: if some error ocur, add 'if not imageName and'
         if not os.path.exists(src + "/" + imageName):
             return False
         return True
 
+
     def cleanupMissingImage(self, src, imageName):
-        # If an image is not found (deleted from outside the app), remove it from the list, update preview, and so on.
+        """
+        If an image is not found (deleted from outside the app), then
+        remove it from the images list, update preview...
+        """
         self.galleryManager.removeFile(imageName)
         self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
         self.galleryManager.updateCounterLabelText()
@@ -602,8 +608,32 @@ class MainWindow(QMainWindow, QObject):
         #     self.mvHistory.pop()
 
 
+    def srcImageExistsInDst(self, imageName, dst) -> bool:
+        """
+        Check, whether the file with the same name does not already exist in the destination directory.
+        """
+        if os.path.exists(dst + "/" + imageName):
+            return True
+        return False
+
+
+    def handleExistingImageInDst(self):
+        """
+        Handles situation, when the file with the same name as source image already exist in the destination.
+
+        Currently, prevent any further operations.
+        
+        In the future, maybe add a suffix to the filename.
+        """
+        # TODO: Maybe Add random suffix number to the filename (and update name in the list!)
+        self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
+        self.keySeq = ""
+        self.updateKeySequenceLabel()
+
+
     def moveImageFromTo(self, src, dst):
         pass
+
 
     def beforeMoveOperations(self):
         # 1. space (one-time dst select)
@@ -715,12 +745,8 @@ class MainWindow(QMainWindow, QObject):
                     return
 
                 # Prevent override of an image in dst, if file with same name exist there.
-                if os.path.exists(dst + "/" + imageName):
-                    self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
-                    # TODO: Add random suffix number to the filename (and update name in the list!)
-                    # for now:
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
+                if self.srcImageExistsInDst(dst, imageName):
+                    self.handleExistingImageInDst()
                     return
 
                 # Remove current image from the list of images in src directory
@@ -778,12 +804,8 @@ class MainWindow(QMainWindow, QObject):
                     return
 
                 # Prevent override of an image in dst, if file with same name exist there.
-                if os.path.exists(dst + "/" + imageName):
-                    self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
-                    # TODO: Add random suffix number to the filename (and update name in the list!)
-                    # for now:
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
+                if self.srcImageExistsInDst(dst, imageName):
+                    self.handleExistingImageInDst()
                     return
 
                 # Remove current image from the list of images in src directory
@@ -830,12 +852,8 @@ class MainWindow(QMainWindow, QObject):
                     return
 
                 # Prevent override of an image in dst, if file with same name exist there.
-                if os.path.exists(dst + "/" + imageName):
-                    self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
-                    # TODO: Add random suffix number to the filename (and update name in the list!)
-                    # for now:
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
+                if self.srcImageExistsInDst(dst, imageName):
+                    self.handleExistingImageInDst()
                     return
 
                 print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
@@ -907,13 +925,8 @@ class MainWindow(QMainWindow, QObject):
                         return
 
                     # Prevent override of an image in dst, if file with same name exist there.
-                    if os.path.exists(dst + "/" + imageName):
-                        # self.statusBarLabel.setText(f"File with that name already exists in the dst directory.")
-                        self.updateStatusBarLabel("File with that name already exists in the dst directory.")
-                        # TODO: Add random suffix number to the filename (and update name in the list!)
-                        # for now:
-                        self.keySeq = ""
-                        self.updateKeySequenceLabel()
+                    if self.srcImageExistsInDst(dst, imageName):
+                        self.handleExistingImageInDst()
                         return
 
                     self.keySeqHistory.append(fullShortcut)
