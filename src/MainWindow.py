@@ -590,7 +590,39 @@ class MainWindow(QMainWindow, QObject):
                 self.keySeq += pressedKey
                 self.updateKeySequenceLabel()
 
+    def srcImageStillExist(self, src, imageName) -> bool:
+        # if not imageName or not os.path.exists(src + "/" + imageName): # TODO: if some error ocur, add 'if not imageName and'
+        if not os.path.exists(src + "/" + imageName):
+            self.galleryManager.removeFile(imageName)
+            self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
+            self.galleryManager.updateCounterLabelText()
+            self.galleryManager.updatePreview()
+            self.keySeq = ""
+            self.updateKeySequenceLabel()
+            return False
+        return True
+
     def moveImageFromTo(self, src, dst):
+
+        pass
+
+    def beforeMoveOperations(self):
+        # 1. space (one-time dst select)
+        #     a. open dialog with dst dir from current keySeq, if any
+        #     b. check adviced/selected dst dir exists
+        #     c. check image was not removed from outside the app
+        #     d. check dst does not contain image with same name
+        #     e. Move/Copy image from src to dst
+        #     f. Remove file from gallery list, if move
+        #     g. Append to history
+        #     h. Update status bar
+        #     i. Clear keySeq
+        #     j. Update keySeq label
+        #     k. Update counter label
+        #     l. Show new image
+        pass
+
+    def afterMoveOperations(self):
         pass
 
     # TODO: Move do specialni nove tridy pro tyhle move operace (alespon to
@@ -673,14 +705,16 @@ class MainWindow(QMainWindow, QObject):
                 imageName = self.galleryManager.getCurrentFilename()
 
                 # Check that image was not removed from outside of an app
-                if not imageName or not os.path.exists(src + "/" + imageName):
-                    self.galleryManager.removeFile(imageName)
-                    self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
-                    self.galleryManager.updateCounterLabelText()
-                    self.galleryManager.updatePreview()
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
+                if self.srcImageStillExist(src, imageName) is False:
                     return
+                # if not imageName or not os.path.exists(src + "/" + imageName):
+                #     self.galleryManager.removeFile(imageName)
+                #     self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
+                #     self.galleryManager.updateCounterLabelText()
+                #     self.galleryManager.updatePreview()
+                #     self.keySeq = ""
+                #     self.updateKeySequenceLabel()
+                #     return
 
                 # Prevent override of an image in dst, if file with same name exist there.
                 if os.path.exists(dst + "/" + imageName):
@@ -741,14 +775,16 @@ class MainWindow(QMainWindow, QObject):
                     return
 
                 # Check that image was not removed from outside of an app
-                if not os.path.exists(src + "/" + imageName):
-                    self.galleryManager.removeFile(imageName)
-                    self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
-                    self.galleryManager.updateCounterLabelText()
-                    self.galleryManager.updatePreview()
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
+                if self.srcImageStillExist(src, imageName) is False:
                     return
+                # if not os.path.exists(src + "/" + imageName):
+                #     self.galleryManager.removeFile(imageName)
+                #     self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
+                #     self.galleryManager.updateCounterLabelText()
+                #     self.galleryManager.updatePreview()
+                #     self.keySeq = ""
+                #     self.updateKeySequenceLabel()
+                #     return
 
                 # Prevent override of an image in dst, if file with same name exist there.
                 if os.path.exists(dst + "/" + imageName):
@@ -798,14 +834,16 @@ class MainWindow(QMainWindow, QObject):
                     os.makedirs(dst)
 
                 # Check that image was not removed from outside of an app
-                if not os.path.exists(src + "/" + imageName):
-                    self.galleryManager.removeFile(imageName)
-                    self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
-                    self.galleryManager.updateCounterLabelText()
-                    self.galleryManager.updatePreview()
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
+                if self.srcImageStillExist(src, imageName) is False:
                     return
+                # if not os.path.exists(src + "/" + imageName):
+                #     self.galleryManager.removeFile(imageName)
+                #     self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
+                #     self.galleryManager.updateCounterLabelText()
+                #     self.galleryManager.updatePreview()
+                #     self.keySeq = ""
+                #     self.updateKeySequenceLabel()
+                #     return
 
                 # Prevent override of an image in dst, if file with same name exist there.
                 if os.path.exists(dst + "/" + imageName):
@@ -880,14 +918,16 @@ class MainWindow(QMainWindow, QObject):
                         return
 
                     # Check that image was not removed from outside of an app
-                    if not os.path.exists(src + "/" + imageName):
-                        self.galleryManager.removeFile(imageName)
-                        self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
-                        self.galleryManager.updateCounterLabelText()
-                        self.galleryManager.updatePreview()
-                        self.keySeq = ""
-                        self.updateKeySequenceLabel()
+                    if self.srcImageStillExist(src, imageName) is False:
                         return
+                    # if not os.path.exists(src + "/" + imageName):
+                    #     self.galleryManager.removeFile(imageName)
+                    #     self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
+                    #     self.galleryManager.updateCounterLabelText()
+                    #     self.galleryManager.updatePreview()
+                    #     self.keySeq = ""
+                    #     self.updateKeySequenceLabel()
+                    #     return
 
                     # Prevent override of an image in dst, if file with same name exist there.
                     if os.path.exists(dst + "/" + imageName):
