@@ -136,7 +136,8 @@ from src.MainWindow import MainWindow
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
 # - [ ] Zmena zkratky na jinou - mit moznost zmenit key_char bez toho, abych musel pridat novy a odstranit predchozi. (treba neco jako "abx/abc" - nahradi x za c)
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
-
+# - [ ] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
+# - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
 
 # Minor issues, future features:
 # - [ ] Otevrit a tridit remote slozku - napr. Google Drive a pod ?

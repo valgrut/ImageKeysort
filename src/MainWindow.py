@@ -412,7 +412,6 @@ class MainWindow(QMainWindow, QObject):
         print("Current mode: Copy")
         self.copyOnly = True
         self.copyButton.setChecked(True)
-        # self.copyButton.setStyleSheet(Styles.getActiveButtonStyles())
         self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
         return
 
@@ -420,7 +419,6 @@ class MainWindow(QMainWindow, QObject):
         print("Current mode: Move")
         self.copyOnly = False
         self.copyButton.setChecked(False)
-        # self.copyButton.setStyleSheet(Styles.getDefaultButtonStyles())
         self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
         return
 
@@ -441,8 +439,6 @@ class MainWindow(QMainWindow, QObject):
         self.currentMode = "edit"
         self.editButton.setChecked(True)
         self.sortButton.setChecked(False)
-        # self.editButton.setStyleSheet(Styles.getActiveButtonStyles())
-        # self.sortButton.setStyleSheet(Styles.getDefaultButtonStyles())
         self.treeViewWidget.setColumnHidden(2, False)
         self.treeViewWidget.setEnabled(True)
 
@@ -453,8 +449,6 @@ class MainWindow(QMainWindow, QObject):
         self.currentMode = "sort"
         self.editButton.setChecked(False)
         self.sortButton.setChecked(True)
-        # self.editButton.setStyleSheet(Styles.getDefaultButtonStyles())
-        # self.sortButton.setStyleSheet(Styles.getActiveButtonStyles())
         self.treeViewWidget.setColumnHidden(2, True)
         self.treeViewWidget.setEnabled(False)
         self.galleryManager.updatePreview()
