@@ -121,7 +121,7 @@ SettingsDialog QLabel {
   font-weight: normal;
   font-size: 12px; }
 
-/***** MenuBar, menu items *****/
+/***** About dialog *****/
 QMessageBox {
   background-color: #bfbdbd; }
 
@@ -130,15 +130,25 @@ QMessageBox * {
   border: 0;
   font-weight: normal; }
 
-QMenuBar {
-  background-color: #bfbdbd; }
-
+/***** MenuBar, menu items *****/
 QMenu {
-  background-color: #bfbdbd; }
-
-QMenu:hover {
   background-color: orange;
-  color: red; }
+  /* Or any color you prefer for hover */
+  color: #830101;
+  /* Hover text color */
+  border: 1px solid black;
+  border-radius: 4px; }
+
+QMenu::item {
+  padding: 2px 25px 2px 20px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  /* reserve space for selection border */ }
+
+QMenu::item:selected {
+  border-color: darkblue;
+  border-radius: 4px;
+  background: rgba(100, 100, 100, 58%); }
 
 /***** EmptyGalleryWidget *****/
 EmptyGalleryWidget {

@@ -237,7 +237,6 @@ class MainWindow(QMainWindow, QObject):
         # Create main Menu bar
         self._createActions()
         self._createMenuBar()
-        self._connectActions()
 
 
         # ========== Signal connections ==========
@@ -365,7 +364,9 @@ class MainWindow(QMainWindow, QObject):
         editMenu = QMenu("&Edit", self)
         menuBar.addMenu(editMenu)
 
-
+        editMenu.addAction(self.undoAction)
+        
+        
         # Help menu
         helpMenu = QMenu("&Help", self)
         menuBar.addMenu(helpMenu)
@@ -385,16 +386,32 @@ class MainWindow(QMainWindow, QObject):
         exit(0)
 
     def _createActions(self):
+        # TODO(QIcon): self.openDirectoryAction = QAction(QIcon('./assets/new.png'), '&New', self)
         self.openDirectoryAction = QAction("&Open directory", self)
-        self.saveAction = QAction("&Save shortcuts", self)
-        self.loadAction = QAction("&Load shortcuts", self)
-        self.exitAction = QAction("&Exit", self)
-
-    def _connectActions(self):
+        self.openDirectoryAction.setShortcut('Ctrl+O')
+        self.openDirectoryAction.setStatusTip("Open source directory")
         self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)
+
+        self.saveAction = QAction("&Save shortcuts", self)
+        self.saveAction.setShortcut('Ctrl+S')
+        self.saveAction.setStatusTip("Save current shortcuts to a file")
         self.saveAction.triggered.connect(self.save_data)
+        
+        self.loadAction = QAction("&Load shortcuts", self)
+        self.loadAction.setShortcut('Ctrl+L')
+        self.loadAction.setStatusTip("Load shortcuts from a file")
         self.loadAction.triggered.connect(self.load_data)
+        
+        self.exitAction = QAction("&Exit", self)
+        self.exitAction.setStatusTip("Exit application")
         self.exitAction.triggered.connect(self.exitApp)
+        # self.exitAction.setShortcut('Ctrl+Q')
+
+        self.undoAction = QAction("&Undo last operation", self)
+        self.undoAction.setShortcut('Ctrl+Z')
+        self.undoAction.setStatusTip("Undo last move/copy operation")
+        self.undoAction.triggered.connect(self.undo_last_operation)
+
 
     def save_data(self):
         self.shortcutManager.saveShortcuts()

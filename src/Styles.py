@@ -14,42 +14,6 @@ class Styles:
 
     shadowEffectOffset = (3, 3)
     shadowEffectBlurRadius = 10
-
-    # @staticmethod
-    # def getDefaultButtonStyles() -> str:
-    #     return f"""
-    #         QPushButton {{
-    #             __width: 150px;
-    #             height: 20px;
-    #             border: 1px solid black;
-    #             border-radius: {Styles.buttonBorderRadius}px;
-    #             padding: 3px;
-    #             background-color: {Styles.buttonBgColor};
-    #             font-weight: bold;
-    #             font-size: 15px;
-    #         }}
-    #         QPushButton:hover {{
-    #             background-color: {Styles.buttonHoverBgColor};
-    #         }}
-    #     """
-    #
-    # @staticmethod
-    # def getActiveButtonStyles() -> str:
-    #     return f"""
-    #         QPushButton {{
-    #             __width: 150px;
-    #             height: 20px;
-    #             border: 1px solid black;
-    #             border-radius: {Styles.buttonBorderRadius}px;
-    #             padding: 3px;
-    #             background-color: {Styles.buttonActivatedBgColor};
-    #             font-weight: bold;
-    #             font-size: 15px;
-    #         }}
-    #         QPushButton:hover {{
-    #             background-color: {Styles.buttonHoverBgColor};
-    #         }}
-    #     """
     
     @staticmethod
     def getShadowEffect():
