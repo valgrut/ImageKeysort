@@ -276,7 +276,7 @@ class ShortcutManager(QObject):
 
         if not isMatched:
             print(f"DEBUG: Incorrect split string {isMatched}.")
-            return
+            return # False  # TODO?
 
         sequenceSplit = sequence.split("-")
         preDelimeter = sequenceSplit[0]
@@ -291,9 +291,11 @@ class ShortcutManager(QObject):
         if lastKey and (postDelimeter in lastKey["keys"]):
             if lastKey["keys"].pop(postDelimeter):
                 self.setDataModified()
+                # return True  # TODO?
 
         # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
         return True
+        # return False  # TODO?
 
 
     def clearShortcuts(self):

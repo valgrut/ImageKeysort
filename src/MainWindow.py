@@ -484,11 +484,7 @@ class MainWindow(QMainWindow, QObject):
         dst = self.mvHistory[-1]["src"]
         positionIndex = self.mvHistory[-1]["gallery_index"]
 
-        if not os.path.exists(dst):
-            print(f"ERROR: Destination directory {dst} does not exist.")
-            self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
-            self.keySeq = ""
-            self.updateKeySequenceLabel()
+        if not self.checkDestinationDirectoryExists(dst):
             return
 
         # Check that image was not removed from outside of an app
@@ -506,7 +502,7 @@ class MainWindow(QMainWindow, QObject):
         shutil.move(src + "/" + imageName, dst + "/" + imageName)
         self.updateStatusBarLabel(f"File moved BACK From: {src}.")
 
-        # Remove current image from the list of images in src directory
+        # return back the image into the list of images
         self.galleryManager.addFile(imageName, positionIndex)
 
         # Update counter label
@@ -609,6 +605,22 @@ class MainWindow(QMainWindow, QObject):
             return False
         return True
 
+    def cleanupAndRestartState(self):
+        """
+        TODO: Vsude se opakuje:
+        
+        self.keySeq = ""
+        self.updateKeySequenceLabel()
+
+        a dalsi, jako:
+        
+        self.galleryManager.updateCounterLabelText()
+        self.galleryManager.updatePreview()
+         
+        ktere vrati stav do startovni pozice. Uklidi po nacatych operacich.
+        Tohle by se melo volat i v pomocnych funkcich, aby se nikde neopakovala ta sama sekvence kodu porad...
+        """
+
 
     def cleanupMissingImage(self, src, imageName):
         """
@@ -646,6 +658,21 @@ class MainWindow(QMainWindow, QObject):
         self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
         self.keySeq = ""
         self.updateKeySequenceLabel()
+
+
+    def checkDestinationDirectoryExists(self, dst) -> bool:
+        """
+        Check, whether destination directory exists.
+        If it does NOT, return False.
+        """
+        if not os.path.exists(dst):
+            print(f"ERROR: Destination directory {dst} does not exist.")
+            self.updateStatusBarLabel(f"ERROR: Destination directory {dst} does not exist.")
+            # self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
+            self.keySeq = ""
+            self.updateKeySequenceLabel()
+            return False
+        return True
 
 
     def moveImageFromTo(self, src, dst):
@@ -808,11 +835,7 @@ class MainWindow(QMainWindow, QObject):
                 src = self.mvHistory[-1]["src"]
                 dst = self.mvHistory[-1]["dst"]
 
-                if not os.path.exists(dst):
-                    print(f"ERROR: Destination directory {dst} does not exist.")
-                    self.updateStatusBarLabel(f"ERROR: Destination directory {dst} does not exist.")
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
+                if not self.checkDestinationDirectoryExists(dst):
                     return
 
                 # Check that image was not removed from outside of an app
@@ -929,11 +952,7 @@ class MainWindow(QMainWindow, QObject):
                     src = self.galleryManager.getSourcePath()
                     dst = dstPath
 
-                    if not os.path.exists(dst):
-                        print(f"ERROR: Destination directory {dst} does not exist.")
-                        self.updateStatusBarLabel(f"ERROR: Destination directory {dst} does not exist.")
-                        self.keySeq = ""
-                        self.updateKeySequenceLabel()
+                    if not self.checkDestinationDirectoryExists(dst):
                         return
 
                     # Check that image was not removed from outside of an app
