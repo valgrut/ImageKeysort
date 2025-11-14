@@ -206,7 +206,7 @@ class ShortcutManager(QObject):
 
         return currentKeyContent
 
-    def moveShortcut(self, sequence: str):
+    def moveShortcutSequence(self, sequence: str):
         """
         Move key_char under different sub-tree.
 
@@ -227,7 +227,52 @@ class ShortcutManager(QObject):
         ab>ac
 
         """
+        # TODO: WIP
+        isMatched = re.search("^[a-zA-Z1-9]+>[a-zA-Z1-9]*$", sequence)
+
+        if not isMatched:
+            print(f"DEBUG: Incorrect split string {isMatched}.")
+            return # False  # TODO?
+
+        sequenceSplit = sequence.split(">")
+        sourceSequence = sequenceSplit[0]
+        targetSequence = sequenceSplit[1]
+
+        parentOfLastKey = self.getLastKeyParent(sourceSequence)
+
+        # Remove last key of the sourceSequence from the shortcut tree
+        poppedSubtree = None
+        # if (sourceSequence in parentOfLastKey["keys"]):
+        lastKeyChar = sourceSequence[-1]
+        poppedSubtree = parentOfLastKey["keys"].pop(lastKeyChar)
+        self.setDataModified()
+        # return True  # TODO?
+
+        # Insert into new location
+        destinationKey = None
+        if targetSequence:
+            destinationKey = self.getLastKeyContentOfSequence(targetSequence)
+        else:
+            destinationKey = self.shortcutTree
+        destinationKey["keys"].update({lastKeyChar: poppedSubtree})
+
+        # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
+        return True
+        # return False  # TODO?
         pass
+
+    def getLastKeyParent(self, keySequence: str):
+        """
+        if abc is sequence and key_char is 'c', return reference to 'b' key, so
+        we can operate on the b's content. For example, remove c from b's keys.
+        """
+        
+        # No parent for single key sequences
+        if len(keySequence) < 2:
+            return self.shortcutTree
+        
+        return self.getLastKeyContentOfSequence(keySequence[:-1])
+
 
     def changeShortcut(self, sequence: str):
         """

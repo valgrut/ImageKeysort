@@ -546,6 +546,12 @@ class MainWindow(QMainWindow, QObject):
 
                 if ">" in self.keySeq:
                     print("Note: move key_char elsewhere.")
+                    self.shortcutManager.moveShortcutSequence(self.keySeq)
+                    self.keySeq = ""
+                    self.treeViewWidget.update_tree_view() # TODO: emit signal?
+                    self.updateKeySequenceLabel()
+                    self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
+                    return
                     # TODO
 
                 if "/" in self.keySeq:
