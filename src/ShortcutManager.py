@@ -291,7 +291,17 @@ class ShortcutManager(QObject):
         1. Change 'x' to 'f'
         acx/f
         """
-        pass
+        # WIP
+        isMatched = re.search("^[a-zA-Z1-9]+/[a-zA-Z1-9]$", sequence)
+
+        if not isMatched:
+            print(f"DEBUG: Incorrect split string {isMatched}.")
+            return # False  # TODO?
+
+        sequenceSplit = sequence.split("-")
+        preDelimeter = sequenceSplit[0]
+        postDelimeter = sequenceSplit[1]
+
 
     def removeShortcutSequence(self, sequence: str):
         """

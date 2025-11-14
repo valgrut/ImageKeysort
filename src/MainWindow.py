@@ -556,6 +556,7 @@ class MainWindow(QMainWindow, QObject):
                 if "/" in self.keySeq:
                     print("Note: change key_char X for key_char Y.")
                     # TODO
+                
 
                 # Add new shortcut sequence
                 for k in self.keySeq:
