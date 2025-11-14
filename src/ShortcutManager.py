@@ -206,6 +206,20 @@ class ShortcutManager(QObject):
 
         return currentKeyContent
 
+
+    def getLastKeyParent(self, keySequence: str):
+        """
+        if abc is sequence and key_char is 'c', return reference to 'b' key, so
+        we can operate on the b's content. For example, remove c from b's keys.
+        """
+        
+        # No parent for single key sequences
+        if len(keySequence) < 2:
+            return self.shortcutTree
+        
+        return self.getLastKeyContentOfSequence(keySequence[:-1])
+
+
     def moveShortcutSequence(self, sequence: str):
         """
         Move key_char under different sub-tree.
@@ -261,18 +275,6 @@ class ShortcutManager(QObject):
         # return False  # TODO?
         pass
 
-    def getLastKeyParent(self, keySequence: str):
-        """
-        if abc is sequence and key_char is 'c', return reference to 'b' key, so
-        we can operate on the b's content. For example, remove c from b's keys.
-        """
-        
-        # No parent for single key sequences
-        if len(keySequence) < 2:
-            return self.shortcutTree
-        
-        return self.getLastKeyContentOfSequence(keySequence[:-1])
-
 
     def changeShortcutKeyChar(self, sequence: str):
         """
@@ -291,7 +293,8 @@ class ShortcutManager(QObject):
         1. Change 'x' to 'f'
         acx/f
         """
-        # TODO WIP
+        # TODO: Testy
+        # TODO: check existenci menene src: if not shortcutExist(shortcut): return.
         isMatched = re.search("^[a-zA-Z1-9]+/[a-zA-Z1-9]$", sequence)
 
         if not isMatched:
@@ -305,11 +308,15 @@ class ShortcutManager(QObject):
 
         parentOfLastKey = self.getLastKeyParent(sourceShortcut)
 
+        # Remove last key of the sourceSequence from the shortcut tree
+        lastKeyChar = sourceShortcut[-1]
+        changingKeyCharContent = parentOfLastKey["keys"].pop(lastKeyChar)
+        self.setDataModified()
+
         if keyCharToChange in parentOfLastKey["keys"]:
             print("ERROR: Such key char already exists under the parent key.")
             return
         
-        changingKeyCharContent = parentOfLastKey["keys"].pop(keyCharToChange)
         self.setDataModified()
         parentOfLastKey["keys"].update({newKeyChar: changingKeyCharContent})
 
