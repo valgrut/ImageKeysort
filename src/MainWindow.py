@@ -822,6 +822,12 @@ class MainWindow(QMainWindow, QObject):
 
             # Repeat last move from src to dst of current image.
             case Qt.Key_Period:
+                # TODO: refactor: Mohlo by to vypadat nejak takhle:
+                # if history is empty: 
+                #     return
+                # src = self.mvHistory[-1]["src"]
+                # dst = self.mvHistory[-1]["dst"]
+                # tryToMoveImage(src, dst, currentImage)
                 print("Repeat last finished command for current image")
 
                 if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:

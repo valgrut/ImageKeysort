@@ -98,6 +98,7 @@ from src.MainWindow import MainWindow
 # - [ ] !!! Presunout veskere styly do app-styles.scss a separovat layoutovani do buildUI() method.
 # - [ ] Add do Settings: Otevrit presets z minula
 # - [ ] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu.
+# - [ ] vymenit statusBar-label za QStatusBar
 
 
 # Installation, Building
