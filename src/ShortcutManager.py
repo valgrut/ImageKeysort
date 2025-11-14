@@ -274,7 +274,7 @@ class ShortcutManager(QObject):
         return self.getLastKeyContentOfSequence(keySequence[:-1])
 
 
-    def changeShortcut(self, sequence: str):
+    def changeShortcutKeyChar(self, sequence: str):
         """
         Move key_char under different sub-tree.
 
@@ -291,16 +291,27 @@ class ShortcutManager(QObject):
         1. Change 'x' to 'f'
         acx/f
         """
-        # WIP
+        # TODO WIP
         isMatched = re.search("^[a-zA-Z1-9]+/[a-zA-Z1-9]$", sequence)
 
         if not isMatched:
-            print(f"DEBUG: Incorrect split string {isMatched}.")
+            print(f"DEBUG: Incorrect change string {isMatched}.")
             return # False  # TODO?
 
-        sequenceSplit = sequence.split("-")
-        preDelimeter = sequenceSplit[0]
-        postDelimeter = sequenceSplit[1]
+        sequenceSplit = sequence.split("/")
+        sourceShortcut = sequenceSplit[0]
+        keyCharToChange = sourceShortcut[-1]
+        newKeyChar = sequenceSplit[1]
+
+        parentOfLastKey = self.getLastKeyParent(sourceShortcut)
+
+        if keyCharToChange in parentOfLastKey["keys"]:
+            print("ERROR: Such key char already exists under the parent key.")
+            return
+        
+        changingKeyCharContent = parentOfLastKey["keys"].pop(keyCharToChange)
+        self.setDataModified()
+        parentOfLastKey["keys"].update({newKeyChar: changingKeyCharContent})
 
 
     def removeShortcutSequence(self, sequence: str):

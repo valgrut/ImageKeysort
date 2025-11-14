@@ -555,7 +555,12 @@ class MainWindow(QMainWindow, QObject):
 
                 if "/" in self.keySeq:
                     print("Note: change key_char X for key_char Y.")
-                    # TODO
+                    self.shortcutManager.changeShortcutKeyChar(self.keySeq)
+                    self.keySeq = ""
+                    self.treeViewWidget.update_tree_view() # TODO: emit signal?
+                    self.updateKeySequenceLabel()
+                    self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
+                    return
                 
 
                 # Add new shortcut sequence
