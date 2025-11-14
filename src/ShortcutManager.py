@@ -227,7 +227,7 @@ class ShortcutManager(QObject):
         ab>ac
 
         """
-        # TODO: WIP
+        # TODO: Osetrit kdyz se snazim presunout neexistujici char. Treba viz schema vys, 'c>'
         isMatched = re.search("^[a-zA-Z1-9]+>[a-zA-Z1-9]*$", sequence)
 
         if not isMatched:

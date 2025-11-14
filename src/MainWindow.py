@@ -552,7 +552,6 @@ class MainWindow(QMainWindow, QObject):
                     self.updateKeySequenceLabel()
                     self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
                     return
-                    # TODO
 
                 if "/" in self.keySeq:
                     print("Note: change key_char X for key_char Y.")
