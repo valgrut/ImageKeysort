@@ -88,6 +88,7 @@ class MainWindow(QMainWindow, QObject):
         # ========== Management Objects instantiation ==========
         self.shortcutManager = ShortcutManager(self)
         self.galleryManager = GalleryManager(self)
+        # self.sortModeHandler = SortModeHandler()
 
 
         # ========== Layout ==========
@@ -388,17 +389,17 @@ class MainWindow(QMainWindow, QObject):
     def _createActions(self):
         # TODO(QIcon): self.openDirectoryAction = QAction(QIcon('./assets/new.png'), '&New', self)
         self.openDirectoryAction = QAction("&Open directory", self)
-        self.openDirectoryAction.setShortcut('Ctrl+O')
+        # self.openDirectoryAction.setShortcut('Ctrl+O')
         self.openDirectoryAction.setStatusTip("Open source directory")
         self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)
 
         self.saveAction = QAction("&Save shortcuts", self)
-        self.saveAction.setShortcut('Ctrl+S')
+        # self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.setStatusTip("Save current shortcuts to a file")
         self.saveAction.triggered.connect(self.save_data)
         
         self.loadAction = QAction("&Load shortcuts", self)
-        self.loadAction.setShortcut('Ctrl+L')
+        # self.loadAction.setShortcut('Ctrl+L')
         self.loadAction.setStatusTip("Load shortcuts from a file")
         self.loadAction.triggered.connect(self.load_data)
         
@@ -408,7 +409,7 @@ class MainWindow(QMainWindow, QObject):
         # self.exitAction.setShortcut('Ctrl+Q')
 
         self.undoAction = QAction("&Undo", self)
-        self.undoAction.setShortcut('Ctrl+Z')
+        # self.undoAction.setShortcut('Ctrl+Z')
         self.undoAction.setStatusTip("Undo last move/copy operation")
         self.undoAction.triggered.connect(self.undo_last_operation)
 
@@ -483,30 +484,37 @@ class MainWindow(QMainWindow, QObject):
         src = self.mvHistory[-1]["dst"]
         dst = self.mvHistory[-1]["src"]
         positionIndex = self.mvHistory[-1]["gallery_index"]
+        operation = self.mvHistory[-1]["operation"]
 
         if not self.checkDestinationDirectoryExists(dst):
             return
 
         # Check that image was not removed from outside of an app
-        if self.srcImageStillExists(src, imageName) is False:
-            self.cleanupMissingImage(src, imageName)
-            if self.mvHistory:  # TODO: Mozna do cleanupMissingImage, mozna jen tu. Jeste nevim.
-                self.mvHistory.pop()
-            return
+        # if self.srcImageStillExists(src, imageName) is False:
+        #     self.cleanupMissingImage(src, imageName)
+        #     #if self.mvHistory:  # TODO: Mozna do cleanupMissingImage, mozna jen tu. Jeste nevim.
+        #     #    self.mvHistory.pop()
+        #     return
 
-        # Prevent override of an image in dst, if file with same name exist there.
-        if self.srcImageExistsInDst(dst, imageName):
-            self.handleExistingImageInDst()
-            return
+        match operation:
+            case "move":
+                # Prevent override of an image in dst, if file with same name exist there.
+                if self.srcImageExistsInDst(dst, imageName):
+                    self.handleExistingImageInDst()
+                    return
+                
+                shutil.move(src + "/" + imageName, dst + "/" + imageName)
+                self.updateStatusBarLabel(f"File moved BACK from: {src}.")
 
-        shutil.move(src + "/" + imageName, dst + "/" + imageName)
-        self.updateStatusBarLabel(f"File moved BACK From: {src}.")
+                # return back the image into the list of images
+                self.galleryManager.addFile(imageName, positionIndex)
 
-        # return back the image into the list of images
-        self.galleryManager.addFile(imageName, positionIndex)
+                # Update counter label
+                self.galleryManager.updateCounterLabelText()
 
-        # Update counter label
-        self.galleryManager.updateCounterLabelText()
+            case "copy":  # Undo copy operation - just delete the image from dst.
+                Path.unlink(src + "/" + imageName)
+                self.updateStatusBarLabel(f"File deleted from: {src}.")
 
         # Remove last record from history
         if self.mvHistory:
@@ -648,11 +656,16 @@ class MainWindow(QMainWindow, QObject):
         #     self.mvHistory.pop()
 
 
-    def srcImageExistsInDst(self, imageName, dst) -> bool:
+    def srcImageExistsInDst(self, dst, imageName) -> bool:
         """
         Check, whether the file with the same name does not already exist in the destination directory.
         """
-        if os.path.exists(dst + "/" + imageName):
+        
+        # print(f"image: '{imageName}' !!!")
+        # print(f"Dst: '{dst}'!!!")
+        # if os.path.exists(dst + "/" + imageName):
+        if os.path.isfile(dst + "/" + imageName):
+            print(f"Image {imageName} already exists in the {dst}!!!")
             return True
         return False
 
@@ -801,6 +814,7 @@ class MainWindow(QMainWindow, QObject):
 
                 # Prevent override of an image in dst, if file with same name exist there.
                 if self.srcImageExistsInDst(dst, imageName):
+
                     self.handleExistingImageInDst()
                     return
 
@@ -813,18 +827,29 @@ class MainWindow(QMainWindow, QObject):
                             "src": src,
                             "dst": dst,
                             "image": imageName,
-                            "gallery_index": self.galleryManager.getGalleryIndex()
+                            "gallery_index": self.galleryManager.getGalleryIndex(),
+                            "operation": "move"
                         }
                     )
                     self.updateStatusBarLabel(f"File moved to {dst}.")
                 else:
                     shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+                    self.mvHistory.append(
+                            {
+                                "src": src,
+                                "dst": dst,
+                                "image": imageName,
+                                "gallery_index": self.galleryManager.getGalleryIndex(),
+                                "operation": "copy"
+                            }
+                        )
                     if SettingsDialog.settingsGetAutoNextAfterCopy():
                         self.galleryManager.decrementGalleryIndex()
 
                     self.updateStatusBarLabel(f"File copied to {dst}.")
 
                 self.keySeq = ""
+                print(f"History entries: {len(self.mvHistory)}")
                 self.updateKeySequenceLabel()
                 self.galleryManager.updateCounterLabelText()
 
@@ -874,17 +899,29 @@ class MainWindow(QMainWindow, QObject):
                             "src": src,
                             "dst": dst,
                             "image": imageName,
-                            "gallery_index": self.galleryManager.getGalleryIndex()
+                            "gallery_index": self.galleryManager.getGalleryIndex(),
+                            "operation": "move"
                         }
                     )
                     self.updateStatusBarLabel(f"File moved to {dst}.")
                 else:
                     shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+                    self.mvHistory.append(
+                            {
+                                "src": src,
+                                "dst": dst,
+                                "image": imageName,
+                                "gallery_index": self.galleryManager.getGalleryIndex(),
+                                "operation": "copy"
+                            }
+                        )
                     if SettingsDialog.settingsGetAutoNextAfterCopy():
                         self.galleryManager.incrementGalleryIndex()
 
                     self.updateStatusBarLabel(f"File copied to {dst}.")
+                
 
+                print(f"History entries: {len(self.mvHistory)}")
                 self.galleryManager.updateCounterLabelText()
 
                 # Show new image
@@ -923,7 +960,8 @@ class MainWindow(QMainWindow, QObject):
                         "src": src,
                         "dst": dst,
                         "image": imageName,
-                        "gallery_index": self.galleryManager.getGalleryIndex()
+                        "gallery_index": self.galleryManager.getGalleryIndex(),
+                        "operation": "move"
                     }
                 )
                 self.updateStatusBarLabel(f"File Deleted.")
@@ -995,17 +1033,28 @@ class MainWindow(QMainWindow, QObject):
                                 "src": src,
                                 "dst": dst,
                                 "image": imageName,
-                                "gallery_index": self.galleryManager.getGalleryIndex()
+                                "gallery_index": self.galleryManager.getGalleryIndex(),
+                                "operation": "move"
                             }
                         )
                         self.updateStatusBarLabel(f"File moved to {dst}.")
                     else:
                         shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+                        self.mvHistory.append(
+                            {
+                                "src": src,
+                                "dst": dst,
+                                "image": imageName,
+                                "gallery_index": self.galleryManager.getGalleryIndex(),
+                                "operation": "copy"
+                            }
+                        )
                         if SettingsDialog.settingsGetAutoNextAfterCopy():
                             self.galleryManager.incrementGalleryIndex()
 
                         self.updateStatusBarLabel(f"File copied to {dst}.")
 
+                    print(f"History entries: {len(self.mvHistory)}")
                     # Update counter label TODO fix:
                     self.galleryManager.updateCounterLabelText()
 
@@ -1074,4 +1123,3 @@ class SortModeHandler:
     def __init__():
         pass
 
-    

@@ -99,7 +99,7 @@ from src.MainWindow import MainWindow
 # - [ ] Add do Settings: Otevrit presets z minula
 # - [ ] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu.
 # - [ ] vymenit statusBar-label za QStatusBar
-
+# - [ ] Mozna do nastaveni jestli povolit ctrl+z (undo) pro copy operaci.
 
 # Installation, Building
 # - [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
