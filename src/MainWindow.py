@@ -1070,3 +1070,8 @@ class MainWindow(QMainWindow, QObject):
         # TODO: Change into scrollable history of status bar. Change to the signal-slots.
 
 
+class SortModeHandler:
+    def __init__():
+        pass
+
+    
