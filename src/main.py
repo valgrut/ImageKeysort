@@ -101,6 +101,7 @@ from src.MainWindow import MainWindow
 # - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 
+
 # Installation, Building
 # - [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
 # - [ ] Zakomponovat qtsass (pip3 install qtsass --break-system-packages)
@@ -137,6 +138,8 @@ from src.MainWindow import MainWindow
 #           webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
 # - [~] Zmena zkratky na jinou - mit moznost zmenit key_char bez toho, abych musel pridat novy a odstranit predchozi. (treba neco jako "abx/abc" - nahradi x za c)
+#       - [ ] Fix edge cases - existuje x, pridame a, zmenime a na x -> zmizi.
+#       - [ ] Prejmenovani neexistujici zkratky
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 # - [X] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
