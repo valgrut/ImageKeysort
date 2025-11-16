@@ -66,7 +66,7 @@ from src.MainWindow import MainWindow
 # - [ ] Pridat Type hints ( -> int, myvar: str, ...)
 # - [ ] Fix Ctrl+O to open new source directory
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!!
-
+# - [ ] !!!!!!!!!!!!!!!!! mozna ty sortModeHandler presunout do GalleryManager - vsak se to stara o galerii, otevirani slozky a pod.... Tam by to mohlo byt!
 
 # Settings:
 # - [~] ! Pridat Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!

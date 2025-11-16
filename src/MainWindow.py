@@ -761,7 +761,7 @@ class MainWindow(QMainWindow, QObject):
                     self.keySeq = self.keySeq[:-1]
                     self.updateKeySequenceLabel()
 
-            # Hold current shortcut and use it as default for upcoming sequences until escape
+            # Sentinel: Hold current shortcut and use it as default for upcoming sequences until escape
             case Qt.Key_Return:  # Key_Return is non-numeric Enter key
                 print("ENTER")
 
