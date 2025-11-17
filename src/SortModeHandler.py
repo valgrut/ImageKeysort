@@ -57,8 +57,7 @@ class SortModeHandler(QObject):
                 print("ESC")
                 # print("key_seq:", self.key_seq)
                 # print("permanent_key_seq:", self.permanent_key_seq)
-                # TODO: Refactor this: pridat flag sentinelExists, bude to
-                # srozumitelnejsi.
+                # TODO: Refactor this: pridat flag sentinelExists, bude to srozumitelnejsi.
                 if self.keySeq and self.permanentKeySeq:
                     self.keySeq = ""
                 elif not self.keySeq and self.permanentKeySeq:
@@ -381,7 +380,6 @@ class SortModeHandler(QObject):
                     self.updateKeySequenceLabel()
 
 
-    # TODO: Move do specialni nove tridy pro tyhle move operace
     def undo_last_operation(self):
         print("Undo last operation")
         # print(self.mv_history)
@@ -443,7 +441,6 @@ class SortModeHandler(QObject):
         This prevents operations on the Image in case the Image was removed from outside
         of the app (for example directly through file manager).
         """
-        # TODO: TOhleby mohlo byt presunuto do galleryManager
         # if not imageName or not os.path.exists(src + "/" + imageName): # TODO: if some error ocur, add 'if not imageName and'
         if not os.path.exists(src + "/" + imageName):
             return False
@@ -517,7 +514,6 @@ class SortModeHandler(QObject):
         if not os.path.exists(dst):
             print(f"ERROR: Destination directory {dst} does not exist.")
             self.updateStatusBarLabel(f"ERROR: Destination directory {dst} does not exist.")
-            # self.statusBarLabel.setText(f"ERROR: Destination directory {dst} does not exist.")
             self.keySeq = ""
             self.updateKeySequenceLabel()
             return False

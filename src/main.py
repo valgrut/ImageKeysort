@@ -95,12 +95,12 @@ from src.MainWindow import MainWindow
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
 # - [~] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
 #       - [ ] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
-# - [ ] !!! Presunout veskere styly do app-styles.scss a separovat layoutovani do buildUI() method.
+# - [~] !!! Presunout veskere styly do app-styles.scss a separovat layoutovani do buildUI() method.
 # - [ ] Add do Settings: Otevrit presets z minula
 # - [ ] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu. (Inspirovat se treba Pycharm, jak to je udelane tam)
 # - [ ] vymenit statusBar-label za QStatusBar
 # - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
-
+# - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 
 # Installation, Building
 # - [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)

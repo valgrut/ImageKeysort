@@ -4,7 +4,7 @@ import argparse
 import datetime
 import typing
 
-from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
 from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -18,7 +18,8 @@ from PyQt5.QtWidgets import (
     QAction,
     QSplitter,
     QProgressBar,
-    QMessageBox
+    QMessageBox,
+    QToolBar
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -231,6 +232,26 @@ class MainWindow(QMainWindow, QObject):
         self._createActions()
         self._createMenuBar()
 
+        # ========== Tool Bar ==========
+        toolbar = QToolBar("Image Keysort Tool bar")
+        toolbar.setIconSize(QSize(16,16))
+        self.addToolBar(toolbar)
+
+        buttonCropImageAction = QAction(QIcon("Resources/image-crop.png"), "Crop", self)
+        buttonCropImageAction.setStatusTip("Crop current image.")
+        # buttonCropImageAction.triggered.connect(self.toolbar_button_clicked)
+        buttonCropImageAction.setCheckable(True)
+        buttonCropImageAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
+        toolbar.addAction(buttonCropImageAction)
+
+        toolbar.addSeparator()
+
+        buttonExtractTextAction = QAction(QIcon("Resources/edit-shade.png"), "Extract text", self)
+        buttonExtractTextAction.setStatusTip("Extract text from the image.")
+        # buttonExtractTextAction.triggered.connect(self.toolbar_button_clicked)
+        buttonExtractTextAction.setShortcut("Ctrl+;")
+        toolbar.addAction(buttonExtractTextAction)
+
 
         # ========== Signal connections ==========
         self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)  # TODO: do it better
@@ -306,19 +327,17 @@ class MainWindow(QMainWindow, QObject):
         fileMenu.addAction(self.saveAction)
         fileMenu.addAction(self.exitAction)
 
-        act_settings = QAction("Settings", self)
+        act_settings = QAction(QIcon("Resources/gear.png"),"Settings", self)
         act_settings.setShortcut("Ctrl+,")  # common on mac
         act_settings.triggered.connect(self.open_settings)
         fileMenu.addAction(act_settings)
 
-
         # Edit menu
         editMenu = QMenu("&Edit", self)
         menuBar.addMenu(editMenu)
-
         editMenu.addAction(self.undoAction)
         
-        
+
         # Help menu
         helpMenu = QMenu("&Help", self)
         menuBar.addMenu(helpMenu)
@@ -432,8 +451,7 @@ class MainWindow(QMainWindow, QObject):
         self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 
 
-    # TODO: Mozna move nejakou cast into shortcutManager. Upravuju strukturu zkratek, nic nepresouvam (obrazky).
-    # TODO: NEBO Cela tahle funkce handeEditMode by mohla prave byt treba ve tride EditModeHandler.
+    # TODO: Cela tahle funkce handeEditMode by mohla prave byt treba ve tride EditModeHandler.
     def handleEditMode(self, event):
         pressedKey = event.text()
         match event.key():
@@ -555,11 +573,11 @@ class MainWindow(QMainWindow, QObject):
         else:
             self.keyLabel.setText(f"Key Sequence Pressed: \n{self.keySeq}")
 
-        
+
     @pyqtSlot(str)
     def updateStatusBarLabel(self, message):
         dateNowStr = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.statusBarLabel.setText(f"[{dateNowStr}]: {message}.")
-        # TODO: Change into scrollable history of status bar. Change to the signal-slots.
+        # TODO: MAYBE Change into scrollable history of status bar.
 
 
