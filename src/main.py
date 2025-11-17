@@ -100,6 +100,8 @@ from src.MainWindow import MainWindow
 # - [ ] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu.
 # - [ ] vymenit statusBar-label za QStatusBar
 # - [ ] Mozna do nastaveni jestli povolit ctrl+z (undo) pro copy operaci.
+# - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
+
 
 # Installation, Building
 # - [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
@@ -140,6 +142,8 @@ from src.MainWindow import MainWindow
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 # - [~] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
+# - [ ] Fix: ClearTree -> SaveChanges? Kdyz nevyberu zadnou slozku, stejne se to smaze. Takze pokracovat k akci jen, kdyz se fakt zvoli soubor do ktereho ulozit zkratky.
+
 
 # Minor issues, future features:
 # - [ ] Otevrit a tridit remote slozku - napr. Google Drive a pod ?
@@ -161,7 +165,7 @@ from src.MainWindow import MainWindow
 # GIT README.md
 # - pridat tam, ze vyhoda je, ze tridime pouze 1 photo at a time! No distraction. No paralysis.
 
-
+# Note: Pycharm: Shift + F10 always runs main.py. No need to always click to main.py first.
 
 def main():
     QCoreApplication.setOrganizationName("JP")
