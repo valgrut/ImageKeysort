@@ -33,6 +33,7 @@ from src.Styles import Styles
 from src.SettingsDialog import SettingsDialog
 from src.SortModeHandler import SortModeHandler
 from src.Modes import Modes
+from src.TextExtractor import TextExtractor
 
 # TODO: Tohle jinam; Kam?
 screenWidth = 1152
@@ -84,9 +85,14 @@ class MainWindow(QMainWindow, QObject):
         # ========== Management Objects instantiation ==========
         self.shortcutManager = ShortcutManager(self)  # deps are injected
         self.galleryManager = GalleryManager(self)  # deps are injected
+
         self.sortModeHandler = SortModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
         self.sortModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
         self.sortModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
+
+        self.textExtractor = TextExtractor(self.galleryManager)
+        self.textExtractor.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
+
 
         # ========== Layout ==========
         mainLayout = QHBoxLayout()
@@ -109,6 +115,7 @@ class MainWindow(QMainWindow, QObject):
         self.statusBarLabel.setObjectName("statusBarLabel")
         self.statusBarLabel.setGraphicsEffect(Styles.getShadowEffect())
         self.statusBarLabel.setWordWrap(True)
+        self.updateStatusBarLabel(f"App loaded.")
         rightInnerLayout.addWidget(self.statusBarLabel)
 
         # Left side of the main layout
@@ -252,7 +259,8 @@ class MainWindow(QMainWindow, QObject):
 
         buttonExtractTextAction = QAction(QIcon("Resources/edit-shade.png"), "Extract text", self)
         buttonExtractTextAction.setStatusTip("Extract text from the image.")
-        # buttonExtractTextAction.triggered.connect(self.toolbar_button_clicked)
+        # buttonExtractTextAction.triggered.connect(self.galleryManager.currentWidget().imageViewWidget.extractTextFromImage)
+        buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage)
         buttonExtractTextAction.setShortcut("Ctrl+;")
         toolbar.addAction(buttonExtractTextAction)
 
