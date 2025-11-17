@@ -241,7 +241,8 @@ class ShortcutManager(QObject):
         ab>ac
 
         """
-        # TODO: Osetrit kdyz se snazim presunout neexistujici char. Treba viz schema vys, 'c>'
+        # TODO: Fix corner case: structura: a->c. Command: a>ac.  Sice validni syntax, ale nefunguje.
+        # - Mozna check, ze char co se bude presouvat, (ten pred >) nesmi byt soucasti target (za >).
         isMatched = re.search("^[a-zA-Z1-9]+>[a-zA-Z1-9]*$", sequence)
 
         if not isMatched:
@@ -251,6 +252,18 @@ class ShortcutManager(QObject):
         sequenceSplit = sequence.split(">")
         sourceSequence = sequenceSplit[0]
         targetSequence = sequenceSplit[1]
+
+        # Check existence of the source shortcut (before >)
+        if not self.getLastKeyContentOfSequence(sourceSequence):
+            print(f"Source shortcut ({sourceSequence}) does not exist.")
+            self.updateStatusBarLabelSignal.emit(f"Source shortcut ({sourceSequence}) does not exist.")
+            return
+
+        # Check existence of the target shortcut (after >)
+        if len(targetSequence) > 0 and not self.getLastKeyContentOfSequence(targetSequence):
+            print(f"Target shortcut ({targetSequence}) does not exist.")
+            self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) does not exist.")
+            return
 
         parentOfLastKey = self.getLastKeyParent(sourceSequence)
 
@@ -306,6 +319,19 @@ class ShortcutManager(QObject):
         keyCharToChange = sourceShortcut[-1]
         newKeyChar = sequenceSplit[1]
 
+        # Check existence of the source shortcut (before /)
+        if not self.getLastKeyContentOfSequence(sourceShortcut):
+            print(f"Source shortcut ({sourceShortcut}) does not exist.")
+            self.updateStatusBarLabelSignal.emit(f"Source shortcut ({sourceShortcut}) does not exist")
+            return
+
+        # Check existence of the target shortcut (after /)
+        targetSequence = sourceShortcut[:-1] + newKeyChar
+        if self.getLastKeyContentOfSequence(targetSequence):
+            print(f"Target shortcut ({targetSequence}) already exist.")
+            self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) already exist.")
+            return
+
         parentOfLastKey = self.getLastKeyParent(sourceShortcut)
 
         # Remove last key of the sourceSequence from the shortcut tree
@@ -313,9 +339,11 @@ class ShortcutManager(QObject):
         changingKeyCharContent = parentOfLastKey["keys"].pop(lastKeyChar)
         self.setDataModified()
 
-        if keyCharToChange in parentOfLastKey["keys"]:
-            print("ERROR: Such key char already exists under the parent key.")
-            return
+        # TODO: Tohle mozna nepotrebuju? Protoze to checkuju vyse... Mozna.
+        # if keyCharToChange in parentOfLastKey["keys"]:
+        #     print("ERROR: Such key char already exists under the parent key.")
+        #     self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) already exist.")
+        #     return
         
         self.setDataModified()
         parentOfLastKey["keys"].update({newKeyChar: changingKeyCharContent})
@@ -349,7 +377,7 @@ class ShortcutManager(QObject):
 
         if not isMatched:
             print(f"DEBUG: Incorrect split string {isMatched}.")
-            return # False  # TODO?
+            return  # False  # TODO?
 
         sequenceSplit = sequence.split("-")
         preDelimeter = sequenceSplit[0]
@@ -464,6 +492,7 @@ class ShortcutManager(QObject):
 
         self.setDataUnmodified()
         print(f"Data loaded from {presetsFilePath}.")
+        self.updateStatusBarLabelSignal.emit(f"Data successfully loaded from {presetsFilePath}.")
 
         return True
 
@@ -487,7 +516,8 @@ class ShortcutManager(QObject):
 
         self.srcPathOfLoadedData = jsonDataFile[0]
         self.setDataUnmodified()
-        print(f"Saved to {jsonDataFile}.")
+        print(f"Data saved to {jsonDataFile}.")
+        self.updateStatusBarLabelSignal.emit(f"Data saved to {jsonDataFile}.")
 
         return True
 

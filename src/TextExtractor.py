@@ -39,7 +39,7 @@ class TextExtractor(QWidget):
 
             # TODO: obrazek specifikovat Tady primo, nebo cestu vlozit do argumentu teto metody
             image_path = Path(self.galleryManager.getSourcePath(), self.galleryManager.getCurrentFilename())
-
+            # todo add check if file exist else return.
             print("extractTextFromImage: ", image_path)
             self.updateStatusBarLabelSignal.emit(f"Text extraction started! Wait...")
 
@@ -52,11 +52,11 @@ class TextExtractor(QWidget):
             # self.extractTextToClipboard_signal.emit(text)
 
             print()
-            print("Extracted text copied to clipboard:")
+            print("Extracted text copied to clipboard!")
             print("==================== TEXT ====================")
             print(text)
             print("==============================================")
 
-            self.updateStatusBarLabelSignal.emit(f"Text extraction finished!")
+            self.updateStatusBarLabelSignal.emit(f"Extraction finished! Text is in your clipboard.")
         except Exception as e:
             print(e)
