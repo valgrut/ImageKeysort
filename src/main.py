@@ -97,9 +97,8 @@ from src.MainWindow import MainWindow
 #       - [ ] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
 # - [ ] !!! Presunout veskere styly do app-styles.scss a separovat layoutovani do buildUI() method.
 # - [ ] Add do Settings: Otevrit presets z minula
-# - [ ] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu.
+# - [ ] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu. (Inspirovat se treba Pycharm, jak to je udelane tam)
 # - [ ] vymenit statusBar-label za QStatusBar
-# - [ ] Mozna do nastaveni jestli povolit ctrl+z (undo) pro copy operaci.
 # - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 
 
@@ -140,7 +139,7 @@ from src.MainWindow import MainWindow
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
 # - [~] Zmena zkratky na jinou - mit moznost zmenit key_char bez toho, abych musel pridat novy a odstranit predchozi. (treba neco jako "abx/abc" - nahradi x za c)
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
-# - [~] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
+# - [X] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
 # - [X] Fix: ClearTree -> SaveChanges? Kdyz nevyberu zadnou slozku, stejne se to smaze. Takze pokracovat k akci jen, kdyz se fakt zvoli soubor do ktereho ulozit zkratky.
 
