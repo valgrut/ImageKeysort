@@ -18,6 +18,10 @@ allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Ke
 
 
 class SortModeHandler(QObject):
+    """
+    Handle sort mode of the app.
+    Executes operations.
+    """
 
     updateKeySequenceLabelSignal = pyqtSignal(str)
     updateStatusBarLabelSignal = pyqtSignal(str)
@@ -98,7 +102,8 @@ class SortModeHandler(QObject):
                     if nonTerminalKey:
                         dst = nonTerminalKey["dst_path"]
                         if not os.path.exists(dst):
-                            print(f"Shortcut probably does not contain dst_path ({dst}).")
+                            print(f"No action. Shortcut probably does not contain dst_path ({dst}).")
+                            self.updateStatusBarLabelSignal.emit(f"No action. Destination directory is empty or does not exist for shortcut ({self.keySeq}).")
                             return
                         print("middle_path", dst)
                     else:
@@ -305,6 +310,7 @@ class SortModeHandler(QObject):
                 if not self.keySeq:
                     return
 
+                # self.updateStatusBarLabelSignal.emit(f"Hit but No action. Destination directory is empty or does not exist for this shortcut.")
                 dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
                 if dstPath:
                     print("HIT!")

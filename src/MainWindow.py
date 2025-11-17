@@ -38,6 +38,10 @@ from src.Modes import Modes
 screenWidth = 1152
 screenHeight = 864
 
+allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
+                Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
+                Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z, Qt.Key_Escape, Qt.Key_Backspace,
+               Qt.Key_Return, Qt.Key_Space, Qt.Key_Period, Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Home, Qt.Key_End]
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow, QObject):
@@ -532,6 +536,9 @@ class MainWindow(QMainWindow, QObject):
             return
 
         pressedKey = event.text()
+        # if pressedKey not in self.allowedKeys:
+        #     print(f"!!! {pressedKey} not in AllowedKeys.")
+        #     return
         # print("Pressed Key:", pressedKey)
 
         # Key binding working in both modes:
@@ -552,7 +559,7 @@ class MainWindow(QMainWindow, QObject):
                 # TODO
                 pass
 
-            case _: # Default case
+            case _:  # Default case
                 super().keyPressEvent(event)
 
         if self.currentMode == Modes.EDIT:
@@ -577,7 +584,7 @@ class MainWindow(QMainWindow, QObject):
     @pyqtSlot(str)
     def updateStatusBarLabel(self, message):
         dateNowStr = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.statusBarLabel.setText(f"[{dateNowStr}]: {message}.")
+        self.statusBarLabel.setText(f"[{dateNowStr}]: {message}")
         # TODO: MAYBE Change into scrollable history of status bar.
 
 

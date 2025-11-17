@@ -33,8 +33,8 @@ class GalleryManager(QStackedWidget):
         self.sourceDirectoryPath = ""
 
         #self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp')
-        self.videoSuffixes = ("gif", "mp4", "avi", "mkv", "mov", "wmv", "flv", "webm")  # TODO: spravit avi, zprovoznit mp4.
-        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp') + self.videoSuffixes  # TODO: spravit avi, zprovoznit mp4.
+        self.videoSuffixes = ("gif", "mp4", "avi", "mkv", "mov", "wmv", "flv", "webm")  # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
+        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp') + self.videoSuffixes  # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
 
         # Stacked widgets:
         self.emptyInboxWidget = EmptyGalleryImageWidget()
