@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtGui import QKeyEvent
 
 from src.SettingsDialog import SettingsDialog
+from src.Operations import Operations
 
 # TODO: tohle by melo ovlivnovat i edit mode, ne???
 allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
@@ -140,7 +141,7 @@ class SortModeHandler(QObject):
                             "dst": dst,
                             "image": imageName,
                             "gallery_index": self.galleryManager.getGalleryIndex(),
-                            "operation": "move"
+                            "operation": Operations.MOVE
                         }
                     )
                     self.updateStatusBarLabel(f"File moved to {dst}.")
@@ -152,7 +153,7 @@ class SortModeHandler(QObject):
                                 "dst": dst,
                                 "image": imageName,
                                 "gallery_index": self.galleryManager.getGalleryIndex(),
-                                "operation": "copy"
+                                "operation": Operations.COPY
                             }
                         )
                     if SettingsDialog.settingsGetAutoNextAfterCopy():
@@ -212,7 +213,7 @@ class SortModeHandler(QObject):
                             "dst": dst,
                             "image": imageName,
                             "gallery_index": self.galleryManager.getGalleryIndex(),
-                            "operation": "move"
+                            "operation": Operations.MOVE
                         }
                     )
                     self.updateStatusBarLabel(f"File moved to {dst}.")
@@ -224,7 +225,7 @@ class SortModeHandler(QObject):
                                 "dst": dst,
                                 "image": imageName,
                                 "gallery_index": self.galleryManager.getGalleryIndex(),
-                                "operation": "copy"
+                                "operation": Operations.COPY
                             }
                         )
                     if SettingsDialog.settingsGetAutoNextAfterCopy():
@@ -273,7 +274,7 @@ class SortModeHandler(QObject):
                         "dst": dst,
                         "image": imageName,
                         "gallery_index": self.galleryManager.getGalleryIndex(),
-                        "operation": "move"
+                        "operation": Operations.MOVE
                     }
                 )
                 self.updateStatusBarLabel(f"File Deleted.")
@@ -346,7 +347,7 @@ class SortModeHandler(QObject):
                                 "dst": dst,
                                 "image": imageName,
                                 "gallery_index": self.galleryManager.getGalleryIndex(),
-                                "operation": "move"
+                                "operation": Operations.MOVE
                             }
                         )
                         self.updateStatusBarLabel(f"File moved to {dst}.")
@@ -358,7 +359,7 @@ class SortModeHandler(QObject):
                                 "dst": dst,
                                 "image": imageName,
                                 "gallery_index": self.galleryManager.getGalleryIndex(),
-                                "operation": "copy"
+                                "operation": Operations.COPY
                             }
                         )
                         if SettingsDialog.settingsGetAutoNextAfterCopy():
@@ -387,6 +388,7 @@ class SortModeHandler(QObject):
 
         if not self.mvHistory:
             print(f"History is Empty!")
+            self.updateStatusBarLabelSignal.emit(f"Nothing to Undo, history is empty.")
             return
 
         imageName = self.mvHistory[-1]["image"]
@@ -406,7 +408,7 @@ class SortModeHandler(QObject):
         #     return
 
         match operation:
-            case "move":
+            case Operations.MOVE:
                 # Prevent override of an image in dst, if file with same name exist there.
                 if self.srcImageExistsInDst(dst, imageName):
                     self.handleExistingImageInDst()
@@ -421,7 +423,7 @@ class SortModeHandler(QObject):
                 # Update counter label
                 self.galleryManager.updateCounterLabelText()
 
-            case "copy":  # Undo copy operation - just delete the image from dst.
+            case Operations.COPY:  # Undo copy operation - just delete the image from dst.
                 Path.unlink(src + "/" + imageName)
                 self.updateStatusBarLabel(f"File deleted from: {src}.")
 

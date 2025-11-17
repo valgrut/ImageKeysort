@@ -330,27 +330,27 @@ class MainWindow(QMainWindow, QObject):
     def _createActions(self):
         # TODO(QIcon): self.openDirectoryAction = QAction(QIcon('./assets/new.png'), '&New', self)
         self.openDirectoryAction = QAction("&Open directory", self)
-        # self.openDirectoryAction.setShortcut('Ctrl+O')
+        # self.openDirectoryAction.setShortcut('Ctrl+O')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.openDirectoryAction.setStatusTip("Open source directory")
         self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)
 
         self.saveAction = QAction("&Save shortcuts", self)
-        # self.saveAction.setShortcut('Ctrl+S')
+        # self.saveAction.setShortcut('Ctrl+S')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.saveAction.setStatusTip("Save current shortcuts to a file")
         self.saveAction.triggered.connect(self.save_data)
         
         self.loadAction = QAction("&Load shortcuts", self)
-        # self.loadAction.setShortcut('Ctrl+L')
+        # self.loadAction.setShortcut('Ctrl+L')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.loadAction.setStatusTip("Load shortcuts from a file")
         self.loadAction.triggered.connect(self.load_data)
         
         self.exitAction = QAction("&Exit", self)
         self.exitAction.setStatusTip("Exit application")
         self.exitAction.triggered.connect(self.exitApp)
-        # self.exitAction.setShortcut('Ctrl+Q')
+        # self.exitAction.setShortcut('Ctrl+Q')  # TODO: Fix - I want the shortcuts to be shown in the menu.
 
         self.undoAction = QAction("&Undo", self)
-        # self.undoAction.setShortcut('Ctrl+Z')
+        # self.undoAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.undoAction.setStatusTip("Undo last move/copy operation")
         self.undoAction.triggered.connect(self.sortModeHandler.undo_last_operation)
 
