@@ -375,7 +375,9 @@ class ShortcutManager(QObject):
         """
         Clears all shortcuts data.
         """
-        self.askSaveIfChanged()
+        if self.askSaveIfChanged():
+            # No file selected to save into or other error occured.
+            return
         self.setDataUnmodified()
         self.shortcutTree = {"keys": {}}
 
@@ -387,7 +389,7 @@ class ShortcutManager(QObject):
     #     return False
 
 
-    def askSaveIfChanged(self):
+    def askSaveIfChanged(self) -> bool:
         """
         Asks user whether he wants to save changes in shortcuts if they are modified.
         """
@@ -404,7 +406,7 @@ class ShortcutManager(QObject):
         if self.saveShortcuts():
             return False
         else:
-            print("DEBUG: Save was not successful.")
+            print("DEBUG: No file selected to save to. Abort.")
             return True
 
 
