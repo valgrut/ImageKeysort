@@ -77,7 +77,7 @@ from src.MainWindow import MainWindow
 # - [~] ! REFACTORING
 # - [X] Tridit zkratky abecedne? (Mozna settings option?)
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
-# - [~] !!!!! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak zkratku nepridavat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [??SETTINGS]
+# - [~] !!!!! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak se zeptat (nebo settings?), jestli zkratku fakt pridat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [??SETTINGS]
 # - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.)
 # - [~] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
@@ -85,7 +85,7 @@ from src.MainWindow import MainWindow
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
 # - [x] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 # - [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou treeViewWidget a image.
-# - [ ] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
+# - [~] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
 # - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni. Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
 # - [X] Mozna nejakou animaci, ze blikne statusbar, kdyz se tam objevi nova zprava, nebo pridat datum a cas zpravy, aby bylo jasne, ze aktualni zprava se tyka treba posledni operace.
 # - [ ] TODO: Translate all done tasks and translate todo ideas to EN:
@@ -93,7 +93,8 @@ from src.MainWindow import MainWindow
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
 # - [X] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
 #       - [X] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
-# - [~] !!! Presunout veskere styly do app-styles.scss a separovat layoutovani do buildUI() method.
+# - [X] Presunout veskere styly do app-styles.scss
+# - [ ] separovat layoutovani do buildUI() method.
 # - [ ] Add do Settings: Otevrit presets z minula
 # - [X] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu. (Inspirovat se treba Pycharm, jak to je udelane tam)
 # - [ ] vymenit statusBar-label za QStatusBar

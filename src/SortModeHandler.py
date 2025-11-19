@@ -295,7 +295,7 @@ class SortModeHandler(QObject):
 
                 self.keySeq += pressedKey
 
-                # self.update_tree_view(event.key()) # TODO:
+                self.mainWindow.treeViewWidget.update_tree_view(self.keySeq)  # TODO
 
                 fullShortcut = ""
                 if self.permanentKeySeq:
