@@ -1,3 +1,4 @@
+import argparse
 import sys
 import pathlib
 from src.Styles import Styles
@@ -172,6 +173,22 @@ from src.MainWindow import MainWindow
 
 # Note: Pycharm: Shift + F10 always runs main.py. No need to always click to main.py first.
 
+def parseArguments():
+    parser = argparse.ArgumentParser(
+                    prog='Image Keysort',
+                    description='Shortcut based image sorter.',
+                    epilog='For CLI options, please refer to the documentation.')
+    parser.add_argument('-c', '--set-copy-mode', action='store_true')  # on/off flag
+    parser.add_argument('--src-path', type=str, required=False, help='Path to the source directory')
+    parser.add_argument('--presets-path', type=str, required=False, help='Preset file name path')
+    args = parser.parse_args()
+
+    srcPathArg = args.src_path
+    presetsArg = args.presets_path
+    setCopyModeArg = args.set_copy_mode
+    return args
+    
+
 def main():
     QCoreApplication.setOrganizationName("JP")
     QCoreApplication.setOrganizationDomain("wogon.cz")
@@ -185,11 +202,14 @@ def main():
     # qss = qtsass.compile(scss_path.read_text(encoding="utf-8"))
     # qss_path.write_text(qss, encoding="utf-8")
 
+    # CLI arguments parsing
+    parsedArgs = parseArguments()
+
     # Create app and apply theme
     app = QApplication(sys.argv)
     app.setPalette(Styles.get_default_palette())
     app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
-    window = MainWindow()
+    window = MainWindow(args = parsedArgs)
     window.show()
     app.aboutToQuit.connect(window.shortcutManager.askSaveIfChanged)
 

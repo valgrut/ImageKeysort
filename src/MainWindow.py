@@ -1,6 +1,5 @@
 import sys
 import json
-import argparse
 import datetime
 import typing
 
@@ -52,26 +51,21 @@ class MainWindow(QMainWindow, QObject):
     firstImageRequestedSignal = pyqtSignal()
     lastImageRequestedSignal = pyqtSignal()
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, args=None):
         super().__init__(parent)
         super().__init__()
 
-        # ========== CLI argument parsing ==========
-        parser = argparse.ArgumentParser(
-                    prog='Image Keysort',
-                    description='Shortcut based image sorter.',
-                    epilog='For CLI options, please refer to the documentation.')
-        parser.add_argument('-c', '--set-copy-mode', action='store_true')  # on/off flag
-        parser.add_argument('--src-path', type=str, required=False, help='Path to the source directory')
-        parser.add_argument('--presets-path', type=str, required=False, help='Preset file name path')
-        args = parser.parse_args()
+        # ========== CLI argument passing ==========
+        srcPathArg = None
+        presetsArg = None
+        setCopyModeArg = None
+        if args is not None:
+            srcPathArg = args.src_path
+            presetsArg = args.presets_path
+            setCopyModeArg = args.set_copy_mode
 
-        srcPathArg = args.src_path
-        presetsArg = args.presets_path
-        setCopyModeArg = args.set_copy_mode
-
-        print(f"Source path: {srcPathArg}")
-        print(f"Presets: {presetsArg}")
+            print(f"Source path: {srcPathArg}")
+            print(f"Presets: {presetsArg}")
 
 
         # ========== Main App Window parameters ==========

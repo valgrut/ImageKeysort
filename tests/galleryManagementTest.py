@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QPushButton
 from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
 
-from main import MainWindow  # Import main.py from the src package
+from src.MainWindow import MainWindow  # Import main.py from the src package
 
 app = QApplication([])  # needed for the app to work during testing
 

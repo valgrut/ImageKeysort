@@ -1,10 +1,16 @@
 import unittest
 from PyQt5.QtWidgets import QApplication, QPushButton
 from PyQt5.QtTest import QTest
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QCoreApplication
 
+from src.main import main
 from src.MainWindow import MainWindow
-from src.ShortcutManager import ShortcutManager  # Import the ShortcutManager class
+from src.ShortcutManager import ShortcutManager
+
+
+QCoreApplication.setOrganizationName("JP")
+QCoreApplication.setOrganizationDomain("wogon.cz")
+QCoreApplication.setApplicationName("Image Keysort")
 
 app = QApplication([])  # needed for the app to work during testing
 
