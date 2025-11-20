@@ -144,7 +144,11 @@ from src.MainWindow import MainWindow
 # - [X] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
 # - [X] Fix: ClearTree -> SaveChanges? Kdyz nevyberu zadnou slozku, stejne se to smaze. Takze pokracovat k akci jen, kdyz se fakt zvoli soubor do ktereho ulozit zkratky.
-
+# - [ ] Reset changes in the shortcuts (revert to last saved state) - button in Edit mode.
+# - [ ] Expand / Collapse everything under a shortcut - by doubleclicking the shortcut?
+# - [ ] Expand / Collapse all shortcuts - button in Edit mode.
+# - [ ] Napr: "a-" odstrani vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
+# - [ ] Tag / color nodes - Add a color or tag (e.g. game, editing, global) for quick visual scanning.
 
 # Minor issues, future features:
 # - [ ] Otevrit a tridit remote slozku - napr. Google Drive a pod ?

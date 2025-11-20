@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QPushButton
 from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
 
-from src.main import MainWindow  # Import main.py from the src package
+from src.MainWindow import MainWindow
 from src.ShortcutManager import ShortcutManager  # Import the ShortcutManager class
 
 app = QApplication([])  # needed for the app to work during testing
