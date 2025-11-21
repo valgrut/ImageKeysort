@@ -101,7 +101,7 @@ from src.MainWindow import MainWindow
 # - [ ] vymenit statusBar-label za QStatusBar
 # - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
-
+# - [ ] Osetrit, kdyz kliknu na extract, ale neni nacteny zadny obrazek.
 
 # Installation, Building
 # - [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
