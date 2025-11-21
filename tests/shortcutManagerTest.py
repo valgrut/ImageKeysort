@@ -21,8 +21,10 @@ class TestShortcutManager(unittest.TestCase):
     def setUp(self):
         # Create the application window and button (the GUI to be tested)
         self.window = MainWindow()  # Replace with your actual window class
-        self.galleryManager = self.window.galleryManager
-        self.button = self.window.copyButton  # Example: the button you're testing
+        self.sm = ShortcutManager(self.window)
+        # self.galleryManager = self.window.galleryManager
+        # self.button = self.window.copyButton  # Example: the button you're testing
+
 
     def test_getAllPaths_simple(self):
         # Example test for getAllPaths
@@ -44,6 +46,7 @@ class TestShortcutManager(unittest.TestCase):
         
         # Check if the paths returned are as expected
         self.assertEqual(paths, ["C:/image-sorter/testing-data/kk"])
+
 
     def test_getAllPaths_complex(self):
         shortcutsData = {
@@ -92,6 +95,8 @@ class TestShortcutManager(unittest.TestCase):
         
         # Check if the paths returned are as expected
         self.assertEqual(paths, ["HOME/Gaming/The Witcher", "HOME/Gaming/World of Warcraft", "HOME/Gaming/Cyberpunk 2077", "HOME/Memes/Gaming memes", "HOME/Memes/Gaming memes/Factorio", "HOME/Memes/Gaming memes/Path of Exile", "HOME/Memes/Gaming memes/The Witcher", "HOME/Memes/Gaming memes/WoW", "HOME/Gaming/Guild wars 2"])
+        self.sm.clearShortcuts()
+
 
     # def test_toggleCoppyMode(self):
     #     # Check that copy mode is set to False
@@ -103,35 +108,714 @@ class TestShortcutManager(unittest.TestCase):
     #     # Check if the button click did what it's supposed to do
     #     self.assertEqual(self.window.copyOnly, True)  # Example assertion
 
-    def test_addShortcut_simple(self):
-        pass
+
+    # ========== addShortcut ==========
+    def test_addShortcut_no_dst(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("a")
+        self.assertIn('a', sm.shortcutTree['keys'])
+        self.assertEqual(sm.areShortcutsModified(), True)
+
 
     def test_addShortcut_complex(self):
-        pass
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        expectedOutput = {
+        "keys": {
+            "a": {
+            "dst_path": "",
+            "keys": {
+                "b": {
+                "dst_path": "",
+                "keys": {
+                    "c": {
+                    "dst_path": "",
+                    "keys": {
+                        "d": {
+                        "dst_path": "",
+                        "keys": {}
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
 
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+
+    def test_addShortcut_addExisting(self):
+        # Prepare
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.setDataUnmodified()  # reset modified flag
+        expectedOutput = {
+        "keys": {
+            "a": {
+            "dst_path": "",
+            "keys": {
+                "b": {
+                "dst_path": "",
+                "keys": {
+                    "c": {
+                    "dst_path": "",
+                    "keys": {
+                        "d": {
+                        "dst_path": "",
+                        "keys": {}
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+
+        # Test
+        sm._getLastKeyOfSequenceAndUpdate("ab")
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    # ========== addKeyUnderCurrent ==========
     def test_addKeyUnderCurrent(self):
         pass
 
-    def test_addDstForShortcut(self):
-        pass
+    
+    # ========== addDstPathForShortcut ==========
+    def test_addDstForShortcut_assign_dst(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
 
+        expectedOutput = {
+        "keys": {
+            "a": {
+            "dst_path": "",
+            "keys": {
+                "b": {
+                "dst_path": "",
+                "keys": {
+                    "c": {
+                    "dst_path": "",
+                    "keys": {
+                        "d": {
+                        "dst_path": "/home/user/Pictures/Photos",
+                        "keys": {}
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+    
+
+    def test_addDstForShortcut_change_dst(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+        expectedOutput = {
+        "keys": {
+            "a": {
+            "dst_path": "",
+            "keys": {
+                "b": {
+                "dst_path": "",
+                "keys": {
+                    "c": {
+                    "dst_path": "",
+                    "keys": {
+                        "d": {
+                        "dst_path": "/home/user/Pictures/Photos",
+                        "keys": {}
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+
+        sm.addDstPathForShortcut("abcd", "/home/user/Documents")
+        actualOutput = sm.shortcutTree
+        expectedOutput = {
+        "keys": {
+            "a": {
+            "dst_path": "",
+            "keys": {
+                "b": {
+                "dst_path": "",
+                "keys": {
+                    "c": {
+                    "dst_path": "",
+                    "keys": {
+                        "d": {
+                        "dst_path": "/home/user/Documents",
+                        "keys": {}
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+        self.assertEqual(actualOutput, expectedOutput)
+        # Changing dst for some shortcut should cause modified state to be True; TODO;
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+
+    def test_addDstForShortcut_nonexisting_shortcut(self):
+        sm = ShortcutManager(self.window)     
+        expectedOutput = {
+        "keys": {
+            "x": {
+            "dst_path": "",
+            "keys": {
+                "y": {
+                "dst_path": "",
+                "keys": {
+                    "z": {
+                    "dst_path": "/home/user/Pictures/Photos",
+                    "keys": {}
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+        # TODO - funkce addDstPathForShortcut shortcuts vytvori, pokud neexistuje.
+        sm.addDstPathForShortcut("xyz", "/home/user/Pictures/Photos")
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+
+    # ========== getDstForShortcut ==========
     def test_getDstForShortcut(self):
-        pass
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
 
-    def test_removeShortcutSequence_simple(self):
-        pass
+        expectedOutput = "/home/user/Pictures/Photos"
 
-    def test_removeShortcutSequence_complex(self):
-        pass
+        actualOutput = sm.getDstPathForShortcut("abcd")
+        self.assertEqual(actualOutput, expectedOutput)
 
+
+    def test_getDstForShortcut_shortcut_does_not_exist(self):
+        sm = ShortcutManager(self.window)
+        expectedOutput = None
+        actualOutput = sm.getDstPathForShortcut("xyz")
+
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_getDstForShortcut_dst_does_not_exist(self):
+        sm = ShortcutManager(self.window)
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.setDataUnmodified()  # reset modified flag
+
+        expectedOutput = None
+        actualOutput = sm.getDstPathForShortcut("abcd")
+
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    # ========== removeShortcutSequence ==========
+    def test_removeShortcutSequence_remove_last(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        sm.removeShortcutSequence("abc-d")
+        expectedOutput = {
+        "keys": {
+            "a": {
+            "dst_path": "",
+            "keys": {
+                "b": {
+                "dst_path": "",
+                "keys": {
+                    "c": {
+                    "dst_path": "",
+                    "keys": {}
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+
+    def test_removeShortcutSequence_remove_first(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        sm.removeShortcutSequence("-a")
+        expectedOutput = {
+        "keys": {}
+        }
+
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+
+    def test_removeShortcutSequence_remove_all_but_first(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        sm.removeShortcutSequence("a-b")
+        expectedOutput = {
+        "keys": {
+            "a": {
+            "dst_path": "",
+            "keys": {}
+            }
+        }
+        }
+
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+
+    def test_removeShortcutSequence_wrong_syntax_too_many_chars_after(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        expectedOutput = sm.removeShortcutSequence("-abcd")
+        actualOutput = False
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_removeShortcutSequence_wrong_syntax(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        expectedOutput = False
+        actualOutput = sm.removeShortcutSequence("abc-def")
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_removeShortcutSequence_wrong_syntax_minus_only(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        expectedOutput = False
+        actualOutput = sm.removeShortcutSequence("-")
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_removeShortcutSequence_left_exists_right_not(self):
+        sm = ShortcutManager(self.window)
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        expectedOutput = False
+        actualOutput = sm.removeShortcutSequence("abc-x")
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_removeShortcutSequence_right_exists_left_not(self):
+        sm = ShortcutManager(self.window)
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        expectedOutput = False
+        actualOutput = sm.removeShortcutSequence("xyz-d")
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    # ========== MoveShortcutSequence ==========
+    def test_moveShortcutSequence_simple(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        sm.moveShortcutSequence("abcd>")
+        expectedOutput = {
+            "keys": {
+                "a": {
+                "dst_path": "",
+                "keys": {
+                    "b": {
+                    "dst_path": "",
+                    "keys": {
+                        "c": {
+                        "dst_path": "",
+                        "keys": {}
+                        }
+                    }
+                    }
+                }
+                },
+                "d": {
+                "dst_path": "/home/user/Pictures/Photos",
+                "keys": {}
+                }
+            }
+            }
+
+
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+    def test_moveShortcutSequence_move_subtree(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        sm.moveShortcutSequence("abc>")
+        expectedOutput = {
+            "keys": {
+                "a": {
+                "dst_path": "",
+                "keys": {
+                    "b": {
+                    "dst_path": "",
+                    "keys": {}
+                    }
+                }
+                },
+                "c": {
+                "dst_path": "",
+                "keys": {
+                    "d": {
+                    "dst_path": "/home/user/Pictures/Photos",
+                    "keys": {}
+                    }
+                }
+                }
+            }
+            }
+
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+    def test_moveShortcutSequence_simple2(self):
+        sm = ShortcutManager(self.window)
+        sm.shortcutTree = {
+            "keys": {
+                "a": {
+                "dst_path": "",
+                "keys": {
+                    "b": {
+                    "dst_path": "",
+                    "keys": {
+                        "c": {
+                        "dst_path": "",
+                        "keys": {}
+                        }
+                    }
+                    }
+                }
+                },
+                "d": {
+                "dst_path": "/home/user/Pictures/Photos",
+                "keys": {}
+                }
+            }
+            }
+        
+        expectedOutput = {
+            "keys": {
+                "a": {
+                "dst_path": "",
+                "keys": {
+                    "b": {
+                    "dst_path": "",
+                    "keys": {
+                        "c": {
+                        "dst_path": "",
+                        "keys": {
+                            "d": {
+                            "dst_path": "/home/user/Pictures/Photos",
+                            "keys": {}
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+
+        sm.moveShortcutSequence("d>abc")
+
+        actualOutput = sm.shortcutTree
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), True)
+
+
+    def test_moveShortcutSequence_nonexisting_src(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        
+        expectedTreeState = {
+            "keys": {
+                "a": {
+                "dst_path": "",
+                "keys": {
+                    "b": {
+                    "dst_path": "",
+                    "keys": {
+                        "c": {
+                        "dst_path": "",
+                        "keys": {
+                            "d": {
+                            "dst_path": "/home/user/Pictures/Photos",
+                            "keys": {}
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        
+        actualOutput = sm.moveShortcutSequence("xyz>abc")
+        expectedOutput = False
+
+        actualTreeState = sm.shortcutTree
+        self.assertEqual(actualTreeState, expectedTreeState)
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_moveShortcutSequence_nonexisting_dst(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        
+        expectedTreeState = {
+            "keys": {
+                "a": {
+                "dst_path": "",
+                "keys": {
+                    "b": {
+                    "dst_path": "",
+                    "keys": {
+                        "c": {
+                        "dst_path": "",
+                        "keys": {
+                            "d": {
+                            "dst_path": "/home/user/Pictures/Photos",
+                            "keys": {}
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        
+        actualOutput = sm.moveShortcutSequence("abcd>xy")
+        expectedOutput = False
+
+        actualTreeState = sm.shortcutTree
+        self.assertEqual(actualTreeState, expectedTreeState)
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_moveShortcutSequence_empty_src(self):
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.setDataUnmodified()  # reset modified flag
+
+        
+        expectedTreeState = {
+            "keys": {
+                "a": {
+                "dst_path": "",
+                "keys": {
+                    "b": {
+                    "dst_path": "",
+                    "keys": {
+                        "c": {
+                        "dst_path": "",
+                        "keys": {
+                            "d": {
+                            "dst_path": "/home/user/Pictures/Photos",
+                            "keys": {}
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        
+        actualOutput = sm.moveShortcutSequence(">abcd")
+        expectedOutput = False
+
+        actualTreeState = sm.shortcutTree
+        self.assertEqual(actualTreeState, expectedTreeState)
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_moveShortcutSequence_dst_already_exist(self):
+        # dst already exists in the target directory
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.addDstPathForShortcut("d", "/home/user/Documents")
+        sm.setDataUnmodified()  # reset modified flag
+
+        expectedTreeState = {
+            "keys": {
+                "a": {
+                "dst_path": "",
+                "keys": {
+                    "b": {
+                    "dst_path": "",
+                    "keys": {
+                        "c": {
+                        "dst_path": "",
+                        "keys": {
+                            "d": {
+                            "dst_path": "/home/user/Pictures/Photos",
+                            "keys": {}
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                },
+                "d": {
+                "dst_path": "/home/user/Documents",
+                "keys": {}
+                }
+            }
+            }
+
+        
+        actualOutput = sm.moveShortcutSequence("abcd>")  # d from abc should be moved to Level 1, but where alredy 'd' exists.
+        expectedOutput = False
+
+        actualTreeState = sm.shortcutTree
+        self.assertEqual(actualTreeState, expectedTreeState)
+        self.assertEqual(actualOutput, expectedOutput)
+        self.assertEqual(sm.areShortcutsModified(), False)
+
+
+    def test_moveShortcutSequence_comprehensive(self):
+        # dst already exists in the target directory
+        sm = ShortcutManager(self.window)
+        # sm.addShortcut('a')
+        sm._getLastKeyOfSequenceAndUpdate("abcd")
+        sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
+        sm.addDstPathForShortcut("d", "/home/user/Documents")
+        sm.setDataUnmodified()  # reset modified flag
+        
+        self.assertEqual(sm.moveShortcutSequence("abcd>"), False)
+        self.assertEqual(sm.moveShortcutSequence(">bcde"), False)
+        self.assertEqual(sm.moveShortcutSequence("#>?"), False)
+        self.assertEqual(sm.moveShortcutSequence("ab#s>?"), False)
+        self.assertEqual(sm.moveShortcutSequence("a<><p"), False)
+        self.assertEqual(sm.moveShortcutSequence("ab>c/d"), False)
+
+
+    # ========== getLastKey ==========
     def test_getLastKey(self):
         pass
     
+
+    # ========== getLastKeyOfSequenceAndUpdate ==========
     def test_getLastKeyOfSequenceAndUpdate(self):
         pass
 
+    # ========== getLastPossibleKeyOfSequence ==========
     def test_getLastPossibleKeyOfSequence(self):
         pass
+
 
     def tearDown(self):
         self.window.close()

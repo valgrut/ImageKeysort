@@ -4,12 +4,19 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from PyQt5.QtCore import pyqtSignal, QObject
 import re
 
-# shortcut = "fbcd"
-# sequence = "f-b-c-d"
 
-
-# QObject is required for the Signals.
 class ShortcutManager(QObject):
+    """
+    Class representing and managing shortcuts data structure in the form of json tree.
+    Also supports set of operations on the shortcuts data structure.
+    
+    TreeViewWidget is used to visualize this data structure.
+
+    # Note: QObject is required for the Signals.
+    
+    # shortcut = "fbcd"
+    # sequence = "f-b-c-d"
+    """
 
     updateMainWindowTitleSignal = pyqtSignal(str)
     updateStatusBarLabelSignal = pyqtSignal(str)
@@ -38,7 +45,7 @@ class ShortcutManager(QObject):
 
     def getAllPaths(self, shortcutsData) -> [str]:  # type: ignore
         """
-        Recursively returns all dst_paths from the shortcutsData treeViewWidget.
+        Recursively returns all dst_paths from the shortcuts json tree.
         """
         dstPathsList = []
         currentShortcutLevel = shortcutsData["keys"] # 'a', 'f', ...
@@ -86,10 +93,13 @@ class ShortcutManager(QObject):
         return self.shortcutTree
 
 
+    # TODO: nevim, co to dela... mozna sem vlozit telo z _getLastKeyOfSequenceAndUpdate nebo to obecne nejak sjednotit.
+    # metody rozdelit na public API a vnitrni logiku s _podtrzitkem za zacatku.
     def addShortcut(self, sequence):
         """
-        Adds new shortcut into the shortcutsData treeViewWidget.
+        Adds new shortcut into the shortcuts json tree.
         """
+        # TODO: Co tohle sakra dela????? a subcategory neexistuje...
         currentNestLevel = self.shortcutTree
         for key in sequence:
             if key in currentNestLevel:
@@ -102,6 +112,7 @@ class ShortcutManager(QObject):
         # print(json.dumps(self.shortcutTree))
         # print(json.dumps(sorted(self.shortcutTree, key=lambda x: x['keys'])))
 
+    # TODO: Prejmenovat na addShortcutAndDstPath()
     def addDstPathForShortcut(self, sequence, dst_path):
         """
         Adds dst_path to the last key of the given sequence.
@@ -116,9 +127,20 @@ class ShortcutManager(QObject):
             print(f"Shortcut {sequence} has not been found.")
 
 
+    def checkShortcutExists(self, sequence) -> bool:
+        """
+        Check whether the given shortcut sequence exists in the shortcuts json tree.
+
+        :param sequence: Shortcut sequence to be checked.
+        """
+        lastKey = self.getLastKeyContentOfSequence(sequence)
+        if lastKey:
+            return True
+        return False
+
     def addKeyUnderCurrent(self, currentKeyRef, new_key):
         """
-        Adds new key under given key in the shortcutsData treeViewWidget.
+        Adds new key under given key in the shortcuts json tree.
 
         :param currentKeyRef: Reference to the key under which the new key should be added.
         :param new_key: New key to be added.
@@ -127,7 +149,7 @@ class ShortcutManager(QObject):
         self.setDataModified()
 
 
-    def getDstPathForShortcut(self, sequence):
+    def getDstPathForShortcut(self, sequence) -> str | None:
         """
         Returns dst_path for the last key of the given sequence.
         """
@@ -137,6 +159,7 @@ class ShortcutManager(QObject):
             print("DEBUG: such sequence does not exist or dst_path is empty.")
             return None
         # print("last: ", last_key)
+        # TODO: check jestli neni prazdny dst_path, myslel jsem, ze ten je tady uz osetreny, ale vraci v testu "", misto None.
         return lastKey["dst_path"]
 
 
@@ -169,7 +192,7 @@ class ShortcutManager(QObject):
 
     def _getLastKeyOfSequenceAndUpdate(self, sequence):
         """
-        Get last key of sequence and if some keys are missing, add them to the treeViewWidget.
+        Get last key of sequence and if some keys are missing, add them to the shortcuts json tree.
         """
         preCurrent = self.shortcutTree["keys"]
         current = self.shortcutTree["keys"]
@@ -247,25 +270,32 @@ class ShortcutManager(QObject):
 
         if not isMatched:
             print(f"DEBUG: Incorrect split string {isMatched}.")
-            return # False  # TODO?
+            return False
 
         sequenceSplit = sequence.split(">")
         sourceSequence = sequenceSplit[0]
-        targetSequence = sequenceSplit[1]
+        destinationSequence = sequenceSplit[1]
 
         # Check existence of the source shortcut (before >)
         if not self.getLastKeyContentOfSequence(sourceSequence):
             print(f"Source shortcut ({sourceSequence}) does not exist.")
             self.updateStatusBarLabelSignal.emit(f"Source shortcut ({sourceSequence}) does not exist.")
-            return
+            return False
 
         # Check existence of the target shortcut (after >)
-        if len(targetSequence) > 0 and not self.getLastKeyContentOfSequence(targetSequence):
-            print(f"Target shortcut ({targetSequence}) does not exist.")
-            self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) does not exist.")
-            return
+        if len(destinationSequence) > 0 and not self.getLastKeyContentOfSequence(destinationSequence):
+            print(f"To-be-moved shortcut ({destinationSequence}) does not exist.")
+            self.updateStatusBarLabelSignal.emit(f"To-be-moved shortcut ({destinationSequence}) does not exist.")
+            return False
 
         parentOfLastKey = self.getLastKeyParent(sourceSequence)
+
+        # Check, whether resulting shortcut already does not exist
+        resultingSequence = destinationSequence + sourceSequence[-1]
+        if self.getLastKeyContentOfSequence(resultingSequence):
+            print(f"Resulting shortcut ({resultingSequence}) does does already exist.")
+            self.updateStatusBarLabelSignal.emit(f"Resulting shortcut ({resultingSequence}) does already exist.")
+            return False
 
         # Remove last key of the sourceSequence from the shortcut tree
         poppedSubtree = None
@@ -273,20 +303,17 @@ class ShortcutManager(QObject):
         lastKeyChar = sourceSequence[-1]
         poppedSubtree = parentOfLastKey["keys"].pop(lastKeyChar)
         self.setDataModified()
-        # return True  # TODO?
 
         # Insert into new location
         destinationKey = None
-        if targetSequence:
-            destinationKey = self.getLastKeyContentOfSequence(targetSequence)
+        if destinationSequence:
+            destinationKey = self.getLastKeyContentOfSequence(destinationSequence)
         else:
             destinationKey = self.shortcutTree
         destinationKey["keys"].update({lastKeyChar: poppedSubtree})
 
         # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
         return True
-        # return False  # TODO?
-        pass
 
 
     def changeShortcutKeyChar(self, sequence: str):
@@ -312,7 +339,7 @@ class ShortcutManager(QObject):
 
         if not isMatched:
             print(f"DEBUG: Incorrect change string {isMatched}.")
-            return # False  # TODO?
+            return False
 
         sequenceSplit = sequence.split("/")
         sourceShortcut = sequenceSplit[0]
@@ -323,16 +350,24 @@ class ShortcutManager(QObject):
         if not self.getLastKeyContentOfSequence(sourceShortcut):
             print(f"Source shortcut ({sourceShortcut}) does not exist.")
             self.updateStatusBarLabelSignal.emit(f"Source shortcut ({sourceShortcut}) does not exist")
-            return
+            return False
 
         # Check existence of the target shortcut (after /)
         targetSequence = sourceShortcut[:-1] + newKeyChar
         if self.getLastKeyContentOfSequence(targetSequence):
             print(f"Target shortcut ({targetSequence}) already exist.")
             self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) already exist.")
-            return
+            return False
 
         parentOfLastKey = self.getLastKeyParent(sourceShortcut)
+
+        # Check, whether resulting shortcut already does not exist
+        # TODO
+        # resultingSequence = destinationSequence + sourceSequence[-1]
+        # if self.getLastKeyContentOfSequence(resultingSequence):
+        #     print(f"Resulting shortcut ({resultingSequence}) does does already exist.")
+        #     self.updateStatusBarLabelSignal.emit(f"Resulting shortcut ({resultingSequence}) does already exist.")
+        #     return False
 
         # Remove last key of the sourceSequence from the shortcut tree
         lastKeyChar = sourceShortcut[-1]
@@ -347,6 +382,7 @@ class ShortcutManager(QObject):
         
         self.setDataModified()
         parentOfLastKey["keys"].update({newKeyChar: changingKeyCharContent})
+        return True
 
 
     def removeShortcutSequence(self, sequence: str):
@@ -364,12 +400,12 @@ class ShortcutManager(QObject):
                 x
 
         Following options are possible:
-        -a Removes the whole 'a' treeViewWidget
-        a-b Removes 'b' from the 'a' treeViewWidget
+        -a Removes the whole 'a' shortcuts json tree.
+        a-b Removes 'b' from the 'a' shortcuts json tree.
         ac-x Removes 'x' from the 'c'.
         a-c Removes whole subtree of the 'c' key including the 'c'.
 
-        :param sequence: Contains key sequence with '-' marking what should be removed from treeViewWidget.
+        :param sequence: Contains key sequence with '-' marking what should be removed from shortcuts json tree.
         :return:
         """
 
@@ -377,7 +413,7 @@ class ShortcutManager(QObject):
 
         if not isMatched:
             print(f"DEBUG: Incorrect split string {isMatched}.")
-            return  # False  # TODO?
+            return False
 
         sequenceSplit = sequence.split("-")
         preDelimeter = sequenceSplit[0]
@@ -392,11 +428,10 @@ class ShortcutManager(QObject):
         if lastKey and (postDelimeter in lastKey["keys"]):
             if lastKey["keys"].pop(postDelimeter):
                 self.setDataModified()
-                # return True  # TODO?
+                return True
 
         # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
-        return True
-        # return False  # TODO?
+        return False
 
 
     def clearShortcuts(self):

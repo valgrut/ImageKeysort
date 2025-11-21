@@ -2,6 +2,8 @@ ROOT_DIR=./
 NAME=main.py
 SCSS_STYLES=static/app-styles.scss
 QSS_STYLES=static/app-styles.qss
+# PYTEST_ARGS="-v"  # -v | -vv |  
+PYTEST_ARGS=""  # Empty
 
 config:
 	( \
@@ -25,7 +27,7 @@ run: config qss
 test: config
 	( \
 	source ${ROOT_DIR}/venv/bin/activate; \
-	PYTHONPATH=${ROOT_DIR}/src pytest ${ROOT_DIR}/tests/*; \
+	PYTHONPATH=${ROOT_DIR}/src pytest ${PYTEST_ARGS} ${ROOT_DIR}/tests/*; \
 	deactivate; \
 	)
 	# PYTHONPATH=${ROOT_DIR}/src pytest -v tests/; \
