@@ -67,6 +67,7 @@ from src.MainWindow import MainWindow
 # - [X] Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. Default povoleno.
 # - [X] Settings: v Edit mode: Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
 # - [X] Osetrit, kdyz kliknu na extract, ale neni nacteny zadny obrazek.
+# - [X] Fix reskalovani toho Shortcut panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
 
 
 # Code tweaking, Refactoring
@@ -89,7 +90,7 @@ from src.MainWindow import MainWindow
 
 # Important features TODO:
 # - [~] ! REFACTORING
-# - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
+# - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 # - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
 # - [ ] !!!!! Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.

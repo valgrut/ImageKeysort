@@ -89,6 +89,7 @@ QStackedWidget QWidget[copyMode="1"] {
 
 /***** QTreeWidget - Shortcuts tree *****/
 QTreeWidget {
+    min-width: 250px;  // TODO: will be probably out after adding the bar to change width between Tree and MediaView.
     width: 200px;
     border: 1px solid black;
     border-radius: 10px;
