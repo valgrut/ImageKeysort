@@ -169,6 +169,15 @@ class ShortcutManager(QObject):
         # TODO: check jestli neni prazdny dst_path, myslel jsem, ze ten je tady uz osetreny, ale vraci v testu "", misto None.
         return lastKey["dst_path"]
 
+    def getDstPathForAnyShortcut(self, sequence) -> str | None:
+        """
+        Returns dst_path for the last key of the given sequence.
+        """
+        lastKey = self.getLastKeyContentOfSequence(sequence)
+        if lastKey and "dst_path" in lastKey and len(lastKey["dst_path"]) > 0:
+            return lastKey["dst_path"]
+        return None
+
 
     def getFirstExistingDstPathFromParents(self, sequence) -> str | None:
         """
@@ -210,6 +219,7 @@ class ShortcutManager(QObject):
 
         If it is not, user can "force" the usage of non-longest match by pressing "space" key.
         """
+        # TODO: Funkce se jmenuje isSequenceLongestMatch, ale nejen, ze to checkuje, ale je pouzivana jako k ziskani contentu pro danou shortcut sequence......
         lastKeyContent = self.getLastKeyContentOfSequence(sequence)
 
         # If key exists but have another sub-keys under the "keys", return False (Not longest match)

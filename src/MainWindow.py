@@ -515,11 +515,31 @@ class MainWindow(QMainWindow, QObject):
                 # Settings: Allow empty destination path (no path selected) or dont.
                 if not dstSortDirectory and not SettingsDialog.settingsGetAllowNoDest():
                     log.info("No dst selected and empty dst is not allowed. No further action.")
-                else:
-                    log.info("Dst is not empty or empty path is allowed for new shortcut.")
-                    for k in self.keySeq:
-                        self.shortcutManager.addShortcut(self.keySeq)
+                    self.cleanupAndUpdate()
+                    return
+
+                # Adding new shortcut sequence into the tree
+                log.info("Dst is not empty or empty path is allowed for new shortcut.")
+                for k in self.keySeq:
+                    self.shortcutManager.addShortcut(self.keySeq)
+
+                # Decide, whether to add dst_path for new shortcut sequence
+                # TODO: Bud ponechat settings, jestli povolovat zmeny, NEBO pridat do stromu button zamecek, ktery zamkne modifikace.
+                # TODO: Kruci, ja vlastne chtel pridat moznost Undo changes v shortcuts, takze i lock button, i settings budou asi zbytecne.....
+                currentDstPathForShortcut = self.shortcutManager.getDstPathForAnyShortcut(self.keySeq)
+                log.debug("I am here")
+                if currentDstPathForShortcut is None or SettingsDialog.settingsGetConfirmToOverride() is False:
                     self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
+                else:
+                    # TODO: 1. show dialogue window to confirm the change of dst_path or prevent it totally.
+                    # TODO: 2. Button do ShortcutTree - Lock shortcuts from modifications (allow only adding new shortcuts).
+                    log.info("Overriding existing dst_path is not allowed. Go to Settings to allow it.")
+                    self.updateStatusBarLabel("Warning: Overriding existing dst_path is not allowed. Go to Settings to allow it.")
+                    qm = QMessageBox()
+                    user_confirmed = qm.question(self, '', f"Do you want to override dst_path for shortcut {self.keySeq}?", qm.Yes | qm.No)
+                    if user_confirmed == qm.Yes:
+                        self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
+                        # TODO: Mozna jeste nejak udelat, aby se prvne zeptalo, esi chci prepsat dst, az pak vyhodit dialog pro novou dst.
 
                 self.cleanupAndUpdate()
                 log.info(json.dumps(self.shortcutManager.getData(), indent=2))

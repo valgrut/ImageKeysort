@@ -65,6 +65,7 @@ from src.MainWindow import MainWindow
 # - [X] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
 # - [X] Fix: ClearTree -> SaveChanges? Kdyz nevyberu zadnou slozku, stejne se to smaze. Takze pokracovat k akci jen, kdyz se fakt zvoli soubor do ktereho ulozit zkratky.
 # - [X] Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. Default povoleno.
+# - [X] Settings: v Edit mode: Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
 
 
 # Code tweaking, Refactoring
@@ -82,7 +83,6 @@ from src.MainWindow import MainWindow
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!!
 
 # Settings:
-# - [~] ! v Edit mode: Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 
 
