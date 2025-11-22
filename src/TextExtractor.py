@@ -1,6 +1,7 @@
 from datetime import time
 from pathlib import Path
 from time import sleep
+import logging
 
 import pytesseract
 import os
@@ -15,6 +16,7 @@ from PyQt5.QtWidgets import QApplication, QWidget
 # (https://github.com/tesseract-ocr/tesseract/releases/download/5.5.0/tesseract-ocr-w64-setup-5.5.0.20241111.exe)
 # Installed into 'C:\Program Files\Tesseract-OCR\'
 
+log = logging.getLogger(__name__)
 
 if os.name == "nt":
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -37,13 +39,24 @@ class TextExtractor(QWidget):
         try:
             # text = pytesseract.image_to_string(Image.open(self.pixmap))
 
-            # TODO: obrazek specifikovat Tady primo, nebo cestu vlozit do argumentu teto metody
+            log.debug(f"Source path:       {self.galleryManager.getSourcePath()}")
+            log.debug(f"Current file name: {self.galleryManager.getCurrentFilename()}")
+
+            # TODO: obrazek specifikovat Tady primo, nebo cestu vlozit do argumentu teto metody?
             image_path = Path(self.galleryManager.getSourcePath(), self.galleryManager.getCurrentFilename())
-            # todo add check if file exist else return.
-            print("extractTextFromImage: ", image_path)
+
+            # Check if file exist (in case no gallery is opened yet)
+            # if image_path == "." or not os.path.exists(image_path):
+            if not self.galleryManager.getSourcePath() or not self.galleryManager.getCurrentFilename() or not os.path.exists(image_path):
+                log.warning(f"Cannot extract text from the file '{image_path}'. Is source gallery opened?. Text extraction terminated.")
+                raise FileNotFoundError
+                return
+
+            log.info(f"File for the text extraction: {image_path}.")
             self.updateStatusBarLabelSignal.emit(f"Text extraction started! Wait...")
 
-            QApplication.processEvents()  # Force the processing of the emitted signal above
+            # Force the processing of the emitted signal above
+            QApplication.processEvents()
 
             text = pytesseract.image_to_string(Image.open(image_path), lang="ces+eng")
 
@@ -56,6 +69,7 @@ class TextExtractor(QWidget):
             print("==================== TEXT ====================")
             print(text)
             print("==============================================")
+            # TODO Settings: Save extracted text into the file: "extractedTexts/{self.galleryManager.getCurrentFilename()}.txt"
 
             self.updateStatusBarLabelSignal.emit(f"Extraction finished! Text is in your clipboard.")
         except Exception as e:

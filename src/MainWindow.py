@@ -477,8 +477,7 @@ class MainWindow(QMainWindow, QObject):
                     log.info(f"probably empty (Key seq: {self.keySeq})")
                     return
 
-                # Check, whether sequence contains '-', and if so
-                # consider this as removing all shortcuts after the '-' character.
+                # Check, whether keySeq contains operation character:
                 if "-" in self.keySeq:
                     self.shortcutManager.removeShortcutSequence(self.keySeq)
                     self.cleanupAndUpdate()
@@ -496,19 +495,22 @@ class MainWindow(QMainWindow, QObject):
                     self.cleanupAndUpdate()
                     return
 
-                # set parent's path as default for the dialogue when nesting shortcut
-                # Usually when nesting shortcuts, they mirror directories, so it is better to show
-                # parent's directory for the new shortcut, because it is probable that target directory is there.
-                log.info(f"Parents path: Get path for shortcut: {self.keySeq}, {self.keySeq[:-1]}")
-                # parentPathAdvice = self.shortcutManager.getDstPathForShortcut(self.keySeq[:-1])
-                parentPathAdvice = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq[:-1])
-                parentPath = ""
-                if parentPathAdvice is not None and "dst_path" in parentPathAdvice:
-                    log.info(f"Parent's path: {parentPathAdvice['dst_path']}")
-                    parentPath = parentPathAdvice["dst_path"]
+                # No operation character, proceed to add new shortcut.
 
-                dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory", parentPath)
-                log.info(f"DST DIR: {dstSortDirectory}")
+                # set parent's path (or parent's parent's, ...) as default for the dialogue when nesting shortcuts.
+                # When nesting shortcuts, they usually correspond to directory hierarchy, so it is better to show
+                # parent's directory for the new shortcut, because it is probable that target directory is there.
+                parentPath = ""
+                parentPathAdvice = self.shortcutManager.getFirstExistingDstPathFromParents(self.keySeq)
+                log.info(f"Find first available dst_path from parents of the shortcut {self.keySeq}.")
+                log.debug(f"First available 'dst_path' from parents: {self.shortcutManager.getFirstExistingDstPathFromParents(self.keySeq)}")
+
+                if parentPathAdvice is not None:
+                    log.info(f"Parent's path: {parentPathAdvice}")
+                    parentPath = parentPathAdvice
+
+                dstSortDirectory = QFileDialog.getExistingDirectory(self, f"Select Directory for shortcut '{self.keySeq}':", parentPath)
+                log.debug(f"Selected directory from Dialogue: {dstSortDirectory}")
 
                 # Settings: Allow empty destination path (no path selected) or dont.
                 if not dstSortDirectory and not SettingsDialog.settingsGetAllowNoDest():

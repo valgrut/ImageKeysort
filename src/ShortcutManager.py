@@ -152,18 +152,46 @@ class ShortcutManager(QObject):
         self.setDataModified()
 
 
+    # TODO: Rename, protoze je to misleading. Myslel jsem, ze to vraci dstPath jakekoli existujici zkratky, ale ne, pouze pokud
+    # je to longestMatch... !!!!!!!!!!!!!!
+    # Peknej pojeb, kdyz jsem ji chtel pouzit pro parent's path advice, kdyz se pridava nova zkratka.
     def getDstPathForShortcut(self, sequence) -> str | None:
         """
         Returns dst_path for the last key of the given sequence.
+        IF it is longest match!!!!!!!
         """
         print(f"get_dst_for_shortcut: {sequence}")
         lastKey = self.isSequenceLongestMatch(sequence)
         if not lastKey:
-            print("DEBUG: such sequence does not exist or dst_path is empty.")
+            log.warning("DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).")
             return None
         # print("last: ", last_key)
         # TODO: check jestli neni prazdny dst_path, myslel jsem, ze ten je tady uz osetreny, ale vraci v testu "", misto None.
         return lastKey["dst_path"]
+
+
+    def getFirstExistingDstPathFromParents(self, sequence) -> str | None:
+        """
+        Returns first dst_path it finds from the end of sequence to the first.
+        Traverses up through parents and returns first non-empty dst_path.
+        """
+        remainingSequence = sequence[:-1]  # Remove the last, because it is the one for which we are finding dst_path.
+        log.debug(f"remainingSequence: {remainingSequence}")
+
+        while len(remainingSequence) > 0:
+            content = self.getLastKeyContentOfSequence(remainingSequence)
+
+            # When we add longer shortcut at once, last-key's parent does not exist yet. (And eventually nor parent's parent and so on)
+            # So in this case, just go deeper into sequence.
+            if content is None:
+                remainingSequence = remainingSequence[:-1]
+                continue
+
+            if content["dst_path"]:
+                return content["dst_path"]
+
+            remainingSequence = remainingSequence[:-1]
+        return None
 
 
     def isSequenceLongestMatch(self, sequence):

@@ -64,7 +64,11 @@ from src.MainWindow import MainWindow
 # - [X] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu. (Inspirovat se treba Pycharm, jak to je udelane tam)
 # - [X] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
 # - [X] Fix: ClearTree -> SaveChanges? Kdyz nevyberu zadnou slozku, stejne se to smaze. Takze pokracovat k akci jen, kdyz se fakt zvoli soubor do ktereho ulozit zkratky.
-# - [X] Pridat Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad! (Default povoleno)
+# - [X] Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. Default povoleno.
+
+
+# Code tweaking, Refactoring
+# - [~] Pridat Type hints ( -> int, myvar: str, ...)
 
 
 # Top priority:
@@ -74,20 +78,17 @@ from src.MainWindow import MainWindow
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 # - [ ] Fix videos on Windows
-# - [~] Pridat Type hints ( -> int, myvar: str, ...)
 # - [ ] Fix Ctrl+O to open new source directory
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!!
 
 # Settings:
 # - [~] ! v Edit mode: Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
-# - [~] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
 
 
 # Important features TODO:
 # - [~] ! REFACTORING
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
-# - [~] !!!!! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak se zeptat (nebo settings?), jestli zkratku fakt pridat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [??SETTINGS]
 # - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
 # - [ ] !!!!! Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
@@ -108,7 +109,7 @@ from src.MainWindow import MainWindow
 # - [ ] Osetrit, kdyz kliknu na extract, ale neni nacteny zadny obrazek.
 # - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default kdyz neposkytnut), INFO, WARN, ERROR.
-
+# - [ ] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
 
 # Misc:
 # - [ ] Naucit se poradne pracovat s Pycharm
@@ -121,7 +122,7 @@ from src.MainWindow import MainWindow
 #   - [ ] `qtsass src/styles/app-styles.scss -o src/styles/app-styles.qss`
 # - [ ] Do kontext menu na Windows (prave kliknuti) ve slozce pridat moznost otevrit ji jako src v Image Keysort.
 #   - [ ] Do instalace pridat spusteni registr scriptuu (add-image-keysort.reg), ktery to prida do toho kontext menu.
-
+# - [ ] Zprovoznit a spravit ikonky na Linuxu.
 
 # Design:
 # - [~] Implementovat jednoduchy light a dark mode + option do nastaveni.
@@ -230,7 +231,7 @@ def main():
     # qss_path.write_text(qss, encoding="utf-8")
 
     # Config logging
-    setupLogging(debugLevel=logging.INFO)
+    setupLogging(debugLevel=logging.WARNING and logging.INFO and logging.DEBUG)
 
     # CLI arguments parsing
     parsedArgs = parseArguments()

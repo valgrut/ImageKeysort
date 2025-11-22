@@ -1,0 +1,2822 @@
+19:47:59 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+19:48:00 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+19:48:00 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+19:48:00 [INFO] src.MainWindow: Mode Changed to: Sort
+19:48:00 [INFO] src.MainWindow: ===================================================
+19:48:00 [INFO] src.MainWindow: App initialised and started!
+19:57:34 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+19:57:35 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+19:57:35 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+19:57:35 [INFO] src.MainWindow: Mode Changed to: Sort
+19:57:35 [INFO] src.MainWindow: ===================================================
+19:57:35 [INFO] src.MainWindow: App initialised and started!
+19:57:36 [INFO] src.MainWindow: Mode Changed to: Edit
+19:57:37 [INFO] src.MainWindow: Mode Changed to: Sort
+19:58:31 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+19:58:32 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+19:58:32 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+19:58:32 [INFO] src.MainWindow: Mode Changed to: Sort
+19:58:32 [INFO] src.MainWindow: ===================================================
+19:58:32 [INFO] src.MainWindow: App initialised and started!
+19:59:36 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+19:59:36 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+19:59:36 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+19:59:36 [INFO] src.MainWindow: Mode Changed to: Sort
+19:59:36 [INFO] src.MainWindow: ===================================================
+19:59:36 [INFO] src.MainWindow: App initialised and started!
+20:01:32 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:01:32 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:01:32 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:01:32 [INFO] src.MainWindow: Mode Changed to: Sort
+20:01:32 [INFO] src.MainWindow: ===================================================
+20:01:32 [INFO] src.MainWindow: App initialised and started!
+20:01:52 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:01:53 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:01:53 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:01:53 [INFO] src.MainWindow: Mode Changed to: Sort
+20:01:53 [INFO] src.MainWindow: ===================================================
+20:01:53 [INFO] src.MainWindow: App initialised and started!
+20:02:28 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:02:29 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:02:29 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:02:29 [INFO] src.MainWindow: Mode Changed to: Sort
+20:02:29 [INFO] src.MainWindow: ===================================================
+20:02:29 [INFO] src.MainWindow: App initialised and started!
+20:02:42 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:02:42 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:02:42 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:02:42 [INFO] src.MainWindow: Mode Changed to: Sort
+20:02:42 [INFO] src.MainWindow: ===================================================
+20:02:42 [INFO] src.MainWindow: App initialised and started!
+20:02:48 [WARNING] src.TextExtractor: File . does not exist. Text extraction terminated.
+20:03:15 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:03:15 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:03:15 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:03:15 [INFO] src.MainWindow: Mode Changed to: Sort
+20:03:15 [INFO] src.MainWindow: ===================================================
+20:03:15 [INFO] src.MainWindow: App initialised and started!
+20:03:39 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:03:39 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:03:39 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:03:39 [INFO] src.MainWindow: Mode Changed to: Sort
+20:03:39 [INFO] src.MainWindow: ===================================================
+20:03:39 [INFO] src.MainWindow: App initialised and started!
+20:05:45 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:05:45 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:05:45 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:05:45 [INFO] src.MainWindow: Mode Changed to: Sort
+20:05:45 [INFO] src.MainWindow: ===================================================
+20:05:45 [INFO] src.MainWindow: App initialised and started!
+20:05:48 [INFO] src.TextExtractor: Source path:       
+20:05:48 [INFO] src.TextExtractor: Current file name: 
+20:07:00 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:07:01 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:07:01 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:07:01 [INFO] src.MainWindow: Mode Changed to: Sort
+20:07:01 [INFO] src.MainWindow: ===================================================
+20:07:01 [INFO] src.MainWindow: App initialised and started!
+20:07:03 [INFO] src.TextExtractor: Source path:       
+20:07:03 [INFO] src.TextExtractor: Current file name: 
+20:07:03 [WARNING] src.TextExtractor: File . does not exist. Text extraction terminated.
+20:08:09 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:08:09 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:08:09 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:08:09 [INFO] src.MainWindow: Mode Changed to: Sort
+20:08:09 [INFO] src.MainWindow: ===================================================
+20:08:09 [INFO] src.MainWindow: App initialised and started!
+20:08:12 [INFO] src.TextExtractor: Source path:       
+20:08:12 [INFO] src.TextExtractor: Current file name: 
+20:08:12 [WARNING] src.TextExtractor: File . does not exist or Source Gallery not selected. Text extraction terminated.
+20:08:31 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:08:32 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:08:32 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:08:32 [INFO] src.MainWindow: Mode Changed to: Sort
+20:08:32 [INFO] src.MainWindow: ===================================================
+20:08:32 [INFO] src.MainWindow: App initialised and started!
+20:08:33 [WARNING] src.TextExtractor: File . does not exist or Source Gallery not selected. Text extraction terminated.
+20:08:47 [WARNING] src.TextExtractor: File . does not exist or Source Gallery not selected. Text extraction terminated.
+20:09:06 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:09:07 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:09:07 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:09:07 [INFO] src.MainWindow: Mode Changed to: Sort
+20:09:07 [INFO] src.MainWindow: ===================================================
+20:09:07 [INFO] src.MainWindow: App initialised and started!
+20:09:10 [WARNING] src.TextExtractor: File . does not exist or Source Gallery not selected. Text extraction terminated.
+20:09:37 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:09:38 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:09:38 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:09:38 [INFO] src.MainWindow: Mode Changed to: Sort
+20:09:38 [INFO] src.MainWindow: ===================================================
+20:09:38 [INFO] src.MainWindow: App initialised and started!
+20:09:40 [DEBUG] src.TextExtractor: Source path:       
+20:09:40 [DEBUG] src.TextExtractor: Current file name: 
+20:09:40 [WARNING] src.TextExtractor: File . does not exist or Source Gallery not selected. Text extraction terminated.
+20:10:36 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:10:36 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:10:36 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:10:36 [INFO] src.MainWindow: Mode Changed to: Sort
+20:10:36 [INFO] src.MainWindow: ===================================================
+20:10:36 [INFO] src.MainWindow: App initialised and started!
+20:10:38 [DEBUG] src.TextExtractor: Source path:       
+20:10:38 [DEBUG] src.TextExtractor: Current file name: 
+20:10:38 [WARNING] src.TextExtractor: Gallery not opened or file '.' does not exist. Text extraction terminated.
+20:11:13 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:11:14 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:11:14 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:11:14 [INFO] src.MainWindow: Mode Changed to: Sort
+20:11:14 [INFO] src.MainWindow: ===================================================
+20:11:14 [INFO] src.MainWindow: App initialised and started!
+20:11:15 [DEBUG] src.TextExtractor: Source path:       
+20:11:15 [DEBUG] src.TextExtractor: Current file name: 
+20:11:15 [WARNING] src.TextExtractor: Source gallery not opened '' or file '.' does not exist. Text extraction terminated.
+20:25:52 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:25:53 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:25:53 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:25:53 [INFO] src.MainWindow: Mode Changed to: Sort
+20:25:53 [INFO] src.MainWindow: ===================================================
+20:25:53 [INFO] src.MainWindow: App initialised and started!
+20:25:54 [INFO] src.MainWindow: Mode Changed to: Edit
+20:25:56 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+20:25:56 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+20:25:56 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:25:56 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:25:59 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:25:59 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:25:59 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:26:01 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'av'.
+20:26:01 [INFO] src.MainWindow: Parents path: Get path for shortcut: av, a
+20:26:01 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Downloads
+20:26:01 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {}}
+20:26:01 [INFO] src.MainWindow: Parent's path: G:/Downloads
+20:26:06 [INFO] src.MainWindow: DST DIR: G:/Downloads/Fotky
+20:26:06 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:26:06 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "v": {
+          "dst_path": "G:/Downloads/Fotky",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:26:42 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'c'.
+20:26:42 [INFO] src.MainWindow: Parents path: Get path for shortcut: c, 
+20:26:42 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:26:42 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:26:43 [INFO] src.MainWindow: DST DIR: 
+20:26:43 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:26:43 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "v": {
+          "dst_path": "G:/Downloads/Fotky",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "",
+      "keys": {}
+    }
+  }
+}
+20:26:44 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'cd'.
+20:26:44 [INFO] src.MainWindow: Parents path: Get path for shortcut: cd, c
+20:26:44 [DEBUG] src.MainWindow: getdstpathforshortcut: 
+20:26:44 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {}}
+20:26:44 [INFO] src.MainWindow: Parent's path: 
+20:26:59 [INFO] src.MainWindow: DST DIR: 
+20:26:59 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:26:59 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "v": {
+          "dst_path": "G:/Downloads/Fotky",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "",
+      "keys": {
+        "d": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:28:43 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:28:43 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:28:43 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:28:43 [INFO] src.MainWindow: Mode Changed to: Sort
+20:28:43 [INFO] src.MainWindow: ===================================================
+20:28:43 [INFO] src.MainWindow: App initialised and started!
+20:28:45 [INFO] src.MainWindow: Mode Changed to: Edit
+20:28:46 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+20:28:46 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+20:28:46 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:28:46 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:28:47 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:28:47 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:28:47 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+20:28:50 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:28:50 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:28:50 [DEBUG] src.MainWindow: getdstpathforshortcut: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:28:50 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {}}
+20:28:50 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:28:53 [INFO] src.MainWindow: DST DIR: 
+20:28:53 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:28:53 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:29:16 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'd'.
+20:29:16 [INFO] src.MainWindow: Parents path: Get path for shortcut: d, 
+20:29:16 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:29:16 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:29:18 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:29:18 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:29:18 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "d": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:29:20 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ad'.
+20:29:20 [INFO] src.MainWindow: Parents path: Get path for shortcut: ad, a
+20:29:20 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:29:20 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}}}
+20:29:24 [INFO] src.MainWindow: DST DIR: 
+20:29:24 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:29:24 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        },
+        "d": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "d": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:31:08 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:31:08 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:31:08 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:31:08 [INFO] src.MainWindow: Mode Changed to: Sort
+20:31:08 [INFO] src.MainWindow: ===================================================
+20:31:08 [INFO] src.MainWindow: App initialised and started!
+20:31:09 [INFO] src.MainWindow: Mode Changed to: Edit
+20:31:10 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+20:31:10 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+20:31:10 [DEBUG] src.MainWindow: current shortcut pressed: a and parent 
+20:31:10 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:31:10 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:31:13 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:31:13 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:31:13 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:31:15 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'c'.
+20:31:15 [INFO] src.MainWindow: Parents path: Get path for shortcut: c, 
+20:31:15 [DEBUG] src.MainWindow: current shortcut pressed: c and parent 
+20:31:15 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:31:15 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:31:18 [INFO] src.MainWindow: DST DIR: D:/HUB (Shortcuts)
+20:31:18 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:31:18 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    },
+    "c": {
+      "dst_path": "D:/HUB (Shortcuts)",
+      "keys": {}
+    }
+  }
+}
+20:31:21 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:31:21 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:31:21 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:31:21 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Downloads
+20:31:21 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {}}
+20:31:21 [INFO] src.MainWindow: Parent's path: G:/Downloads
+20:31:36 [INFO] src.MainWindow: DST DIR: G:/Downloads/Hudba
+20:31:36 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:31:36 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "c": {
+          "dst_path": "G:/Downloads/Hudba",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "D:/HUB (Shortcuts)",
+      "keys": {}
+    }
+  }
+}
+20:31:38 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'cd'.
+20:31:38 [INFO] src.MainWindow: Parents path: Get path for shortcut: cd, c
+20:31:38 [DEBUG] src.MainWindow: current shortcut pressed: cd and parent c
+20:31:38 [DEBUG] src.MainWindow: getdstpathforshortcut: D:/HUB (Shortcuts)
+20:31:38 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'D:/HUB (Shortcuts)', 'keys': {}}
+20:31:38 [INFO] src.MainWindow: Parent's path: D:/HUB (Shortcuts)
+20:31:40 [INFO] src.MainWindow: DST DIR: 
+20:31:40 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:31:40 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "c": {
+          "dst_path": "G:/Downloads/Hudba",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "D:/HUB (Shortcuts)",
+      "keys": {
+        "d": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:32:06 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:32:07 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:32:07 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:32:07 [INFO] src.MainWindow: Mode Changed to: Sort
+20:32:07 [INFO] src.MainWindow: ===================================================
+20:32:07 [INFO] src.MainWindow: App initialised and started!
+20:32:07 [INFO] src.MainWindow: Mode Changed to: Edit
+20:32:09 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+20:32:09 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+20:32:09 [DEBUG] src.MainWindow: current shortcut pressed: a and parent 
+20:32:09 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:32:09 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:32:11 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:32:11 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:32:11 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+20:32:16 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'c'.
+20:32:16 [INFO] src.MainWindow: Parents path: Get path for shortcut: c, 
+20:32:16 [DEBUG] src.MainWindow: current shortcut pressed: c and parent 
+20:32:16 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:32:16 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:32:19 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:32:19 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:32:19 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    },
+    "c": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:32:20 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:32:20 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:32:20 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:32:20 [DEBUG] src.MainWindow: getdstpathforshortcut: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:32:20 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {}}
+20:32:20 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:32:26 [INFO] src.MainWindow: DST DIR: 
+20:32:26 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:32:26 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:32:27 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ad'.
+20:32:27 [INFO] src.MainWindow: Parents path: Get path for shortcut: ad, a
+20:32:27 [DEBUG] src.MainWindow: current shortcut pressed: ad and parent a
+20:32:27 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:32:27 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}}}
+20:32:28 [INFO] src.MainWindow: DST DIR: 
+20:32:28 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:32:28 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        },
+        "d": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:32:29 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'cd'.
+20:32:29 [INFO] src.MainWindow: Parents path: Get path for shortcut: cd, c
+20:32:29 [DEBUG] src.MainWindow: current shortcut pressed: cd and parent c
+20:32:29 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Downloads
+20:32:29 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {}}
+20:32:29 [INFO] src.MainWindow: Parent's path: G:/Downloads
+20:32:31 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:32:31 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:32:31 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        },
+        "d": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "d": {
+          "dst_path": "G:/Downloads",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:32:34 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:32:34 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:32:34 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:32:34 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:32:34 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}, 'd': {'dst_path': '', 'keys': {}}}}
+20:33:39 [INFO] src.MainWindow: DST DIR: 
+20:33:39 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:33:39 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        },
+        "d": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "d": {
+          "dst_path": "G:/Downloads",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:34:16 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:34:16 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:34:16 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:34:16 [INFO] src.MainWindow: Mode Changed to: Sort
+20:34:16 [INFO] src.MainWindow: ===================================================
+20:34:16 [INFO] src.MainWindow: App initialised and started!
+20:34:18 [INFO] src.MainWindow: Mode Changed to: Edit
+20:34:19 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+20:34:19 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+20:34:19 [DEBUG] src.MainWindow: current shortcut pressed: a and parent 
+20:34:19 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:34:19 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:34:21 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:34:21 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:34:21 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+20:34:28 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+20:34:28 [INFO] src.MainWindow: Parents path: Get path for shortcut: x, 
+20:34:28 [DEBUG] src.MainWindow: current shortcut pressed: x and parent 
+20:34:28 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:34:28 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:34:30 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:34:30 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:34:30 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:34:33 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:34:33 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:34:33 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:34:33 [DEBUG] src.MainWindow: getdstpathforshortcut: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:34:33 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {}}
+20:34:33 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:34:35 [INFO] src.MainWindow: DST DIR: 
+20:34:35 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:34:35 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:34:38 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xs'.
+20:34:38 [INFO] src.MainWindow: Parents path: Get path for shortcut: xs, x
+20:34:38 [DEBUG] src.MainWindow: current shortcut pressed: xs and parent x
+20:34:38 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Downloads
+20:34:38 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {}}
+20:34:38 [INFO] src.MainWindow: Parent's path: G:/Downloads
+20:34:40 [INFO] src.MainWindow: DST DIR: 
+20:34:40 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:34:40 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:34:44 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:34:44 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:34:44 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:34:44 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:34:44 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}}}
+20:34:46 [INFO] src.MainWindow: DST DIR: 
+20:34:46 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:34:46 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:35:42 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:35:42 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:35:42 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:35:42 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:35:42 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}}}
+20:36:18 [INFO] src.MainWindow: DST DIR: 
+20:36:18 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:36:18 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:42:50 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:42:50 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:42:50 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:42:50 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:42:50 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}}}
+20:42:52 [INFO] src.MainWindow: DST DIR: 
+20:42:52 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:42:52 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:43:23 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:43:23 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:43:23 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:43:23 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:43:23 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}}}
+20:43:26 [INFO] src.MainWindow: DST DIR: 
+20:43:26 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:43:26 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:53:30 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:53:30 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:53:30 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:53:30 [INFO] src.MainWindow: Mode Changed to: Sort
+20:53:30 [INFO] src.MainWindow: ===================================================
+20:53:30 [INFO] src.MainWindow: App initialised and started!
+20:53:35 [INFO] src.MainWindow: Mode Changed to: Edit
+20:53:38 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+20:53:38 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+20:53:38 [DEBUG] src.MainWindow: current shortcut pressed: a and parent 
+20:53:38 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+20:53:38 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:53:38 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:53:40 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:53:40 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:53:40 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+20:53:44 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+20:53:44 [INFO] src.MainWindow: Parents path: Get path for shortcut: x, 
+20:53:44 [DEBUG] src.MainWindow: current shortcut pressed: x and parent 
+20:53:44 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+20:53:44 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:53:44 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:53:47 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:53:47 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:53:47 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:53:51 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:53:51 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:53:51 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:53:51 [DEBUG] src.MainWindow: getdstpathforshortcut: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:53:51 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {}}
+20:53:51 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:53:54 [INFO] src.MainWindow: DST DIR: 
+20:53:54 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:53:54 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:53:58 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xs'.
+20:53:58 [INFO] src.MainWindow: Parents path: Get path for shortcut: xs, x
+20:53:58 [DEBUG] src.MainWindow: current shortcut pressed: xs and parent x
+20:53:58 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Downloads
+20:53:58 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {}}
+20:53:58 [INFO] src.MainWindow: Parent's path: G:/Downloads
+20:54:05 [INFO] src.MainWindow: DST DIR: 
+20:54:05 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:54:05 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:54:06 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:54:06 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:54:06 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:54:06 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+20:54:06 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:54:06 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}}}
+20:54:06 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:54:08 [INFO] src.MainWindow: DST DIR: 
+20:54:08 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:54:08 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:56:12 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+20:56:13 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+20:56:13 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+20:56:13 [INFO] src.MainWindow: Mode Changed to: Sort
+20:56:13 [INFO] src.MainWindow: ===================================================
+20:56:13 [INFO] src.MainWindow: App initialised and started!
+20:56:23 [INFO] src.MainWindow: Mode Changed to: Edit
+20:56:24 [INFO] src.MainWindow: Mode Changed to: Sort
+20:56:40 [INFO] src.MainWindow: Mode Changed to: Edit
+20:56:42 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+20:56:42 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+20:56:42 [DEBUG] src.MainWindow: current shortcut pressed: a and parent 
+20:56:42 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+20:56:42 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:56:42 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:56:43 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:56:43 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:56:43 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+20:56:44 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+20:56:44 [INFO] src.MainWindow: Parents path: Get path for shortcut: x, 
+20:56:44 [DEBUG] src.MainWindow: current shortcut pressed: x and parent 
+20:56:44 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+20:56:44 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:56:44 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:56:47 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:56:47 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:56:47 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:56:55 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+20:56:55 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+20:56:55 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+20:56:55 [DEBUG] src.MainWindow: getdstpathforshortcut: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:56:55 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {}}
+20:56:55 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+20:56:56 [INFO] src.MainWindow: DST DIR: 
+20:56:56 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:56:56 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:56:58 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+20:56:58 [INFO] src.MainWindow: Parents path: Get path for shortcut: acd, ac
+20:56:58 [DEBUG] src.MainWindow: current shortcut pressed: acd and parent ac
+20:56:58 [DEBUG] src.MainWindow: getdstpathforshortcut: 
+20:56:58 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {}}
+20:56:58 [INFO] src.MainWindow: Parent's path: 
+20:57:00 [INFO] src.MainWindow: DST DIR: 
+20:57:00 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:57:00 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:57:01 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+20:57:01 [INFO] src.MainWindow: Parents path: Get path for shortcut: x, 
+20:57:01 [DEBUG] src.MainWindow: current shortcut pressed: x and parent 
+20:57:01 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+20:57:01 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:57:01 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:57:03 [INFO] src.MainWindow: DST DIR: 
+20:57:03 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:57:03 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "",
+      "keys": {}
+    }
+  }
+}
+20:57:03 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+20:57:03 [INFO] src.MainWindow: Parents path: Get path for shortcut: x, 
+20:57:03 [DEBUG] src.MainWindow: current shortcut pressed: x and parent 
+20:57:03 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+20:57:03 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:57:03 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+20:57:06 [INFO] src.MainWindow: DST DIR: G:/Downloads
+20:57:06 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:57:06 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+20:57:08 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xd'.
+20:57:08 [INFO] src.MainWindow: Parents path: Get path for shortcut: xd, x
+20:57:08 [DEBUG] src.MainWindow: current shortcut pressed: xd and parent x
+20:57:08 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Downloads
+20:57:08 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {}}
+20:57:08 [INFO] src.MainWindow: Parent's path: G:/Downloads
+20:57:12 [INFO] src.MainWindow: DST DIR: G:/Downloads/Videa
+20:57:12 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:57:12 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "d": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+20:57:14 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+20:57:14 [INFO] src.MainWindow: Parents path: Get path for shortcut: acd, ac
+20:57:14 [DEBUG] src.MainWindow: current shortcut pressed: acd and parent ac
+20:57:14 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+20:57:14 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+20:57:14 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {'d': {'dst_path': '', 'keys': {}}}}
+20:57:14 [INFO] src.MainWindow: Parent's path: 
+20:57:52 [INFO] src.MainWindow: DST DIR: 
+20:57:52 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+20:57:52 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "d": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:07:37 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+21:07:38 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+21:07:38 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+21:07:38 [INFO] src.MainWindow: Mode Changed to: Sort
+21:07:38 [INFO] src.MainWindow: ===================================================
+21:07:38 [INFO] src.MainWindow: App initialised and started!
+21:07:40 [INFO] src.MainWindow: Mode Changed to: Edit
+21:07:44 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+21:07:44 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+21:07:44 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:07:44 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents None
+21:07:44 [DEBUG] src.MainWindow: current shortcut pressed: a and parent 
+21:07:44 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:07:44 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:07:44 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+21:07:46 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:07:46 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:07:46 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+21:07:47 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'av'.
+21:07:47 [INFO] src.MainWindow: Parents path: Get path for shortcut: av, a
+21:07:47 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:07:47 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:07:47 [DEBUG] src.MainWindow: current shortcut pressed: av and parent a
+21:07:47 [DEBUG] src.MainWindow: getdstpathforshortcut: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:07:47 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {}}
+21:07:47 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:07:48 [INFO] src.MainWindow: DST DIR: 
+21:07:48 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:07:48 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:07:50 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'avc'.
+21:07:50 [INFO] src.MainWindow: Parents path: Get path for shortcut: avc, av
+21:07:50 [DEBUG] src.ShortcutManager: remainingSequence: av
+21:07:50 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:07:50 [DEBUG] src.MainWindow: current shortcut pressed: avc and parent av
+21:07:50 [DEBUG] src.MainWindow: getdstpathforshortcut: 
+21:07:50 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {}}
+21:07:50 [INFO] src.MainWindow: Parent's path: 
+21:07:50 [INFO] src.MainWindow: DST DIR: 
+21:07:50 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:07:50 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:07:53 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'avcd'.
+21:07:53 [INFO] src.MainWindow: Parents path: Get path for shortcut: avcd, avc
+21:07:53 [DEBUG] src.ShortcutManager: remainingSequence: avc
+21:07:53 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:07:53 [DEBUG] src.MainWindow: current shortcut pressed: avcd and parent avc
+21:07:53 [DEBUG] src.MainWindow: getdstpathforshortcut: 
+21:07:53 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {}}
+21:07:53 [INFO] src.MainWindow: Parent's path: 
+21:08:16 [INFO] src.MainWindow: DST DIR: 
+21:08:16 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:08:16 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:08:19 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:08:19 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+21:08:19 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:08:19 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:08:19 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+21:08:19 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:08:19 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:08:19 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'v': {'dst_path': '', 'keys': {'c': {'dst_path': '', 'keys': {'d': {'dst_path': '', 'keys': {}}}}}}}}
+21:08:19 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:08:22 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:08:22 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:08:22 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        },
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:08:27 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+21:08:27 [INFO] src.MainWindow: Parents path: Get path for shortcut: acd, ac
+21:08:27 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:08:27 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:08:27 [DEBUG] src.MainWindow: current shortcut pressed: acd and parent ac
+21:08:27 [DEBUG] src.MainWindow: getdstpathforshortcut: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:08:27 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources', 'keys': {}}
+21:08:27 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:08:28 [INFO] src.MainWindow: DST DIR: 
+21:08:28 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:08:28 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        },
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:08:31 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+21:08:31 [INFO] src.MainWindow: Parents path: Get path for shortcut: x, 
+21:08:31 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:08:31 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents None
+21:08:31 [DEBUG] src.MainWindow: current shortcut pressed: x and parent 
+21:08:31 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:08:31 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:08:31 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+21:08:33 [INFO] src.MainWindow: DST DIR: G:/Downloads
+21:08:33 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:08:33 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        },
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+21:08:35 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+21:08:35 [INFO] src.MainWindow: Parents path: Get path for shortcut: acd, ac
+21:08:35 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:08:35 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:08:35 [DEBUG] src.MainWindow: current shortcut pressed: acd and parent ac
+21:08:35 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:08:35 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:08:35 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources', 'keys': {'d': {'dst_path': '', 'keys': {}}}}
+21:08:35 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:08:37 [INFO] src.MainWindow: DST DIR: 
+21:08:37 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:08:37 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        },
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+21:08:40 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:08:40 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+21:08:40 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:08:40 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:08:40 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+21:08:40 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:08:40 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:08:40 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'v': {'dst_path': '', 'keys': {'c': {'dst_path': '', 'keys': {'d': {'dst_path': '', 'keys': {}}}}}}, 'c': {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources', 'keys': {'d': {'dst_path': '', 'keys': {}}}}}}
+21:08:40 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:08:40 [INFO] src.MainWindow: DST DIR: 
+21:08:40 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:08:40 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        },
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+21:08:43 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+21:08:43 [INFO] src.MainWindow: Parents path: Get path for shortcut: x, 
+21:08:43 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:08:43 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents None
+21:08:43 [DEBUG] src.MainWindow: current shortcut pressed: x and parent 
+21:08:43 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:08:43 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:08:43 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+21:08:53 [INFO] src.MainWindow: DST DIR: G:/Downloads/Obrazky
+21:08:53 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:08:53 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        },
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads/Obrazky",
+      "keys": {}
+    }
+  }
+}
+21:08:56 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+21:08:56 [INFO] src.MainWindow: Parents path: Get path for shortcut: acd, ac
+21:08:56 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:08:56 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:08:56 [DEBUG] src.MainWindow: current shortcut pressed: acd and parent ac
+21:08:56 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:08:56 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:08:56 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {'d': {'dst_path': '', 'keys': {}}}}
+21:08:56 [INFO] src.MainWindow: Parent's path: 
+21:09:05 [INFO] src.MainWindow: DST DIR: 
+21:09:05 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:09:05 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "v": {
+          "dst_path": "",
+          "keys": {
+            "c": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        },
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads/Obrazky",
+      "keys": {}
+    }
+  }
+}
+21:09:41 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+21:09:42 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+21:09:42 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+21:09:42 [INFO] src.MainWindow: Mode Changed to: Sort
+21:09:42 [INFO] src.MainWindow: ===================================================
+21:09:42 [INFO] src.MainWindow: App initialised and started!
+21:09:43 [INFO] src.MainWindow: Mode Changed to: Edit
+21:09:45 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+21:09:45 [INFO] src.MainWindow: Parents path: Get path for shortcut: a, 
+21:09:45 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:09:45 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:09:45 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents None
+21:09:45 [DEBUG] src.MainWindow: current shortcut pressed: a and parent 
+21:09:45 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:09:45 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:09:45 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+21:09:47 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:09:47 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:09:47 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+21:09:49 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+21:09:49 [INFO] src.MainWindow: Parents path: Get path for shortcut: x, 
+21:09:49 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:09:49 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:09:49 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents None
+21:09:49 [DEBUG] src.MainWindow: current shortcut pressed: x and parent 
+21:09:49 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:09:49 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:09:49 [DEBUG] src.MainWindow: getlastkeycontentofsequence: 
+21:09:51 [INFO] src.MainWindow: DST DIR: G:/Downloads
+21:09:51 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:09:51 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+21:09:53 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:09:53 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+21:09:53 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:09:53 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:09:53 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:09:53 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+21:09:53 [DEBUG] src.MainWindow: getdstpathforshortcut: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:09:53 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {}}
+21:09:53 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:09:54 [INFO] src.MainWindow: DST DIR: 
+21:09:54 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:09:54 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+21:09:57 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xs'.
+21:09:57 [INFO] src.MainWindow: Parents path: Get path for shortcut: xs, x
+21:09:57 [DEBUG] src.ShortcutManager: remainingSequence: x
+21:09:57 [DEBUG] src.ShortcutManager: remainingSequence: x
+21:09:57 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents G:/Downloads
+21:09:57 [DEBUG] src.MainWindow: current shortcut pressed: xs and parent x
+21:09:57 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Downloads
+21:09:57 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {}}
+21:09:57 [INFO] src.MainWindow: Parent's path: G:/Downloads
+21:09:58 [INFO] src.MainWindow: DST DIR: 
+21:09:58 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:09:58 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:03 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:10:03 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+21:10:03 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:10:03 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:10:03 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:10:03 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+21:10:03 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:10:03 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:10:03 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {}}}}
+21:10:03 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:10:05 [INFO] src.MainWindow: DST DIR: 
+21:10:05 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:05 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:07 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xs'.
+21:10:07 [INFO] src.MainWindow: Parents path: Get path for shortcut: xs, x
+21:10:07 [DEBUG] src.ShortcutManager: remainingSequence: x
+21:10:07 [DEBUG] src.ShortcutManager: remainingSequence: x
+21:10:07 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents G:/Downloads
+21:10:07 [DEBUG] src.MainWindow: current shortcut pressed: xs and parent x
+21:10:07 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:10:07 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:10:07 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {'s': {'dst_path': '', 'keys': {}}}}
+21:10:07 [INFO] src.MainWindow: Parent's path: G:/Downloads
+21:10:08 [INFO] src.MainWindow: DST DIR: 
+21:10:08 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:08 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:11 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+21:10:11 [INFO] src.MainWindow: Parents path: Get path for shortcut: acd, ac
+21:10:11 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:10:11 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:10:11 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:10:11 [DEBUG] src.MainWindow: current shortcut pressed: acd and parent ac
+21:10:11 [DEBUG] src.MainWindow: getdstpathforshortcut: 
+21:10:11 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {}}
+21:10:11 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:10:13 [INFO] src.MainWindow: DST DIR: 
+21:10:13 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:13 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:15 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:10:15 [INFO] src.MainWindow: Parents path: Get path for shortcut: ac, a
+21:10:15 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:10:15 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:10:15 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:10:15 [DEBUG] src.MainWindow: current shortcut pressed: ac and parent a
+21:10:15 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:10:15 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:10:15 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter', 'keys': {'c': {'dst_path': '', 'keys': {'d': {'dst_path': '', 'keys': {}}}}}}
+21:10:15 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:10:18 [INFO] src.MainWindow: DST DIR: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:10:18 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:18 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:19 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+21:10:19 [INFO] src.MainWindow: Parents path: Get path for shortcut: acd, ac
+21:10:19 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:10:19 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:10:19 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:10:19 [DEBUG] src.MainWindow: current shortcut pressed: acd and parent ac
+21:10:19 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:10:19 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:10:19 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources', 'keys': {'d': {'dst_path': '', 'keys': {}}}}
+21:10:19 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:10:21 [INFO] src.MainWindow: DST DIR: 
+21:10:21 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:21 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:24 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xs'.
+21:10:24 [INFO] src.MainWindow: Parents path: Get path for shortcut: xs, x
+21:10:24 [DEBUG] src.ShortcutManager: remainingSequence: x
+21:10:24 [DEBUG] src.ShortcutManager: remainingSequence: x
+21:10:24 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents G:/Downloads
+21:10:24 [DEBUG] src.MainWindow: current shortcut pressed: xs and parent x
+21:10:24 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:10:24 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:10:24 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads', 'keys': {'s': {'dst_path': '', 'keys': {}}}}
+21:10:24 [INFO] src.MainWindow: Parent's path: G:/Downloads
+21:10:27 [INFO] src.MainWindow: DST DIR: G:/Downloads/Videa
+21:10:27 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:27 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:28 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+21:10:28 [INFO] src.MainWindow: Parents path: Get path for shortcut: acd, ac
+21:10:28 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:10:28 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:10:28 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:10:28 [DEBUG] src.MainWindow: current shortcut pressed: acd and parent ac
+21:10:28 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:10:28 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:10:28 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources', 'keys': {'d': {'dst_path': '', 'keys': {}}}}
+21:10:28 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:10:30 [INFO] src.MainWindow: DST DIR: 
+21:10:30 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:30 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:32 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acde'.
+21:10:32 [INFO] src.MainWindow: Parents path: Get path for shortcut: acde, acd
+21:10:32 [DEBUG] src.ShortcutManager: remainingSequence: acd
+21:10:32 [DEBUG] src.ShortcutManager: remainingSequence: acd
+21:10:32 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:10:32 [DEBUG] src.MainWindow: current shortcut pressed: acde and parent acd
+21:10:32 [DEBUG] src.MainWindow: getdstpathforshortcut: 
+21:10:32 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {}}
+21:10:32 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources
+21:10:33 [INFO] src.MainWindow: DST DIR: 
+21:10:33 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:33 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:10:38 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xsa'.
+21:10:38 [INFO] src.MainWindow: Parents path: Get path for shortcut: xsa, xs
+21:10:38 [DEBUG] src.ShortcutManager: remainingSequence: xs
+21:10:38 [DEBUG] src.ShortcutManager: remainingSequence: xs
+21:10:38 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents G:/Downloads/Videa
+21:10:38 [DEBUG] src.MainWindow: current shortcut pressed: xsa and parent xs
+21:10:38 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Downloads/Videa
+21:10:38 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads/Videa', 'keys': {}}
+21:10:38 [INFO] src.MainWindow: Parent's path: G:/Downloads/Videa
+21:10:42 [INFO] src.MainWindow: DST DIR: G:/Ekura
+21:10:42 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:42 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {
+            "a": {
+              "dst_path": "G:/Ekura",
+              "keys": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:10:47 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xsad'.
+21:10:47 [INFO] src.MainWindow: Parents path: Get path for shortcut: xsad, xsa
+21:10:47 [DEBUG] src.ShortcutManager: remainingSequence: xsa
+21:10:47 [DEBUG] src.ShortcutManager: remainingSequence: xsa
+21:10:47 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents G:/Ekura
+21:10:47 [DEBUG] src.MainWindow: current shortcut pressed: xsad and parent xsa
+21:10:47 [DEBUG] src.MainWindow: getdstpathforshortcut: G:/Ekura
+21:10:47 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Ekura', 'keys': {}}
+21:10:47 [INFO] src.MainWindow: Parent's path: G:/Ekura
+21:10:48 [INFO] src.MainWindow: DST DIR: 
+21:10:48 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:48 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {
+            "a": {
+              "dst_path": "G:/Ekura",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:10:51 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xsa'.
+21:10:51 [INFO] src.MainWindow: Parents path: Get path for shortcut: xsa, xs
+21:10:51 [DEBUG] src.ShortcutManager: remainingSequence: xs
+21:10:51 [DEBUG] src.ShortcutManager: remainingSequence: xs
+21:10:51 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents G:/Downloads/Videa
+21:10:51 [DEBUG] src.MainWindow: current shortcut pressed: xsa and parent xs
+21:10:51 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:10:51 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:10:51 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': 'G:/Downloads/Videa', 'keys': {'a': {'dst_path': 'G:/Ekura', 'keys': {'d': {'dst_path': '', 'keys': {}}}}}}
+21:10:51 [INFO] src.MainWindow: Parent's path: G:/Downloads/Videa
+21:10:51 [INFO] src.MainWindow: DST DIR: 
+21:10:51 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:51 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {
+            "a": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:10:54 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xsad'.
+21:10:54 [INFO] src.MainWindow: Parents path: Get path for shortcut: xsad, xsa
+21:10:54 [DEBUG] src.ShortcutManager: remainingSequence: xsa
+21:10:54 [DEBUG] src.ShortcutManager: remainingSequence: xsa
+21:10:54 [DEBUG] src.MainWindow: >>>>>getFirstExistingDstPathForParents G:/Downloads/Videa
+21:10:54 [DEBUG] src.MainWindow: current shortcut pressed: xsad and parent xsa
+21:10:54 [WARNING] src.ShortcutManager: DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).
+21:10:54 [DEBUG] src.MainWindow: getdstpathforshortcut: None
+21:10:54 [DEBUG] src.MainWindow: getlastkeycontentofsequence: {'dst_path': '', 'keys': {'d': {'dst_path': '', 'keys': {}}}}
+21:10:54 [INFO] src.MainWindow: Parent's path: G:/Downloads/Videa
+21:10:55 [INFO] src.MainWindow: DST DIR: 
+21:10:55 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:10:55 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "G:/Downloads/Videa",
+          "keys": {
+            "a": {
+              "dst_path": "",
+              "keys": {
+                "d": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:19:02 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+21:19:03 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+21:19:03 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+21:19:03 [INFO] src.MainWindow: Mode Changed to: Sort
+21:19:03 [INFO] src.MainWindow: ===================================================
+21:19:03 [INFO] src.MainWindow: App initialised and started!
+21:19:04 [INFO] src.MainWindow: Mode Changed to: Edit
+21:19:05 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'av'.
+21:19:05 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:20:24 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+21:20:25 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+21:20:25 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+21:20:25 [INFO] src.MainWindow: Mode Changed to: Sort
+21:20:25 [INFO] src.MainWindow: ===================================================
+21:20:25 [INFO] src.MainWindow: App initialised and started!
+21:20:27 [INFO] src.MainWindow: Mode Changed to: Edit
+21:20:28 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+21:20:28 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:20:28 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut a.
+21:20:28 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:20:28 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:20:30 [DEBUG] src.MainWindow: Selected directory from Dialogue: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:20:30 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:20:30 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+21:20:31 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'c'.
+21:20:31 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:20:31 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut c.
+21:20:31 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:20:31 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:20:32 [DEBUG] src.MainWindow: Selected directory from Dialogue: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:20:32 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:20:32 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    },
+    "c": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+21:20:33 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:20:33 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:20:33 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut ac.
+21:20:33 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:20:33 [DEBUG] src.MainWindow: First available 'dst_path' from parents: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:20:33 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:20:34 [DEBUG] src.MainWindow: Selected directory from Dialogue: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:20:34 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:20:34 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+          "keys": {}
+        }
+      }
+    },
+    "c": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+21:20:42 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acdf'.
+21:20:42 [DEBUG] src.ShortcutManager: remainingSequence: acd
+21:25:39 [INFO] src.MainWindow: Arguments:
+ Source path: None
+ Presets:     None
+ Copy mode:   False
+21:25:40 [INFO] src.MainWindow: Empty or invalid arg srcDir path
+21:25:40 [INFO] src.MainWindow: Empty or invalid arg shortcuts path
+21:25:40 [INFO] src.MainWindow: Mode Changed to: Sort
+21:25:40 [INFO] src.MainWindow: ===================================================
+21:25:40 [INFO] src.MainWindow: App initialised and started!
+21:25:41 [INFO] src.MainWindow: Mode Changed to: Edit
+21:25:45 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'aca'.
+21:25:45 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:25:45 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut aca.
+21:25:45 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:25:45 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:25:47 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:25:47 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:25:47 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "a": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:25:53 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+21:25:53 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:25:53 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut a.
+21:25:53 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:25:53 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:25:53 [DEBUG] src.MainWindow: Selected directory from Dialogue: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:25:53 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:25:53 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+21:25:55 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acde'.
+21:25:55 [DEBUG] src.ShortcutManager: remainingSequence: acd
+21:25:55 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut acde.
+21:25:55 [DEBUG] src.ShortcutManager: remainingSequence: acd
+21:25:55 [DEBUG] src.MainWindow: First available 'dst_path' from parents: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:25:55 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:25:57 [DEBUG] src.MainWindow: Selected directory from Dialogue: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:25:57 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:25:57 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:26:01 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+21:26:01 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:26:01 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut acd.
+21:26:01 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:26:01 [DEBUG] src.MainWindow: First available 'dst_path' from parents: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:01 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:02 [DEBUG] src.MainWindow: Selected directory from Dialogue: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:02 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:02 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+              "keys": {
+                "e": {
+                  "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:26:05 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:26:05 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:26:05 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut ac.
+21:26:05 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:26:05 [DEBUG] src.MainWindow: First available 'dst_path' from parents: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:05 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:07 [DEBUG] src.MainWindow: Selected directory from Dialogue: G:/Downloads
+21:26:07 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:07 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "G:/Downloads",
+          "keys": {
+            "d": {
+              "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+              "keys": {
+                "e": {
+                  "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:26:09 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'acd'.
+21:26:09 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:26:09 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut acd.
+21:26:09 [DEBUG] src.ShortcutManager: remainingSequence: ac
+21:26:09 [DEBUG] src.MainWindow: First available 'dst_path' from parents: G:/Downloads
+21:26:09 [INFO] src.MainWindow: Parent's path: G:/Downloads
+21:26:11 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:26:11 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:11 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "G:/Downloads",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:26:14 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'asdfe'.
+21:26:14 [DEBUG] src.ShortcutManager: remainingSequence: asdf
+21:26:14 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut asdfe.
+21:26:14 [DEBUG] src.ShortcutManager: remainingSequence: asdf
+21:26:14 [DEBUG] src.MainWindow: First available 'dst_path' from parents: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:14 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:16 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:26:16 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:16 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "G:/Downloads",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        },
+        "s": {
+          "dst_path": "",
+          "keys": {
+            "d": {
+              "dst_path": "",
+              "keys": {
+                "f": {
+                  "dst_path": "",
+                  "keys": {
+                    "e": {
+                      "dst_path": "",
+                      "keys": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:26:30 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'a'.
+21:26:30 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:26:30 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut a.
+21:26:30 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:26:30 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:26:31 [DEBUG] src.MainWindow: Selected directory from Dialogue: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:31 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:31 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    }
+  }
+}
+21:26:33 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'x'.
+21:26:33 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:26:33 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut x.
+21:26:33 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:26:33 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:26:36 [DEBUG] src.MainWindow: Selected directory from Dialogue: G:/Downloads
+21:26:36 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:36 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {}
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+21:26:39 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:26:39 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:26:39 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut ac.
+21:26:39 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:26:39 [DEBUG] src.MainWindow: First available 'dst_path' from parents: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:39 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:41 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:26:41 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:41 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {}
+    }
+  }
+}
+21:26:43 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'xs'.
+21:26:43 [DEBUG] src.ShortcutManager: remainingSequence: x
+21:26:43 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut xs.
+21:26:43 [DEBUG] src.ShortcutManager: remainingSequence: x
+21:26:43 [DEBUG] src.MainWindow: First available 'dst_path' from parents: G:/Downloads
+21:26:43 [INFO] src.MainWindow: Parent's path: G:/Downloads
+21:26:44 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:26:44 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:44 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:26:46 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'ac'.
+21:26:46 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:26:46 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut ac.
+21:26:46 [DEBUG] src.ShortcutManager: remainingSequence: a
+21:26:46 [DEBUG] src.MainWindow: First available 'dst_path' from parents: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:46 [INFO] src.MainWindow: Parent's path: C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter
+21:26:49 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:26:49 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:49 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    }
+  }
+}
+21:26:51 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'g'.
+21:26:51 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:26:51 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut g.
+21:26:51 [DEBUG] src.ShortcutManager: remainingSequence: 
+21:26:51 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:26:52 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:26:52 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:52 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "g": {
+      "dst_path": "",
+      "keys": {}
+    }
+  }
+}
+21:26:53 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'gas'.
+21:26:53 [DEBUG] src.ShortcutManager: remainingSequence: ga
+21:26:53 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut gas.
+21:26:53 [DEBUG] src.ShortcutManager: remainingSequence: ga
+21:26:53 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:26:55 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:26:55 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:55 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "g": {
+      "dst_path": "",
+      "keys": {
+        "a": {
+          "dst_path": "",
+          "keys": {
+            "s": {
+              "dst_path": "",
+              "keys": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:26:58 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: 'gase'.
+21:26:58 [DEBUG] src.ShortcutManager: remainingSequence: gas
+21:26:58 [INFO] src.MainWindow: Find first available dst_path from parents of the shortcut gase.
+21:26:58 [DEBUG] src.ShortcutManager: remainingSequence: gas
+21:26:58 [DEBUG] src.MainWindow: First available 'dst_path' from parents: None
+21:26:59 [DEBUG] src.MainWindow: Selected directory from Dialogue: 
+21:26:59 [INFO] src.MainWindow: Dst is not empty or empty path is allowed for new shortcut.
+21:26:59 [INFO] src.MainWindow: {
+  "keys": {
+    "a": {
+      "dst_path": "C:/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter",
+      "keys": {
+        "c": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "x": {
+      "dst_path": "G:/Downloads",
+      "keys": {
+        "s": {
+          "dst_path": "",
+          "keys": {}
+        }
+      }
+    },
+    "g": {
+      "dst_path": "",
+      "keys": {
+        "a": {
+          "dst_path": "",
+          "keys": {
+            "s": {
+              "dst_path": "",
+              "keys": {
+                "e": {
+                  "dst_path": "",
+                  "keys": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+21:27:02 [INFO] src.MainWindow: ENTER pressed. Current key-seqence: '-g'.
