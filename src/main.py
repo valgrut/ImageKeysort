@@ -68,6 +68,9 @@ from src.MainWindow import MainWindow
 # - [X] Settings: v Edit mode: Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
 # - [X] Osetrit, kdyz kliknu na extract, ale neni nacteny zadny obrazek.
 # - [X] Fix reskalovani toho Shortcut panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
+# - [X] Zmena zkratky na jinou - mit moznost zmenit key_char bez toho, abych musel pridat novy a odstranit predchozi. (treba neco jako "abx/abc" - nahradi x za c)
+#       - [X] Fix edge cases - existuje x, pridame a, zmenime a na x -> zmizi.
+#       - [X] Prejmenovani neexistujici zkratky
 
 
 # Code tweaking, Refactoring
@@ -104,12 +107,16 @@ from src.MainWindow import MainWindow
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
 # - [ ] separovat layoutovani do buildUI() method.
 # - [ ] !!!! Add do Settings: Otevrit presets z minula
-# - [ ] vymenit statusBar-label za QStatusBar
 # - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [~] Misto debug print() nahradit za logging module
-# - [ ] Pridat do arguments --debug a jako mozny parametr None (default kdyz neposkytnut), INFO, WARN, ERROR.
+# - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 # - [ ] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
+
+
+# Consider (Maybe):
+# - [ ] vymenit statusBar-label za QStatusBar
+
 
 # Misc:
 # - [ ] Naucit se poradne pracovat s Pycharm
@@ -151,9 +158,6 @@ from src.MainWindow import MainWindow
 # - [ ] Pridat moznost otevrit slozku pri kliknuti na shortcut (Tohle funguje!!!):
 #           webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
-# - [~] Zmena zkratky na jinou - mit moznost zmenit key_char bez toho, abych musel pridat novy a odstranit predchozi. (treba neco jako "abx/abc" - nahradi x za c)
-#       - [ ] Fix edge cases - existuje x, pridame a, zmenime a na x -> zmizi.
-#       - [ ] Prejmenovani neexistujici zkratky
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
 # - [ ] Reset all changes in the shortcuts (revert to last saved state) - button in Edit mode.

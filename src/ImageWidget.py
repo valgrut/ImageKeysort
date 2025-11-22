@@ -17,6 +17,10 @@ from src.Styles import Styles
 #     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 #
 
+
+log = logging.getLogger(__name__)
+
+
 class ImageWidget(QWidget):
 
     """
