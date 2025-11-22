@@ -26,6 +26,7 @@ class Styles:
     def get_default_palette():
         pal = QPalette()
 
+        # pal.setColor(QPalette.Background, QColor(191, 189, 189))
         # pal.setColor(QPalette.Window, QColor("#1e1f22"))
         # pal.setColor(QPalette.WindowText, QColor("#e6e6e6"))
         #

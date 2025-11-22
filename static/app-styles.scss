@@ -7,11 +7,11 @@
 QWidget {
     background-color: $main-background;
     font-family: "Inter";
-    _background-color: palette(Background);
+    //background-color: palette(Background);
 }
 
 GalleryManager {
-    __width: 150px;
+    //width: 150px;
     border: 1px solid black;
     border-radius: $widget-border-radius;
     padding: 3px;
@@ -26,7 +26,7 @@ QLabel {
     font-weight: bold;
     font-size: 15px;
     font-family: "Inter";
-    xxmargin: 5px;
+    //margin: 5px;
 }
 QLabel#statusBarLabel {
     min-height: 26px;
@@ -43,7 +43,7 @@ QProgressBar {
 }
 
 QPushButton {
-    __width: 150px;
+    //width: 150px;
     height: 20px;
     border: 1px solid black;
     border-radius: $button-border-radius;
@@ -95,7 +95,7 @@ QTreeWidget {
     border-radius: 10px;
     background-color: $widget-background-color;
     color: black;
-    __padding: 2px;
+    //padding: 2px;
 }
 
 QTreeWidget::header {
@@ -113,15 +113,15 @@ QHeaderView {
 }
 
 QHeaderView::section {
-    _color: green;
+    //color: green;
     font-weight: bold;
     background-color: rgb(214, 137, 60);
-    _border: 1px solid black;
-    _border-radius: 10px;
+    //border: 1px solid black;
+    //border-radius: 10px;
     padding: 3px;
 
-    _margin: 3px;
-    _min-height: 20px;
+    //margin: 3px;
+    //min-height: 20px;
 }
 
 /***** Settings Dialog styles *****/

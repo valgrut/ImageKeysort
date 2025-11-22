@@ -1,5 +1,6 @@
 import pytesseract
 import os
+import logging
 from PIL import Image
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QPixmap
