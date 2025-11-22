@@ -37,7 +37,7 @@ from src.MainWindow import MainWindow
 # - [x] Fix: HIT is detected even for sequences containing intermediate nonexisting keys: fxxxxk, oxa, ...
 # - [x] Empty the shortcuts (or just update the preview?) if HIT && target dir does not exist physically.
 # - [x] Resize image in label to fill the label while keeping ratio and even during the window resizing.
-# - [x~] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
+# - [x] Pridat nekam indikator, jestli jsou provedeny zmeny, nebo ne. (Obvykle je nekde treba '*').
 # - [x] Fix crash, when manipulating image, which is removed outside of program, while source directory is loaded.
 #   - Kontext: Odstranim/presunu rucne obrazek ve slozce, ktera je otevrena v programu. Kdyz na obrazek (ktery v poli ale porad existuje) sipkama dojdu a zkusim ho odstranit, program crashne.
 #   - [x] Pridat file exist check pri manipulaci s obrazkem (pri mv, copy, del) !!!! If does not exist, remove from list.
@@ -66,6 +66,7 @@ from src.MainWindow import MainWindow
 # - [X] Fix: ClearTree -> SaveChanges? Kdyz nevyberu zadnou slozku, stejne se to smaze. Takze pokracovat k akci jen, kdyz se fakt zvoli soubor do ktereho ulozit zkratky.
 # - [X] Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. Default povoleno.
 # - [X] Settings: v Edit mode: Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
+# - [X] Osetrit, kdyz kliknu na extract, ale neni nacteny zadny obrazek.
 
 
 # Code tweaking, Refactoring
@@ -83,7 +84,7 @@ from src.MainWindow import MainWindow
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!!
 
 # Settings:
-# - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
+# - [ ] Settings: Moznost sort podle dst_path, (krom podle insert order (default) a podle Key_char (alphabetically).
 
 
 # Important features TODO:
@@ -97,7 +98,6 @@ from src.MainWindow import MainWindow
 # - [~] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
 # - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni.
 # - [ ] textExtraction: Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
-# - [ ] TODO: Translate all done tasks and translate todo ideas to EN:
 # - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
 # - [ ] Zmenit barvy pozadi v menu !
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
@@ -106,7 +106,6 @@ from src.MainWindow import MainWindow
 # - [ ] vymenit statusBar-label za QStatusBar
 # - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
-# - [ ] Osetrit, kdyz kliknu na extract, ale neni nacteny zadny obrazek.
 # - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default kdyz neposkytnut), INFO, WARN, ERROR.
 # - [ ] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
@@ -120,7 +119,7 @@ from src.MainWindow import MainWindow
 # - [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
 # - [ ] Zakomponovat qtsass (pip3 install qtsass --break-system-packages)
 #   - [ ] `qtsass src/styles/app-styles.scss -o src/styles/app-styles.qss`
-# - [ ] Do kontext menu na Windows (prave kliknuti) ve slozce pridat moznost otevrit ji jako src v Image Keysort.
+# - [ ] Do kontext menu na Windows (prave kliknuti na slozku nebo ve slozce) pridat moznost otevrit ji jako src v Image Keysort.
 #   - [ ] Do instalace pridat spusteni registr scriptuu (add-image-keysort.reg), ktery to prida do toho kontext menu.
 # - [ ] Zprovoznit a spravit ikonky na Linuxu.
 
@@ -129,7 +128,7 @@ from src.MainWindow import MainWindow
 
 
 # To Fix:
-# - [x] Crashing when moving the .git bcz process (medium) is used or what...
+# - [x] Crashing when moving the .gif bcz process (medium) is used or what...
 # - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
 # - [x] r -> cesta. c-f -> cesta -> crash !!! Fix.Parents path: Get path for shortcut:  cf c -> Key c -> DEBUG: such sequence does not exist.
 # - [ ] !!! Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
@@ -137,8 +136,8 @@ from src.MainWindow import MainWindow
 
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
-# - [ ] Sort shortcuts alphabetically (a, A, c, G, x) and option2 sort target directories alphabetically. [Settings]!
-# - [ ] CustomTreeWidget: 1. Jak zvolit, kolik ma zobrazit sloupcu?? 2. Jak prizpusobit sirku - na zaklade poctu zobrazenych sloupcu? [SETTINGS]
+# - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
+# - [ ] CustomTreeWidget:  2. Jak prizpusobit sirku - mozna na zaklade poctu zobrazenych sloupcu?
 # - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
 # - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
 # - [ ] Udelat CustomTree resizable pomoci QSplitter
@@ -156,7 +155,7 @@ from src.MainWindow import MainWindow
 #       - [ ] Prejmenovani neexistujici zkratky
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
-# - [ ] Reset changes in the shortcuts (revert to last saved state) - button in Edit mode.
+# - [ ] Reset all changes in the shortcuts (revert to last saved state) - button in Edit mode.
 # - [ ] Expand / Collapse everything under a shortcut - by doubleclicking the shortcut?
 # - [ ] Expand / Collapse all shortcuts - button in Edit mode.
 # - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
@@ -165,6 +164,7 @@ from src.MainWindow import MainWindow
 
 
 # Minor issues, future features:
+# - [ ] Translate all done tasks and ideas to EN
 # - [ ] Otevrit a tridit remote slozku - napr. Google Drive a pod ?
 # - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
 # - [ ] Pridat radu do helpu: Namapovat co nejvic zkratek pod prsty leve ruky (a, e, d, ...)
