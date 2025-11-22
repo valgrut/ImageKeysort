@@ -2,6 +2,7 @@ import sys
 import json
 import datetime
 import typing
+import logging
 
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
 from PyQt5.QtWidgets import (
@@ -43,6 +44,8 @@ allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Ke
                 Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z, Qt.Key_Escape, Qt.Key_Backspace,
                Qt.Key_Return, Qt.Key_Space, Qt.Key_Period, Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Home, Qt.Key_End]
 
+log = logging.getLogger(__name__)
+
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow, QObject):
 
@@ -64,8 +67,10 @@ class MainWindow(QMainWindow, QObject):
             presetsArg = args.presets_path
             setCopyModeArg = args.set_copy_mode
 
-            print(f"Source path: {srcPathArg}")
-            print(f"Presets: {presetsArg}")
+            log.info(f"Arguments:\n"
+                     f" Source path: {srcPathArg}\n"
+                     f" Presets:     {presetsArg}\n"
+                     f" Copy mode:   {setCopyModeArg}")
 
 
         # ========== Main App Window parameters ==========
@@ -162,13 +167,8 @@ class MainWindow(QMainWindow, QObject):
 
 
         # ========== Default variables and behaviour ==========
-        # self.keySeqHistory = []
-        # self.mvHistory = []
         self.keySeq = ""
-        # self.permanentKeySeq = ""
         self.currentMode = "home"  # Next options: edit, sort
-        # self.copyOnly = False
-        print("Mod: " + self.currentMode)
 
 
         # ========== Register global keyboard shortcuts ==========
@@ -273,14 +273,14 @@ class MainWindow(QMainWindow, QObject):
         if srcPathArg:
             self.galleryManager.setSourcePath(srcPathArg)
         else:
-            print("Empty or invalid arg srcDir path")
+            log.info("Empty or invalid arg srcDir path")
 
         # Set shortcuts preset from CLI, if some provided
         if presetsArg:
             self.shortcutManager.loadShortcutsFromFile(presetsArg)
             self.treeViewWidget.update_tree_view()  # TODO: emit signal?
         else:
-            print("Empty or invalid arg shortcuts path")
+            log.info("Empty or invalid arg shortcuts path")
 
 
         # ========== Start the App with the Sort mode as default ==========
@@ -291,6 +291,9 @@ class MainWindow(QMainWindow, QObject):
 
         # print("Has focus?", self.hasFocus())
         # print("Focus Widget:", self.focusWidget())
+
+        log.info("===================================================")
+        log.info("App initialised and started!")
 
 
     @pyqtSlot(str)
@@ -307,7 +310,7 @@ class MainWindow(QMainWindow, QObject):
 
     @pyqtSlot()
     def apply_settings(self, s: dict):
-        print(s)
+        log.info(s)
         pass
 
 
@@ -386,7 +389,7 @@ class MainWindow(QMainWindow, QObject):
         # writeSettings()
         # event.accept()
 
-        print("Exiting")
+        log.info("Exitting the app.")
         sys.exit(0)
         exit(0)
 
@@ -404,22 +407,20 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.update_tree_view() # TODO: emit signal?  Mozna nahradit toto volani za emit signalu pro update_tree_viw()
 
     def setCopyMode(self):
-        print("Current mode: Copy")
-        # self.copyOnly = True
+        log.info("Toggle Copy mode ON.")
         self.sortModeHandler.setCopyOnly()
         self.copyButton.setChecked(True)
         self.galleryManager.mediaContainerWidget.setCopyModeBorderHighlight()
         return
 
     def unsetCopyMode(self):
-        print("Current mode: Move")
+        log.info("Toggle Copy mode OFF.")
         self.sortModeHandler.unsetCopyOnly()
         self.copyButton.setChecked(False)
         self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
         return
 
     def toggleCopyMode(self):
-        # self.next_image_button.setFocus()
         if self.sortModeHandler.getCopyOnlyState() is False:
             self.setCopyMode()
             return
@@ -429,9 +430,7 @@ class MainWindow(QMainWindow, QObject):
             return
 
     def set_edit_mode(self):
-        # Display a message when the shortcut is activated
-        # self.message_label.setText("You pressed Ctrl+M!")
-        print("New mode: Edit")
+        log.info("Mode Changed to: Edit")
         self.currentMode = Modes.EDIT
         self.editButton.setChecked(True)
         self.sortButton.setChecked(False)
@@ -439,9 +438,7 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setEnabled(True)
 
     def set_sort_mode(self):
-        # Display a message when the shortcut is activated
-        # self.messagae_label.setText("You pressed Ctrl+M!")
-        print("New mode: Sort")
+        log.info("Mode Changed to: Sort")
         self.currentMode = Modes.SORT
         self.editButton.setChecked(False)
         self.sortButton.setChecked(True)
@@ -475,9 +472,9 @@ class MainWindow(QMainWindow, QObject):
 
             # Confirm entered shortcut, add into tree and ask for the dst path
             case Qt.Key_Return:  # "Return" is the "Enter" key in the center of keyboard.
-                print("ENTER: seq:", self.keySeq)
+                log.info(f"ENTER pressed. Current key-seqence: '{self.keySeq}'.")
                 if len(self.keySeq) == 0:
-                    print(f"probably empty (Key seq: {self.keySeq})")
+                    log.info(f"probably empty (Key seq: {self.keySeq})")
                     return
 
                 # Check, whether sequence contains '-', and if so
@@ -488,45 +485,42 @@ class MainWindow(QMainWindow, QObject):
                     return
 
                 if ">" in self.keySeq:
-                    print("Note: move key_char elsewhere.")
+                    log.info("Note: move key_char elsewhere.")
                     self.shortcutManager.moveShortcutSequence(self.keySeq)
                     self.cleanupAndUpdate()
                     return
 
                 if "/" in self.keySeq:
-                    print("Note: change key_char X for key_char Y.")
+                    log.info("Note: change key_char X for key_char Y.")
                     self.shortcutManager.changeShortcutKeyChar(self.keySeq)
                     self.cleanupAndUpdate()
                     return
 
-                # Add new shortcut sequence
-                for k in self.keySeq:
-                    self.shortcutManager.addShortcut(self.keySeq)
-
                 # set parent's path as default for the dialogue when nesting shortcut
                 # Usually when nesting shortcuts, they mirror directories, so it is better to show
                 # parent's directory for the new shortcut, because it is probable that target directory is there.
-                print("Parents path: Get path for shortcut: ", self.keySeq, self.keySeq[:-1])
+                log.info(f"Parents path: Get path for shortcut: {self.keySeq}, {self.keySeq[:-1]}")
                 # parentPathAdvice = self.shortcutManager.getDstPathForShortcut(self.keySeq[:-1])
                 parentPathAdvice = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq[:-1])
                 parentPath = ""
                 if parentPathAdvice is not None and "dst_path" in parentPathAdvice:
-                    print("Parent's path: ", parentPathAdvice["dst_path"])
+                    log.info(f"Parent's path: {parentPathAdvice['dst_path']}")
                     parentPath = parentPathAdvice["dst_path"]
 
                 dstSortDirectory = QFileDialog.getExistingDirectory(self, "Select Directory", parentPath)
-                # WIP: TODO: Zde asi povolit podle Settings. Chci vlastne
-                # zabranit i pridani zkratek, takze zpetne je odstranit zase?
-                # nebo je pridat az po tom, co se potvrdi, ze je slozka
-                # vybrana (neprazdna)?
-                # print("DST DIR:", dstSortDirectory)
-                # if dstSortDirectory is "" and SettingsDialog.settingsGetAllowNoDest():
-                self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
-                # else:
-                    # self.shortcutManager.addDstPathForShortcut(self.keySeq, "!PRAZDNA")
+                log.info(f"DST DIR: {dstSortDirectory}")
+
+                # Settings: Allow empty destination path (no path selected) or dont.
+                if not dstSortDirectory and not SettingsDialog.settingsGetAllowNoDest():
+                    log.info("No dst selected and empty dst is not allowed. No further action.")
+                else:
+                    log.info("Dst is not empty or empty path is allowed for new shortcut.")
+                    for k in self.keySeq:
+                        self.shortcutManager.addShortcut(self.keySeq)
+                    self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
 
                 self.cleanupAndUpdate()
-                print(json.dumps(self.shortcutManager.getData(), indent=2))
+                log.info(json.dumps(self.shortcutManager.getData(), indent=2))
 
             case _:
                 self.keySeq += pressedKey

@@ -1,6 +1,7 @@
 import argparse
 import sys
 import pathlib
+import logging
 from src.Styles import Styles
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QCoreApplication
@@ -55,11 +56,20 @@ from src.MainWindow import MainWindow
 #   - [X] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
 # - [X] Settings - ovladani hlasitosti - mute by default.
 # - [X] Tridit zkratky abecedne? (Mozna settings option?)
+# - [x] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
+# - [X] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
+#       - [X] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
+# - [X] Presunout veskere styly do app-styles.scss
+# - [X] kdyz se tam objevi nova zprava, nebo pridat datum a cas zpravy, aby bylo jasne, ze aktualni zprava se tyka treba posledni operace.
+# - [X] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu. (Inspirovat se treba Pycharm, jak to je udelane tam)
+# - [X] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
+# - [X] Fix: ClearTree -> SaveChanges? Kdyz nevyberu zadnou slozku, stejne se to smaze. Takze pokracovat k akci jen, kdyz se fakt zvoli soubor do ktereho ulozit zkratky.
+# - [X] Pridat Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad! (Default povoleno)
 
 
 # Top priority:
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
-# - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
+# - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi). Mozna pridat nejaky label ze je 3/5 urovni videt.
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
@@ -69,39 +79,41 @@ from src.MainWindow import MainWindow
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!!
 
 # Settings:
-# - [~] ! Pridat Settings - (v Edit mode): pujde zaskrtnout, jestli povolit pridavani zkratek bez vybrane cesty. !!! To je napad!
 # - [~] ! v Edit mode: Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.) - pridat option do settings, jestli povolit prepsani nebo ne. nebo jestli zobrazit potvrzeni prepsani, nebo prepsat bez potvrzeni.
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
+# - [~] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
 
 
 # Important features TODO:
 # - [~] ! REFACTORING
-# - [X] Tridit zkratky abecedne? (Mozna settings option?)
 # - [ ] ! Fix reskalovani toho Shortuc panelu - obcas se zmensuje a zvetsuje dle zobrazeneho obrazku.
 # - [~] !!!!! FIX: Kdyz se pri tvorbe nove zkratky nevybere zadna cesta, tak se zeptat (nebo settings?), jestli zkratku fakt pridat.! Aktualne se prida prazdna. Nebo dialog okno esi fakt pridat. [??SETTINGS]
 # - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
-# - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.)
-# - [~] ! Pridat varovani, kdyz uz zkratka existuje, a my ji chceme prepsat dst path. (Vyskoci dialog okno ze uz existuje, jestli ji chceme prepsat.)
+# - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
 # - [ ] !!!!! Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
-# - [x] Pridat moznost pouzivat backspace, abych mohl odmazat znak ze psane zkratky??
 # - [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou treeViewWidget a image.
 # - [~] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
-# - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni. Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
-# - [X] Mozna nejakou animaci, ze blikne statusbar, kdyz se tam objevi nova zprava, nebo pridat datum a cas zpravy, aby bylo jasne, ze aktualni zprava se tyka treba posledni operace.
+# - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni.
+# - [ ] textExtraction: Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
 # - [ ] TODO: Translate all done tasks and translate todo ideas to EN:
+# - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
 # - [ ] Zmenit barvy pozadi v menu !
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
-# - [X] !!!!! Clicking on the image (**or pressing some shortcut, for example '~' or something**, will convert text on the current image and copy it to clipboard to copy for example to markdown and such.
-#       - [X] Pridat tlacitko pro tohle. Udelat toolbar, kam tohle tlacitko pujde (a asi i dalsi tlacitka)
-# - [X] Presunout veskere styly do app-styles.scss
 # - [ ] separovat layoutovani do buildUI() method.
-# - [ ] Add do Settings: Otevrit presets z minula
-# - [X] About - tu cast se shortcuts - kam ji presunout? V tom About je to moc velke. Nechat tam jen popis programu. (Inspirovat se treba Pycharm, jak to je udelane tam)
+# - [ ] !!!! Add do Settings: Otevrit presets z minula
 # - [ ] vymenit statusBar-label za QStatusBar
 # - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [ ] Osetrit, kdyz kliknu na extract, ale neni nacteny zadny obrazek.
+# - [~] Misto debug print() nahradit za logging module
+# - [ ] Pridat do arguments --debug a jako mozny parametr None (default kdyz neposkytnut), INFO, WARN, ERROR.
+
+
+# Misc:
+# - [ ] Naucit se poradne pracovat s Pycharm
+# - [ ] Naucit se s pdb (python debuggerem)
+
 
 # Installation, Building
 # - [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
@@ -142,14 +154,14 @@ from src.MainWindow import MainWindow
 #       - [ ] Fix edge cases - existuje x, pridame a, zmenime a na x -> zmizi.
 #       - [ ] Prejmenovani neexistujici zkratky
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
-# - [X] Pridat moznost undo copy operation. Kdyz se clovek splete, tak lze undo i copy operaci, takze se proste z dst ta fotka smaze.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
-# - [X] Fix: ClearTree -> SaveChanges? Kdyz nevyberu zadnou slozku, stejne se to smaze. Takze pokracovat k akci jen, kdyz se fakt zvoli soubor do ktereho ulozit zkratky.
 # - [ ] Reset changes in the shortcuts (revert to last saved state) - button in Edit mode.
 # - [ ] Expand / Collapse everything under a shortcut - by doubleclicking the shortcut?
 # - [ ] Expand / Collapse all shortcuts - button in Edit mode.
-# - [ ] Napr: "a-" odstrani vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
+# - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
 # - [ ] Tag / color nodes - Add a color or tag (e.g. game, editing, global) for quick visual scanning.
+# - [ ] Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, zmeny s /, >, -, operacemi a pod.)
+
 
 # Minor issues, future features:
 # - [ ] Otevrit a tridit remote slozku - napr. Google Drive a pod ?
@@ -160,7 +172,7 @@ from src.MainWindow import MainWindow
 # - [~] Separatni repozitar, hodit na reddit, na RH, kolegum,
 # - [ ] Pridat slovo "EMPTY" do Inbox obrazku
 # - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
-# - [~] Dodelat progress widget
+# - [ ] Dodelat progress widget
 # - [ ] MAYBE: Pridat AI advices based on keywords on image.
 # - [ ] Po dotrideni inboxu zobrazit tabulku s gratulaci, treba poctem setridenych obrazku, mozna animace famfar.
 # - [ ] Ctrl+F Otevre search bar, a kdyz zadam cast nejake slozky, zobrazi se matchnute slozky s jejich zkratkami. (hlavne kdyz se preset rozroste, tak to muze byt uzitecne)
@@ -172,6 +184,21 @@ from src.MainWindow import MainWindow
 # - pridat tam, ze vyhoda je, ze tridime pouze 1 photo at a time! No distraction. No paralysis.
 
 # Note: Pycharm: Shift + F10 always runs main.py. No need to always click to main.py first.
+
+
+log = logging.getLogger(__name__)
+
+
+def setupLogging(debugLevel):
+    logging.basicConfig(
+        level=debugLevel,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        datefmt="%H:%M:%S",
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+            logging.FileHandler("myapp.log")
+        ]
+    )
 
 def parseArguments():
     parser = argparse.ArgumentParser(
@@ -202,6 +229,9 @@ def main():
     # qss = qtsass.compile(scss_path.read_text(encoding="utf-8"))
     # qss_path.write_text(qss, encoding="utf-8")
 
+    # Config logging
+    setupLogging(debugLevel=logging.INFO)
+
     # CLI arguments parsing
     parsedArgs = parseArguments()
 
@@ -209,7 +239,7 @@ def main():
     app = QApplication(sys.argv)
     app.setPalette(Styles.get_default_palette())
     app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
-    window = MainWindow(args = parsedArgs)
+    window = MainWindow(args=parsedArgs)
     window.show()
     app.aboutToQuit.connect(window.shortcutManager.askSaveIfChanged)
 

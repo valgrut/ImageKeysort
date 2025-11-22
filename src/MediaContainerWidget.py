@@ -1,3 +1,4 @@
+import logging
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QKeyEvent, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QMessageBox, \
@@ -15,6 +16,9 @@ from src.Styles import Styles
 #         if not isinstance(event, QMouseEvent):
 #             return
 #         QMessageBox.about(self, "Hello!")
+
+log = logging.getLogger(__name__)
+
 
 class MediaContainerWidget(QWidget):
     def __init__(self, galleryManager):

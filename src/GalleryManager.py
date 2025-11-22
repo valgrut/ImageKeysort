@@ -1,6 +1,7 @@
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
+import logging
 
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
@@ -10,6 +11,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 from src.EmptyGalleryWidget import EmptyGalleryImageWidget
 from src.MediaContainerWidget import MediaContainerWidget
 
+log = logging.getLogger(__name__)
 
 class GalleryManager(QStackedWidget):
 

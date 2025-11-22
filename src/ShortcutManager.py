@@ -1,8 +1,11 @@
 import json
 import os
+import logging
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from PyQt5.QtCore import pyqtSignal, QObject
 import re
+
+log = logging.getLogger(__name__)
 
 
 class ShortcutManager(QObject):

@@ -1,3 +1,4 @@
+import logging
 from PyQt5.QtCore import Qt, QSettings, pyqtSignal
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QAction, QToolBar, QStyle, QDialog, QDialogButtonBox,
@@ -11,6 +12,9 @@ from src.Styles import Styles
 #   When I tried to use "general" category, in the file, it was changed into
 #   "%General" because of the internal "ini" file behaviour.
 #   That caused, that Value could not be retrieved with "general".
+
+log = logging.getLogger(__name__)
+
 
 class SettingsDialog(QDialog):
 
