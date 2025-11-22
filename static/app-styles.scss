@@ -5,24 +5,24 @@
 }
 
 QWidget {
-    background-color: $main-background;
+    //background-color: $main-background;
     font-family: "Inter";
-    //background-color: palette(Background);
+    background-color: palette(Window);
 }
 
 GalleryManager {
     //width: 150px;
-    border: 1px solid black;
+    border: 1px solid palette(Link);
     border-radius: $widget-border-radius;
     padding: 3px;
-    background-color: $widget-background-color;
+    background-color: palette(Background);
 }
 
 QLabel {
     min-height: 20px;
-    border: 1px solid black;
+    border: 1px solid palette(Link);
     border-radius: $button-border-radius;
-    background-color: $widget-background-color;
+    background-color: palette(Background);
     font-weight: bold;
     font-size: 15px;
     font-family: "Inter";
@@ -35,7 +35,8 @@ QLabel#statusBarLabel {
 QLabel#keyLabel {
     font-size: 16px;
     border-radius: $widget-border-radius;
-    color: rgb(171, 110, 3);
+    //color: rgb(171, 110, 3);
+    color: palette(Background);
 }
 
 QProgressBar {
@@ -45,18 +46,18 @@ QProgressBar {
 QPushButton {
     //width: 150px;
     height: 20px;
-    border: 1px solid black;
+    border: 1px solid palette(Link);
     border-radius: $button-border-radius;
     padding: 3px;
-    background-color: $button-background-color;
+    background-color: palette(Button);
     font-weight: bold;
     font-size: 15px;
 }
 QPushButton:hover {
-    background-color: $button-background-hover-color;
+    background-color: palette(Highlight);
 }
 QPushButton:checked {
-    background-color: $button-background-active-color;
+    background-color: palette(Base);
 }
 QPushButton#clearTreeButton:hover {
     background-color: red;
@@ -68,7 +69,7 @@ MediaContainerWidget QPushButton {
     width: 150px;
 }
 MediaContainerWidget QPushButton:hover {
-    background-color: $button-background-hover-color;
+    background-color: palette(Highlight);
 }
 MediaContainerWidget QLabel {
     font-weight: normal;
@@ -91,9 +92,9 @@ QStackedWidget QWidget[copyMode="1"] {
 QTreeWidget {
     min-width: 250px;  // TODO: will be probably out after adding the bar to change width between Tree and MediaView.
     width: 200px;
-    border: 1px solid black;
+    border: 1px solid palette(Link);
     border-radius: 10px;
-    background-color: $widget-background-color;
+    background-color: palette(Background);
     color: black;
     //padding: 2px;
 }
@@ -104,7 +105,7 @@ QTreeWidget::header {
 }
 
 QHeaderView {
-    background-color: $widget-background-color;
+    background-color: palette(Background);
     color: black;
     border: 0px solid black;
     border-radius: 10px;
@@ -115,7 +116,8 @@ QHeaderView {
 QHeaderView::section {
     //color: green;
     font-weight: bold;
-    background-color: rgb(214, 137, 60);
+    //background-color: rgb(214, 137, 60);
+    background-color: palette(Background);
     //border: 1px solid black;
     //border-radius: 10px;
     padding: 3px;
@@ -127,14 +129,14 @@ QHeaderView::section {
 /***** Settings Dialog styles *****/
 SettingsDialog {
     border: 0;
-    background-color: $widget-background-color;
+    background-color: palette(Background);
     font-weight: normal;
 }
 SettingsDialog * {
-    background-color: $widget-background-color;
+    background-color: palette(Background);
 }
 SettingsDialog QFormLayout {
-    background-color: $widget-background-color;
+    background-color: palette(Background);
     border: 0;
 }
 SettingsDialog QGroupBox {
@@ -157,22 +159,22 @@ QMessageBox QPushButton {
     border: 1px solid black;
 }
 QMessageBox QPushButton:hover {
-    background-color: $button-background-hover-color;
+    background-color: palette(Highlight);
 }
 
 /***** About message *****/
 QMessageBox {
-    background-color: $widget-background-color;
+    background-color: palette(Background);
 }
 QMessageBox * {
-    background-color: $widget-background-color;
+    background-color: palette(Background);
     border: 0;
     font-weight: normal;
 }
 
 /***** MenuBar, menu items *****/
 QMenuBar {
-    background-color: $widget-background-color;
+    background-color: palette(Background);
     min-height: 30px;
 }
 // QMenuBar {
@@ -206,7 +208,7 @@ QMenu::item:selected {
 /***** EmptyGalleryWidget *****/
 EmptyGalleryWidget {
     width: 100px;
-    border: 1px solid black;
+    border: 1px solid palette(Link);
     border-radius: $widget-border-radius;
     padding: 3px;
     background-color: rgb(100, 189, 189);
@@ -216,7 +218,7 @@ EmptyGalleryWidget {
 /***** ImageWidget *****/
 ImageWidget {
     width: 100px;
-    border: 1px solid black;
+    border: 1px solid palette(Link);
     border-radius: $widget-border-radius;
     padding: 3px;
     background-color: rgb(100, 100, 189);
@@ -224,7 +226,7 @@ ImageWidget {
 
 /***** VideoWidget *****/
 QGraphicsView {
-    border: 2px solid black;
+    border: 2px solid palette(Link);
 }
 
 

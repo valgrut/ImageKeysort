@@ -244,6 +244,7 @@ def main():
     # Create app and apply theme
     app = QApplication(sys.argv)
     app.setPalette(Styles.get_default_palette())
+    # app.setPalette(Styles.get_dark_palette())
     app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
     window = MainWindow(args=parsedArgs)
     window.show()

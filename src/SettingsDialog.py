@@ -236,5 +236,6 @@ class SettingsDialog(QDialog):
         return True if SettingsDialog.checkSetting("video/muteDefault") == "true" else False
         # return self.cb_mute_videos
 
+    # TODO: Add app Theme method
 
 

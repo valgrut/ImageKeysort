@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import (
     QSplitter,
     QProgressBar,
     QMessageBox,
-    QToolBar
+    QToolBar, QApplication
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -304,14 +304,16 @@ class MainWindow(QMainWindow, QObject):
     def open_settings(self):
         dlg = SettingsDialog(self)
         dlg.settingsChangedSignal.connect(self.treeViewWidget.update_tree_view)
-        # dlg.settingsChanged.connect(self.apply_settings)
+        dlg.settingsChangedSignal.connect(self.apply_settings)
         dlg.exec()
 
 
     @pyqtSlot()
-    def apply_settings(self, s: dict):
-        log.info(s)
-        pass
+    def apply_settings(self):
+        log.info("Apply new settings")
+        app = QApplication.instance()
+        # app.setPalette(SettingsDialog.settingsGetTheme())
+        app.setPalette(Styles.get_dark_palette())
 
 
     def showAbout(self):
