@@ -120,7 +120,7 @@ from src.MainWindow import MainWindow
 # - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 # - [ ] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
-# - [ ] mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod.
+# - [ ] mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
 
 
 # Consider (Maybe):
@@ -138,6 +138,8 @@ from src.MainWindow import MainWindow
 # - [ ] Do kontext menu na Windows (prave kliknuti na slozku nebo ve slozce) pridat moznost otevrit ji jako src v Image Keysort.
 #   - [ ] Do instalace pridat spusteni registr scriptuu (add-image-keysort.reg), ktery to prida do toho kontext menu.
 # - [ ] Zprovoznit a spravit ikonky na Linuxu.
+# - [ ] Upgrade from Qt5 to Qt6
+
 
 # Design:
 # - [ ] Zmenit barvy pozadi v menu !
@@ -165,12 +167,12 @@ from src.MainWindow import MainWindow
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
-# - [ ] Reset all changes in the shortcuts (revert to last saved state) - button in Edit mode.
+# - [ ] Reset /Drop all changes in the shortcuts (revert to last saved state) - button in Edit mode.
 # - [ ] Expand / Collapse everything under a shortcut - by doubleclicking the shortcut?
 # - [ ] Expand / Collapse all shortcuts - button in Edit mode.
 # - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
 # - [ ] Tag / color nodes - Add a color or tag (e.g. game, editing, global) for quick visual scanning.
-# - [ ] Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, zmeny s /, >, -, operacemi a pod.)
+# - [ ] Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod.). Mozna pouzit QUndoView ?
 
 
 # Minor issues, future features:
