@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QMessageBox,
 )
+
 from src.SettingsDialog import SettingsDialog
 
 # TODO: tohle by melo ovlivnovat i edit mode, ne???
@@ -78,18 +79,19 @@ class EditModeHandler(QObject):
 
                 # Check, whether keySeq contains operation character:
                 if "-" in self.keySeq:
+                    log.info("Edit Operation: Remove (-)")
                     self.shortcutManager.removeShortcutSequence(self.keySeq)
                     self.cleanupAndUpdate()
                     return
 
                 if ">" in self.keySeq:
-                    log.info("Note: move key_char elsewhere.")
+                    log.info("Edit Operation: Move (>)")
                     self.shortcutManager.moveShortcutSequence(self.keySeq)
                     self.cleanupAndUpdate()
                     return
 
                 if "/" in self.keySeq:
-                    log.info("Note: change key_char X for key_char Y.")
+                    log.info("Edit Operation: Change (/)")
                     self.shortcutManager.changeShortcutKeyChar(self.keySeq)
                     self.cleanupAndUpdate()
                     return

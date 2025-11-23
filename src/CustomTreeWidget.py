@@ -1,4 +1,5 @@
 import pathlib
+import logging
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import (
     QTreeWidget,
@@ -6,6 +7,9 @@ from PyQt5.QtWidgets import (
 )
 
 from src.SettingsDialog import SettingsDialog
+
+log = logging.getLogger(__name__)
+
 
 class CustomTreeWidget(QTreeWidget):
 

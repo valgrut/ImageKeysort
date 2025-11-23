@@ -126,6 +126,7 @@ class MainWindow(QMainWindow, QObject):
         self.keyLabel.setObjectName("keyLabel")
         self.keyLabel.setAlignment(Qt.AlignCenter)
 
+        # TODO: WIP
         self.expProgress = QProgressBar()
         self.expProgress.setValue(20)
 
@@ -266,14 +267,18 @@ class MainWindow(QMainWindow, QObject):
         self.nextImageRequestedSignal.connect(self.galleryManager.setNextImage)
         self.firstImageRequestedSignal.connect(self.galleryManager.setFirstImage)
         self.lastImageRequestedSignal.connect(self.galleryManager.setLastImage)
+
         self.shortcutManager.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.shortcutManager.updateMainWindowTitleSignal.connect(self.updateWindowTitle)
+
         self.sortModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
         self.sortModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.sortModeHandler.updateTreeViewSignal.connect(self.treeViewWidget.update_tree_view)
+
         self.editModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
         self.editModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.editModeHandler.updateTreeViewSignal.connect(self.treeViewWidget.update_tree_view)
+
         self.textExtractor.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
 
 
@@ -304,47 +309,6 @@ class MainWindow(QMainWindow, QObject):
         log.info("App initialised and started!")
 
 
-    @pyqtSlot(str)
-    def updateWindowTitle(self, newTitle):
-        self.setWindowTitle(newTitle)
-
-
-    def open_settings(self):
-        dlg = SettingsDialog(self)
-        dlg.settingsChangedSignal.connect(self.treeViewWidget.update_tree_view)
-        dlg.settingsChangedSignal.connect(self.apply_settings)
-        dlg.exec()
-
-
-    @pyqtSlot()
-    def apply_settings(self):
-        log.info("Apply new settings")
-        app = QApplication.instance()
-        # app.setPalette(SettingsDialog.settingsGetTheme())
-        # app.setPalette(Styles.get_dark_palette())
-
-        selectedTheme = SettingsDialog.settingsGetTheme()
-        match selectedTheme:
-            case "Light":
-                app.setPalette(Styles.get_default_palette())
-            case "Dark":
-                app.setPalette(Styles.get_dark_palette())
-
-
-        import pathlib
-        # Required for new styles to take effect.
-        app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
-
-    def showAbout(self):
-        aboutBox = QMessageBox(self)
-        aboutBox.setWindowTitle("About Image Keysort")
-        aboutBox.setObjectName("AboutMessageBox")
-        aboutBox.setTextFormat(Qt.RichText)
-        with open("about.html", "r", encoding="utf-8") as f:
-            about_text = f.read()
-        aboutBox.setText(about_text)
-        aboutBox.exec()
-
     def _createMenuBar(self):
         menuBar = self.menuBar()
 
@@ -357,7 +321,7 @@ class MainWindow(QMainWindow, QObject):
         fileMenu.addAction(self.saveAction)
         fileMenu.addAction(self.exitAction)
 
-        act_settings = QAction(QIcon("Resources/gear.png"),"Settings", self)
+        act_settings = QAction(QIcon("Resources/gear.png"), "Settings", self)
         act_settings.setShortcut("Ctrl+,")  # common on mac
         act_settings.triggered.connect(self.open_settings)
         fileMenu.addAction(act_settings)
@@ -366,7 +330,6 @@ class MainWindow(QMainWindow, QObject):
         editMenu = QMenu("&Edit", self)
         menuBar.addMenu(editMenu)
         editMenu.addAction(self.undoAction)
-        
 
         # Help menu
         helpMenu = QMenu("&Help", self)
@@ -403,6 +366,46 @@ class MainWindow(QMainWindow, QObject):
         self.undoAction.setStatusTip("Undo last move/copy operation")
         self.undoAction.triggered.connect(self.sortModeHandler.undo_last_operation)
 
+    @pyqtSlot(str)
+    def updateWindowTitle(self, newTitle):
+        self.setWindowTitle(newTitle)
+
+
+    def open_settings(self):
+        dlg = SettingsDialog(self)
+        dlg.settingsChangedSignal.connect(self.treeViewWidget.update_tree_view)
+        dlg.settingsChangedSignal.connect(self.apply_settings)
+        dlg.exec()
+
+
+    @pyqtSlot()
+    def apply_settings(self):
+        log.info("Apply new settings")
+        app = QApplication.instance()
+        # app.setPalette(SettingsDialog.settingsGetTheme())
+        # app.setPalette(Styles.get_dark_palette())
+
+        selectedTheme = SettingsDialog.settingsGetTheme()
+        match selectedTheme:
+            case "Light":
+                app.setPalette(Styles.get_default_palette())
+            case "Dark":
+                app.setPalette(Styles.get_dark_palette())
+
+        import pathlib
+        # Required for new styles to take effect.
+        app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
+
+
+    def showAbout(self):
+        aboutBox = QMessageBox(self)
+        aboutBox.setWindowTitle("About Image Keysort")
+        aboutBox.setObjectName("AboutMessageBox")
+        aboutBox.setTextFormat(Qt.RichText)
+        with open("about.html", "r", encoding="utf-8") as f:
+            about_text = f.read()
+        aboutBox.setText(about_text)
+        aboutBox.exec()
 
     def exitApp(self):
         if self.shortcutManager.areShortcutsModified():
