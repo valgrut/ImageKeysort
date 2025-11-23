@@ -14,7 +14,14 @@ class Styles:
 
     shadowEffectOffset = (3, 3)
     shadowEffectBlurRadius = 10
-    
+
+    THEME_DARK = {
+        "button_bg": "#335480",
+        "button_bg_hover": "#465f80",
+        "button_bg_active": "#2b4060",
+        "button_border": "#9ba5c7",
+    }
+
     @staticmethod
     def getShadowEffect():
         shadowEffect = QGraphicsDropShadowEffect()
