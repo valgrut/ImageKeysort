@@ -92,8 +92,8 @@ class SettingsDialog(QDialog):
         self.cfg_app_theme = QComboBox()
         self.cfg_app_theme.addItem("Light")
         self.cfg_app_theme.addItem("Dark")
-        self.cfg_app_theme.addItem("custom1")
-        self.cfg_app_theme.addItem("custom2")
+        self.cfg_app_theme.addItem("Night")
+        self.cfg_app_theme.addItem("Retro")
         # TODO: Maybe, load themes from some directory so users can add custom themes without requiring code change.
 
         # Form
@@ -182,6 +182,7 @@ class SettingsDialog(QDialog):
         settings.setValue("currentTheme", self.cfg_app_theme.currentText())
         settings.endGroup()
 
+
     @pyqtSlot()
     def restore_defaults(self):
         self.sp_nested_levels.setValue(3)
@@ -194,11 +195,13 @@ class SettingsDialog(QDialog):
         self.cb_mute_videos.setChecked(True)
         self.cfg_app_theme.setCurrentText("Light")
 
+
     # Make sure clicking OK persists
     def accept(self):
         self.save_settings()
         super().accept()
         self.settingsChangedSignal.emit()
+
 
     @staticmethod
     def checkSetting(optionToRetrieve: str):
@@ -209,6 +212,7 @@ class SettingsDialog(QDialog):
         else:
             print(f"Setting {optionToRetrieve} does not exist in the Settings")
             return None
+
 
     @staticmethod
     def settingsGetNestingLevels() -> int:

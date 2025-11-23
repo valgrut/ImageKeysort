@@ -23,70 +23,92 @@ class Styles:
         return shadowEffect
 
     @staticmethod
-    def get_default_palette():
+    def get_retro_palette():
         pal = QPalette()
 
-        # new:
-        pal.setColor(QPalette.Window,     QColor("#7a7878"))  # main-background
-        #pal.setColor(QPalette.Background, QColor("#bfbdbd"))  # widget-background-color
-        pal.setColor(QPalette.Mid,        QColor("#bfbdbd"))
-        pal.setColor(QPalette.Button,     QColor("#bfbdbd"))  # button-background-color
-        pal.setColor(QPalette.Highlight,  QColor("#fcba77"))  # button-background-hover-color
-        pal.setColor(QPalette.Base,       QColor("#ffa200"))  # button-background-active-color
-        pal.setColor(QPalette.Link,       QColor("#000000"))  # button-border-color
-        pal.setColor(QPalette.AlternateBase, QColor("#bfbdbd"))  #
+        pal.setColor(QPalette.Window, QColor("#7a7878"))  # main window bg
+        pal.setColor(QPalette.WindowText, QColor("#000000"))  # text on Window
 
-        # old:
-        #
-        # pal.setColor(QPalette.WindowText, QColor("#e6e6e6"))
-        #
-        # pal.setColor(QPalette.Base, QColor("#121212"))
-        # pal.setColor(QPalette.AlternateBase, QColor("#1e1f22"))
-        # pal.setColor(QPalette.Text, QColor("#e6e6e6"))
-        #
-        # pal.setColor(QPalette.Button, QColor("#2b2d31"))
-        # pal.setColor(QPalette.ButtonText, QColor("#ffffff"))
-        #
-        # pal.setColor(QPalette.Mid, QColor("#3a3d41"))
-        # pal.setColor(QPalette.Dark, QColor("#181a1f"))
-        # pal.setColor(QPalette.Light, QColor("#3a3d41"))
-        #
-        # pal.setColor(QPalette.Highlight, QColor("#ff8c00"))
-        # pal.setColor(QPalette.HighlightedText, QColor("#000000"))
+        # item-view content area
+        pal.setColor(QPalette.Base, QColor("#bfbdbd"))  # tree/list/table bg
+        pal.setColor(QPalette.AlternateBase, QColor("#d0cece"))
+        pal.setColor(QPalette.Text, QColor("#000000"))  # text in item-views
 
-        # app.setPalette(pal)
+        # buttons
+        pal.setColor(QPalette.Button, QColor("#bfbdbd"))
+        pal.setColor(QPalette.ButtonText, QColor("#000000"))
+
+        # lines/borders and shades
+        pal.setColor(QPalette.Mid, QColor("#000000"))
+        pal.setColor(QPalette.Link, QColor("#000000"))  #000000 # “border” color
+
+        # selection
+        pal.setColor(QPalette.Highlight, QColor("#fcba77"))
+        pal.setColor(QPalette.HighlightedText, QColor("#ffa200"))
+
         return pal
 
 
     @staticmethod
     def get_dark_palette():
         pal = QPalette()
+        pal.setColor(QPalette.Window, QColor("#233f66"))  # main window bg
+        pal.setColor(QPalette.WindowText, QColor("#000000"))  # text on Window
 
-        # new:
-        pal.setColor(QPalette.Window,     QColor("#233f66"))  # main-background
-        #pal.setColor(QPalette.Background, QColor("#233f66"))  # widget-background-color
-        pal.setColor(QPalette.Button,     QColor("#335480"))  # button-background-color
-        pal.setColor(QPalette.Highlight,  QColor("#465f80"))  # button-background-hover-color
-        pal.setColor(QPalette.Base,       QColor("#465f80"))  # button-background-active-color
-        pal.setColor(QPalette.Link,       QColor("#9ba5c7"))  # button-border-color
+        # item-view content area
+        pal.setColor(QPalette.Base, QColor("#335480"))  # tree/list/table bg
+        pal.setColor(QPalette.AlternateBase, QColor("#d0cece"))
+        pal.setColor(QPalette.Text, QColor("#000000"))  # text in item-views
 
-        # Old:
-        # pal.setColor(QPalette.Window, QColor("#1e1f22"))
-        # pal.setColor(QPalette.WindowText, QColor("#e6e6e6"))
-        #
-        # pal.setColor(QPalette.Base, QColor("#121212"))
-        # pal.setColor(QPalette.AlternateBase, QColor("#1e1f22"))
-        # pal.setColor(QPalette.Text, QColor("#e6e6e6"))
-        #
-        # pal.setColor(QPalette.Button, QColor("#2b2d31"))
-        # pal.setColor(QPalette.ButtonText, QColor("#ffffff"))
-        #
-        # pal.setColor(QPalette.Mid, QColor("#3a3d41"))
-        # pal.setColor(QPalette.Dark, QColor("#181a1f"))
-        # pal.setColor(QPalette.Light, QColor("#3a3d41"))
-        #
-        # pal.setColor(QPalette.Highlight, QColor("#ff8c00"))
-        # pal.setColor(QPalette.HighlightedText, QColor("#000000"))
+        # buttons
+        pal.setColor(QPalette.Button, QColor("#335480"))
+        pal.setColor(QPalette.ButtonText, QColor("#000000"))
+
+        # lines/borders and shades
+        pal.setColor(QPalette.Mid, QColor("#000000"))
+        pal.setColor(QPalette.Link, QColor("#9ba5c7"))  # “border” color
+
+        # selection
+        pal.setColor(QPalette.Highlight, QColor("#fcba77"))
+        pal.setColor(QPalette.HighlightedText, QColor("#ffa200"))
+        return pal
+
+
+    @staticmethod
+    def get_night_palette():
+        pal = QPalette()
+        
+        # --- Window / general surfaces ---
+        pal.setColor(QPalette.Window,          QColor("#111318"))  # app background
+        pal.setColor(QPalette.WindowText,      QColor("#e5e7eb"))  # text on window
+
+        # --- Item/view surfaces (lists, trees, tables, inputs) ---
+        pal.setColor(QPalette.Base,            QColor("#171a20"))  # content surface
+        pal.setColor(QPalette.AlternateBase,   QColor("#1c2027"))  # zebra rows
+        pal.setColor(QPalette.Text,            QColor("#f3f4f6"))  # primary content text
+
+        # --- Buttons ---
+        pal.setColor(QPalette.Button,          QColor("#1e2230"))  # button surface
+        pal.setColor(QPalette.ButtonText,      QColor("#e5e7eb"))  # button text
+
+        # --- Borders / lines / shades ---
+        pal.setColor(QPalette.Light,           QColor("#32384a"))  # top highlights
+        pal.setColor(QPalette.Midlight,        QColor("#2b3040"))
+        pal.setColor(QPalette.Mid,             QColor("#252a38"))  # standard border
+        pal.setColor(QPalette.Dark,            QColor("#0c0f15"))
+        pal.setColor(QPalette.Shadow,          QColor("#000000"))
+
+        # --- Selection / active states (accent) ---
+        pal.setColor(QPalette.Highlight,       QColor("#ff8c00"))  # accent (orange)
+        pal.setColor(QPalette.HighlightedText, QColor("#000000"))  # readable on orange
+
+        # --- Links (your request) ---
+        pal.setColor(QPalette.Link,            QColor("#9ba5c7"))
+        pal.setColor(QPalette.LinkVisited,     QColor("#8a94b8"))
+
+        # --- Tooltips ---
+        pal.setColor(QPalette.ToolTipBase,     QColor("#1f2431"))
+        pal.setColor(QPalette.ToolTipText,     QColor("#e5e7eb"))
 
         return pal
 
@@ -94,26 +116,82 @@ class Styles:
     def get_light_palette():
         pal = QPalette()
 
-        # new:
-        pal.setColor(QPalette.Background, QColor(250, 250, 250))
+        # --- Window / general surfaces ---
+        pal.setColor(QPalette.Window, QColor("#f5f6f8"))  # app background
+        pal.setColor(QPalette.WindowText, QColor("#1f2937"))  # text on window
 
+        # --- Item/view surfaces (lists, trees, tables, inputs) ---
+        pal.setColor(QPalette.Base, QColor("#ffffff"))  # content surface
+        pal.setColor(QPalette.AlternateBase, QColor("#f8fafc"))  # zebra rows
+        pal.setColor(QPalette.Text, QColor("#111827"))  # primary content text
+
+        # --- Buttons ---
+        pal.setColor(QPalette.Button, QColor("#f3f4f6"))  # button surface
+        pal.setColor(QPalette.ButtonText, QColor("#1f2937"))  # button text
+
+        # --- Borders / lines / shades ---
+        pal.setColor(QPalette.Light, QColor("#ffffff"))  # top highlights
+        pal.setColor(QPalette.Midlight, QColor("#e5e7eb"))
+        pal.setColor(QPalette.Mid, QColor("#d1d5db"))  # standard border
+        pal.setColor(QPalette.Dark, QColor("#9ca3af"))
+        pal.setColor(QPalette.Shadow, QColor("#6b7280"))
+
+        # --- Selection / active states (accent) ---
+        pal.setColor(QPalette.Highlight, QColor("#ff8c00"))  # accent (orange)
+        pal.setColor(QPalette.HighlightedText, QColor("#000000"))
+
+        # --- Links ---
+        pal.setColor(QPalette.Link, QColor("#2563eb"))
+        pal.setColor(QPalette.LinkVisited, QColor("#1e40af"))
+
+        # --- Tooltips ---
+        pal.setColor(QPalette.ToolTipBase, QColor("#ffffff"))
+        pal.setColor(QPalette.ToolTipText, QColor("#111827"))
+
+
+        # --------------------------------------
+        # [ ] check 2:
+        # TODO: Check, it is from net...
+        # windows / widgets background
+        # pal.setColor(QPalette.Window, QColor("#7a7878"))  # main window bg
+        # pal.setColor(QPalette.WindowText, QColor("#000000"))  # text on Window
+        #
+        # # item-view content area
+        # pal.setColor(QPalette.Base, QColor("#bfbdbd"))  # tree/list/table bg
+        # pal.setColor(QPalette.AlternateBase, QColor("#d0cece"))
+        # pal.setColor(QPalette.Text, QColor("#000000"))  # text in item-views
+        #
+        # # buttons
+        # pal.setColor(QPalette.Button, QColor("#bfbdbd"))
+        # pal.setColor(QPalette.ButtonText, QColor("#000000"))
+        #
+        # # lines/borders and shades
+        # pal.setColor(QPalette.Mid, QColor("#000000"))  # your “border” color
+        # pal.setColor(QPalette.Link, QColor("#000000"))
+        #
+        # # selection
+        # pal.setColor(QPalette.Highlight, QColor("#fcba77"))
+        # pal.setColor(QPalette.HighlightedText, QColor("#000000"))
+
+
+        # --------------------------------------
+        # [ ] Check 1:
         # old:
-        # pal.setColor(QPalette.Window, QColor("#f2f2f2"))
-        # pal.setColor(QPalette.WindowText, QColor("#202020"))
+        # pal.setColor(QPalette.WindowText, QColor("#e6e6e6"))
         #
-        # pal.setColor(QPalette.Base, QColor("#ffffff"))
-        # pal.setColor(QPalette.AlternateBase, QColor("#f2f2f2"))
-        # pal.setColor(QPalette.Text, QColor("#202020"))
+        # pal.setColor(QPalette.Base, QColor("#121212"))
+        # pal.setColor(QPalette.AlternateBase, QColor("#1e1f22"))
+        # pal.setColor(QPalette.Text, QColor("#e6e6e6"))
         #
-        # pal.setColor(QPalette.Button, QColor("#e0e0e0"))
-        # pal.setColor(QPalette.ButtonText, QColor("#202020"))
+        # pal.setColor(QPalette.Button, QColor("#2b2d31"))
+        # pal.setColor(QPalette.ButtonText, QColor("#ffffff"))
         #
-        # pal.setColor(QPalette.Mid, QColor("#c0c0c0"))
-        # pal.setColor(QPalette.Dark, QColor("#a0a0a0"))
-        # pal.setColor(QPalette.Light, QColor("#ffffff"))
+        # pal.setColor(QPalette.Mid, QColor("#3a3d41"))
+        # pal.setColor(QPalette.Dark, QColor("#181a1f"))
+        # pal.setColor(QPalette.Light, QColor("#3a3d41"))
         #
-        # pal.setColor(QPalette.Highlight, QColor("#2979ff"))
-        # pal.setColor(QPalette.HighlightedText, QColor("#ffffff"))
+        # pal.setColor(QPalette.Highlight, QColor("#ff8c00"))
+        # pal.setColor(QPalette.HighlightedText, QColor("#000000"))
 
         return pal
 

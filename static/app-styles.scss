@@ -1,26 +1,32 @@
 @import "app-styles-variables.scss";
 
+/* ---------- Global color defaults ---------- */
+
 * {
-  color: black;
+  color: palette(text);
 }
 
 QWidget {
-    //background-color: $main-background;
     font-family: "Inter";
-    background-color: palette(Window);
+    background-color: palette(window);
+    color: palette(text);
 }
+
+/* ---------- GalleryManager ---------- */
 
 GalleryManager {
     //width: 150px;
-    border: 1px solid palette(Link);
+    background-color: palette(base);
+    border: 1px solid palette(link);
     border-radius: $widget-border-radius;
     padding: 3px;
-    background-color: palette(Mid);
 }
+
+/* ---------- Status bar & labels ---------- */
 
 QStatusBar {
     min-height: 26px;
-    border: 1px solid palette(Link);
+    border: 1px solid palette(link);
     border-radius: $button-border-radius;
     //background-color: palette(Mid);
     //font-weight: bold;
@@ -30,13 +36,13 @@ QStatusBar {
 }
 QLabel {
     min-height: 20px;
-    border: 1px solid palette(Link);
+    border: 1px solid palette(link);
     border-radius: $button-border-radius;
-    background-color: palette(Mid);
+    background-color: palette(base);
     font-weight: bold;
     font-size: 15px;
-    font-family: "Inter";
-    color: black;
+    // font-family: "Inter";
+    color: palette(text);
     //margin: 5px;
 }
 QLabel#statusBarLabel {
@@ -44,43 +50,48 @@ QLabel#statusBarLabel {
 }
 
 QLabel#keyLabel {
-    font-size: 16px;
+    font-size: 15px;
     border-radius: $widget-border-radius;
     //color: rgb(171, 110, 3);
-    color: black;
+    //color: palette(text);
 }
+
+/* ---------- Progress bar ---------- */
 
 QProgressBar {
     max-width: 250px;
 }
 
+/* ---------- Buttons ---------- */
+
 QPushButton {
     //width: 150px;
     height: 20px;
-    border: 1px solid palette(Link);
+    border: 1px solid palette(link);
     border-radius: $button-border-radius;
     padding: 3px;
-    background-color: palette(Button);
+    background-color: palette(button);
     font-weight: bold;
     font-size: 15px;
 }
 QPushButton:hover {
-    background-color: palette(Highlight);
+    background-color: palette(light);
 }
 QPushButton:checked {
-    background-color: palette(Base);
+    background-color: palette(highlight);
 }
 QPushButton#clearTreeButton:hover {
     background-color: red;
+    color: palette(highlighted-text);
 }
 
+/* ---------- MediaContainerWidget ---------- */
 
-/***** MediaContainerWidget *****/
 MediaContainerWidget QPushButton {
     width: 150px;
 }
 MediaContainerWidget QPushButton:hover {
-    background-color: palette(Highlight);
+    background-color: palette(highlight);
 }
 MediaContainerWidget QLabel {
     font-weight: normal;
@@ -99,26 +110,33 @@ QStackedWidget QWidget[copyMode="1"] {
   border: 4px solid orange;
 }*/
 
-/***** QTreeWidget - Shortcuts tree *****/
+
+/* ---------- Shortcuts Tree ---------- */
+
 QTreeWidget {
     min-width: 250px;  // TODO: will be probably out after adding the bar to change width between Tree and MediaView.
     width: 200px;
-    border: 1px solid palette(Link);
+    border: 1px solid palette(link);
     border-radius: 10px;
-    background-color: palette(Mid);
-    color: black;
+    background-color: transparent;
+    color: palette(text);
     //padding: 2px;
 }
 
 QTreeWidget::header {
-    background-color: red;
+    background-color: palette(button);
+    color: palette(button-text);
     min-height: 30px;
 }
 
+QTreeWidget::viewport {
+  background-color: palette(base);
+}
+
 QHeaderView {
-    background-color: palette(Mid);
-    color: black;
-    border: 0px solid black;
+    background-color: palette(button);
+    color: palette(button-text);
+    border: 0px solid transparent;
     border-radius: 10px;
     margin-top: 8px;
     min-height: 30px;
@@ -128,7 +146,8 @@ QHeaderView::section {
     //color: green;
     font-weight: bold;
     //background-color: rgb(214, 137, 60);
-    background-color: palette(Mid);
+    background-color: palette(button);
+    border: 1px solid palette(link);
     //border: 1px solid black;
     //border-radius: 10px;
     padding: 3px;
@@ -137,17 +156,18 @@ QHeaderView::section {
     //min-height: 20px;
 }
 
-/***** Settings Dialog styles *****/
+/* ---------- Settings Dialog ---------- */
+
 SettingsDialog {
     border: 0;
-    background-color: palette(Mid);
+    background-color: palette(window);
     font-weight: normal;
 }
 SettingsDialog * {
-    background-color: palette(Mid);
+    background-color: palette(window);
 }
 SettingsDialog QFormLayout {
-    background-color: palette(Mid);
+    background-color: palette(window);
     border: 0;
 }
 SettingsDialog QGroupBox {
@@ -160,32 +180,45 @@ SettingsDialog QLabel {
 }
 
 
-/***** About dialog *****/
+/* ---------- Buttons inside Settings (from "About dialog") ---------- */
+
 SettingsDialog QPushButton {
-    border: 1px solid black;
+       background-color: palette(button);
+    border: 1px solid palette(link);
+    color: palette(button-text);
 }
 
 /***** Ask save message *****/
 QMessageBox QPushButton {
-    border: 1px solid black;
+    background-color: palette(button);
+    border: 1px solid palette(link);
+    color: palette(button-text);
 }
 QMessageBox QPushButton:hover {
-    background-color: palette(Highlight);
+    background-color: palette(light);
+    color: palette(button-text);
 }
 
-/***** About message *****/
+
+/* ---------- QMessageBox : About ---------- */
+
 QMessageBox {
-    background-color: palette(Mid);
+    background-color: palette(window);
+    color: palette(text);
 }
 QMessageBox * {
-    background-color: palette(Mid);
+    background-color: transparent;
     border: 0;
     font-weight: normal;
+    color: palette(text);
 }
 
-/***** MenuBar, menu items *****/
+
+/* ---------- Menus ---------- */
+
 QMenuBar {
-    background-color: palette(Mid);
+    background-color: palette(button);
+    color: palette(button-text);
     min-height: 30px;
 }
 // QMenuBar {
@@ -194,50 +227,52 @@ QMenuBar {
 // }
 
 QMenu {
-    background: rgb(150, 150, 150);  /* Or any color you prefer for hover */
-    color: black;  /* Hover text color */
-    border: 1px solid transparent;
+    background: palette(base);  /* Or any color you prefer for hover */
+    color: palette(text);  /* Hover text color */
+    border: 1px solid palette(link);
     border-radius: 4px;
     // position: static;
     // left: -20px;
 }
 QMenu::item {
-    background-color: green;
+    background-color: transparent;
     padding: 2px 25px 2px 20px;
     border-radius: 4px;
     border: 1px solid transparent; /* reserve space for selection border */
+    color: palette(text);
     // position: static;
     // left: -20px;
 }
 QMenu::item:selected {
-    border-color: darkblue;
     border-radius: 4px;
-    background: rgba(100, 100, 100, 150);
+    background: palette(light);
+    border-color: palette(link);
+    color: palette(text);
 }
 
 
-/***** EmptyGalleryWidget *****/
+/* ---------- EmptyGalleryWidget ---------- */
 EmptyGalleryWidget {
     width: 100px;
-    border: 1px solid palette(Link);
+    border: 1px solid palette(link);
     border-radius: $widget-border-radius;
     padding: 3px;
-    background-color: rgb(100, 189, 189);
+    background-color: palette(base);
 }
 
 
-/***** ImageWidget *****/
+/* ---------- ImageWidget ---------- */
 ImageWidget {
     width: 100px;
-    border: 1px solid palette(Link);
+    border: 1px solid palette(link);
     border-radius: $widget-border-radius;
     padding: 3px;
-    background-color: rgb(100, 100, 189);
+    background-color: palette(base);
 }
 
-/***** VideoWidget *****/
+/* ---------- VideoWidget ---------- */
 QGraphicsView {
-    border: 2px solid palette(Link);
+    border: 2px solid palette(link);
 }
 
 

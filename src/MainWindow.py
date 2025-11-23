@@ -388,9 +388,13 @@ class MainWindow(QMainWindow, QObject):
         selectedTheme = SettingsDialog.settingsGetTheme()
         match selectedTheme:
             case "Light":
-                app.setPalette(Styles.get_default_palette())
+                app.setPalette(Styles.get_light_palette())
             case "Dark":
                 app.setPalette(Styles.get_dark_palette())
+            case "Night":
+                app.setPalette(Styles.get_night_palette())
+            case "Retro":
+                app.setPalette(Styles.get_retro_palette())
 
         import pathlib
         # Required for new styles to take effect.
