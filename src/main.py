@@ -76,11 +76,13 @@ from src.MainWindow import MainWindow
 # - [x] Crashing when moving the .gif because process (medium) is used or what...
 # - [X] vymenit statusBar-label za QStatusBar
 # - [X] !!! Fix Crash kdyz preklikavam mezi default settings a nasledne menim themes.
+# - [X] Po refaktoru EditModeHandler po spusteni neni focus na hlavnim widgetu, takze zadne zkratky nefunguji a crashne to aplikaci.
 
 
 # Code tweaking, Refactoring
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
 
+Fixed crashing caused by keyboard shortcuts like Ctrl+L.
 
 # Top priority:
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
@@ -148,7 +150,6 @@ from src.MainWindow import MainWindow
 
 # To Fix:
 # - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
-
 
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!

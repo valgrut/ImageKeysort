@@ -60,18 +60,21 @@ class EditModeHandler(QObject):
         match event.key():
             # Clear current key-sequence
             case Qt.Key_Escape:
+                log.debug("handleEditMode: Case 'Escape'")
                 # self.key_seq_history.append(self.key_seq)  # What was purpose of this???
                 self.keySeq = ""
                 self.updateKeySequenceLabel()
 
             # Remove one character from current key-sequence
             case Qt.Key_Backspace:
+                log.debug("handleEditMode: Case 'Backspace'")
                 if len(self.keySeq) >= 1:
                     self.keySeq = self.keySeq[:-1]
                     self.updateKeySequenceLabel()
 
             # Confirm entered shortcut, add into tree and ask for the dst path
             case Qt.Key_Return:  # "Return" is the "Enter" key in the center of keyboard.
+                log.debug("handleEditMode: Case 'Enter' (Key_Return)")
                 log.info(f"ENTER pressed. Current key-seqence: '{self.keySeq}'.")
                 if len(self.keySeq) == 0:
                     log.info(f"probably empty (Key seq: {self.keySeq})")
@@ -147,5 +150,6 @@ class EditModeHandler(QObject):
                 log.info(json.dumps(self.shortcutManager.getData(), indent=2))
 
             case _:
+                log.debug("handleEditMode: Case '_' (some other key)")
                 self.keySeq += pressedKey
                 self.updateKeySequenceLabel()

@@ -2,6 +2,7 @@ import shutil
 import os
 from pathlib import Path
 import typing
+import logging
 
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject
 from PyQt5.QtWidgets import QFileDialog
@@ -15,7 +16,7 @@ allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Ke
                 Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
                 Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
 
-
+log = logging.getLogger(__name__)
 
 class SortModeHandler(QObject):
     """
@@ -58,7 +59,7 @@ class SortModeHandler(QObject):
         # Cancel currently started shortcut or escape from the hold partial sequence
         match event.key():
             case Qt.Key_Escape:
-                log.debug("handleSortMode: Case 'Escape' pressed.")
+                log.debug("handleSortMode: Case 'Escape'")
                 # print("key_seq:", self.key_seq)
                 # print("permanent_key_seq:", self.permanent_key_seq)
                 # TODO: Refactor this: pridat flag sentinelExists, bude to srozumitelnejsi.
@@ -80,7 +81,7 @@ class SortModeHandler(QObject):
 
             # Sentinel: Hold current shortcut and use it as default for upcoming sequences until escape
             case Qt.Key_Return:  # Key_Return is non-numeric Enter key
-                log.debug("handleSortMode: Case 'Enter' (Key_Return) pressed.")
+                log.debug("handleSortMode: Case 'Enter' (Key_Return)")
 
                 if self.keySeq:
                     self.permanentKeySeq = self.keySeq
