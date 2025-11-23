@@ -84,7 +84,8 @@ from src.MainWindow import MainWindow
 
 # Top priority:
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
-# - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi). Mozna pridat nejaky label ze je 3/5 urovni videt.
+# - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
+#   - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
@@ -120,6 +121,7 @@ from src.MainWindow import MainWindow
 # - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 # - [ ] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
+# - [ ] Nahradit vsude print() za log.info()
 
 
 # Consider (Maybe):
