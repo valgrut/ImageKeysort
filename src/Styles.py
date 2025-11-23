@@ -3,24 +3,17 @@ from PyQt5.QtWidgets import QGraphicsDropShadowEffect
 
 
 class Styles:
-    mainBackground = "rgb(122, 120, 120)"
-    widgetsBgColor = "rgb(191, 189, 189)"
-    widgetBorderRadius = 10  # px
+    # mainBackground = "rgb(122, 120, 120)"
+    # widgetsBgColor = "rgb(191, 189, 189)"
+    # widgetBorderRadius = 10  # px
 
-    buttonBgColor = widgetsBgColor
-    buttonHoverBgColor = "rgb(252, 186, 119)"
-    buttonBorderRadius = 5  # px
-    buttonActivatedBgColor = "orange"
+    # buttonBgColor = widgetsBgColor
+    # buttonHoverBgColor = "rgb(252, 186, 119)"
+    # buttonBorderRadius = 5  # px
+    # buttonActivatedBgColor = "orange"
 
     shadowEffectOffset = (3, 3)
     shadowEffectBlurRadius = 10
-
-    THEME_DARK = {
-        "button_bg": "#335480",
-        "button_bg_hover": "#465f80",
-        "button_bg_active": "#2b4060",
-        "button_border": "#9ba5c7",
-    }
 
     @staticmethod
     def getShadowEffect():
@@ -35,7 +28,7 @@ class Styles:
 
         # new:
         pal.setColor(QPalette.Window,     QColor("#7a7878"))  # main-background
-        pal.setColor(QPalette.Background, QColor("#bfbdbd"))  # widget-background-color
+        pal.setColor(QPalette.Background, QColor("#bfbdbd"))  # widget-background-color  
         pal.setColor(QPalette.Button,     QColor("#bfbdbd"))  # button-background-color
         pal.setColor(QPalette.Highlight,  QColor("#fcba77"))  # button-background-hover-color
         pal.setColor(QPalette.Base,     QColor("#ffa200"))  # button-background-active-color
@@ -69,7 +62,7 @@ class Styles:
 
         # new:
         pal.setColor(QPalette.Window,     QColor("#233f66"))  # main-background
-        pal.setColor(QPalette.Background, QColor("#233f66"))
+        pal.setColor(QPalette.Background, QColor("#233f66"))  # widget-background-color
         pal.setColor(QPalette.Button,     QColor("#335480"))  # button-background-color
         pal.setColor(QPalette.Highlight,  QColor("#465f80"))  # button-background-hover-color
         pal.setColor(QPalette.Base,     QColor("#465f80"))  # button-background-active-color

@@ -314,7 +314,9 @@ class MainWindow(QMainWindow, QObject):
         app = QApplication.instance()
         # app.setPalette(SettingsDialog.settingsGetTheme())
         app.setPalette(Styles.get_dark_palette())
-
+        # Required for new styles to take effect.
+        import pathlib
+        app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
 
     def showAbout(self):
         aboutBox = QMessageBox(self)
