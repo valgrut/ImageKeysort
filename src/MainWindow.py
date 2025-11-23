@@ -317,19 +317,28 @@ class MainWindow(QMainWindow, QObject):
         menuBar.addMenu(fileMenu)
 
         fileMenu.addAction(self.openDirectoryAction)
-        fileMenu.addAction(self.loadAction)
-        fileMenu.addAction(self.saveAction)
-        fileMenu.addAction(self.exitAction)
-
         act_settings = QAction(QIcon("Resources/gear.png"), "Settings", self)
         act_settings.setShortcut("Ctrl+,")  # common on mac
         act_settings.triggered.connect(self.open_settings)
         fileMenu.addAction(act_settings)
+        fileMenu.addSeparator()
+        fileMenu.addAction(self.exitAction)
 
         # Edit menu
-        editMenu = QMenu("&Edit", self)
-        menuBar.addMenu(editMenu)
-        editMenu.addAction(self.undoAction)
+        shortcutsMenu = QMenu("&Shortcuts", self)
+        menuBar.addMenu(shortcutsMenu)
+        shortcutsMenu.addAction(self.undoShortcutModificationAction) # TODO WIP
+        shortcutsMenu.addSeparator()
+        shortcutsMenu.addAction(self.loadAction)
+        shortcutsMenu.addAction(self.saveAction)
+        shortcutsMenu.addAction(self.dropChangesAction)  # TODO
+
+        # Edit menu
+        galleryMenu = QMenu("&Gallery", self)
+        menuBar.addMenu(galleryMenu)
+        galleryMenu.addAction(self.undoSortAction)
+        galleryMenu.addSeparator()
+        galleryMenu.addAction(self.openDirectoryAction)
 
         # Help menu
         helpMenu = QMenu("&Help", self)
@@ -361,10 +370,19 @@ class MainWindow(QMainWindow, QObject):
         self.exitAction.triggered.connect(self.exitApp)
         # self.exitAction.setShortcut('Ctrl+Q')  # TODO: Fix - I want the shortcuts to be shown in the menu.
 
-        self.undoAction = QAction("&Undo", self)
-        # self.undoAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
-        self.undoAction.setStatusTip("Undo last move/copy operation")
-        self.undoAction.triggered.connect(self.sortModeHandler.undo_last_operation)
+        self.undoSortAction = QAction("&Undo move", self)
+        # self.undoSortAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.undoSortAction.setStatusTip("Undo last move/copy operation")
+        self.undoSortAction.triggered.connect(self.sortModeHandler.undo_last_operation)
+
+        self.undoShortcutModificationAction = QAction("&Undo modification", self)
+        # self.undoShortcutModificationAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.undoShortcutModificationAction.setStatusTip("Undo last shortcut modification. It could be adding, deleting, ...")
+        # self.undoShortcutModificationAction.triggered.connect(TODO)
+
+        self.dropChangesAction = QAction("&Drop unsaved changes", self)
+        self.dropChangesAction.setStatusTip("Drop unsaved changes in the shortcut tree.")
+        #self.dropChangesAction.triggered.connect(self.sortModeHandler.TODO)
 
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):

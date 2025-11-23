@@ -77,6 +77,7 @@ from src.MainWindow import MainWindow
 # - [X] vymenit statusBar-label za QStatusBar
 # - [X] !!! Fix Crash kdyz preklikavam mezi default settings a nasledne menim themes.
 # - [X] Po refaktoru EditModeHandler po spusteni neni focus na hlavnim widgetu, takze zadne zkratky nefunguji a crashne to aplikaci.
+# - [X] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
 
 
 # Code tweaking, Refactoring
@@ -121,8 +122,8 @@ from src.MainWindow import MainWindow
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
-# - [ ] !!!  Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
 # - [ ] Nahradit vsude print() za log.info()
+# - [ ] Do menu->File pridat: Toggle On Toolbar - on totiz jde vypnout, kdyz se na nej klikne pravym, pak zmizi, a neni moznost ho vratit.
 
 
 # Consider (Maybe):
@@ -168,7 +169,7 @@ from src.MainWindow import MainWindow
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
-# - [ ] Reset /Drop all changes in the shortcuts (revert to last saved state) - button in Edit mode.
+# - [ ] Reset / Drop all changes in the shortcuts (revert to last saved state) - button in Edit mode.
 # - [ ] Expand / Collapse everything under a shortcut - by doubleclicking the shortcut?
 # - [ ] Expand / Collapse all shortcuts - button in Edit mode.
 # - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
