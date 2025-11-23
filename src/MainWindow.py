@@ -19,7 +19,9 @@ from PyQt5.QtWidgets import (
     QSplitter,
     QProgressBar,
     QMessageBox,
-    QToolBar, QApplication, QStatusBar
+    QToolBar,
+    QApplication,
+    QStatusBar
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -32,6 +34,7 @@ from src.CustomTreeWidget import CustomTreeWidget
 from src.Styles import Styles
 from src.SettingsDialog import SettingsDialog
 from src.SortModeHandler import SortModeHandler
+from src.EditModeHandler import EditModeHandler
 from src.Modes import Modes
 from src.TextExtractor import TextExtractor
 
@@ -85,12 +88,9 @@ class MainWindow(QMainWindow, QObject):
         self.shortcutManager = ShortcutManager(self)  # deps are injected
         self.galleryManager = GalleryManager(self)  # deps are injected
 
-        self.sortModeHandler = SortModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
-        self.sortModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
-        self.sortModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
-
+        self.sortModeHandler = SortModeHandler(self.shortcutManager, self.galleryManager)  # deps are injected
+        self.editModeHandler = EditModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
         self.textExtractor = TextExtractor(self.galleryManager)
-        self.textExtractor.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
 
 
         # ========== Layout ==========
@@ -269,6 +269,13 @@ class MainWindow(QMainWindow, QObject):
         self.lastImageRequestedSignal.connect(self.galleryManager.setLastImage)
         self.shortcutManager.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.shortcutManager.updateMainWindowTitleSignal.connect(self.updateWindowTitle)
+        self.sortModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
+        self.sortModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
+        self.sortModeHandler.updateTreeViewSignal.connect(self.treeViewWidget.update_tree_view)
+        self.editModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
+        self.editModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
+        self.editModeHandler.updateTreeViewSignal.connect(self.treeViewWidget.update_tree_view)
+        self.textExtractor.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
 
 
         # ========== Apply the provided CLI options, if any ==========
@@ -461,109 +468,6 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setEnabled(False)
         self.galleryManager.updatePreview()
 
-
-    def cleanupAndUpdate(self):
-        self.keySeq = ""
-        self.treeViewWidget.update_tree_view() # TODO: emit signal?
-        self.updateKeySequenceLabel()
-        self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
-
-
-    # TODO: Cela tahle funkce handeEditMode by mohla prave byt treba ve tride EditModeHandler.
-    def handleEditMode(self, event):
-        pressedKey = event.text()
-        match event.key():
-            # Clear current key-sequence
-            case Qt.Key_Escape:
-                # self.key_seq_history.append(self.key_seq)  # What was purpose of this???
-                self.keySeq = ""
-                self.updateKeySequenceLabel()
-
-            # Remove one character from current key-sequence
-            case Qt.Key_Backspace:
-                if len(self.keySeq) >= 1:
-                    self.keySeq = self.keySeq[:-1]
-                    self.updateKeySequenceLabel()
-
-            # Confirm entered shortcut, add into tree and ask for the dst path
-            case Qt.Key_Return:  # "Return" is the "Enter" key in the center of keyboard.
-                log.info(f"ENTER pressed. Current key-seqence: '{self.keySeq}'.")
-                if len(self.keySeq) == 0:
-                    log.info(f"probably empty (Key seq: {self.keySeq})")
-                    return
-
-                # Check, whether keySeq contains operation character:
-                if "-" in self.keySeq:
-                    self.shortcutManager.removeShortcutSequence(self.keySeq)
-                    self.cleanupAndUpdate()
-                    return
-
-                if ">" in self.keySeq:
-                    log.info("Note: move key_char elsewhere.")
-                    self.shortcutManager.moveShortcutSequence(self.keySeq)
-                    self.cleanupAndUpdate()
-                    return
-
-                if "/" in self.keySeq:
-                    log.info("Note: change key_char X for key_char Y.")
-                    self.shortcutManager.changeShortcutKeyChar(self.keySeq)
-                    self.cleanupAndUpdate()
-                    return
-
-                # No operation character, proceed to add new shortcut.
-
-                # set parent's path (or parent's parent's, ...) as default for the dialogue when nesting shortcuts.
-                # When nesting shortcuts, they usually correspond to directory hierarchy, so it is better to show
-                # parent's directory for the new shortcut, because it is probable that target directory is there.
-                parentPath = ""
-                parentPathAdvice = self.shortcutManager.getFirstExistingDstPathFromParents(self.keySeq)
-                log.info(f"Find first available dst_path from parents of the shortcut {self.keySeq}.")
-                log.debug(f"First available 'dst_path' from parents: {self.shortcutManager.getFirstExistingDstPathFromParents(self.keySeq)}")
-
-                if parentPathAdvice is not None:
-                    log.info(f"Parent's path: {parentPathAdvice}")
-                    parentPath = parentPathAdvice
-
-                dstSortDirectory = QFileDialog.getExistingDirectory(self, f"Select Directory for shortcut '{self.keySeq}':", parentPath)
-                log.debug(f"Selected directory from Dialogue: {dstSortDirectory}")
-
-                # Settings: Allow empty destination path (no path selected) or dont.
-                if not dstSortDirectory and not SettingsDialog.settingsGetAllowNoDest():
-                    log.info("No dst selected and empty dst is not allowed. No further action.")
-                    self.cleanupAndUpdate()
-                    return
-
-                # Adding new shortcut sequence into the tree
-                log.info("Dst is not empty or empty path is allowed for new shortcut.")
-                for k in self.keySeq:
-                    self.shortcutManager.addShortcut(self.keySeq)
-
-                # Decide, whether to add dst_path for new shortcut sequence
-                # TODO: Bud ponechat settings, jestli povolovat zmeny, NEBO pridat do stromu button zamecek, ktery zamkne modifikace.
-                # TODO: Kruci, ja vlastne chtel pridat moznost Undo changes v shortcuts, takze i lock button, i settings budou asi zbytecne.....
-                currentDstPathForShortcut = self.shortcutManager.getDstPathForAnyShortcut(self.keySeq)
-                log.debug("I am here")
-                if currentDstPathForShortcut is None or SettingsDialog.settingsGetConfirmToOverride() is False:
-                    self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
-                else:
-                    # TODO: 1. show dialogue window to confirm the change of dst_path or prevent it totally.
-                    # TODO: 2. Button do ShortcutTree - Lock shortcuts from modifications (allow only adding new shortcuts).
-                    log.info("Overriding existing dst_path is not allowed. Go to Settings to allow it.")
-                    self.updateStatusBarLabel("Warning: Overriding existing dst_path is not allowed. Go to Settings to allow it.")
-                    qm = QMessageBox()
-                    user_confirmed = qm.question(self, '', f"Do you want to override dst_path for shortcut {self.keySeq}?", qm.Yes | qm.No)
-                    if user_confirmed == qm.Yes:
-                        self.shortcutManager.addDstPathForShortcut(self.keySeq, dstSortDirectory)
-                        # TODO: Mozna jeste nejak udelat, aby se prvne zeptalo, esi chci prepsat dst, az pak vyhodit dialog pro novou dst.
-
-                self.cleanupAndUpdate()
-                log.info(json.dumps(self.shortcutManager.getData(), indent=2))
-
-            case _:
-                self.keySeq += pressedKey
-                self.updateKeySequenceLabel()
-
-
     def keyPressEvent(self, event):
         if not isinstance(event, QKeyEvent):
             return
@@ -596,7 +500,7 @@ class MainWindow(QMainWindow, QObject):
                 super().keyPressEvent(event)
 
         if self.currentMode == Modes.EDIT:
-            self.handleEditMode(event)
+            self.editModeHandler.handleEditMode(event)
 
         elif self.currentMode == Modes.SORT:
             self.sortModeHandler.handleSortMode(event)
@@ -607,7 +511,6 @@ class MainWindow(QMainWindow, QObject):
 
     @pyqtSlot(str)
     def updateKeySequenceLabel(self, newContent=None):
-        # TODO: this will be called as slot from the [X]SortModeHandler a [ ]EditModeHandler.
         if newContent is not None:
             self.keyLabel.setText(newContent)
         else:
@@ -621,5 +524,6 @@ class MainWindow(QMainWindow, QObject):
         self.statusBarLabel.showMessage(f"[{dateNowStr}]: {message}")
         # self.statusBarLabel.showMessage(f"[{dateNowStr}]: {message}", 2000)
         # TODO: MAYBE Change into scrollable history of status bar.
+
 
 

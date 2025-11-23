@@ -25,10 +25,10 @@ class SortModeHandler(QObject):
 
     updateKeySequenceLabelSignal = pyqtSignal(str)
     updateStatusBarLabelSignal = pyqtSignal(str)
+    updateTreeViewSignal = pyqtSignal(str)
 
-    def __init__(self, mainWindow, shortcutManager, galleryManager, parent=None):
+    def __init__(self, shortcutManager, galleryManager, parent=None):
         super().__init__(parent)
-        self.mainWindow = mainWindow
         self.shortcutManager = shortcutManager
         self.galleryManager = galleryManager
 
@@ -58,7 +58,7 @@ class SortModeHandler(QObject):
         # Cancel currently started shortcut or escape from the hold partial sequence
         match event.key():
             case Qt.Key_Escape:
-                print("ESC")
+                log.debug("handleSortMode: Case 'Escape' pressed.")
                 # print("key_seq:", self.key_seq)
                 # print("permanent_key_seq:", self.permanent_key_seq)
                 # TODO: Refactor this: pridat flag sentinelExists, bude to srozumitelnejsi.
@@ -73,13 +73,14 @@ class SortModeHandler(QObject):
                 self.updateKeySequenceLabel()
 
             case Qt.Key_Backspace:
+                log.debug("handleSortMode: Case 'Backspace'")
                 if len(self.keySeq) >= 1:
                     self.keySeq = self.keySeq[:-1]
                     self.updateKeySequenceLabel()
 
             # Sentinel: Hold current shortcut and use it as default for upcoming sequences until escape
             case Qt.Key_Return:  # Key_Return is non-numeric Enter key
-                print("ENTER")
+                log.debug("handleSortMode: Case 'Enter' (Key_Return) pressed.")
 
                 if self.keySeq:
                     self.permanentKeySeq = self.keySeq
@@ -89,8 +90,8 @@ class SortModeHandler(QObject):
 
             # Single-time move file
             case Qt.Key_Space:
-                print("Select destination directory just for the current image.")
-
+                log.debug("handleSortMode: Case 'Space'")
+                log.info("Select destination directory just for the current image.")
                 dst = ""
 
                 # TODO: Refactor celou tuhle hruzu::::::
@@ -175,19 +176,20 @@ class SortModeHandler(QObject):
 
             # Repeat last move from src to dst of current image.
             case Qt.Key_Period:
+                log.debug("handleSortMode: Case '.'")
                 # TODO: refactor: Mohlo by to vypadat nejak takhle:
                 # if history is empty: 
                 #     return
                 # src = self.mvHistory[-1]["src"]
                 # dst = self.mvHistory[-1]["dst"]
                 # tryToMoveImage(src, dst, currentImage)
-                print("Repeat last finished command for current image")
+                log.info("Repeat last finished command for current image")
 
                 if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:
-                    print("History is empty.")
+                    log.info("History is empty.")
                     return
 
-                print(f"Last history entry: {self.keySeqHistory[-1]}")
+                log.info(f"Last history entry: {self.keySeqHistory[-1]}")
 
                 imageName = self.galleryManager.getCurrentFilename()
 
@@ -246,6 +248,7 @@ class SortModeHandler(QObject):
 
 
             case Qt.Key_Delete:
+                log.debug("handleSortMode: Case 'Delete'")
                 if self.galleryManager.isGalleryEmpty():
                     print("Source directory is empty")
                     return
@@ -289,13 +292,14 @@ class SortModeHandler(QObject):
                 self.galleryManager.updatePreview()
 
             case _: # Other keys
+                log.debug("handleSortMode: Case _ (other keys)")
                 if event.key() not in allowedKeys:
-                    print("not a-z was pressed, nothing to append to shortcuts.")
+                    print("not [a-zA-Z1-9] was pressed, nothing to append to shortcuts.")
                     return
 
                 self.keySeq += pressedKey
 
-                self.mainWindow.treeViewWidget.update_tree_view(self.keySeq)  # TODO
+                self.updateTreeViewSignal.emit(self.keySeq)
 
                 fullShortcut = ""
                 if self.permanentKeySeq:
@@ -387,7 +391,7 @@ class SortModeHandler(QObject):
 
 
     def undo_last_operation(self):
-        print("Undo last operation")
+        log.debug("Undo last operation")
         # print(self.mv_history)
 
         if not self.mvHistory:

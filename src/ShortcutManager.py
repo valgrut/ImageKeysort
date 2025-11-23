@@ -30,6 +30,7 @@ class ShortcutManager(QObject):
         self.mainWindow = mainWindow
         self.dataModified = False
         self.srcPathOfLoadedData = ""
+        # self.operationsHistory = []  # TODO: Here or in the EditModeHandler class???
 
     def areShortcutsModified(self) -> bool:
         return self.dataModified

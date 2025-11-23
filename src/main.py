@@ -96,9 +96,12 @@ from src.MainWindow import MainWindow
 # Settings:
 # - [ ] Settings: Moznost sort podle dst_path, (krom podle insert order (default) a podle Key_char (alphabetically).
 
+# Refactoring
+# - [~] EditModeHandler
+# - [ ] SortModeHandler !
+
 
 # Important features TODO:
-# - [~] ! REFACTORING
 # - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 # - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
