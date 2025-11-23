@@ -148,50 +148,5 @@ class Styles:
         pal.setColor(QPalette.ToolTipBase, QColor("#ffffff"))
         pal.setColor(QPalette.ToolTipText, QColor("#111827"))
 
-
-        # --------------------------------------
-        # [ ] check 2:
-        # TODO: Check, it is from net...
-        # windows / widgets background
-        # pal.setColor(QPalette.Window, QColor("#7a7878"))  # main window bg
-        # pal.setColor(QPalette.WindowText, QColor("#000000"))  # text on Window
-        #
-        # # item-view content area
-        # pal.setColor(QPalette.Base, QColor("#bfbdbd"))  # tree/list/table bg
-        # pal.setColor(QPalette.AlternateBase, QColor("#d0cece"))
-        # pal.setColor(QPalette.Text, QColor("#000000"))  # text in item-views
-        #
-        # # buttons
-        # pal.setColor(QPalette.Button, QColor("#bfbdbd"))
-        # pal.setColor(QPalette.ButtonText, QColor("#000000"))
-        #
-        # # lines/borders and shades
-        # pal.setColor(QPalette.Mid, QColor("#000000"))  # your “border” color
-        # pal.setColor(QPalette.Link, QColor("#000000"))
-        #
-        # # selection
-        # pal.setColor(QPalette.Highlight, QColor("#fcba77"))
-        # pal.setColor(QPalette.HighlightedText, QColor("#000000"))
-
-
-        # --------------------------------------
-        # [ ] Check 1:
-        # old:
-        # pal.setColor(QPalette.WindowText, QColor("#e6e6e6"))
-        #
-        # pal.setColor(QPalette.Base, QColor("#121212"))
-        # pal.setColor(QPalette.AlternateBase, QColor("#1e1f22"))
-        # pal.setColor(QPalette.Text, QColor("#e6e6e6"))
-        #
-        # pal.setColor(QPalette.Button, QColor("#2b2d31"))
-        # pal.setColor(QPalette.ButtonText, QColor("#ffffff"))
-        #
-        # pal.setColor(QPalette.Mid, QColor("#3a3d41"))
-        # pal.setColor(QPalette.Dark, QColor("#181a1f"))
-        # pal.setColor(QPalette.Light, QColor("#3a3d41"))
-        #
-        # pal.setColor(QPalette.Highlight, QColor("#ff8c00"))
-        # pal.setColor(QPalette.HighlightedText, QColor("#000000"))
-
         return pal
 
