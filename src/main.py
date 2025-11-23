@@ -121,7 +121,7 @@ from src.MainWindow import MainWindow
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
-# - [ ] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
+# - [ ] !!!  Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
 # - [ ] Nahradit vsude print() za log.info()
 
 
@@ -144,7 +144,7 @@ from src.MainWindow import MainWindow
 
 
 # Design:
-# - [ ] Zmenit barvy pozadi v menu !
+# - [ ] Pridat do next/first/previous/last image buttons Ikonku sipky.
 
 
 # To Fix:

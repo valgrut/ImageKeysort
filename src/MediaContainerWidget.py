@@ -1,4 +1,6 @@
 import logging
+
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QKeyEvent, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QMessageBox, \
@@ -51,6 +53,8 @@ class MediaContainerWidget(QWidget):
         self.previousImageButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.previousImageButton.setFocus(True)
         self.previousImageButton.setGraphicsEffect(Styles.getShadowEffect())
+        # self.previousImageButton.setIcon(QtGui.QIcon('Resources/Arrow_left'))
+        # self.previousImageButton.setIconSize(QtCore.QSize(30, 30))
 
         self.nextImageButton = QPushButton("&Next", self)
         self.nextImageButton.clicked.connect(self.showNextImage)
