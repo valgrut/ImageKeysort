@@ -389,7 +389,7 @@ class SortModeHandler(QObject):
                 else:
                     self.updateKeySequenceLabel()
 
-
+    @pyqtSlot()
     def undo_last_operation(self):
         log.debug("Undo last operation")
         # print(self.mv_history)

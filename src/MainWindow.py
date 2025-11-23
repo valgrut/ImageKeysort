@@ -169,7 +169,6 @@ class MainWindow(QMainWindow, QObject):
 
 
         # ========== Default variables and behaviour ==========
-        self.keySeq = ""
         self.currentMode = "home"  # Next options: edit, sort
 
 
@@ -210,7 +209,7 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setColumnWidth(1, 100)
         self.treeViewWidget.setColumnWidth(2, 50)
         self.treeViewWidget.setFocusPolicy(Qt.NoFocus)
-        self.treeViewWidget.update_tree_view() # TODO: emit signal?
+        self.treeViewWidget.update_tree_view()
 
         # Add clear button below the Tree
         leftInnerLayout.addWidget(self.clearButton)
@@ -451,6 +450,7 @@ class MainWindow(QMainWindow, QObject):
             self.unsetCopyMode()
             return
 
+    @pyqtSlot()
     def set_edit_mode(self):
         log.info("Mode Changed to: Edit")
         self.currentMode = Modes.EDIT
@@ -459,6 +459,7 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setColumnHidden(2, False)
         self.treeViewWidget.setEnabled(True)
 
+    @pyqtSlot()
     def set_sort_mode(self):
         log.info("Mode Changed to: Sort")
         self.currentMode = Modes.SORT
@@ -514,7 +515,7 @@ class MainWindow(QMainWindow, QObject):
         if newContent is not None:
             self.keyLabel.setText(newContent)
         else:
-            self.keyLabel.setText(f"Key Sequence Pressed: \n{self.keySeq}")
+            self.keyLabel.setText(f"Key Sequence Pressed: \n")
 
 
     @pyqtSlot(str)
