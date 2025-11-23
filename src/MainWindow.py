@@ -492,7 +492,8 @@ class MainWindow(QMainWindow, QObject):
         self.editButton.setChecked(False)
         self.sortButton.setChecked(True)
         self.treeViewWidget.setColumnHidden(2, True)
-        self.treeViewWidget.setEnabled(False)
+        # self.treeViewWidget.setEnabled(False)
+        self.treeViewWidget.setEnabled(True)
         self.galleryManager.updatePreview()
 
     def keyPressEvent(self, event):

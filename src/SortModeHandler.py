@@ -95,7 +95,6 @@ class SortModeHandler(QObject):
                 log.debug("handleSortMode: Case 'Space'")
                 log.info("Select destination directory just for the current image.")
                 dst = ""
-                # TODO: Fix !!!! Crashing.
 
                 # TODO: Refactor celou tuhle hruzu::::::
                 # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
@@ -380,7 +379,7 @@ class SortModeHandler(QObject):
                         self.updateStatusBarLabel(f"File copied to {dst}.")
 
                     print(f"History entries: {len(self.mvHistory)}")
-                    # Update counter label TODO fix:
+                    # Update counter label
                     self.galleryManager.updateCounterLabelText()
 
                     # Show new image

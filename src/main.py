@@ -78,6 +78,7 @@ from src.MainWindow import MainWindow
 # - [X] !!! Fix Crash kdyz preklikavam mezi default settings a nasledne menim themes.
 # - [X] Po refaktoru EditModeHandler po spusteni neni focus na hlavnim widgetu, takze zadne zkratky nefunguji a crashne to aplikaci.
 # - [X] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
+# - [X] Shortcuts by mely byt scrollovatelne i v Sort modu!
 
 
 # Code tweaking, Refactoring
@@ -152,7 +153,6 @@ from src.MainWindow import MainWindow
 # - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
 
 # Shortcuts management, Shortcut Tree (GUI):
-# - [ ] Shortcuts by mely byt scrollovatelne i v Sort modu!
 # - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
 # - [ ] CustomTreeWidget:  2. Jak prizpusobit sirku - mozna na zaklade poctu zobrazenych sloupcu?
 # - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
