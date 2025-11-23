@@ -11,6 +11,12 @@ GalleryManager {
   padding: 3px;
   background-color: palette(Background); }
 
+QStatusBar {
+  min-height: 26px;
+  border: 1px solid palette(Link);
+  border-radius: 5px;
+  font-size: 15px; }
+
 QLabel {
   min-height: 20px;
   border: 1px solid palette(Link);

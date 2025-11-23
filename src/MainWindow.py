@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import (
     QSplitter,
     QProgressBar,
     QMessageBox,
-    QToolBar, QApplication
+    QToolBar, QApplication, QStatusBar
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -110,10 +110,12 @@ class MainWindow(QMainWindow, QObject):
         # Right side of the main layout
         rightInnerLayout.addWidget(self.galleryManager)
 
-        self.statusBarLabel = QLabel("Status bar")
+        #self.statusBarLabel = QLabel("Status bar")
+        self.statusBarLabel = QStatusBar()
+        # self.statusBarLabel.addPermanentWidget(QLabel())
         self.statusBarLabel.setObjectName("statusBarLabel")
         self.statusBarLabel.setGraphicsEffect(Styles.getShadowEffect())
-        self.statusBarLabel.setWordWrap(True)
+        #self.statusBarLabel.setWordWrap(True)
         self.updateStatusBarLabel(f"App loaded.")
         rightInnerLayout.addWidget(self.statusBarLabel)
 
@@ -615,7 +617,9 @@ class MainWindow(QMainWindow, QObject):
     @pyqtSlot(str)
     def updateStatusBarLabel(self, message):
         dateNowStr = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.statusBarLabel.setText(f"[{dateNowStr}]: {message}")
+        # self.statusBarLabel.setText(f"[{dateNowStr}]: {message}")
+        self.statusBarLabel.showMessage(f"[{dateNowStr}]: {message}")
+        # self.statusBarLabel.showMessage(f"[{dateNowStr}]: {message}", 2000)
         # TODO: MAYBE Change into scrollable history of status bar.
 
 

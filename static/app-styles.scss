@@ -18,6 +18,16 @@ GalleryManager {
     background-color: palette(Background);
 }
 
+QStatusBar {
+    min-height: 26px;
+    border: 1px solid palette(Link);
+    border-radius: $button-border-radius;
+    //background-color: palette(Background);
+    //font-weight: bold;
+    font-size: 15px;
+    //font-family: "Inter";
+    //margin: 5px;
+}
 QLabel {
     min-height: 20px;
     border: 1px solid palette(Link);

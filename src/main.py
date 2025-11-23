@@ -74,6 +74,7 @@ from src.MainWindow import MainWindow
 #       - [X] Prejmenovani neexistujici zkratky
 # - [X] Implementovat jednoduchy light a dark mode + option do nastaveni.
 # - [x] Crashing when moving the .gif because process (medium) is used or what...
+# - [X] vymenit statusBar-label za QStatusBar
 
 
 # Code tweaking, Refactoring
@@ -108,7 +109,6 @@ from src.MainWindow import MainWindow
 # - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni.
 # - [ ] textExtraction: Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
 # - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
-# - [ ] Zmenit barvy pozadi v menu !
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
 # - [ ] separovat layoutovani do buildUI() method.
 # - [ ] !!!! Add do Settings: Otevrit presets z minula
@@ -117,10 +117,10 @@ from src.MainWindow import MainWindow
 # - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 # - [ ] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
+# - [ ] mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod.
 
 
 # Consider (Maybe):
-# - [ ] vymenit statusBar-label za QStatusBar
 
 
 # Misc:
@@ -137,6 +137,7 @@ from src.MainWindow import MainWindow
 # - [ ] Zprovoznit a spravit ikonky na Linuxu.
 
 # Design:
+# - [ ] Zmenit barvy pozadi v menu !
 
 
 # To Fix:
