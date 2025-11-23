@@ -82,7 +82,6 @@ from src.MainWindow import MainWindow
 # Code tweaking, Refactoring
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
 
-Fixed crashing caused by keyboard shortcuts like Ctrl+L.
 
 # Top priority:
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!

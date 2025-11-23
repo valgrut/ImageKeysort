@@ -15,14 +15,14 @@ GalleryManager {
     border: 1px solid palette(Link);
     border-radius: $widget-border-radius;
     padding: 3px;
-    background-color: palette(Background);
+    background-color: palette(Mid);
 }
 
 QStatusBar {
     min-height: 26px;
     border: 1px solid palette(Link);
     border-radius: $button-border-radius;
-    //background-color: palette(Background);
+    //background-color: palette(Mid);
     //font-weight: bold;
     font-size: 15px;
     //font-family: "Inter";
@@ -32,10 +32,11 @@ QLabel {
     min-height: 20px;
     border: 1px solid palette(Link);
     border-radius: $button-border-radius;
-    background-color: palette(Background);
+    background-color: palette(Mid);
     font-weight: bold;
     font-size: 15px;
     font-family: "Inter";
+    color: black;
     //margin: 5px;
 }
 QLabel#statusBarLabel {
@@ -46,7 +47,7 @@ QLabel#keyLabel {
     font-size: 16px;
     border-radius: $widget-border-radius;
     //color: rgb(171, 110, 3);
-    color: palette(Background);
+    color: black;
 }
 
 QProgressBar {
@@ -104,7 +105,7 @@ QTreeWidget {
     width: 200px;
     border: 1px solid palette(Link);
     border-radius: 10px;
-    background-color: palette(Background);
+    background-color: palette(Mid);
     color: black;
     //padding: 2px;
 }
@@ -115,7 +116,7 @@ QTreeWidget::header {
 }
 
 QHeaderView {
-    background-color: palette(Background);
+    background-color: palette(Mid);
     color: black;
     border: 0px solid black;
     border-radius: 10px;
@@ -127,7 +128,7 @@ QHeaderView::section {
     //color: green;
     font-weight: bold;
     //background-color: rgb(214, 137, 60);
-    background-color: palette(Background);
+    background-color: palette(Mid);
     //border: 1px solid black;
     //border-radius: 10px;
     padding: 3px;
@@ -139,14 +140,14 @@ QHeaderView::section {
 /***** Settings Dialog styles *****/
 SettingsDialog {
     border: 0;
-    background-color: palette(Background);
+    background-color: palette(Mid);
     font-weight: normal;
 }
 SettingsDialog * {
-    background-color: palette(Background);
+    background-color: palette(Mid);
 }
 SettingsDialog QFormLayout {
-    background-color: palette(Background);
+    background-color: palette(Mid);
     border: 0;
 }
 SettingsDialog QGroupBox {
@@ -174,17 +175,17 @@ QMessageBox QPushButton:hover {
 
 /***** About message *****/
 QMessageBox {
-    background-color: palette(Background);
+    background-color: palette(Mid);
 }
 QMessageBox * {
-    background-color: palette(Background);
+    background-color: palette(Mid);
     border: 0;
     font-weight: normal;
 }
 
 /***** MenuBar, menu items *****/
 QMenuBar {
-    background-color: palette(Background);
+    background-color: palette(Mid);
     min-height: 30px;
 }
 // QMenuBar {

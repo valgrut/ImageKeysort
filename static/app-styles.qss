@@ -9,7 +9,7 @@ GalleryManager {
   border: 1px solid palette(Link);
   border-radius: 10px;
   padding: 3px;
-  background-color: palette(Background); }
+  background-color: palette(Mid); }
 
 QStatusBar {
   min-height: 26px;
@@ -21,10 +21,11 @@ QLabel {
   min-height: 20px;
   border: 1px solid palette(Link);
   border-radius: 5px;
-  background-color: palette(Background);
+  background-color: palette(Mid);
   font-weight: bold;
   font-size: 15px;
-  font-family: "Inter"; }
+  font-family: "Inter";
+  color: black; }
 
 QLabel#statusBarLabel {
   min-height: 26px; }
@@ -32,7 +33,7 @@ QLabel#statusBarLabel {
 QLabel#keyLabel {
   font-size: 16px;
   border-radius: 10px;
-  color: palette(Background); }
+  color: black; }
 
 QProgressBar {
   max-width: 250px; }
@@ -83,7 +84,7 @@ QTreeWidget {
   width: 200px;
   border: 1px solid palette(Link);
   border-radius: 10px;
-  background-color: palette(Background);
+  background-color: palette(Mid);
   color: black; }
 
 QTreeWidget::header {
@@ -91,7 +92,7 @@ QTreeWidget::header {
   min-height: 30px; }
 
 QHeaderView {
-  background-color: palette(Background);
+  background-color: palette(Mid);
   color: black;
   border: 0px solid black;
   border-radius: 10px;
@@ -100,20 +101,20 @@ QHeaderView {
 
 QHeaderView::section {
   font-weight: bold;
-  background-color: palette(Background);
+  background-color: palette(Mid);
   padding: 3px; }
 
 /***** Settings Dialog styles *****/
 SettingsDialog {
   border: 0;
-  background-color: palette(Background);
+  background-color: palette(Mid);
   font-weight: normal; }
 
 SettingsDialog * {
-  background-color: palette(Background); }
+  background-color: palette(Mid); }
 
 SettingsDialog QFormLayout {
-  background-color: palette(Background);
+  background-color: palette(Mid);
   border: 0; }
 
 SettingsDialog QGroupBox {
@@ -137,16 +138,16 @@ QMessageBox QPushButton:hover {
 
 /***** About message *****/
 QMessageBox {
-  background-color: palette(Background); }
+  background-color: palette(Mid); }
 
 QMessageBox * {
-  background-color: palette(Background);
+  background-color: palette(Mid);
   border: 0;
   font-weight: normal; }
 
 /***** MenuBar, menu items *****/
 QMenuBar {
-  background-color: palette(Background);
+  background-color: palette(Mid);
   min-height: 30px; }
 
 QMenu {

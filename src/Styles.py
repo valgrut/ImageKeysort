@@ -28,11 +28,13 @@ class Styles:
 
         # new:
         pal.setColor(QPalette.Window,     QColor("#7a7878"))  # main-background
-        pal.setColor(QPalette.Background, QColor("#bfbdbd"))  # widget-background-color  
+        #pal.setColor(QPalette.Background, QColor("#bfbdbd"))  # widget-background-color
+        pal.setColor(QPalette.Mid,        QColor("#bfbdbd"))
         pal.setColor(QPalette.Button,     QColor("#bfbdbd"))  # button-background-color
         pal.setColor(QPalette.Highlight,  QColor("#fcba77"))  # button-background-hover-color
-        pal.setColor(QPalette.Base,     QColor("#ffa200"))  # button-background-active-color
-        pal.setColor(QPalette.Link, QColor("#000000"))  # button-border-color
+        pal.setColor(QPalette.Base,       QColor("#ffa200"))  # button-background-active-color
+        pal.setColor(QPalette.Link,       QColor("#000000"))  # button-border-color
+        pal.setColor(QPalette.AlternateBase, QColor("#bfbdbd"))  #
 
         # old:
         #
@@ -62,11 +64,11 @@ class Styles:
 
         # new:
         pal.setColor(QPalette.Window,     QColor("#233f66"))  # main-background
-        pal.setColor(QPalette.Background, QColor("#233f66"))  # widget-background-color
+        #pal.setColor(QPalette.Background, QColor("#233f66"))  # widget-background-color
         pal.setColor(QPalette.Button,     QColor("#335480"))  # button-background-color
         pal.setColor(QPalette.Highlight,  QColor("#465f80"))  # button-background-hover-color
-        pal.setColor(QPalette.Base,     QColor("#465f80"))  # button-background-active-color
-        pal.setColor(QPalette.Link, QColor("#9ba5c7"))  # button-border-color
+        pal.setColor(QPalette.Base,       QColor("#465f80"))  # button-background-active-color
+        pal.setColor(QPalette.Link,       QColor("#9ba5c7"))  # button-border-color
 
         # Old:
         # pal.setColor(QPalette.Window, QColor("#1e1f22"))
