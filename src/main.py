@@ -75,11 +75,11 @@ from src.MainWindow import MainWindow
 # - [X] Implementovat jednoduchy light a dark mode + option do nastaveni.
 # - [x] Crashing when moving the .gif because process (medium) is used or what...
 # - [X] vymenit statusBar-label za QStatusBar
+# - [X] !!! Fix Crash kdyz preklikavam mezi default settings a nasledne menim themes.
 
 
 # Code tweaking, Refactoring
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
-# - [X] !!! Fix Crash kdyz preklikavam mezi default settings a nasledne menim themes.
 
 
 # Top priority:
@@ -120,7 +120,6 @@ from src.MainWindow import MainWindow
 # - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 # - [ ] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
-# - [ ] mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
 
 
 # Consider (Maybe):
@@ -172,7 +171,8 @@ from src.MainWindow import MainWindow
 # - [ ] Expand / Collapse all shortcuts - button in Edit mode.
 # - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
 # - [ ] Tag / color nodes - Add a color or tag (e.g. game, editing, global) for quick visual scanning.
-# - [ ] Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod.). Mozna pouzit QUndoView ?
+# - [ ] Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
+#   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
 
 
 # Minor issues, future features:
