@@ -1,4 +1,3 @@
-import sys
 import json
 import typing
 import logging
@@ -8,8 +7,6 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QMessageBox,
 )
-from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
-
 from src.SettingsDialog import SettingsDialog
 
 # TODO: tohle by melo ovlivnovat i edit mode, ne???

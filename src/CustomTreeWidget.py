@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import (
     QTreeWidgetItem
 )
 
-from src.ShortcutManager import ShortcutManager
 from src.SettingsDialog import SettingsDialog
 
 class CustomTreeWidget(QTreeWidget):

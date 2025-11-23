@@ -387,12 +387,12 @@ class MainWindow(QMainWindow, QObject):
         # self.saveAction.setShortcut('Ctrl+S')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.saveAction.setStatusTip("Save current shortcuts to a file")
         self.saveAction.triggered.connect(self.save_data)
-        
+
         self.loadAction = QAction("&Load shortcuts", self)
         # self.loadAction.setShortcut('Ctrl+L')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.loadAction.setStatusTip("Load shortcuts from a file")
         self.loadAction.triggered.connect(self.load_data)
-        
+
         self.exitAction = QAction("&Exit", self)
         self.exitAction.setStatusTip("Exit application")
         self.exitAction.triggered.connect(self.exitApp)
@@ -441,6 +441,7 @@ class MainWindow(QMainWindow, QObject):
         self.galleryManager.mediaContainerWidget.unsetCopyModeBorderHighlight()
         return
 
+    @pyqtSlot()
     def toggleCopyMode(self):
         if self.sortModeHandler.getCopyOnlyState() is False:
             self.setCopyMode()
