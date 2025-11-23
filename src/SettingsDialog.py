@@ -90,10 +90,10 @@ class SettingsDialog(QDialog):
 
         # Stylesheets
         self.cfg_app_theme = QComboBox()
-        self.cfg_app_theme.addItem("Light theme")
-        self.cfg_app_theme.addItem("Dark theme")
-        self.cfg_app_theme.addItem("some other theme 1 ?")
-        self.cfg_app_theme.addItem("some other theme 2 ?")
+        self.cfg_app_theme.addItem("Light")
+        self.cfg_app_theme.addItem("Dark")
+        self.cfg_app_theme.addItem("custom1")
+        self.cfg_app_theme.addItem("custom2")
         # TODO: Maybe, load themes from some directory so users can add custom themes without requiring code change.
 
         # Form
@@ -148,7 +148,11 @@ class SettingsDialog(QDialog):
         settings.beginGroup("video")
         self.cb_mute_videos.setChecked(settings.value("muteDefault") == "true")
         settings.endGroup()
-        # TODO: Add Theme and load last presets
+
+        settings.beginGroup("theme")
+        themeIndex = self.cfg_app_theme.findText(settings.value("currentTheme", defaultValue="Light"))
+        self.cfg_app_theme.setCurrentIndex(themeIndex if themeIndex >= 0 else 0)
+        settings.endGroup()
 
     def save_settings(self):
         # Values have to be saved as a string, so checking form state, and
@@ -173,7 +177,10 @@ class SettingsDialog(QDialog):
         settings.beginGroup("video")
         settings.setValue("muteDefault", "true" if self.cb_mute_videos.isChecked() else "false")
         settings.endGroup()
-        # TODO: Add Theme and load last presets
+
+        settings.beginGroup("theme")
+        settings.setValue("currentTheme", self.cfg_app_theme.currentText())
+        settings.endGroup()
 
     def restore_defaults(self):
         # Define your app’s sensible defaults here
@@ -185,7 +192,7 @@ class SettingsDialog(QDialog):
         self.cb_other_opt1.setChecked(False)
         self.cb_other_opt2.setChecked(False)
         self.cb_mute_videos.setChecked(False)
-        # TODO: Add Theme and load last presets
+        self.cfg_app_theme = "Light"
 
     # Make sure clicking OK persists
     def accept(self):
@@ -236,6 +243,9 @@ class SettingsDialog(QDialog):
         return True if SettingsDialog.checkSetting("video/muteDefault") == "true" else False
         # return self.cb_mute_videos
 
-    # TODO: Add app Theme method
+    @staticmethod
+    def settingsGetTheme() -> str:
+        return SettingsDialog.checkSetting("theme/currentTheme")
+
 
 

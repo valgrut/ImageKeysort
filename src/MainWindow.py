@@ -313,9 +313,18 @@ class MainWindow(QMainWindow, QObject):
         log.info("Apply new settings")
         app = QApplication.instance()
         # app.setPalette(SettingsDialog.settingsGetTheme())
-        app.setPalette(Styles.get_dark_palette())
-        # Required for new styles to take effect.
+        # app.setPalette(Styles.get_dark_palette())
+
+        selectedTheme = SettingsDialog.settingsGetTheme()
+        match selectedTheme:
+            case "Light":
+                app.setPalette(Styles.get_default_palette())
+            case "Dark":
+                app.setPalette(Styles.get_dark_palette())
+
+
         import pathlib
+        # Required for new styles to take effect.
         app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
 
     def showAbout(self):

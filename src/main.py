@@ -52,6 +52,7 @@ from src.MainWindow import MainWindow
 # - [NE] WONT_DO Pridat i nektere znaky jako labely ($, ...)
 # - [X] Pridat CLI argumenty pro spusteni aplikace s preddefinovanymi parametry (napr. --src-dir, --dst-dir, --load-data, --save-data, ...)
 # - [X] How many columns of shortcuts to show (1-5) [Settings]
+# - [x] r -> cesta. c-f -> cesta -> crash !!! Fix.Parents path: Get path for shortcut:  cf c -> Key c -> DEBUG: such sequence does not exist.
 # - [X] Settings saving and loading.
 #   - [X] Settings - na jake misto soubor hodit? Kam se divat defaultne? Win vs Linux (~/).
 # - [X] Settings - ovladani hlasitosti - mute by default.
@@ -71,6 +72,8 @@ from src.MainWindow import MainWindow
 # - [X] Zmena zkratky na jinou - mit moznost zmenit key_char bez toho, abych musel pridat novy a odstranit predchozi. (treba neco jako "abx/abc" - nahradi x za c)
 #       - [X] Fix edge cases - existuje x, pridame a, zmenime a na x -> zmizi.
 #       - [X] Prejmenovani neexistujici zkratky
+# - [X] Implementovat jednoduchy light a dark mode + option do nastaveni.
+# - [x] Crashing when moving the .gif because process (medium) is used or what...
 
 
 # Code tweaking, Refactoring
@@ -85,7 +88,8 @@ from src.MainWindow import MainWindow
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 # - [ ] Fix videos on Windows
 # - [ ] Fix Ctrl+O to open new source directory
-# - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!!
+# - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
+
 
 # Settings:
 # - [ ] Settings: Moznost sort podle dst_path, (krom podle insert order (default) a podle Key_char (alphabetically).
@@ -132,13 +136,9 @@ from src.MainWindow import MainWindow
 # - [ ] Zprovoznit a spravit ikonky na Linuxu.
 
 # Design:
-# - [~] Implementovat jednoduchy light a dark mode + option do nastaveni.
 
 
 # To Fix:
-# - [x] Crashing when moving the .gif bcz process (medium) is used or what...
-# - [ ] ??! Fix error state: 1.) add 'hd' without chosing path. 2.) remove 'd': 'h-d'. 3.) add 'hd'. 4.) issue - empty shortcut on L1 .....CANNOT REPRODUCE NOW.....
-# - [x] r -> cesta. c-f -> cesta -> crash !!! Fix.Parents path: Get path for shortcut:  cf c -> Key c -> DEBUG: such sequence does not exist.
 # - [ ] !!! Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
 
 
@@ -243,11 +243,12 @@ def main():
 
     # Create app and apply theme
     app = QApplication(sys.argv)
-    app.setPalette(Styles.get_default_palette())
+    # app.setPalette(Styles.get_default_palette())
     # app.setPalette(Styles.get_dark_palette())
-    app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
+    # app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
     
     window = MainWindow(args=parsedArgs)
+    window.apply_settings()
     window.show()
     app.aboutToQuit.connect(window.shortcutManager.askSaveIfChanged)
 
