@@ -88,7 +88,7 @@ class MainWindow(QMainWindow, QObject):
         self.shortcutManager = ShortcutManager(self)  # deps are injected
         self.galleryManager = GalleryManager(self)  # deps are injected
 
-        self.sortModeHandler = SortModeHandler(self.shortcutManager, self.galleryManager)  # deps are injected
+        self.sortModeHandler = SortModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
         self.editModeHandler = EditModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
         self.textExtractor = TextExtractor(self.galleryManager)
 

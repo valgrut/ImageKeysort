@@ -28,8 +28,9 @@ class SortModeHandler(QObject):
     updateStatusBarLabelSignal = pyqtSignal(str)
     updateTreeViewSignal = pyqtSignal(str)
 
-    def __init__(self, shortcutManager, galleryManager, parent=None):
+    def __init__(self, mainWindow, shortcutManager, galleryManager, parent=None):
         super().__init__(parent)
+        self.mainWindow = mainWindow
         self.shortcutManager = shortcutManager
         self.galleryManager = galleryManager
 
@@ -94,6 +95,7 @@ class SortModeHandler(QObject):
                 log.debug("handleSortMode: Case 'Space'")
                 log.info("Select destination directory just for the current image.")
                 dst = ""
+                # TODO: Fix !!!! Crashing.
 
                 # TODO: Refactor celou tuhle hruzu::::::
                 # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
@@ -113,7 +115,7 @@ class SortModeHandler(QObject):
                         return
 
                 else:  # KeySeq is empty
-                    singleUseDstDirectory = QFileDialog.getExistingDirectory(self, "Select Directory")
+                    singleUseDstDirectory = QFileDialog.getExistingDirectory(self.mainWindow, "Select Directory")
 
                     # Check that some directory was selected
                     if not singleUseDstDirectory:
