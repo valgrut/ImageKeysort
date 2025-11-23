@@ -1,5 +1,5 @@
 import logging
-from PyQt5.QtCore import Qt, QSettings, pyqtSignal
+from PyQt5.QtCore import Qt, QSettings, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QAction, QToolBar, QStyle, QDialog, QDialogButtonBox,
     QWidget, QVBoxLayout, QGroupBox, QFormLayout, QSpinBox, QCheckBox, QLabel,
@@ -182,17 +182,17 @@ class SettingsDialog(QDialog):
         settings.setValue("currentTheme", self.cfg_app_theme.currentText())
         settings.endGroup()
 
+    @pyqtSlot()
     def restore_defaults(self):
-        # Define your app’s sensible defaults here
-        self.sp_nested_levels.setValue(2)
-        self.cb_allow_no_dest.setChecked(False)
-        self.cfg_confirm_to_override.setChecked(True)
+        self.sp_nested_levels.setValue(3)
+        self.cb_allow_no_dest.setChecked(True)
+        self.cfg_confirm_to_override.setChecked(False)
         self.cfg_sort_shortcuts.setChecked(True)
         self.cb_auto_next_after_copy.setChecked(True)
         self.cb_other_opt1.setChecked(False)
         self.cb_other_opt2.setChecked(False)
-        self.cb_mute_videos.setChecked(False)
-        self.cfg_app_theme = "Light"
+        self.cb_mute_videos.setChecked(True)
+        self.cfg_app_theme.setCurrentText("Light")
 
     # Make sure clicking OK persists
     def accept(self):

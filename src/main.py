@@ -78,6 +78,7 @@ from src.MainWindow import MainWindow
 
 # Code tweaking, Refactoring
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
+# - [X] !!! Fix Crash kdyz preklikavam mezi default settings a nasledne menim themes.
 
 
 # Top priority:
@@ -139,7 +140,7 @@ from src.MainWindow import MainWindow
 
 
 # To Fix:
-# - [ ] !!! Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
+# - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
 
 
 # Shortcuts management, Shortcut Tree (GUI):
