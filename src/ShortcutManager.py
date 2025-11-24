@@ -37,7 +37,7 @@ class ShortcutManager(QObject):
 
     def setDataModified(self):
         self.dataModified = True
-        print("MODIFIED")
+        log.info("MODIFIED")
         self.updateMainWindowTitleSignal.emit("*"+self.mainWindow.appTitle)
 
     def setDataUnmodified(self):
@@ -52,7 +52,7 @@ class ShortcutManager(QObject):
         Recursively returns all dst_paths from the shortcuts json tree.
         """
         dstPathsList = []
-        currentShortcutLevel = shortcutsData["keys"] # 'a', 'f', ...
+        currentShortcutLevel = shortcutsData["keys"]  # 'a', 'f', ...
 
         if currentShortcutLevel is None:
             return
@@ -109,12 +109,12 @@ class ShortcutManager(QObject):
             if key in currentNestLevel:
                 self.shortcutTree.update({key: self.subcategory})
                 self.setDataModified()
-        print(json.dumps(self.shortcutTree))
+        log.info(json.dumps(self.shortcutTree))
 
-        # Print nice json formatted TODO
-        # print(self.shortcutTree["keys"])
-        # print(json.dumps(self.shortcutTree))
-        # print(json.dumps(sorted(self.shortcutTree, key=lambda x: x['keys'])))
+        # log.info nice json formatted TODO
+        # log.info(self.shortcutTree["keys"])
+        # log.info(json.dumps(self.shortcutTree))
+        # log.info(json.dumps(sorted(self.shortcutTree, key=lambda x: x['keys'])))
 
     # TODO: Prejmenovat na addShortcutAndDstPath()
     def addDstPathForShortcut(self, sequence, dst_path):
@@ -124,11 +124,11 @@ class ShortcutManager(QObject):
         Effectively it means that for the given sequence, dst_path is target path.
         """
         lastKey = self._getLastKeyOfSequenceAndUpdate(sequence)
-        print("last_key:", lastKey)
+        log.info(f"last_key: {lastKey}")
         if lastKey:
             lastKey.update({"dst_path" : dst_path})
         else:
-            print(f"Shortcut {sequence} has not been found.")
+            log.info(f"Shortcut {sequence} has not been found.")
 
 
     def checkShortcutExists(self, sequence) -> bool:
@@ -161,12 +161,12 @@ class ShortcutManager(QObject):
         Returns dst_path for the last key of the given sequence.
         IF it is longest match!!!!!!!
         """
-        print(f"get_dst_for_shortcut: {sequence}")
+        log.info(f"get_dst_for_shortcut: {sequence}")
         lastKey = self.isSequenceLongestMatch(sequence)
         if not lastKey:
             log.warning("DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).")
             return None
-        # print("last: ", last_key)
+        # log.info("last: ", last_key)
         # TODO: check jestli neni prazdny dst_path, myslel jsem, ze ten je tady uz osetreny, ale vraci v testu "", misto None.
         return lastKey["dst_path"]
 
@@ -240,7 +240,7 @@ class ShortcutManager(QObject):
         current = self.shortcutTree["keys"]
         for key in sequence:
             if key not in current.keys():
-                print(f"Key {key} has not been found. Adding it.")
+                log.info(f"Key {key} has not been found. Adding it.")
                 self.addKeyUnderCurrent(current, key)
 
             # Go one key deeper into saved sequence
@@ -261,12 +261,12 @@ class ShortcutManager(QObject):
         currentKeyContent = ""
 
         for key in sequence:
-            print("Key", key)
+            log.info(f"Key {key}")
             if key in nextAvailableKeys.keys():
                 currentKeyContent = nextAvailableKeys[key]  # Content = {dst_path, keys:{}}
                 nextAvailableKeys = currentKeyContent["keys"]
             else:
-                print(f"DEBUG: such sequence does not exist.")
+                log.info(f"DEBUG: such sequence does not exist.")
                 return None
 
         return currentKeyContent
@@ -311,7 +311,7 @@ class ShortcutManager(QObject):
         isMatched = re.search("^[a-zA-Z1-9]+>[a-zA-Z1-9]*$", sequence)
 
         if not isMatched:
-            print(f"DEBUG: Incorrect split string {isMatched}.")
+            log.info(f"DEBUG: Incorrect split string {isMatched}.")
             return False
 
         sequenceSplit = sequence.split(">")
@@ -320,13 +320,13 @@ class ShortcutManager(QObject):
 
         # Check existence of the source shortcut (before >)
         if not self.getLastKeyContentOfSequence(sourceSequence):
-            print(f"Source shortcut ({sourceSequence}) does not exist.")
+            log.info(f"Source shortcut ({sourceSequence}) does not exist.")
             self.updateStatusBarLabelSignal.emit(f"Source shortcut ({sourceSequence}) does not exist.")
             return False
 
         # Check existence of the target shortcut (after >)
         if len(destinationSequence) > 0 and not self.getLastKeyContentOfSequence(destinationSequence):
-            print(f"To-be-moved shortcut ({destinationSequence}) does not exist.")
+            log.info(f"To-be-moved shortcut ({destinationSequence}) does not exist.")
             self.updateStatusBarLabelSignal.emit(f"To-be-moved shortcut ({destinationSequence}) does not exist.")
             return False
 
@@ -335,7 +335,7 @@ class ShortcutManager(QObject):
         # Check, whether resulting shortcut already does not exist
         resultingSequence = destinationSequence + sourceSequence[-1]
         if self.getLastKeyContentOfSequence(resultingSequence):
-            print(f"Resulting shortcut ({resultingSequence}) does does already exist.")
+            log.info(f"Resulting shortcut ({resultingSequence}) does does already exist.")
             self.updateStatusBarLabelSignal.emit(f"Resulting shortcut ({resultingSequence}) does already exist.")
             return False
 
@@ -380,7 +380,7 @@ class ShortcutManager(QObject):
         isMatched = re.search("^[a-zA-Z1-9]+/[a-zA-Z1-9]$", sequence)
 
         if not isMatched:
-            print(f"DEBUG: Incorrect change string {isMatched}.")
+            log.info(f"DEBUG: Incorrect change string {isMatched}.")
             return False
 
         sequenceSplit = sequence.split("/")
@@ -390,14 +390,14 @@ class ShortcutManager(QObject):
 
         # Check existence of the source shortcut (before /)
         if not self.getLastKeyContentOfSequence(sourceShortcut):
-            print(f"Source shortcut ({sourceShortcut}) does not exist.")
+            log.info(f"Source shortcut ({sourceShortcut}) does not exist.")
             self.updateStatusBarLabelSignal.emit(f"Source shortcut ({sourceShortcut}) does not exist")
             return False
 
         # Check existence of the target shortcut (after /)
         targetSequence = sourceShortcut[:-1] + newKeyChar
         if self.getLastKeyContentOfSequence(targetSequence):
-            print(f"Target shortcut ({targetSequence}) already exist.")
+            log.info(f"Target shortcut ({targetSequence}) already exist.")
             self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) already exist.")
             return False
 
@@ -407,7 +407,7 @@ class ShortcutManager(QObject):
         # TODO
         # resultingSequence = destinationSequence + sourceSequence[-1]
         # if self.getLastKeyContentOfSequence(resultingSequence):
-        #     print(f"Resulting shortcut ({resultingSequence}) does does already exist.")
+        #     log.info(f"Resulting shortcut ({resultingSequence}) does does already exist.")
         #     self.updateStatusBarLabelSignal.emit(f"Resulting shortcut ({resultingSequence}) does already exist.")
         #     return False
 
@@ -418,7 +418,7 @@ class ShortcutManager(QObject):
 
         # TODO: Tohle mozna nepotrebuju? Protoze to checkuju vyse... Mozna.
         # if keyCharToChange in parentOfLastKey["keys"]:
-        #     print("ERROR: Such key char already exists under the parent key.")
+        #     log.info("ERROR: Such key char already exists under the parent key.")
         #     self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) already exist.")
         #     return
         
@@ -454,7 +454,7 @@ class ShortcutManager(QObject):
         isMatched = re.search("^[a-zA-Z1-9]*-[a-zA-Z1-9]$", sequence)
 
         if not isMatched:
-            print(f"DEBUG: Incorrect split string {isMatched}.")
+            log.info(f"DEBUG: Incorrect split string {isMatched}.")
             return False
 
         sequenceSplit = sequence.split("-")
@@ -505,13 +505,13 @@ class ShortcutManager(QObject):
         ret = qm.question(self.mainWindow, '', "Do you want to save changes in shortcuts?", qm.Yes | qm.No)
 
         if ret == qm.No:
-            print("DEBUG: Loading data without saving.")
+            log.info("DEBUG: Loading data without saving.")
             return False  # User does not want to save changes, but it is ok.
 
         if self.saveShortcuts():
             return False
         else:
-            print("DEBUG: No file selected to save to. Abort.")
+            log.info("DEBUG: No file selected to save to. Abort.")
             return True
 
 
@@ -539,7 +539,7 @@ class ShortcutManager(QObject):
         """
 
         if not presetsFilePath:
-            print(f"No file selected.")
+            log.info(f"No file selected.")
             return False
 
         try:
@@ -547,7 +547,7 @@ class ShortcutManager(QObject):
                 self.shortcutTree = json.load(data)
         except ValueError as error:
             # Prevent loading invalid json data
-            print("DEBUG: Invalid json data!")
+            log.info("DEBUG: Invalid json data!")
             self.updateStatusBarLabelSignal.emit(f"Error: Invalid json data in {presetsFilePath}!")
             return False
 
@@ -560,15 +560,15 @@ class ShortcutManager(QObject):
                 # TODO: Highlight all dst dirs that do not exist
             # return False
 
-            # Print nonexisting paths:
+            # log.info nonexisting paths:
             for path in nonexistingPaths:
-                print("E: Directory does not exist: ", path)
+                log.info(f"E: Directory does not exist: {path}")
 
         # Save path of the loaded data
         self.srcPathOfLoadedData = presetsFilePath
 
         self.setDataUnmodified()
-        print(f"Data loaded from {presetsFilePath}.")
+        log.info(f"Data loaded from {presetsFilePath}.")
         self.updateStatusBarLabelSignal.emit(f"Data successfully loaded from {presetsFilePath}.")
 
         return True
@@ -584,7 +584,7 @@ class ShortcutManager(QObject):
         jsonDataFile = QFileDialog.getSaveFileName(self.mainWindow, "Select file or filename to save data into.", self.srcPathOfLoadedData)
 
         if not jsonDataFile[0]:
-            print(f"No file selected.")
+            log.info(f"No file selected.")
             return False
 
         with open(jsonDataFile[0], 'w', encoding='utf-8') as datafile:
@@ -593,7 +593,7 @@ class ShortcutManager(QObject):
 
         self.srcPathOfLoadedData = jsonDataFile[0]
         self.setDataUnmodified()
-        print(f"Data saved to {jsonDataFile}.")
+        log.info(f"Data saved to {jsonDataFile}.")
         self.updateStatusBarLabelSignal.emit(f"Data saved to {jsonDataFile}.")
 
         return True

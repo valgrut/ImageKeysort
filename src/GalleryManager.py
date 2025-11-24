@@ -49,7 +49,7 @@ class GalleryManager(QStackedWidget):
         self.addWidget(self.mediaContainerWidget)
 
         self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
-        # print(f"[INIT] mediaContainerWidget: {id(self.mediaContainerWidget)}")
+        # log.info(f"[INIT] mediaContainerWidget: {id(self.mediaContainerWidget)}")
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
@@ -69,7 +69,7 @@ class GalleryManager(QStackedWidget):
 
     def loadImagesInDirectory(self):
         if not self.sourceDirectoryPath:
-            print("DEBUG: Error, src dir path is empty")
+            log.info("DEBUG: Error, src dir path is empty")
             return
 
         self.availableMediaFiles = []
@@ -102,12 +102,12 @@ class GalleryManager(QStackedWidget):
     def incrementGalleryIndex(self):
         if self.galleryIndex < len(self.availableMediaFiles) -1:
             self.galleryIndex += 1
-        # print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
+        # log.info(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
 
     def decrementGalleryIndex(self):
         if self.galleryIndex >= 1:
             self.galleryIndex -= 1
-        # print(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
+        # log.info(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
 
     @pyqtSlot()
     def setNextImage(self):

@@ -79,6 +79,7 @@ from src.MainWindow import MainWindow
 # - [X] Po refaktoru EditModeHandler po spusteni neni focus na hlavnim widgetu, takze zadne zkratky nefunguji a crashne to aplikaci.
 # - [X] Pridat do menu kategorii "Pictures nebo Gallery", kde budou veci jako Undo, next image, open gallery, a tak. A "Shortcuts", kde pujde Undo pro shortcut operace - jako undo odstraneni zkratky, pridany zkratky, zmenu cesty a tak.
 # - [X] Shortcuts by mely byt scrollovatelne i v Sort modu!
+# - [X] Misto debug print() nahradit za logging module
 
 
 # Code tweaking, Refactoring
@@ -121,9 +122,7 @@ from src.MainWindow import MainWindow
 # - [ ] !!!! Add do Settings: Otevrit presets z minula
 # - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
-# - [~] Misto debug print() nahradit za logging module
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
-# - [ ] Nahradit vsude print() za log.info()
 # - [ ] Do menu->File pridat: Toggle On Toolbar - on totiz jde vypnout, kdyz se na nej klikne pravym, pak zmizi, a neni moznost ho vratit.
 
 

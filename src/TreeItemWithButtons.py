@@ -60,24 +60,6 @@ class TreeItemWithButtons(QWidget):
         deleteButton.setIcon(deleteIcon)
         deleteButton.setIconSize(deleteButton.size())
 
-        # TODO: this does not work:
-        # self.setStyleSheet("background-color: green; border: 1px solid black;")
-        self.setStyleSheet("background-color: green;")
-
-        # self.setStyleSheet(
-        # """
-        #     TreeItemWithButtons {
-        #         xbackground-color: transparent;
-        #         border: 1px solid black;
-        #         xborder-radius: 3px;
-        #         xcolor: black;  /* Set the initial text color */
-        #         xbackground-color: rgba(100, 0, 0, 0.3);  /* Solid color on hover */
-        #     }
-        #     TreeItemWithButtons:hover {
-        #         background-color: rgba(200, 0, 0, 1);  /* Solid color on hover */
-        #         color: white;  /* Change text color on hover */
-        #     }
-        # """)
 
         layout.addWidget(editButton)
         layout.addWidget(deleteButton)

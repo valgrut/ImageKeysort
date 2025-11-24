@@ -139,7 +139,7 @@ class EditModeHandler(QObject):
                     # TODO: 2. Button do ShortcutTree - Lock shortcuts from modifications (allow only adding new shortcuts).
                     log.info("Overriding existing dst_path is not allowed. Go to Settings to allow it.")
                     self.updateStatusBarLabel("Warning: Overriding existing dst_path is not allowed. Go to Settings to allow it.")
-                    log.debug("I am here")
+
                     qm = QMessageBox()
                     user_confirmed = qm.question(self.mainWindow, '', f"Do you want to override dst_path for shortcut {self.keySeq}?", qm.Yes | qm.No)
                     if user_confirmed == qm.Yes:

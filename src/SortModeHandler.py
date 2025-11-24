@@ -61,8 +61,8 @@ class SortModeHandler(QObject):
         match event.key():
             case Qt.Key_Escape:
                 log.debug("handleSortMode: Case 'Escape'")
-                # print("key_seq:", self.key_seq)
-                # print("permanent_key_seq:", self.permanent_key_seq)
+                # log.info(f"key_seq: {self.key_seq}")
+                # log.info(f"permanent_key_seq: {self.permanent_key_seq}")
                 # TODO: Refactor this: pridat flag sentinelExists, bude to srozumitelnejsi.
                 if self.keySeq and self.permanentKeySeq:
                     self.keySeq = ""
@@ -100,17 +100,17 @@ class SortModeHandler(QObject):
                 # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
                 # and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
                 if self.keySeq:
-                    print(f"keySeq is not empty ('{self.keySeq}')")
+                    log.info(f"keySeq is not empty ('{self.keySeq}')")
                     nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq)
                     if nonTerminalKey:
                         dst = nonTerminalKey["dst_path"]
                         if not os.path.exists(dst):
-                            print(f"No action. Shortcut probably does not contain dst_path ({dst}).")
+                            log.info(f"No action. Shortcut probably does not contain dst_path ({dst}).")
                             self.updateStatusBarLabelSignal.emit(f"No action. Destination directory is empty or does not exist for shortcut ({self.keySeq}).")
                             return
-                        print("middle_path", dst)
+                        log.info(f"middle_path {dst}")
                     else:
-                        print(f"Shortcut sequence {self.keySeq} does not exist.")
+                        log.info(f"Shortcut sequence {self.keySeq} does not exist.")
                         return
 
                 else:  # KeySeq is empty
@@ -121,7 +121,7 @@ class SortModeHandler(QObject):
                         self.updateStatusBarLabel(f"No directory was selected.")
                         return
 
-                    print(singleUseDstDirectory)
+                    log.info(singleUseDstDirectory)
                     dst = singleUseDstDirectory
 
                 src = self.galleryManager.getSourcePath()
@@ -169,7 +169,7 @@ class SortModeHandler(QObject):
                     self.updateStatusBarLabel(f"File copied to {dst}.")
 
                 self.keySeq = ""
-                # print(f"History entries: {len(self.mvHistory)}")
+                # log.info(f"History entries: {len(self.mvHistory)}")
                 self.updateKeySequenceLabel()
                 self.galleryManager.updateCounterLabelText()
 
@@ -242,7 +242,7 @@ class SortModeHandler(QObject):
                     self.updateStatusBarLabel(f"File copied to {dst}.")
                 
 
-                print(f"History entries: {len(self.mvHistory)}")
+                log.info(f"History entries: {len(self.mvHistory)}")
                 self.galleryManager.updateCounterLabelText()
 
                 # Show new image
@@ -252,7 +252,7 @@ class SortModeHandler(QObject):
             case Qt.Key_Delete:
                 log.debug("handleSortMode: Case 'Delete'")
                 if self.galleryManager.isGalleryEmpty():
-                    print("Source directory is empty")
+                    log.info("Source directory is empty")
                     return
 
                 imageName = self.galleryManager.getCurrentFilename()
@@ -272,7 +272,7 @@ class SortModeHandler(QObject):
                     self.handleExistingImageInDst()
                     return
 
-                print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
+                log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
                 # Remove current image from the list of images in src directory
                 self.galleryManager.removeFile(imageName)
@@ -296,7 +296,7 @@ class SortModeHandler(QObject):
             case _: # Other keys
                 log.debug("handleSortMode: Case _ (other keys)")
                 if event.key() not in allowedKeys:
-                    print("not [a-zA-Z1-9] was pressed, nothing to append to shortcuts.")
+                    log.info("not [a-zA-Z1-9] was pressed, nothing to append to shortcuts.")
                     return
 
                 self.keySeq += pressedKey
@@ -309,20 +309,20 @@ class SortModeHandler(QObject):
                 else:
                     fullShortcut = self.keySeq
 
-                print("key_seq:", self.keySeq)
-                print("full key_seq:", fullShortcut)
+                log.info(f"key_seq: {self.keySeq}")
+                log.info(f"full key_seq: {fullShortcut}")
 
-                # print("dst for shortcut:", self.shortcut_manager.get_dst_for_shortcut(full_shortcut))
+                # log.info(f"dst for shortcut: {self.shortcut_manager.get_dst_for_shortcut(full_shortcut)}")
                 if not self.keySeq:
                     return
 
                 # self.updateStatusBarLabelSignal.emit(f"Hit but No action. Destination directory is empty or does not exist for this shortcut.")
                 dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
                 if dstPath:
-                    print("HIT!")
+                    log.info("HIT!")
 
                     if self.galleryManager.isGalleryEmpty():
-                        print("Source directory is empty")
+                        log.info("Source directory is empty")
                         self.keySeq = ""
                         self.updateKeySequenceLabel()
                         return
@@ -346,7 +346,7 @@ class SortModeHandler(QObject):
 
                     self.keySeqHistory.append(fullShortcut)
 
-                    print(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
+                    log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
                     # Remove current image from the list of images in src directory
                     if not self.copyOnly:
@@ -378,7 +378,7 @@ class SortModeHandler(QObject):
 
                         self.updateStatusBarLabel(f"File copied to {dst}.")
 
-                    print(f"History entries: {len(self.mvHistory)}")
+                    log.info(f"History entries: {len(self.mvHistory)}")
                     # Update counter label
                     self.galleryManager.updateCounterLabelText()
 
@@ -394,10 +394,10 @@ class SortModeHandler(QObject):
     @pyqtSlot()
     def undo_last_operation(self):
         log.debug("Undo last operation")
-        # print(self.mv_history)
+        # log.info(self.mv_history)
 
         if not self.mvHistory:
-            print(f"History is Empty!")
+            log.info(f"History is Empty!")
             self.updateStatusBarLabelSignal.emit(f"Nothing to Undo, history is empty.")
             return
 
@@ -443,7 +443,7 @@ class SortModeHandler(QObject):
 
         # Show new image
         self.galleryManager.updatePreview()
-        # print(self.images)
+        # log.info(self.images)
 
 
 
@@ -495,11 +495,11 @@ class SortModeHandler(QObject):
         Check, whether the file with the same name does not already exist in the destination directory.
         """
         
-        # print(f"image: '{imageName}' !!!")
-        # print(f"Dst: '{dst}'!!!")
+        # log.info(f"image: '{imageName}' !!!")
+        # log.info(f"Dst: '{dst}'!!!")
         # if os.path.exists(dst + "/" + imageName):
         if os.path.isfile(dst + "/" + imageName):
-            print(f"Image {imageName} already exists in the {dst}!!!")
+            log.info(f"Image {imageName} already exists in the {dst}!!!")
             return True
         return False
 
@@ -524,7 +524,7 @@ class SortModeHandler(QObject):
         If it does NOT, return False.
         """
         if not os.path.exists(dst):
-            print(f"ERROR: Destination directory {dst} does not exist.")
+            log.info(f"ERROR: Destination directory {dst} does not exist.")
             self.updateStatusBarLabel(f"ERROR: Destination directory {dst} does not exist.")
             self.keySeq = ""
             self.updateKeySequenceLabel()

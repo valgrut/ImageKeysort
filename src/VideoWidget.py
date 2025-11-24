@@ -1,3 +1,5 @@
+import logging
+
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import QDir, Qt, QUrl, QSize, pyqtSlot, QSizeF
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
@@ -6,6 +8,8 @@ from PyQt5.QtWidgets import (QGraphicsScene, QGraphicsView, QApplication, QFileD
 
 from src.SettingsDialog import SettingsDialog
 from src.Styles import Styles
+
+log = logging.getLogger(__name__)
 
 
 # VideoViewWidget (Nic spolecneho s QVideoWidget)
@@ -142,7 +146,7 @@ class VideoWidget(QWidget):
         self.statusBar.showMessage("Error: " + self.mediaPlayer.errorString())
 
     def cleanup(self):
-        print("Cleanup VideoWidget")
+        log.info("Cleanup VideoWidget")
         self.mediaPlayer.stop()
         self.positionSlider.setValue(0)
         self.playButton.setIcon(
@@ -175,7 +179,7 @@ class VideoWidget(QWidget):
         self.playButton.setEnabled(False)
         self.statusBar.showMessage("Error: " + self.mediaPlayer.errorString())
         self.mediaPlayer.stop()
-        print(f"Error: " + self.mediaPlayer.errorString())
+        log.info(f"Error: {self.mediaPlayer.errorString()}")
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

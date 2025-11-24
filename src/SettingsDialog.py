@@ -210,7 +210,7 @@ class SettingsDialog(QDialog):
         if settings.contains(optionToRetrieve):
             return settings.value(optionToRetrieve)
         else:
-            print(f"Setting {optionToRetrieve} does not exist in the Settings")
+            log.info(f"Setting {optionToRetrieve} does not exist in the Settings")
             return None
 
 

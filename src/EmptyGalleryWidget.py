@@ -1,9 +1,14 @@
+import logging
+
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QPixmap, QCursor
 from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout
 
 import src.resources_rc
 from src.Styles import Styles
+
+log = logging.getLogger(__name__)
+
 
 class EmptyGalleryImageWidget(QWidget):
 
@@ -36,7 +41,7 @@ class EmptyGalleryImageWidget(QWidget):
         self.setLayout(self.layout)
 
     def mousePressEvent(self, event):
-        self.selectSourceSignal.emit()
         if event.button() == Qt.LeftButton:
-            print("EmptyGalleryImageWidget: Emitted (Left Click)")
+            self.selectSourceSignal.emit()
+            log.info("Emitted (Left Click)")
         super().mousePressEvent(event)
