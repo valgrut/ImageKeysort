@@ -350,6 +350,10 @@ class MainWindow(QMainWindow, QObject):
         showAboutAction.triggered.connect(self.showAbout)
         helpMenu.addAction(showAboutAction)
 
+        showShortcutsAction = QAction("Keyboard shortcuts", self)
+        showShortcutsAction.triggered.connect(self.showKeyboardShortcuts)
+        helpMenu.addAction(showShortcutsAction)
+
 
     def _createActions(self):
         self.returnToolbarAction = QAction("&Return toolbar", self)
@@ -437,6 +441,17 @@ class MainWindow(QMainWindow, QObject):
             about_text = f.read()
         aboutBox.setText(about_text)
         aboutBox.exec()
+
+
+    def showKeyboardShortcuts(self):
+        keyboardShortcutsBox = QMessageBox(self)
+        keyboardShortcutsBox.setWindowTitle("Available Keyboard shortcuts")
+        keyboardShortcutsBox.setObjectName("KeyboardShortcutsMessageBox")
+        keyboardShortcutsBox.setTextFormat(Qt.RichText)
+        with open("keyboard_shortcuts.html", "r", encoding="utf-8") as f:
+            shortcuts_text = f.read()
+        keyboardShortcutsBox.setText(shortcuts_text)
+        keyboardShortcutsBox.exec()
 
     def exitApp(self):
         if self.shortcutManager.areShortcutsModified():

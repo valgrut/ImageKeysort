@@ -5,35 +5,6 @@
     It lets you define shortcut sequences that map sources to destinations, then fly through
     large folders using only the keyboard.
 </p>
-<p><b>Available shortcuts:</b></p>
-<ul>
-    <li><b>[a-zA-Z]+</b> – Add shortcut (Edit mode) / Use shortcut (Sort mode)</li>
-    <li><b>[a-zA-Z]?-[a-zA-Z]</b> - Remove key after '-' from key before '-'</li>
-    <li><b>Ctrl+C</b> – Toggle copy mode</li>
-    <li><b>Ctrl+E</b> – Set Edit mode</li>
-    <li><b>Ctrl+R</b> – Set Sort mode</li>
-    <li><b>.</b> – Repeat last source -> destination transition</li>
-    <li><b>Space</b> – One-time move/copy of current item even without a full shortcut sequence</li>
-    <li><b>Left/Right arrow</b> – Go to next/previous image in selected directory.</li>
-    <li><b>Ctrl+Z</b> – Undo last operation (swap src/dst and re-execute)</li>
-    <li><b>Ctrl+L</b> – Load predefined shortcuts</li>
-    <li><b>Ctrl+O</b> – Open and load directory as source</li>
-    <li><b>Delete</b> – Delete current image/video</li>
-    <li><b>Esc</b> – Clear current shortcut sequence</li>
-    <li><b>Enter</b> – Insert sentinel (“+”) at current position in the shortcut sequence.<br/>
-        Example: <code>ab&lt;Enter&gt;</code> -> <code>ab+</code>, then <code>cd</code> -> <code>ab+cd</code>.<br/>
-        Pressing <b>Esc</b> removes only the part after the sentinel, keeping <code>ab+</code> instead of clearing the whole sequence.
-    </li>
-    <li><b>Ctrl+,</b> – Open settings</li>
-</ul>
-<p><b>Example use-case:</b></p>
-<ul>
-    <li>1. <b>Ctrl + E</b> - set edit mode</li>
-    <li>2. <b>ic ENTER</b> - add shortcut 'i+c' (Images/Cats) and select target directory for it.</li>
-    <li>3. <b>Ctrl + R</b> - set Sort mode</li>
-    <li>4. <b>Ctrl + O</b> - Select directory, which you want to sort.</li>
-    <li>5. <b>ic</b> - Current image will be moved into directory selected for 'ic' shortcut.</li>
-</ul>
 <p>
     <b>GitHub:</b>
     <a href="https://github.com/valgrut/image-keysort" target="_blank">
