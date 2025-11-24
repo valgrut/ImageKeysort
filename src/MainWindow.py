@@ -352,13 +352,13 @@ class MainWindow(QMainWindow, QObject):
 
 
     def _createActions(self):
-        self.returnToolbarAction = QAction("&Return ToolBar", self)
+        self.returnToolbarAction = QAction("&Return toolbar", self)
         self.returnToolbarAction.setStatusTip("Returns toolbar, if closed.")
         self.returnToolbarAction.triggered.connect(self.returnToolbar)
 
         # TODO(QIcon): self.openDirectoryAction = QAction(QIcon('./assets/new.png'), '&New', self)
         self.openDirectoryAction = QAction("&Open directory", self)
-        # self.openDirectoryAction.setShortcut('Ctrl+O')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.openDirectoryAction.setShortcut('Ctrl+O')
         self.openDirectoryAction.setStatusTip("Open source directory")
         self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)
 

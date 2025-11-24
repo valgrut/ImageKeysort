@@ -81,57 +81,50 @@ from src.MainWindow import MainWindow
 # - [X] Shortcuts by mely byt scrollovatelne i v Sort modu!
 # - [X] Misto debug print() nahradit za logging module
 # - [X] Do menu->File pridat: Toggle On Toolbar - on totiz jde vypnout, kdyz se na nej klikne pravym, pak zmizi, a neni moznost ho vratit.
+# - [X] Fix Ctrl+O to open new source directory
 
 
-# Code tweaking, Refactoring
-# - [~] Pridat Type hints ( -> int, myvar: str, ...)
-
-
-# Top priority:
+# Important - Misc:
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 # - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
 #   - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
-# - [ ] Fix videos on Windows
-# - [ ] Fix Ctrl+O to open new source directory
-# - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
 
 
 # Settings:
 # - [ ] Settings: Moznost sort podle dst_path, (krom podle insert order (default) a podle Key_char (alphabetically).
 
-# Refactoring
+# Refactoring and code tweaking
 # - [~] EditModeHandler
 # - [ ] SortModeHandler !
+# - [~] Pridat Type hints ( -> int, myvar: str, ...)
 
 
 # Important features TODO:
-# - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
-# - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
-# - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
 # - [ ] !!!!! Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
+# - [~] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
+# - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
+# - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
+# - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
+# - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
 # - [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou treeViewWidget a image.
-# - [~] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
-# - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni.
-# - [ ] textExtraction: Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
-# - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
 # - [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
-# - [ ] separovat layoutovani do buildUI() method.
 # - [ ] !!!! Add do Settings: Otevrit presets z minula
-# - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
-# - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
+# - [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
+#   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
+# - [~] !!! Reset / Drop all changes in the shortcuts (revert to last saved state) - button in Edit mode.
 
 
 # Consider (Maybe):
-
-
-# Misc:
-# - [ ] Naucit se poradne pracovat s Pycharm
-# - [ ] Naucit se s pdb (python debuggerem)
+# - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
+# - [ ] separovat layoutovani do buildUI() method.
+# - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni.
+# - [ ] textExtraction: Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
+# - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 
 
 # Installation, Building
@@ -150,6 +143,9 @@ from src.MainWindow import MainWindow
 
 # To Fix:
 # - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
+# - [ ] Fix videos on Windows
+# - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
+
 
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
@@ -168,13 +164,15 @@ from src.MainWindow import MainWindow
 # - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
 # - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 # - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.
-# - [ ] Reset / Drop all changes in the shortcuts (revert to last saved state) - button in Edit mode.
 # - [ ] Expand / Collapse everything under a shortcut - by doubleclicking the shortcut?
 # - [ ] Expand / Collapse all shortcuts - button in Edit mode.
 # - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
 # - [ ] Tag / color nodes - Add a color or tag (e.g. game, editing, global) for quick visual scanning.
-# - [ ] Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
-#   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
+
+
+# Misc:
+# - [ ] Naucit se poradne pracovat s Pycharm
+# - [ ] Naucit se s pdb (python debuggerem)
 
 
 # Minor issues, future features:
