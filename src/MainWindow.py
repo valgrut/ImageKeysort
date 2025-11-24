@@ -240,25 +240,25 @@ class MainWindow(QMainWindow, QObject):
         self._createMenuBar()
 
         # ========== Tool Bar ==========
-        toolbar = QToolBar("Image Keysort Tool bar")
-        toolbar.setIconSize(QSize(16,16))
-        self.addToolBar(toolbar)
+        self.toolbar = QToolBar("Image Keysort Tool bar")
+        self.toolbar.setIconSize(QSize(16,16))
+        self.addToolBar(self.toolbar)
 
         buttonCropImageAction = QAction(QIcon("Resources/image-crop.png"), "Crop", self)
         buttonCropImageAction.setStatusTip("Crop current image.")
         # buttonCropImageAction.triggered.connect(self.toolbar_button_clicked)
         buttonCropImageAction.setCheckable(True)
         buttonCropImageAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
-        toolbar.addAction(buttonCropImageAction)
+        self.toolbar.addAction(buttonCropImageAction)
 
-        toolbar.addSeparator()
+        self.toolbar.addSeparator()
 
         buttonExtractTextAction = QAction(QIcon("Resources/edit-shade.png"), "Extract text", self)
         buttonExtractTextAction.setStatusTip("Extract text from the image.")
         # buttonExtractTextAction.triggered.connect(self.galleryManager.currentWidget().imageViewWidget.extractTextFromImage)
         buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage)
         buttonExtractTextAction.setShortcut("Ctrl+;")
-        toolbar.addAction(buttonExtractTextAction)
+        self.toolbar.addAction(buttonExtractTextAction)
 
 
         # ========== Signal connections ==========
@@ -317,9 +317,12 @@ class MainWindow(QMainWindow, QObject):
         menuBar.addMenu(fileMenu)
 
         fileMenu.addAction(self.openDirectoryAction)
+        fileMenu.addAction(self.returnToolbarAction)
+
         act_settings = QAction(QIcon("Resources/gear.png"), "Settings", self)
         act_settings.setShortcut("Ctrl+,")  # common on mac
         act_settings.triggered.connect(self.open_settings)
+
         fileMenu.addAction(act_settings)
         fileMenu.addSeparator()
         fileMenu.addAction(self.exitAction)
@@ -349,6 +352,10 @@ class MainWindow(QMainWindow, QObject):
 
 
     def _createActions(self):
+        self.returnToolbarAction = QAction("&Return ToolBar", self)
+        self.returnToolbarAction.setStatusTip("Returns toolbar, if closed.")
+        self.returnToolbarAction.triggered.connect(self.returnToolbar)
+
         # TODO(QIcon): self.openDirectoryAction = QAction(QIcon('./assets/new.png'), '&New', self)
         self.openDirectoryAction = QAction("&Open directory", self)
         # self.openDirectoryAction.setShortcut('Ctrl+O')  # TODO: Fix - I want the shortcuts to be shown in the menu.
@@ -441,6 +448,8 @@ class MainWindow(QMainWindow, QObject):
         sys.exit(0)
         exit(0)
 
+    def returnToolbar(self):
+        self.toolbar.show()
 
     def save_data(self):
         self.shortcutManager.saveShortcuts()
