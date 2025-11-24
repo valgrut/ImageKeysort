@@ -403,6 +403,8 @@ class MainWindow(QMainWindow, QObject):
         # app.setPalette(SettingsDialog.settingsGetTheme())
         # app.setPalette(Styles.get_dark_palette())
 
+        # TODO: Maybe, load themes from some directory so users can add custom themes without requiring code change.
+        # TODO: Use src.Themes ?
         selectedTheme = SettingsDialog.settingsGetTheme()
         match selectedTheme:
             case "Light":

@@ -1,11 +1,7 @@
 import logging
 from PyQt5.QtCore import Qt, QSettings, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QAction, QToolBar, QStyle, QDialog, QDialogButtonBox,
-    QWidget, QVBoxLayout, QGroupBox, QFormLayout, QSpinBox, QCheckBox, QLabel,
-    QHBoxLayout, QToolButton, QComboBox
-)
-import sys
+from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QVBoxLayout, QGroupBox, QFormLayout, QSpinBox, QCheckBox, QComboBox)
+
 from src.Styles import Styles
 
 # Development notes:
