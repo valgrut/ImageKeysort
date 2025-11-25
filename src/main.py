@@ -191,7 +191,7 @@ from src.MainWindow import MainWindow
 # - [ ] Ctrl+F Otevre search bar, a kdyz zadam cast nejake slozky, zobrazi se matchnute slozky s jejich zkratkami. (hlavne kdyz se preset rozroste, tak to muze byt uzitecne)
 # - [ ] Jazykova podpora ?
 # - [ ] Tooltips
-
+# - [ ] !!! Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj
 
 # GIT README.md
 # - pridat tam, ze vyhoda je, ze tridime pouze 1 photo at a time! No distraction. No paralysis.
@@ -227,7 +227,7 @@ def parseArguments():
     presetsArg = args.presets_path
     setCopyModeArg = args.set_copy_mode
     return args
-    
+
 
 def main():
     QCoreApplication.setOrganizationName("JP")
