@@ -35,8 +35,9 @@ class GalleryManager(QStackedWidget):
         self.sourceDirectoryPath = ""
 
         #self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp')
+        self.textSuffixes = (".txt", ".log", ".csv", ".ini", ".json", ".xml", ".md", ".yaml", ".yml", ".py", ".cpp", ".c", ".h", ".html", ".htm", ".css", ".js")  # TODO: presunout do Settings
         self.videoSuffixes = ("gif", "mp4", "avi", "mkv", "mov", "wmv", "flv", "webm")  # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
-        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp') + self.videoSuffixes  # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
+        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp') + self.videoSuffixes  + self.textSuffixes # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
 
         # Stacked widgets:
         self.emptyInboxWidget = EmptyGalleryImageWidget()
@@ -148,6 +149,10 @@ class GalleryManager(QStackedWidget):
             self.setCurrentWidget(self.emptyInboxWidget)
             return
 
+        # TODO: Refactor this method to somethink like this:
+        # if ext in (".txt", ".log", ".md", ".py", ".json", ".yaml", ".yml", ".ini"):
+        # if ext == ".pdf":
+        # if .......
         if self.isCurrentVideo():
             # It is playable
             self.setCurrentWidget(self.mediaContainerWidget)
@@ -155,6 +160,15 @@ class GalleryManager(QStackedWidget):
             
             videoPath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
             self.mediaContainerWidget.updateVideo(videoPath)  # Mozna spis prejmenovat na showVideo()
+        
+        elif self.getCurrentFilename().lower().endswith(self.textSuffixes):
+            # It is text file
+            self.setCurrentWidget(self.mediaContainerWidget)
+            self.mediaContainerWidget.setTextWidget()
+
+            textFilePath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
+            self.mediaContainerWidget.updateTextFile(textFilePath)
+        
         else:
             # It is image
             self.setCurrentWidget(self.mediaContainerWidget)

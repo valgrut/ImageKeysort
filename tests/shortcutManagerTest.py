@@ -43,7 +43,7 @@ class TestShortcutManager(unittest.TestCase):
         }
         manager = ShortcutManager(self.window)
         paths = manager.getAllPaths(shortcutsData)
-        
+
         # Check if the paths returned are as expected
         self.assertEqual(paths, ["C:/image-sorter/testing-data/kk"])
 
@@ -92,7 +92,7 @@ class TestShortcutManager(unittest.TestCase):
         }
         manager = ShortcutManager(self.window)
         paths = manager.getAllPaths(shortcutsData)
-        
+
         # Check if the paths returned are as expected
         self.assertEqual(paths, ["HOME/Gaming/The Witcher", "HOME/Gaming/World of Warcraft", "HOME/Gaming/Cyberpunk 2077", "HOME/Memes/Gaming memes", "HOME/Memes/Gaming memes/Factorio", "HOME/Memes/Gaming memes/Path of Exile", "HOME/Memes/Gaming memes/The Witcher", "HOME/Memes/Gaming memes/WoW", "HOME/Gaming/Guild wars 2"])
         self.sm.clearShortcuts()
@@ -101,7 +101,7 @@ class TestShortcutManager(unittest.TestCase):
     # def test_toggleCoppyMode(self):
     #     # Check that copy mode is set to False
     #     self.assertEqual(self.window.copyOnly, False)  # Example assertion
-        
+
     #     # Simulate clicking the button
     #     QTest.mouseClick(self.button, Qt.LeftButton)
 
@@ -192,7 +192,7 @@ class TestShortcutManager(unittest.TestCase):
     def test_addKeyUnderCurrent(self):
         pass
 
-    
+
     # ========== addDstPathForShortcut ==========
     def test_addDstForShortcut_assign_dst(self):
         sm = ShortcutManager(self.window)
@@ -227,7 +227,7 @@ class TestShortcutManager(unittest.TestCase):
         actualOutput = sm.shortcutTree
         self.assertEqual(actualOutput, expectedOutput)
         self.assertEqual(sm.areShortcutsModified(), True)
-    
+
 
     def test_addDstForShortcut_change_dst(self):
         sm = ShortcutManager(self.window)
@@ -292,7 +292,7 @@ class TestShortcutManager(unittest.TestCase):
 
 
     def test_addDstForShortcut_nonexisting_shortcut(self):
-        sm = ShortcutManager(self.window)     
+        sm = ShortcutManager(self.window)
         expectedOutput = {
         "keys": {
             "x": {
@@ -533,6 +533,14 @@ class TestShortcutManager(unittest.TestCase):
         sm.setDataUnmodified()  # reset modified flag
 
         sm.moveShortcutSequence("abc>")
+
+        # TODO: Vsechny tyhle stromy zamenit za check, jeslti existuje ta
+        # presunuta sekvence. Kdyz bych do json chtel neco pridat, musel bych
+        # to pak vsude rucne upravovat:
+        # actualOutput = sm.checkShortcutExists("c")  # Should be True
+        # actualOutput = sm.checkShortcutExists("ab")  # Should be True
+        # actualOutput = sm.checkShortcutExists("abc")  # Should be False
+
         expectedOutput = {
             "keys": {
                 "a": {
@@ -584,7 +592,7 @@ class TestShortcutManager(unittest.TestCase):
                 }
             }
             }
-        
+
         expectedOutput = {
             "keys": {
                 "a": {
@@ -623,7 +631,7 @@ class TestShortcutManager(unittest.TestCase):
         sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
         sm.setDataUnmodified()  # reset modified flag
 
-        
+
         expectedTreeState = {
             "keys": {
                 "a": {
@@ -647,7 +655,7 @@ class TestShortcutManager(unittest.TestCase):
                 }
             }
             }
-        
+
         actualOutput = sm.moveShortcutSequence("xyz>abc")
         expectedOutput = False
 
@@ -664,7 +672,7 @@ class TestShortcutManager(unittest.TestCase):
         sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
         sm.setDataUnmodified()  # reset modified flag
 
-        
+
         expectedTreeState = {
             "keys": {
                 "a": {
@@ -688,7 +696,7 @@ class TestShortcutManager(unittest.TestCase):
                 }
             }
             }
-        
+
         actualOutput = sm.moveShortcutSequence("abcd>xy")
         expectedOutput = False
 
@@ -704,8 +712,6 @@ class TestShortcutManager(unittest.TestCase):
         sm._getLastKeyOfSequenceAndUpdate("abcd")
         sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
         sm.setDataUnmodified()  # reset modified flag
-
-        
         expectedTreeState = {
             "keys": {
                 "a": {
@@ -729,7 +735,7 @@ class TestShortcutManager(unittest.TestCase):
                 }
             }
             }
-        
+
         actualOutput = sm.moveShortcutSequence(">abcd")
         expectedOutput = False
 
@@ -776,7 +782,7 @@ class TestShortcutManager(unittest.TestCase):
             }
             }
 
-        
+
         actualOutput = sm.moveShortcutSequence("abcd>")  # d from abc should be moved to Level 1, but where alredy 'd' exists.
         expectedOutput = False
 
@@ -794,7 +800,7 @@ class TestShortcutManager(unittest.TestCase):
         sm.addDstPathForShortcut("abcd", "/home/user/Pictures/Photos")
         sm.addDstPathForShortcut("d", "/home/user/Documents")
         sm.setDataUnmodified()  # reset modified flag
-        
+
         self.assertEqual(sm.moveShortcutSequence("abcd>"), False)
         self.assertEqual(sm.moveShortcutSequence(">bcde"), False)
         self.assertEqual(sm.moveShortcutSequence("#>?"), False)
@@ -806,7 +812,7 @@ class TestShortcutManager(unittest.TestCase):
     # ========== getLastKey ==========
     def test_getLastKey(self):
         pass
-    
+
 
     # ========== getLastKeyOfSequenceAndUpdate ==========
     def test_getLastKeyOfSequenceAndUpdate(self):

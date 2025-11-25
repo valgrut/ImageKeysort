@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushB
 
 from src.ImageWidget import ImageWidget
 from src.VideoWidget import VideoWidget
+from src.TextPreviewWidget import TextPreviewWidget
 from src.Styles import Styles
 
 # class ClickableLabel(QLabel):
@@ -29,10 +30,12 @@ class MediaContainerWidget(QWidget):
 
         self.imageViewWidget = ImageWidget()  # for .png, .jpg, ...
         self.videoViewWidget = VideoWidget()  # for .gif and such
+        self.textPreviewWidget = TextPreviewWidget()
         self.stackedMediaWidget = QStackedWidget()
 
         self.stackedMediaWidget.addWidget(self.imageViewWidget)
         self.stackedMediaWidget.addWidget(self.videoViewWidget)
+        self.stackedMediaWidget.addWidget(self.textPreviewWidget)
 
         rightLayout = QVBoxLayout()
 
@@ -116,10 +119,12 @@ class MediaContainerWidget(QWidget):
         """)
         # self.stackedMediaWidget.currentWidget().setProperty("copyMode", False)
 
+
     def cleanupCurrentMedia(self):
         current = self.stackedMediaWidget.currentWidget()
         if current == self.videoViewWidget:
             self.videoViewWidget.cleanup()
+
 
     def showNextImage(self):
         self.cleanupCurrentMedia()
@@ -141,17 +146,23 @@ class MediaContainerWidget(QWidget):
         self.galleryManager.setLastImage()
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
+
     def setVideoWidget(self):
         self.stackedMediaWidget.setCurrentWidget(self.videoViewWidget)
 
     def setImageWidget(self):
         self.stackedMediaWidget.setCurrentWidget(self.imageViewWidget)
+    
+    def setTextWidget(self):
+        self.stackedMediaWidget.setCurrentWidget(self.textPreviewWidget)
+
 
     def updateCounterLabelText(self, text):
         self.imageCounterLabel.setText(text)
 
     def updateFilenameLabelText(self, text):
         self.imageFilenameLabel.setText(text)
+
 
     def setSourceDirLabelText(self, path: str):
         self.sourceDirLabel.setText(path)
@@ -161,3 +172,6 @@ class MediaContainerWidget(QWidget):
 
     def updatePreviewImage(self, path):
         self.imageViewWidget.updateImage(path)
+    
+    def updateTextFile(self, path: str):
+        self.textPreviewWidget.setTextFile(path)
