@@ -201,6 +201,8 @@ from src.MainWindow import MainWindow
 # - [ ] Jazykova podpora ?
 # - [ ] Tooltips
 # - [ ] !!! Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj
+# - [ ] Pridat komentare metod a trid (Vygenerovat AI)
+
 
 # GIT README.md
 # - pridat tam, ze vyhoda je, ze tridime pouze 1 photo at a time! No distraction. No paralysis.
