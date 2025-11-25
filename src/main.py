@@ -104,6 +104,7 @@ from src.MainWindow import MainWindow
 # Refactoring and code tweaking
 # - [~] EditModeHandler
 # - [ ] SortModeHandler !
+# - [ ] ! ShortcutManager - mam tam x metod, ktery delaj skoro to samo, nebo jsou spatne pojmenovane, nebo nepouzivane a tak. Na zaklade toho, kde se jake pouzivaji, tak je poprejmenovavat, a predelat.
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
 # - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodnuti ohledne zobrazeni (obrazek vs video vs text vs pdf)
 # - [~] V metodach v Shortcutmanager pridat UpdateTreePreviewSignal.emit() na konec metody, aby se vzdy po zmene dat obnovil treeview. A z MainWindow odstranit prebytecne metody, ktere obsahuji vlastne pouze volani te ShortcutManager metody a pod tim updateTreeView(). Update bude iniciovan tim Signalem.
