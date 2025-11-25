@@ -39,7 +39,7 @@ class MediaContainerWidget(QWidget):
 
         rightLayout = QVBoxLayout()
 
-        self.sourceDirLabel = QLabel("No source directory selected. You can select one by pressing ctrl+L.")
+        self.sourceDirLabel = QLabel()
         self.sourceDirLabel.setMaximumHeight(30)
 
         rightLayout.addWidget(self.sourceDirLabel)
