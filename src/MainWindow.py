@@ -152,12 +152,19 @@ class MainWindow(QMainWindow, QObject):
         self.sortButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.sortButton.setGraphicsEffect(Styles.getShadowEffect())
 
-        self.clearButton = QPushButton("&Clear treeViewWidget", self)
-        self.clearButton.setObjectName("clearTreeButton")
-        self.clearButton.clicked.connect(self.clearShortcuts)
-        self.clearButton.setFocusPolicy(Qt.NoFocus)
-        self.clearButton.setCursor(QCursor(Qt.PointingHandCursor))
-        self.clearButton.setGraphicsEffect(Styles.getShadowEffect())
+        self.clearTreeButton = QPushButton("&Clear tree", self)
+        self.clearTreeButton.setObjectName("clearTreeButton")
+        self.clearTreeButton.clicked.connect(self.clearShortcuts)
+        self.clearTreeButton.setFocusPolicy(Qt.NoFocus)
+        self.clearTreeButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.clearTreeButton.setGraphicsEffect(Styles.getShadowEffect())
+
+        self.dropChangesTreeButton = QPushButton("&Reload tree", self)
+        self.dropChangesTreeButton.setObjectName("dropChangesTreeButton")
+        self.dropChangesTreeButton.setToolTip("Drops unsaved changes in the shortcut tree. Effectively reloads shortcuts from the file.")
+        self.dropChangesTreeButton.setFocusPolicy(Qt.NoFocus)
+        self.dropChangesTreeButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.dropChangesTreeButton.setGraphicsEffect(Styles.getShadowEffect())
 
         leftInnerButtonLayout = QHBoxLayout()
         leftInnerButtonLayout.addWidget(self.editButton)
@@ -213,7 +220,10 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.update_tree_view()
 
         # Add clear button below the Tree
-        leftInnerLayout.addWidget(self.clearButton)
+        treeButtonsLayout = QHBoxLayout()
+        treeButtonsLayout.addWidget(self.clearTreeButton)
+        treeButtonsLayout.addWidget(self.dropChangesTreeButton)
+        leftInnerLayout.addLayout(treeButtonsLayout)
 
 
         # ========== Menu Bar ==========
@@ -282,6 +292,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.textExtractor.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
 
+        self.dropChangesTreeButton.clicked.connect(self.dropChangesAction.activate)
 
         # ========== Apply the provided CLI options, if any ==========
         if srcPathArg:

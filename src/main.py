@@ -111,6 +111,7 @@ from src.MainWindow import MainWindow
 # - [~] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
+# - [ ] Moznost zavrit slozku (Clear Gallery) pomoci polozky v Gallery menu.
 # - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
@@ -120,7 +121,7 @@ from src.MainWindow import MainWindow
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 # - [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
 #   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
-# - [~] !!! Reset / Drop all changes in the shortcuts (revert to last saved state) - button in Edit mode.
+# - [~] !!! Reset / Drop all changes in the shortcuts (revert to last saved state) - button vedle ClearTree.
 # - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
 # - [ ] Drop changes / Clear tree -> Add confirmation dialogue.
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
