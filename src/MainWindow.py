@@ -270,6 +270,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.shortcutManager.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.shortcutManager.updateMainWindowTitleSignal.connect(self.updateWindowTitle)
+        self.shortcutManager.updateTreePreviewSignal.connect(self.treeViewWidget.update_tree_view)
 
         self.sortModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
         self.sortModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
@@ -393,7 +394,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.dropChangesAction = QAction("&Drop unsaved changes", self)
         self.dropChangesAction.setStatusTip("Drop unsaved changes in the shortcut tree.")
-        #self.dropChangesAction.triggered.connect(self.sortModeHandler.TODO)
+        self.dropChangesAction.triggered.connect(self.shortcutManager.dropUnsavedChanges)
 
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):

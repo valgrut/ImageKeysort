@@ -35,7 +35,7 @@ class GalleryManager(QStackedWidget):
         self.sourceDirectoryPath = ""
 
         #self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp')
-        self.textSuffixes = (".txt", ".log", ".csv", ".ini", ".json", ".xml", ".md", ".yaml", ".yml", ".py", ".cpp", ".c", ".h", ".html", ".htm", ".css", ".js")  # TODO: presunout do Settings
+        self.textSuffixes = (".txt", ".log", ".csv", ".ini", ".json", ".xml", ".md", ".yaml", ".yml", ".py", ".cpp", ".c", ".h", ".html", ".htm", ".css", ".js")  # TODO: presunout do Settings a pridat dalsi text formaty (nebo to udelat nejak genericky)
         self.videoSuffixes = ("gif", "mp4", "avi", "mkv", "mov", "wmv", "flv", "webm")  # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
         self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp') + self.videoSuffixes  + self.textSuffixes # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
 

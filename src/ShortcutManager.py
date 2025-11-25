@@ -23,6 +23,7 @@ class ShortcutManager(QObject):
 
     updateMainWindowTitleSignal = pyqtSignal(str)
     updateStatusBarLabelSignal = pyqtSignal(str)
+    updateTreePreviewSignal = pyqtSignal()
 
     def __init__(self, mainWindow, parent=None):
         super().__init__(parent)
@@ -355,6 +356,7 @@ class ShortcutManager(QObject):
         destinationKey["keys"].update({lastKeyChar: poppedSubtree})
 
         # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
+        # TODO: emit signal to update TreeView
         return True
 
 
@@ -424,6 +426,7 @@ class ShortcutManager(QObject):
         
         self.setDataModified()
         parentOfLastKey["keys"].update({newKeyChar: changingKeyCharContent})
+        # TODO: emit signal to update TreeView
         return True
 
 
@@ -472,7 +475,7 @@ class ShortcutManager(QObject):
                 self.setDataModified()
                 return True
 
-        # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
+        # TODO: emit signal to update TreeView
         return False
 
 
@@ -485,7 +488,19 @@ class ShortcutManager(QObject):
             return
         self.setDataUnmodified()
         self.shortcutTree = {"keys": {}}
+        # TODO: emit signal to update TreeView
+        # TODO: Pridat dialog pro potvrzeni. (Opravdu chcete smazat vsechny zkratky?)
 
+
+    def dropUnsavedChanges(self):
+        """
+        Loads previously loaded shortcuts data, effectively dropping all unsaved changes.
+        """
+        self._loadShortcuts(self.srcPathOfLoadedData)
+        self.setDataUnmodified()
+        # TODO: Pridat dialog pro potvrzeni. (Opravdu chcete zahodit vsechny nezapsane zmeny?)
+        self.updateTreePreviewSignal.emit()
+    
 
     # def does_shortcut_exist(self, sequence) -> bool:
     #     last_key = _return_last_key_of_sequence(sequence)
@@ -520,6 +535,7 @@ class ShortcutManager(QObject):
             return False #TODO fix
 
         self._loadShortcuts(presetsFilePath)
+        # TODO: emit signal to update TreeView
         return True
 
 
@@ -530,6 +546,7 @@ class ShortcutManager(QObject):
         jsonDataFile = QFileDialog.getOpenFileName(self.mainWindow, "Select file with shortcuts data to load.", self.srcPathOfLoadedData)
 
         self._loadShortcuts(jsonDataFile[0])
+        # TODO: emit signal to update TreeView
         return True
 
 
@@ -570,7 +587,7 @@ class ShortcutManager(QObject):
         self.setDataUnmodified()
         log.info(f"Data loaded from {presetsFilePath}.")
         self.updateStatusBarLabelSignal.emit(f"Data successfully loaded from {presetsFilePath}.")
-
+        # TODO: emit signal to update TreeView
         return True
 
 

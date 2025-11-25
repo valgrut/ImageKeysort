@@ -2,7 +2,6 @@ import argparse
 import sys
 import pathlib
 import logging
-from src.Styles import Styles
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QCoreApplication
 from src.MainWindow import MainWindow
@@ -95,11 +94,16 @@ from src.MainWindow import MainWindow
 
 # Settings:
 # - [ ] Settings: Moznost sort podle dst_path, (krom podle insert order (default) a podle Key_char (alphabetically).
+# - [ ] Settings: Add option which types of files to allow / show (videos/images/pdfs/text files/ ...)
+# - [ ] Settings: show/hide gallery counter label (muze nekoho stresovat, kolik toho jeste zbyva v dane slozce setridit.)
+
 
 # Refactoring and code tweaking
 # - [~] EditModeHandler
 # - [ ] SortModeHandler !
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
+# - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodnuti ohledne zobrazeni (obrazek vs video vs text vs pdf)
+# - [~] V metodach v Shortcutmanager pridat UpdateTreePreviewSignal.emit() na konec metody, aby se vzdy po zmene dat obnovil treeview. A z MainWindow odstranit prebytecne metody, ktere obsahuji vlastne pouze volani te ShortcutManager metody a pod tim updateTreeView(). Update bude iniciovan tim Signalem.
 
 
 # Important features TODO:
