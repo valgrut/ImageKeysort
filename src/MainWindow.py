@@ -405,7 +405,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.dropChangesAction = QAction("&Drop unsaved changes", self)
         self.dropChangesAction.setStatusTip("Drop unsaved changes in the shortcut tree.")
-        self.dropChangesAction.triggered.connect(self.shortcutManager.dropUnsavedChanges)
+        self.dropChangesAction.triggered.connect(self.dropUnsavedChanges)
 
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):
@@ -418,6 +418,16 @@ class MainWindow(QMainWindow, QObject):
         dlg.settingsChangedSignal.connect(self.apply_settings)
         dlg.exec()
 
+
+    def dropUnsavedChanges(self):
+        if self.shortcutManager.areShortcutsModified():
+            qm = QMessageBox()
+            user_confirmed = qm.question(self, '', f"Do you really want to reload shortcuts from the file {self.shortcutManager.srcPathOfLoadedData}?", qm.Yes | qm.No)
+            if user_confirmed == qm.No:
+                return
+        
+        self.shortcutManager.dropUnsavedChanges()
+        self.treeViewWidget.update_tree_view()
 
     @pyqtSlot()
     def apply_settings(self):

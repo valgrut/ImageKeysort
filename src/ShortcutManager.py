@@ -489,7 +489,6 @@ class ShortcutManager(QObject):
         self.setDataUnmodified()
         self.shortcutTree = {"keys": {}}
         # TODO: emit signal to update TreeView
-        # TODO: Pridat dialog pro potvrzeni. (Opravdu chcete smazat vsechny zkratky?)
 
 
     def dropUnsavedChanges(self):
@@ -498,7 +497,6 @@ class ShortcutManager(QObject):
         """
         self._loadShortcuts(self.srcPathOfLoadedData)
         self.setDataUnmodified()
-        # TODO: Pridat dialog pro potvrzeni. (Opravdu chcete zahodit vsechny nezapsane zmeny?)
         self.updateTreePreviewSignal.emit()
     
 

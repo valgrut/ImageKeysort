@@ -82,6 +82,7 @@ from src.MainWindow import MainWindow
 # - [X] Do menu->File pridat: Toggle On Toolbar - on totiz jde vypnout, kdyz se na nej klikne pravym, pak zmizi, a neni moznost ho vratit.
 # - [X] Fix Ctrl+O to open new source directory
 # - [X] Reset / Drop all changes in the shortcuts (revert to last saved state) - button vedle ClearTree.
+# - [X] Drop changes / Clear tree -> Add confirmation dialogue.
 
 
 # Important - Misc:
@@ -90,7 +91,6 @@ from src.MainWindow import MainWindow
 #   - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
-# - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 # - [~~] !!~~!!~~!! Anonymizovat testovaci data - pro kazdy .py, .md a pod proste jen sebrat neco z netu, neco generickeho. Ne moje scripty!!!
 
 
@@ -110,10 +110,11 @@ from src.MainWindow import MainWindow
 
 # Important features TODO:
 # - [ ] !!!!! Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
+#       - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 # - [~] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
-# - [ ] Moznost zavrit slozku (Clear Gallery) pomoci polozky v Gallery menu.
+# - [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
 # - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
 # - [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
 # - [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
@@ -124,7 +125,6 @@ from src.MainWindow import MainWindow
 # - [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
 #   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
 # - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
-# - [ ] Drop changes / Clear tree -> Add confirmation dialogue.
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] MenuBar -> Shortcuts -> add Clear shortcut tree
 # - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
