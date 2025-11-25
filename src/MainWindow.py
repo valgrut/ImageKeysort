@@ -39,6 +39,8 @@ from src.Modes import Modes
 from src.TextExtractor import TextExtractor
 
 # TODO: Tohle jinam; Kam?
+from src.treeView import ShortcutsTreeView
+
 screenWidth = 1152
 screenHeight = 864
 
@@ -207,15 +209,20 @@ class MainWindow(QMainWindow, QObject):
 
 
         # ========== User's Shortcuts Tree Structure and Viewer ==========
+        # Puvodni verze:
         self.treeViewWidget = CustomTreeWidget(self.shortcutManager)
-        self.treeViewWidget.setGraphicsEffect(Styles.getShadowEffect())
-        self.treeViewWidget.setMaximumWidth(250)
-        leftInnerLayout.addWidget(self.treeViewWidget)
         self.treeViewWidget.setColumnCount(3)
         self.treeViewWidget.setHeaderLabels(["Shortcut", "Directory", "Actions"])
         self.treeViewWidget.setColumnWidth(0, 90)
         self.treeViewWidget.setColumnWidth(1, 100)
         self.treeViewWidget.setColumnWidth(2, 50)
+
+        # TODO: Rewrite, then use.
+        #self.treeViewWidget = ShortcutsTreeView(self.shortcutManager)
+
+        self.treeViewWidget.setGraphicsEffect(Styles.getShadowEffect())
+        self.treeViewWidget.setMaximumWidth(250)
+        leftInnerLayout.addWidget(self.treeViewWidget)
         self.treeViewWidget.setFocusPolicy(Qt.NoFocus)
         self.treeViewWidget.update_tree_view()
 
@@ -530,7 +537,7 @@ class MainWindow(QMainWindow, QObject):
         self.currentMode = Modes.EDIT
         self.editButton.setChecked(True)
         self.sortButton.setChecked(False)
-        self.treeViewWidget.setColumnHidden(2, False)
+        # self.treeViewWidget.setColumnHidden(2, False)
         self.treeViewWidget.setEnabled(True)
 
     @pyqtSlot()
@@ -539,8 +546,7 @@ class MainWindow(QMainWindow, QObject):
         self.currentMode = Modes.SORT
         self.editButton.setChecked(False)
         self.sortButton.setChecked(True)
-        self.treeViewWidget.setColumnHidden(2, True)
-        # self.treeViewWidget.setEnabled(False)
+        # self.treeViewWidget.setColumnHidden(2, True)
         self.treeViewWidget.setEnabled(True)
         self.galleryManager.updatePreview()
 

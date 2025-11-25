@@ -130,6 +130,7 @@ from src.MainWindow import MainWindow
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] MenuBar -> Shortcuts -> add Clear shortcut tree
 # - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
+# - [ ] Text file Previewer - pridat kontrolu, jak je textak velky. Pokud vic nez X MB (napr rockyou.txt), nacist pouze y prvnich radku.
 
 
 # Consider (Maybe):
