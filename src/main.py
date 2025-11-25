@@ -209,6 +209,7 @@ from src.MainWindow import MainWindow
 
 # GIT README.md
 # - pridat tam, ze vyhoda je, ze tridime pouze 1 photo at a time! No distraction. No paralysis.
+# - jedna z prvnich variant v commitu: c15c6127   (git reset --hard c15c6127)
 
 # Note: Pycharm: Shift + F10 always runs main.py. No need to always click to main.py first.
 
