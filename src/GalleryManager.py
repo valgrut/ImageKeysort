@@ -3,7 +3,7 @@ from os.path import isfile, join
 from pathlib import Path
 import logging
 
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QMimeDatabase
 from PyQt5.QtWidgets import QApplication, QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -75,9 +75,10 @@ class GalleryManager(QStackedWidget):
 
         self.availableMediaFiles = []
         # self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
+        # TODO: Refactor this to only include allowed file types based on enabled types in Settings.
         self.availableMediaFiles = [
             f for f in listdir(self.sourceDirectoryPath)
-            if isfile(join(self.sourceDirectoryPath, f)) and f.lower().endswith(self.allowedSuffixes)
+            if isfile(join(self.sourceDirectoryPath, f)) and (f.lower().endswith(self.allowedSuffixes) or self.isCurrentTextFile(join(self.sourceDirectoryPath, f)))
         ]
         self.availableMediaFiles.sort()
         self.galleryIndex = 0
@@ -86,6 +87,33 @@ class GalleryManager(QStackedWidget):
     def isGalleryEmpty(self):
         if not self.availableMediaFiles:
             return True
+        return False
+
+    def isCurrentTextFile(self, path=None) -> bool:
+        """
+        returns true if current file is .txt or other text format
+        """
+
+        db = QMimeDatabase()
+        if path is None:
+            path = str(Path(self.sourceDirectoryPath + "/" + self.getCurrentFilename()))
+        
+        # 1) by filename (fast; catches Makefile, Dockerfile, etc. on many systems)
+        # mt = db.mimeTypeForFile(path, QMimeDatabase.MatchExtension)
+        # if mt.name().startswith("text/"):
+        #     return True
+
+        # 2) by content (slower; best for “no suffix” or wrong suffix)
+        mt = db.mimeTypeForFile(path, QMimeDatabase.MatchContent)
+        if mt.name().startswith("text/"):
+            log.info(f"Preview file: {self.getCurrentFilename()} of the type: {QMimeDatabase().mimeTypeForFile(self.getCurrentFilename()).name()}")
+            return True
+
+        # sometimes scripts/configs come as application/x-... but are still text
+        if mt.inherits("text/plain"):
+            log.info(f"Preview file: {self.getCurrentFilename()} of the type: {QMimeDatabase().mimeTypeForFile(self.getCurrentFilename()).name()}")
+            return True
+
         return False
 
     def isCurrentVideo(self) -> bool:
@@ -153,6 +181,7 @@ class GalleryManager(QStackedWidget):
         # if ext in (".txt", ".log", ".md", ".py", ".json", ".yaml", ".yml", ".ini"):
         # if ext == ".pdf":
         # if .......
+
         if self.isCurrentVideo():
             # It is playable
             self.setCurrentWidget(self.mediaContainerWidget)
@@ -161,7 +190,8 @@ class GalleryManager(QStackedWidget):
             videoPath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
             self.mediaContainerWidget.updateVideo(videoPath)  # Mozna spis prejmenovat na showVideo()
         
-        elif self.getCurrentFilename().lower().endswith(self.textSuffixes):
+        #elif self.getCurrentFilename().lower().endswith(self.textSuffixes):
+        elif self.isCurrentTextFile():
             # It is text file
             self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setTextWidget()

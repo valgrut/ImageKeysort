@@ -121,6 +121,7 @@ from src.MainWindow import MainWindow
 # - [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
 #   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
 # - [~] !!! Reset / Drop all changes in the shortcuts (revert to last saved state) - button in Edit mode.
+# - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
 
 
 # Consider (Maybe):
