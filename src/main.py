@@ -81,6 +81,7 @@ from src.MainWindow import MainWindow
 # - [X] Misto debug print() nahradit za logging module
 # - [X] Do menu->File pridat: Toggle On Toolbar - on totiz jde vypnout, kdyz se na nej klikne pravym, pak zmizi, a neni moznost ho vratit.
 # - [X] Fix Ctrl+O to open new source directory
+# - [X] Reset / Drop all changes in the shortcuts (revert to last saved state) - button vedle ClearTree.
 
 
 # Important - Misc:
@@ -121,7 +122,6 @@ from src.MainWindow import MainWindow
 # - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 # - [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
 #   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
-# - [~] !!! Reset / Drop all changes in the shortcuts (revert to last saved state) - button vedle ClearTree.
 # - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
 # - [ ] Drop changes / Clear tree -> Add confirmation dialogue.
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
