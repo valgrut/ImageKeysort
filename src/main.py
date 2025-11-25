@@ -122,6 +122,9 @@ from src.MainWindow import MainWindow
 #   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
 # - [~] !!! Reset / Drop all changes in the shortcuts (revert to last saved state) - button in Edit mode.
 # - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
+# - [ ] Drop changes / Clear tree -> Add confirmation dialogue.
+# - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
+# - [ ] MenuBar -> Shortcuts -> add Clear shortcut tree
 
 
 # Consider (Maybe):
