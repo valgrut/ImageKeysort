@@ -93,6 +93,7 @@ from src.MainWindow import MainWindow
 # - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
 # - [~~] !!~~!!~~!! Anonymizovat testovaci data - pro kazdy .py, .md a pod proste jen sebrat neco z netu, neco generickeho. Ne moje scripty!!!
 
+
 # Settings:
 # - [ ] Settings: Moznost sort podle dst_path, (krom podle insert order (default) a podle Key_char (alphabetically).
 # - [ ] Settings: Add option which types of files to allow / show (videos/images/pdfs/text files/ ...)
@@ -126,6 +127,7 @@ from src.MainWindow import MainWindow
 # - [ ] Drop changes / Clear tree -> Add confirmation dialogue.
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] MenuBar -> Shortcuts -> add Clear shortcut tree
+# - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
 
 
 # Consider (Maybe):
