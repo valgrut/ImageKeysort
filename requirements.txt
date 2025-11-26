@@ -6,3 +6,4 @@ qtsass
 pytesseract~=0.3.13
 pillow~=11.3.0
 setuptools~=75.1.0
+pytest-qt~=4.5.0
