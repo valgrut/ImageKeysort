@@ -106,7 +106,7 @@ from src.MainWindow import MainWindow
 # - [ ] SortModeHandler !
 # - [ ] ! ShortcutManager - mam tam x metod, ktery delaj skoro to samo, nebo jsou spatne pojmenovane, nebo nepouzivane a tak. Na zaklade toho, kde se jake pouzivaji, tak je poprejmenovavat, a predelat.
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
-# - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodnuti ohledne zobrazeni (obrazek vs video vs text vs pdf)
+# - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodovani ohledne zobrazeni (obrazek vs video vs text vs pdf)
 # - [~] V metodach v Shortcutmanager pridat UpdateTreePreviewSignal.emit() na konec metody, aby se vzdy po zmene dat obnovil treeview. A z MainWindow odstranit prebytecne metody, ktere obsahuji vlastne pouze volani te ShortcutManager metody a pod tim updateTreeView(). Update bude iniciovan tim Signalem.
 
 
@@ -131,6 +131,7 @@ from src.MainWindow import MainWindow
 # - [ ] MenuBar -> Shortcuts -> add Clear shortcut tree
 # - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
 # - [ ] Text file Previewer - pridat kontrolu, jak je textak velky. Pokud vic nez X MB (napr rockyou.txt), nacist pouze y prvnich radku.
+# - [ ] Pokud aktualni soubor neni obrazek, tak disable TextExtraction tlacitko.
 
 
 # Consider (Maybe):
@@ -240,9 +241,9 @@ def parseArguments():
     parser.add_argument('--presets-path', type=str, required=False, help='Preset file name path')
     args = parser.parse_args()
 
-    srcPathArg = args.src_path
-    presetsArg = args.presets_path
-    setCopyModeArg = args.set_copy_mode
+    # srcPathArg = args.src_path
+    # presetsArg = args.presets_path
+    # setCopyModeArg = args.set_copy_mode
     return args
 
 
