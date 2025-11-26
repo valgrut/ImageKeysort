@@ -7,6 +7,24 @@ import re
 
 log = logging.getLogger(__name__)
 
+# TODO: Udelat prototypy metod, ktere jsou potreba. Do nich pak presunout tela existujicich. Pak zmenit v kodu kde se pouzivaji, na ty nove, a stare smazat.
+#
+# doesShortcutExist() / getLongestMatchForShortcut()
+# metoda vracejici longest shortcut - aby se neHITlo v prubehu psani zkratky, ale az pri poslednim moznem characteru.
+# getLastKeyContentOfSequence()
+#
+# addShortcut() / addShortcutSequence() / addShortcutSequence(dst_path)
+# addDstPathForShortcut() / mozna updateDstPathForShortcut()
+# getDstPathForShortcut()
+#
+# clearShortcuts()
+# removeShortcut()
+# moveShortcut()
+# changeShortcutKeyChar()
+#
+# loadShortcutsFromFile()
+# saveShortcutsToFile()
+# 
 
 class ShortcutManager(QObject):
     """

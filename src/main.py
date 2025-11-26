@@ -237,8 +237,8 @@ def parseArguments():
                     description='Shortcut based image sorter.',
                     epilog='For CLI options, please refer to the documentation.')
     parser.add_argument('-c', '--set-copy-mode', action='store_true')  # on/off flag
-    parser.add_argument('--src-path', type=str, required=False, help='Path to the source directory')
-    parser.add_argument('--presets-path', type=str, required=False, help='Preset file name path')
+    parser.add_argument('--src-path', type=str, required=False, help='Path to the source directory to load images from on startup')
+    parser.add_argument('--presets-path', type=str, required=False, help='Path to the presets file (shortcuts data) to load on startup')
     args = parser.parse_args()
 
     # srcPathArg = args.src_path
