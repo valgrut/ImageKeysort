@@ -7,24 +7,7 @@ import re
 
 log = logging.getLogger(__name__)
 
-# TODO: Udelat prototypy metod, ktere jsou potreba. Do nich pak presunout tela existujicich. Pak zmenit v kodu kde se pouzivaji, na ty nove, a stare smazat.
-#
-# doesShortcutExist() / getLongestMatchForShortcut()
-# metoda vracejici longest shortcut - aby se neHITlo v prubehu psani zkratky, ale az pri poslednim moznem characteru.
-# getLastKeyContentOfSequence()
-#
-# addShortcut() / addShortcutSequence() / addShortcutSequence(dst_path)
-# addDstPathForShortcut() / mozna updateDstPathForShortcut()
-# getDstPathForShortcut()
-#
-# clearShortcuts()
-# removeShortcut()
-# moveShortcut()
-# changeShortcutKeyChar()
-#
-# loadShortcutsFromFile()
-# saveShortcutsToFile()
-# 
+
 
 class ShortcutManager(QObject):
     """
@@ -46,10 +29,11 @@ class ShortcutManager(QObject):
     def __init__(self, mainWindow, parent=None):
         super().__init__(parent)
         self.shortcutTree = {"keys": {}}
+        self._keyContent = {"dst_path": "", "keys": {}}
         self.mainWindow = mainWindow
         self.dataModified = False
         self.srcPathOfLoadedData = ""
-        # self.operationsHistory = []  # TODO: Here or in the EditModeHandler class???
+        # self.operationsHistory = []
 
     def areShortcutsModified(self) -> bool:
         return self.dataModified
@@ -116,86 +100,160 @@ class ShortcutManager(QObject):
         return self.shortcutTree
 
 
-    # TODO: nevim, co to dela... mozna sem vlozit telo z _getLastKeyOfSequenceAndUpdate nebo to obecne nejak sjednotit.
-    # metody rozdelit na public API a vnitrni logiku s _podtrzitkem za zacatku.
-    def addShortcut(self, sequence):
+    def shortcutExists(self, shortcut: str) -> bool:
         """
-        Adds new shortcut into the shortcuts json tree.
+        Check whether the given shortcut keychar sequence exists in the shortcuts json tree.
+
+        Check, whether given keychar sequence exists in the json data tree. It does not 
+        matter, whether it has children keys or not.
         """
-        # TODO: Co tohle sakra dela????? a subcategory neexistuje...
-        currentNestLevel = self.shortcutTree
-        for key in sequence:
-            if key in currentNestLevel:
-                self.shortcutTree.update({key: self.subcategory})
-                self.setDataModified()
-        log.info(json.dumps(self.shortcutTree))
 
-        # log.info nice json formatted TODO
-        # log.info(self.shortcutTree["keys"])
-        # log.info(json.dumps(self.shortcutTree))
-        # log.info(json.dumps(sorted(self.shortcutTree, key=lambda x: x['keys'])))
+        currentKeyContent = self.shortcutTree
+        
+        if currentKeyContent is None or "keys" not in currentKeyContent:
+            return False
+        
+        for keyChar in shortcut:
+            currentKeyChildren = currentKeyContent["keys"]
+            if keyChar not in currentKeyChildren:
+                return False
+            currentKeyContent = currentKeyChildren[keyChar]
+        
+        return True
 
-    # TODO: Prejmenovat na addShortcutAndDstPath()
-    def addDstPathForShortcut(self, sequence, dst_path):
+    
+    def shortcutExistsAndIsFinal(self, shortcut: str) -> bool:
         """
-        Adds dst_path to the last key of the given sequence.
+        Check, whether given shortcut exists and does not have any children keys.
 
-        Effectively it means that for the given sequence, dst_path is target path.
+        This is used during the typing of the shortcut, to avoid HITing in the 
+        middle of typing.
+
+        Lets have existing shortcut "abc".
+        If user types "ab", it should not HIT yet, because "ab" is not final
+        shortcut, it has child "c".
         """
-        lastKey = self._getLastKeyOfSequenceAndUpdate(sequence)
-        log.info(f"last_key: {lastKey}")
-        if lastKey:
-            lastKey.update({"dst_path" : dst_path})
-        else:
-            log.info(f"Shortcut {sequence} has not been found.")
 
-
-    def checkShortcutExists(self, sequence) -> bool:
+        if not self.shortcutExists(shortcut):
+            return False
+        
+        lastKeyContent = self.getLastKeyContentOfSequence(shortcut)
+        if lastKeyContent is None:
+            return False
+        
+        if len(lastKeyContent["keys"].keys()) > 0:
+            return False
+        
+        return True
+    
+    def getLastKeyContentOfSequence(self, shortcut: str) -> dict | None:
         """
-        Check whether the given shortcut sequence exists in the shortcuts json tree.
+        Returns content of the last key of the given shortcut sequence.
 
-        :param sequence: Shortcut sequence to be checked.
+        Example:
+        For shortcut "abc", it returns reference to "c" key content.
+        Content of "c" key will have following structure:
+        {
+            "dst_path": "/some/path",
+            "keys": {}
+        }
         """
-        lastKey = self.getLastKeyContentOfSequence(sequence)
-        if lastKey:
-            return True
-        return False
 
-    def addKeyUnderCurrent(self, currentKeyRef, new_key):
-        """
-        Adds new key under given key in the shortcuts json tree.
-
-        :param currentKeyRef: Reference to the key under which the new key should be added.
-        :param new_key: New key to be added.
-        """
-        currentKeyRef.update({new_key: {"dst_path": "", "keys": {}}})
-        self.setDataModified()
-
-
-    # TODO: Rename, protoze je to misleading. Myslel jsem, ze to vraci dstPath jakekoli existujici zkratky, ale ne, pouze pokud
-    # je to longestMatch... !!!!!!!!!!!!!!
-    # Peknej pojeb, kdyz jsem ji chtel pouzit pro parent's path advice, kdyz se pridava nova zkratka.
-    def getDstPathForShortcut(self, sequence) -> str | None:
-        """
-        Returns dst_path for the last key of the given sequence.
-        IF it is longest match!!!!!!!
-        """
-        log.info(f"get_dst_for_shortcut: {sequence}")
-        lastKey = self.isSequenceLongestMatch(sequence)
-        if not lastKey:
-            log.warning("DEBUG: such sequence does not exist OR dst_path is empty OR shortcut is not longest match (contains children).")
+        if not self.shortcutExists(shortcut):
             return None
-        # log.info("last: ", last_key)
-        # TODO: check jestli neni prazdny dst_path, myslel jsem, ze ten je tady uz osetreny, ale vraci v testu "", misto None.
-        return lastKey["dst_path"]
+    
+        currentKeyContent = self.shortcutTree
 
-    def getDstPathForAnyShortcut(self, sequence) -> str | None:
+        # Travel to the end of the given shortcut in the data tree structure
+        for keyChar in shortcut:
+            currentKeyChildren = currentKeyContent["keys"]
+            currentKeyContent = currentKeyChildren[keyChar]
+        
+        return currentKeyContent
+
+
+    def getParentContentOfLastKeyOfSequence(self, shortcut: str) -> dict | None:
         """
-        Returns dst_path for the last key of the given sequence.
+        Returns reference to the parent of the last key of the given shortcut sequence.
+
+        If shortcut is single key, it returns reference to the root of the shortcuts tree.
+        
+        Example:
+        For shortcut "abc", it returns reference to "b" key content.
+        Content of "b" key will have following structure:
+        {
+            "dst_path": "",
+            "keys": {
+                "c": {
+                    "dst_path": "/some/path",
+                    "keys": {}
+                }
+            }
+        }
+        
+        Now we can operate on b's content, for example remove c from b's keys.
         """
-        lastKey = self.getLastKeyContentOfSequence(sequence)
-        if lastKey and "dst_path" in lastKey and len(lastKey["dst_path"]) > 0:
-            return lastKey["dst_path"]
+        
+        # No parent for single key sequences
+        if len(shortcut) < 2:
+            return self.shortcutTree
+        
+        return self.getLastKeyContentOfSequence(shortcut[:-1])
+
+
+    def addShortcutSequence(self, shortcut: str, dst_path: str = "") -> None:
+        """
+        Adds new shortcut sequence into the shortcuts json tree.
+
+        If dst_path is provided, it is set for the last key of the shortcut sequence.
+
+        If key in the sequence already exists, it is not added again.
+        """
+        currentKeyContent = self.shortcutTree
+
+        for keyChar in shortcut:
+            currentKeyChildren = currentKeyContent["keys"]
+            if keyChar not in currentKeyChildren:
+                # currentKeyChildren.update({keyChar: self._keyContent.copy()})  # TODO deep copy required
+                currentKeyChildren.update({keyChar: {"dst_path": "", "keys": {}}})  # workaround
+                self.setDataModified()
+            currentKeyContent = currentKeyChildren[keyChar]
+        
+        if dst_path:
+            currentKeyContent["dst_path"] = dst_path
+            self.setDataModified()
+
+        self.updateTreePreviewSignal.emit()
+
+
+    def updateDstPathForShortcut(self, shortcut: str, dst_path: str) -> bool:
+        """
+        Updates dst_path for the last key of the given shortcut sequence.
+
+        Before it was addDstPathForShortcut, but the 'update' is more accurate.
+
+        If shortcut does not exist, returns False.
+        """
+        lastKeyContent = self.getLastKeyContentOfSequence(shortcut)
+        if not lastKeyContent:
+            return False
+        
+        lastKeyContent.update({"dst_path" : dst_path})
+        self.setDataModified()
+        self.updateTreePreviewSignal.emit()
+        return True    
+
+
+    def getDstPathForShortcut(self, shortcut: str) -> str | None:
+        """
+        Returns dst_path for the last key of the given shortcut sequence.
+
+        If shortcut does not exist or dst_path is empty, returns None.
+        """
+        lastKeyContent = self.getLastKeyContentOfSequence(shortcut)
+        if lastKeyContent and "dst_path" in lastKeyContent and len(lastKeyContent["dst_path"]) > 0:
+            return lastKeyContent["dst_path"]
+        
         return None
 
 
@@ -221,87 +279,6 @@ class ShortcutManager(QObject):
 
             remainingSequence = remainingSequence[:-1]
         return None
-
-
-    def isSequenceLongestMatch(self, sequence):
-        """
-        Return True only if the sequence is longest match, otherwise False.
-
-        Example:
-        lets have following structure:
-        a
-            b
-                c
-                    x
-
-        We need to return True only if the sequence is "abc" and not "ab" or "a".
-        Sequence is written by the user and for each key pressed, we need to check if the sequence is longest match.
-
-        If it is not, user can "force" the usage of non-longest match by pressing "space" key.
-        """
-        # TODO: Funkce se jmenuje isSequenceLongestMatch, ale nejen, ze to checkuje, ale je pouzivana jako k ziskani contentu pro danou shortcut sequence......
-        lastKeyContent = self.getLastKeyContentOfSequence(sequence)
-
-        # If key exists but have another sub-keys under the "keys", return False (Not longest match)
-        # uz vim, proc to je- kdyz pisu zkratku, tak potrebuju, aby se to HITlo ne v prubehu, ale az kdyz
-        # uz zkratka konci, ne treba u tretiho pismena z 5.
-        if not lastKeyContent or lastKeyContent["keys"]:
-            return False
-
-        return lastKeyContent
-
-
-    def _getLastKeyOfSequenceAndUpdate(self, sequence):
-        """
-        Get last key of sequence and if some keys are missing, add them to the shortcuts json tree.
-        """
-        preCurrent = self.shortcutTree["keys"]
-        current = self.shortcutTree["keys"]
-        for key in sequence:
-            if key not in current.keys():
-                log.info(f"Key {key} has not been found. Adding it.")
-                self.addKeyUnderCurrent(current, key)
-
-            # Go one key deeper into saved sequence
-            preCurrent = current[key]
-            current = current[key]["keys"]
-
-        return preCurrent
-
-
-    def getLastKeyContentOfSequence(self, sequence) -> str | None:
-        """
-        Get last key of sequence and does NOT matter whether the last key has children keys under itself.
-
-        :param sequence:
-        :return: Returns content of the last key of the sequence or False if the sequence does not exist.
-        """
-        nextAvailableKeys = self.shortcutTree["keys"]  # "keys": {a:, b:, x:}
-        currentKeyContent = ""
-
-        for key in sequence:
-            log.info(f"Key {key}")
-            if key in nextAvailableKeys.keys():
-                currentKeyContent = nextAvailableKeys[key]  # Content = {dst_path, keys:{}}
-                nextAvailableKeys = currentKeyContent["keys"]
-            else:
-                log.info(f"DEBUG: such sequence does not exist.")
-                return None
-
-        return currentKeyContent
-
-
-    def getLastKeyParent(self, keySequence: str):
-        """
-        if abc is sequence and key_char is 'c', return reference to 'b' key, so
-        we can operate on the b's content. For example, remove c from b's keys.
-        """
-        
-        # No parent for single key sequences
-        if len(keySequence) < 2:
-            return self.shortcutTree
-        
-        return self.getLastKeyContentOfSequence(keySequence[:-1])
 
 
     def moveShortcutSequence(self, sequence: str):
@@ -337,6 +314,8 @@ class ShortcutManager(QObject):
         sourceSequence = sequenceSplit[0]
         destinationSequence = sequenceSplit[1]
 
+        # TODO: volam tady asi 3x getLastKeyOfSequence(destinationSequence).
+
         # Check existence of the source shortcut (before >)
         if not self.getLastKeyContentOfSequence(sourceSequence):
             log.info(f"Source shortcut ({sourceSequence}) does not exist.")
@@ -349,7 +328,7 @@ class ShortcutManager(QObject):
             self.updateStatusBarLabelSignal.emit(f"To-be-moved shortcut ({destinationSequence}) does not exist.")
             return False
 
-        parentOfLastKey = self.getLastKeyParent(sourceSequence)
+        parentOfLastKey = self.getParentContentOfLastKeyOfSequence(sourceSequence)
 
         # Check, whether resulting shortcut already does not exist
         resultingSequence = destinationSequence + sourceSequence[-1]
@@ -373,8 +352,7 @@ class ShortcutManager(QObject):
             destinationKey = self.shortcutTree
         destinationKey["keys"].update({lastKeyChar: poppedSubtree})
 
-        # TODO: dalsi focus problem po odstraneni zkratky a naslednem pridani... proc??
-        # TODO: emit signal to update TreeView
+        self.updateTreePreviewSignal.emit()
         return True
 
 
@@ -396,7 +374,6 @@ class ShortcutManager(QObject):
         acx/f
         """
         # TODO: Testy
-        # TODO: check existenci menene src: if not shortcutExist(shortcut): return.
         isMatched = re.search("^[a-zA-Z1-9]+/[a-zA-Z1-9]$", sequence)
 
         if not isMatched:
@@ -421,7 +398,7 @@ class ShortcutManager(QObject):
             self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) already exist.")
             return False
 
-        parentOfLastKey = self.getLastKeyParent(sourceShortcut)
+        parentOfLastKey = self.getParentContentOfLastKeyOfSequence(sourceShortcut)
 
         # Check, whether resulting shortcut already does not exist
         # TODO
@@ -444,7 +421,7 @@ class ShortcutManager(QObject):
         
         self.setDataModified()
         parentOfLastKey["keys"].update({newKeyChar: changingKeyCharContent})
-        # TODO: emit signal to update TreeView
+        self.updateTreePreviewSignal.emit()
         return True
 
 
@@ -493,7 +470,7 @@ class ShortcutManager(QObject):
                 self.setDataModified()
                 return True
 
-        # TODO: emit signal to update TreeView
+        self.updateTreePreviewSignal.emit()
         return False
 
 
@@ -506,7 +483,7 @@ class ShortcutManager(QObject):
             return
         self.setDataUnmodified()
         self.shortcutTree = {"keys": {}}
-        # TODO: emit signal to update TreeView
+        self.updateTreePreviewSignal.emit()
 
 
     def dropUnsavedChanges(self):
@@ -516,13 +493,6 @@ class ShortcutManager(QObject):
         self._loadShortcuts(self.srcPathOfLoadedData)
         self.setDataUnmodified()
         self.updateTreePreviewSignal.emit()
-    
-
-    # def does_shortcut_exist(self, sequence) -> bool:
-    #     last_key = _return_last_key_of_sequence(sequence)
-    #     if last_key:
-    #         return True
-    #     return False
 
 
     def askSaveIfChanged(self) -> bool:
@@ -551,7 +521,7 @@ class ShortcutManager(QObject):
             return False #TODO fix
 
         self._loadShortcuts(presetsFilePath)
-        # TODO: emit signal to update TreeView
+        self.updateTreePreviewSignal.emit()
         return True
 
 
@@ -562,7 +532,7 @@ class ShortcutManager(QObject):
         jsonDataFile = QFileDialog.getOpenFileName(self.mainWindow, "Select file with shortcuts data to load.", self.srcPathOfLoadedData)
 
         self._loadShortcuts(jsonDataFile[0])
-        # TODO: emit signal to update TreeView
+        self.updateTreePreviewSignal.emit()
         return True
 
 
@@ -603,7 +573,7 @@ class ShortcutManager(QObject):
         self.setDataUnmodified()
         log.info(f"Data loaded from {presetsFilePath}.")
         self.updateStatusBarLabelSignal.emit(f"Data successfully loaded from {presetsFilePath}.")
-        # TODO: emit signal to update TreeView
+        self.updateTreePreviewSignal.emit()
         return True
 
 

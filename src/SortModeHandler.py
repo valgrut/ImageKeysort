@@ -100,6 +100,7 @@ class SortModeHandler(QObject):
                 # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
                 # and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
                 if self.keySeq:
+                    # TODO: Refactor tuhle divnou if podminku:
                     log.info(f"keySeq is not empty ('{self.keySeq}')")
                     nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq)
                     if nonTerminalKey:
@@ -277,7 +278,7 @@ class SortModeHandler(QObject):
                 # Remove current image from the list of images in src directory
                 self.galleryManager.removeFile(imageName)
                 shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                self.mvHistory.append(
+                self.mvHistory.append(  # TODO: nahradit za objekt OperationRecord, ktery prvne naplnim, a cely append do history.
                     {
                         "src": src,
                         "dst": dst,
@@ -317,79 +318,82 @@ class SortModeHandler(QObject):
                     return
 
                 # self.updateStatusBarLabelSignal.emit(f"Hit but No action. Destination directory is empty or does not exist for this shortcut.")
+                if not self.shortcutManager.shortcutExistsAndIsFinal(fullShortcut):
+                    self.updateKeySequenceLabel()
+                    return
+
+                log.info("HIT!")
+
                 dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
-                if dstPath:
-                    log.info("HIT!")
 
-                    if self.galleryManager.isGalleryEmpty():
-                        log.info("Source directory is empty")
-                        self.keySeq = ""
-                        self.updateKeySequenceLabel()
-                        return
-
-                    imageName = self.galleryManager.getCurrentFilename()
-                    src = self.galleryManager.getSourcePath()
-                    dst = dstPath
-
-                    if not self.checkDestinationDirectoryExists(dst):
-                        return
-
-                    # Check that image was not removed from outside of an app
-                    if self.srcImageStillExists(src, imageName) is False:
-                        self.cleanupMissingImage(src, imageName)
-                        return
-
-                    # Prevent override of an image in dst, if file with same name exist there.
-                    if self.srcImageExistsInDst(dst, imageName):
-                        self.handleExistingImageInDst()
-                        return
-
-                    self.keySeqHistory.append(fullShortcut)
-
-                    log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
-
-                    # Remove current image from the list of images in src directory
-                    if not self.copyOnly:
-                        self.galleryManager.removeFile(imageName)
-                        shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                        self.mvHistory.append(
-                            {
-                                "src": src,
-                                "dst": dst,
-                                "image": imageName,
-                                "gallery_index": self.galleryManager.getGalleryIndex(),
-                                "operation": Operations.MOVE
-                            }
-                        )
-                        self.updateStatusBarLabel(f"File moved to {dst}.")
-                    else:
-                        shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-                        self.mvHistory.append(
-                            {
-                                "src": src,
-                                "dst": dst,
-                                "image": imageName,
-                                "gallery_index": self.galleryManager.getGalleryIndex(),
-                                "operation": Operations.COPY
-                            }
-                        )
-                        if SettingsDialog.settingsGetAutoNextAfterCopy():
-                            self.galleryManager.incrementGalleryIndex()
-
-                        self.updateStatusBarLabel(f"File copied to {dst}.")
-
-                    log.info(f"History entries: {len(self.mvHistory)}")
-                    # Update counter label
-                    self.galleryManager.updateCounterLabelText()
-
-                    # Show new image
-                    self.galleryManager.updatePreview()
-
-                    # Enable temporaly save and reuse partial shortcut
+                if self.galleryManager.isGalleryEmpty():
+                    log.info("Source directory is empty")
                     self.keySeq = ""
                     self.updateKeySequenceLabel()
+                    return
+
+                imageName = self.galleryManager.getCurrentFilename()
+                src = self.galleryManager.getSourcePath()
+                dst = dstPath
+
+                if not self.checkDestinationDirectoryExists(dst):
+                    return
+
+                # Check that image was not removed from outside of an app
+                if self.srcImageStillExists(src, imageName) is False:
+                    self.cleanupMissingImage(src, imageName)
+                    return
+
+                # Prevent override of an image in dst, if file with same name exist there.
+                if self.srcImageExistsInDst(dst, imageName):
+                    self.handleExistingImageInDst()
+                    return
+
+                self.keySeqHistory.append(fullShortcut)
+
+                log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
+
+                # Remove current image from the list of images in src directory
+                if not self.copyOnly:
+                    self.galleryManager.removeFile(imageName)
+                    shutil.move(src + "/" + imageName, dst + "/" + imageName)
+                    self.mvHistory.append(
+                        {
+                            "src": src,
+                            "dst": dst,
+                            "image": imageName,
+                            "gallery_index": self.galleryManager.getGalleryIndex(),
+                            "operation": Operations.MOVE
+                        }
+                    )
+                    self.updateStatusBarLabel(f"File moved to {dst}.")
                 else:
-                    self.updateKeySequenceLabel()
+                    shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+                    self.mvHistory.append(
+                        {
+                            "src": src,
+                            "dst": dst,
+                            "image": imageName,
+                            "gallery_index": self.galleryManager.getGalleryIndex(),
+                            "operation": Operations.COPY
+                        }
+                    )
+                    if SettingsDialog.settingsGetAutoNextAfterCopy():
+                        self.galleryManager.incrementGalleryIndex()
+
+                    self.updateStatusBarLabel(f"File copied to {dst}.")
+
+                log.info(f"History entries: {len(self.mvHistory)}")
+                # Update counter label
+                self.galleryManager.updateCounterLabelText()
+
+                # Show new image
+                self.galleryManager.updatePreview()
+
+                # Enable temporaly save and reuse partial shortcut
+                self.keySeq = ""
+                self.updateKeySequenceLabel()
+                
 
     @pyqtSlot()
     def undo_last_operation(self):
