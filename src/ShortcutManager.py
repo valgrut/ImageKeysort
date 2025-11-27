@@ -63,7 +63,7 @@ class ShortcutManager(QObject):
         for key in currentShortcutLevel:
             # Add dst_path of the root key of this level into the list.
             dstPath = currentShortcutLevel[key]["dst_path"]
-            if dstPath is not '':
+            if dstPath:  # is not '':
                 dstPathsList.append(dstPath)
 
             # Add dst paths of the sub-keys of the root key of this level.
