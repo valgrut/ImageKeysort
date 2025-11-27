@@ -13,11 +13,11 @@ class ShortcutManager(QObject):
     """
     Class representing and managing shortcuts data structure in the form of json tree.
     Also supports set of operations on the shortcuts data structure.
-    
+
     TreeViewWidget is used to visualize this data structure.
 
     # Note: QObject is required for the Signals.
-    
+
     # shortcut = "fbcd"
     # sequence = "f-b-c-d"
     """
@@ -104,29 +104,29 @@ class ShortcutManager(QObject):
         """
         Check whether the given shortcut keychar sequence exists in the shortcuts json tree.
 
-        Check, whether given keychar sequence exists in the json data tree. It does not 
+        Check, whether given keychar sequence exists in the json data tree. It does not
         matter, whether it has children keys or not.
         """
 
         currentKeyContent = self.shortcutTree
-        
+
         if currentKeyContent is None or "keys" not in currentKeyContent:
             return False
-        
+
         for keyChar in shortcut:
             currentKeyChildren = currentKeyContent["keys"]
             if keyChar not in currentKeyChildren:
                 return False
             currentKeyContent = currentKeyChildren[keyChar]
-        
+
         return True
 
-    
+
     def shortcutExistsAndIsFinal(self, shortcut: str) -> bool:
         """
         Check, whether given shortcut exists and does not have any children keys.
 
-        This is used during the typing of the shortcut, to avoid HITing in the 
+        This is used during the typing of the shortcut, to avoid HITing in the
         middle of typing.
 
         Lets have existing shortcut "abc".
@@ -136,16 +136,16 @@ class ShortcutManager(QObject):
 
         if not self.shortcutExists(shortcut):
             return False
-        
+
         lastKeyContent = self.getLastKeyContentOfSequence(shortcut)
         if lastKeyContent is None:
             return False
-        
+
         if len(lastKeyContent["keys"].keys()) > 0:
             return False
-        
+
         return True
-    
+
     def getLastKeyContentOfSequence(self, shortcut: str) -> dict | None:
         """
         Returns content of the last key of the given shortcut sequence.
@@ -161,14 +161,14 @@ class ShortcutManager(QObject):
 
         if not self.shortcutExists(shortcut):
             return None
-    
+
         currentKeyContent = self.shortcutTree
 
         # Travel to the end of the given shortcut in the data tree structure
         for keyChar in shortcut:
             currentKeyChildren = currentKeyContent["keys"]
             currentKeyContent = currentKeyChildren[keyChar]
-        
+
         return currentKeyContent
 
 
@@ -177,7 +177,7 @@ class ShortcutManager(QObject):
         Returns reference to the parent of the last key of the given shortcut sequence.
 
         If shortcut is single key, it returns reference to the root of the shortcuts tree.
-        
+
         Example:
         For shortcut "abc", it returns reference to "b" key content.
         Content of "b" key will have following structure:
@@ -190,14 +190,14 @@ class ShortcutManager(QObject):
                 }
             }
         }
-        
+
         Now we can operate on b's content, for example remove c from b's keys.
         """
-        
+
         # No parent for single key sequences
         if len(shortcut) < 2:
             return self.shortcutTree
-        
+
         return self.getLastKeyContentOfSequence(shortcut[:-1])
 
 
@@ -218,7 +218,7 @@ class ShortcutManager(QObject):
                 currentKeyChildren.update({keyChar: {"dst_path": "", "keys": {}}})  # workaround
                 self.setDataModified()
             currentKeyContent = currentKeyChildren[keyChar]
-        
+
         if dst_path:
             currentKeyContent["dst_path"] = dst_path
             self.setDataModified()
@@ -237,11 +237,11 @@ class ShortcutManager(QObject):
         lastKeyContent = self.getLastKeyContentOfSequence(shortcut)
         if not lastKeyContent:
             return False
-        
+
         lastKeyContent.update({"dst_path" : dst_path})
         self.setDataModified()
         self.updateTreePreviewSignal.emit()
-        return True    
+        return True
 
 
     def getDstPathForShortcut(self, shortcut: str) -> str | None:
@@ -253,7 +253,7 @@ class ShortcutManager(QObject):
         lastKeyContent = self.getLastKeyContentOfSequence(shortcut)
         if lastKeyContent and "dst_path" in lastKeyContent and len(lastKeyContent["dst_path"]) > 0:
             return lastKeyContent["dst_path"]
-        
+
         return None
 
 
@@ -418,7 +418,7 @@ class ShortcutManager(QObject):
         #     log.info("ERROR: Such key char already exists under the parent key.")
         #     self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) already exist.")
         #     return
-        
+
         self.setDataModified()
         parentOfLastKey["keys"].update({newKeyChar: changingKeyCharContent})
         self.updateTreePreviewSignal.emit()

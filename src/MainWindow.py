@@ -432,7 +432,7 @@ class MainWindow(QMainWindow, QObject):
             user_confirmed = qm.question(self, '', f"Do you really want to reload shortcuts from the file {self.shortcutManager.srcPathOfLoadedData}?", qm.Yes | qm.No)
             if user_confirmed == qm.No:
                 return
-        
+
         self.shortcutManager.dropUnsavedChanges()
         self.treeViewWidget.update_tree_view()
 
@@ -589,7 +589,7 @@ class MainWindow(QMainWindow, QObject):
 
         else: # Unknown mode
             pass
-    
+
 
     @pyqtSlot(str)
     def updateKeySequenceLabel(self, newContent=None):

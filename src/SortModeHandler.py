@@ -181,7 +181,7 @@ class SortModeHandler(QObject):
             case Qt.Key_Period:
                 log.debug("handleSortMode: Case '.'")
                 # TODO: refactor: Mohlo by to vypadat nejak takhle:
-                # if history is empty: 
+                # if history is empty:
                 #     return
                 # src = self.mvHistory[-1]["src"]
                 # dst = self.mvHistory[-1]["dst"]
@@ -241,7 +241,7 @@ class SortModeHandler(QObject):
                         self.galleryManager.incrementGalleryIndex()
 
                     self.updateStatusBarLabel(f"File copied to {dst}.")
-                
+
 
                 log.info(f"History entries: {len(self.mvHistory)}")
                 self.galleryManager.updateCounterLabelText()
@@ -393,7 +393,7 @@ class SortModeHandler(QObject):
                 # Enable temporaly save and reuse partial shortcut
                 self.keySeq = ""
                 self.updateKeySequenceLabel()
-                
+
 
     @pyqtSlot()
     def undo_last_operation(self):
@@ -427,7 +427,7 @@ class SortModeHandler(QObject):
                 if self.srcImageExistsInDst(dst, imageName):
                     self.handleExistingImageInDst()
                     return
-                
+
                 shutil.move(src + "/" + imageName, dst + "/" + imageName)
                 self.updateStatusBarLabel(f"File moved BACK from: {src}.")
 
@@ -465,19 +465,19 @@ class SortModeHandler(QObject):
     def cleanupAndRestartState(self):
         """
         TODO: Vsude se opakuje:
-        
+
         self.keySeq = ""
         self.updateKeySequenceLabel()
 
         a dalsi, jako:
-        
+
         self.galleryManager.updateCounterLabelText()
         self.galleryManager.updatePreview()
-         
+
         ktere vrati stav do startovni pozice. Uklidi po nacatych operacich.
         Tohle by se melo volat i v pomocnych funkcich, aby se nikde neopakovala ta sama sekvence kodu porad...
         """
-
+        pass
 
     def cleanupMissingImage(self, src, imageName):
         """
@@ -498,7 +498,7 @@ class SortModeHandler(QObject):
         """
         Check, whether the file with the same name does not already exist in the destination directory.
         """
-        
+
         # log.info(f"image: '{imageName}' !!!")
         # log.info(f"Dst: '{dst}'!!!")
         # if os.path.exists(dst + "/" + imageName):
@@ -513,7 +513,7 @@ class SortModeHandler(QObject):
         Handles situation, when the file with the same name as source image already exist in the destination.
 
         Currently, prevent any further operations.
-        
+
         In the future, maybe add a suffix to the filename.
         """
         # TODO: Maybe Add random suffix number to the filename (and update name in the list!)
@@ -536,7 +536,7 @@ class SortModeHandler(QObject):
         return True
 
 
-    
+
     def moveImageFromTo(self, src, dst):
         pass
 
