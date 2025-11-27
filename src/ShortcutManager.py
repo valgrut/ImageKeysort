@@ -74,7 +74,7 @@ class ShortcutManager(QObject):
         return dstPathsList
 
 
-    def isSomeDstDirectoryMissing(self, shortcutsData):
+    def isSomeDstDirectoryMissing(self, shortcutsData) -> list[str]:
         """
         Check if all non-empty destination directories exist for all shortcuts.
 
@@ -90,7 +90,7 @@ class ShortcutManager(QObject):
         if nonexistingPaths:
             return nonexistingPaths
 
-        return False
+        return []
 
 
     def getData(self) -> dict[str, dict]:
@@ -281,7 +281,7 @@ class ShortcutManager(QObject):
         return None
 
 
-    def moveShortcutSequence(self, sequence: str):
+    def moveShortcutSequence(self, sequence: str) -> bool:
         """
         Move key_char under different sub-tree.
 
@@ -352,7 +352,7 @@ class ShortcutManager(QObject):
         return True
 
 
-    def changeShortcutKeyChar(self, sequence: str):
+    def changeShortcutKeyChar(self, sequence: str) -> bool:
         """
         Move key_char under different sub-tree.
 
