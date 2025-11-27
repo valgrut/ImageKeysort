@@ -38,9 +38,9 @@ from src.EditModeHandler import EditModeHandler
 from src.Modes import Modes
 from src.TextExtractor import TextExtractor
 
-# TODO: Tohle jinam; Kam?
 from src.treeView import ShortcutsTreeView
 
+# TODO: Tohle jinam; Kam?
 screenWidth = 1152
 screenHeight = 864
 
@@ -77,7 +77,7 @@ class MainWindow(QMainWindow, QObject):
                      f" Presets:     {presetsArg}\n"
                      f" Copy mode:   {setCopyModeArg}")
 
-
+        
         # ========== Main App Window parameters ==========
         self.appTitle = "Image Keysort"
         self.setWindowTitle(self.appTitle)

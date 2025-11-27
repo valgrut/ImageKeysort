@@ -2,8 +2,8 @@ ROOT_DIR=./
 NAME=main.py
 SCSS_STYLES=static/app-styles.scss
 QSS_STYLES=static/app-styles.qss
-# PYTEST_ARGS="-v"  # -v | -vv |  
-PYTEST_ARGS=""  # Empty
+PYTEST_ARGS="-v"  # -v | -vv |  
+# PYTEST_ARGS=""  # Empty
 
 config:
 	( \

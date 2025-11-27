@@ -104,7 +104,7 @@ from src.MainWindow import MainWindow
 # Refactoring and code tweaking
 # - [~] EditModeHandler
 # - [ ] SortModeHandler !
-# - [ ] ! ShortcutManager
+# - [X] ShortcutManager
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
 # - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodovani ohledne zobrazeni (obrazek vs video vs text vs pdf)
 
