@@ -314,32 +314,28 @@ class ShortcutManager(QObject):
         sourceSequence = sequenceSplit[0]
         destinationSequence = sequenceSplit[1]
 
-        # TODO: volam tady asi 3x getLastKeyOfSequence(destinationSequence).
-
         # Check existence of the source shortcut (before >)
-        if not self.getLastKeyContentOfSequence(sourceSequence):
+        if not self.shortcutExists(sourceSequence):
             log.info(f"Source shortcut ({sourceSequence}) does not exist.")
             self.updateStatusBarLabelSignal.emit(f"Source shortcut ({sourceSequence}) does not exist.")
             return False
 
         # Check existence of the target shortcut (after >)
-        if len(destinationSequence) > 0 and not self.getLastKeyContentOfSequence(destinationSequence):
+        if len(destinationSequence) > 0 and not self.shortcutExists(destinationSequence):
             log.info(f"To-be-moved shortcut ({destinationSequence}) does not exist.")
             self.updateStatusBarLabelSignal.emit(f"To-be-moved shortcut ({destinationSequence}) does not exist.")
             return False
 
-        parentOfLastKey = self.getParentContentOfLastKeyOfSequence(sourceSequence)
-
         # Check, whether resulting shortcut already does not exist
         resultingSequence = destinationSequence + sourceSequence[-1]
-        if self.getLastKeyContentOfSequence(resultingSequence):
+        if self.shortcutExists(resultingSequence):
             log.info(f"Resulting shortcut ({resultingSequence}) does does already exist.")
             self.updateStatusBarLabelSignal.emit(f"Resulting shortcut ({resultingSequence}) does already exist.")
             return False
 
-        # Remove last key of the sourceSequence from the shortcut tree
-        poppedSubtree = None
+        # Remove last key and its content of the sourceSequence from the shortcut tree
         # if (sourceSequence in parentOfLastKey["keys"]):
+        parentOfLastKey = self.getParentContentOfLastKeyOfSequence(sourceSequence)
         lastKeyChar = sourceSequence[-1]
         poppedSubtree = parentOfLastKey["keys"].pop(lastKeyChar)
         self.setDataModified()
@@ -386,14 +382,14 @@ class ShortcutManager(QObject):
         newKeyChar = sequenceSplit[1]
 
         # Check existence of the source shortcut (before /)
-        if not self.getLastKeyContentOfSequence(sourceShortcut):
+        if not self.shortcutExists(sourceShortcut):
             log.info(f"Source shortcut ({sourceShortcut}) does not exist.")
             self.updateStatusBarLabelSignal.emit(f"Source shortcut ({sourceShortcut}) does not exist")
             return False
 
         # Check existence of the target shortcut (after /)
         targetSequence = sourceShortcut[:-1] + newKeyChar
-        if self.getLastKeyContentOfSequence(targetSequence):
+        if self.shortcutExists(targetSequence):
             log.info(f"Target shortcut ({targetSequence}) already exist.")
             self.updateStatusBarLabelSignal.emit(f"Target shortcut ({targetSequence}) already exist.")
             return False

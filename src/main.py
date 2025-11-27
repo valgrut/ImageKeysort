@@ -104,11 +104,7 @@ from src.MainWindow import MainWindow
 # Refactoring and code tweaking
 # - [~] EditModeHandler
 # - [ ] SortModeHandler !
-# - [ ] ! ShortcutManager - mam tam x metod, ktery delaj skoro to samo, nebo jsou spatne pojmenovane, nebo nepouzivane a tak. Na zaklade toho, kde se jake pouzivaji, tak je poprejmenovavat, a predelat.
-#       - [ ] Mozna separovat saveToFile a loadFromFile, protoze to vyhazuje Dialog window, a to je slozitejsi na testovani.
-#       - [ ] Pomohlo by to i v testovani, protoze bych mohl poskytnout treba normalni soubor s predchystanou strukturou, misto vyvolavani dialogu. Lepsi pro testovani.
-#       - [ ] Rozhodnout, jestli to teda bude "Sequence", "Shortcut", nebo "KeyChar" a pod v nazvech metod a promennych.
-#       - [~] JO! V metodach v Shortcutmanager pridat UpdateTreePreviewSignal.emit() na konec metody, aby se vzdy po zmene dat obnovil treeview. A z MainWindow odstranit prebytecne metody, ktere obsahuji vlastne pouze volani te ShortcutManager metody a pod tim updateTreeView(). Update bude iniciovan tim Signalem.
+# - [ ] ! ShortcutManager
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
 # - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodovani ohledne zobrazeni (obrazek vs video vs text vs pdf)
 
