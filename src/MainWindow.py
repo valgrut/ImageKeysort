@@ -252,6 +252,7 @@ class MainWindow(QMainWindow, QObject):
         # buttonCropImageAction.triggered.connect(self.toolbar_button_clicked)
         self.buttonCropImageAction.setCheckable(True)
         self.buttonCropImageAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
+        self.buttonCropImageAction.setDisabled(True)
         self.toolbar.addAction(self.buttonCropImageAction)
 
         self.toolbar.addSeparator()
@@ -261,6 +262,7 @@ class MainWindow(QMainWindow, QObject):
         # buttonExtractTextAction.triggered.connect(self.galleryManager.currentWidget().imageViewWidget.extractTextFromImage)
         self.buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage)
         self.buttonExtractTextAction.setShortcut("Ctrl+;")
+        self.buttonExtractTextAction.setDisabled(True)
         self.toolbar.addAction(self.buttonExtractTextAction)
 
 
@@ -268,6 +270,8 @@ class MainWindow(QMainWindow, QObject):
         self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)  # TODO: do it better
         self.galleryManager.enableExtractTextButtonSignal.connect(lambda: self.buttonExtractTextAction.setDisabled(False))  # 'lambda' creates 'callable' from the setDisabled method.
         self.galleryManager.disableExtractTextButtonSignal.connect(lambda: self.buttonExtractTextAction.setDisabled(True))
+        self.galleryManager.enableCropButtonSignal.connect(lambda: self.buttonCropImageAction.setDisabled(False))
+        self.galleryManager.disableCropButtonSignal.connect(lambda: self.buttonCropImageAction.setDisabled(True))
 
         self.previousImageRequestedSignal.connect(self.galleryManager.setPreviousImage)
         self.nextImageRequestedSignal.connect(self.galleryManager.setNextImage)

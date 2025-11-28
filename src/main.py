@@ -88,6 +88,7 @@ from src.MainWindow import MainWindow
 # - [X] Text file Previewer - pridat kontrolu, jak je textak velky. Pokud vic nez X MB (napr rockyou.txt), nacist pouze y prvnich radku.
 # - [X] Fix: add 'ac' s dst, pak add dst for 'a'. pak zkusit 'a + mezernik' -> crash. Pricina byla, ze se nekontrolovalo, jestli je vubec nactena nejaka src slozka.
 # - [X] Zprovoznit a spravit ikonky na Linuxu.
+# - [X] Pokud aktualni soubor neni obrazek (nebo aj video??), tak disable CropImage tlacitko.
 
 
 # Important - Misc:
@@ -135,7 +136,6 @@ from src.MainWindow import MainWindow
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
 # - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
-# - [ ] Pokud aktualni soubor neni obrazek (nebo aj video??), tak disable CropImage tlacitko.
 
 
 # Consider (Maybe):

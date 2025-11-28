@@ -19,6 +19,8 @@ class GalleryManager(QStackedWidget):
     setSourceDirLabelTextSignal = pyqtSignal(str)
     disableExtractTextButtonSignal = pyqtSignal()
     enableExtractTextButtonSignal = pyqtSignal()
+    disableCropButtonSignal = pyqtSignal()
+    enableCropButtonSignal = pyqtSignal()
 
     def __init__(self, mainWindow):
         super().__init__()
@@ -192,6 +194,7 @@ class GalleryManager(QStackedWidget):
             videoPath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
             self.mediaContainerWidget.updateVideo(videoPath)  # Mozna spis prejmenovat na showVideo()
             self.disableExtractTextButtonSignal.emit()
+            self.enableCropButtonSignal.emit()
         
         #elif self.getCurrentFilename().lower().endswith(self.textSuffixes):
         elif self.isCurrentTextFile():
@@ -202,12 +205,14 @@ class GalleryManager(QStackedWidget):
             textFilePath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
             self.mediaContainerWidget.updateTextFile(textFilePath)
             self.disableExtractTextButtonSignal.emit()
+            self.disableCropButtonSignal.emit()
         
         else:
             # It is image
             self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setImageWidget()
             self.enableExtractTextButtonSignal.emit()
+            self.enableCropButtonSignal.emit()
 
             imagePath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
             self.mediaContainerWidget.updatePreviewImage(imagePath)  # Mozna spis prejmenovat na showImage()
