@@ -226,7 +226,7 @@ def setupLogging(debugLevel):
         datefmt="%H:%M:%S",
         handlers=[
             logging.StreamHandler(sys.stdout),
-            logging.FileHandler("myapp.log")
+            logging.FileHandler("image-keysort.log")
         ]
     )
 

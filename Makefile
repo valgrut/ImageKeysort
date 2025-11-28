@@ -1,4 +1,4 @@
-ROOT_DIR=./
+ROOT_DIR=.
 NAME=main.py
 SCSS_STYLES=static/app-styles.scss
 QSS_STYLES=static/app-styles.qss
@@ -13,14 +13,15 @@ config:
 	pyrcc5 ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py; \
 	deactivate; \
 	)
-	# - at the start makes makefile to ignore the potential error:
+	# '-' at the start makes makefile to ignore the potential error:
 	- pyrcc5.exe ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py
 
 run: config qss
 	( \
 	source ${ROOT_DIR}/venv/bin/activate; \
 	pyrcc5 ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py; \
-	python3 ${ROOT_DIR}/src/${NAME}; \
+	cd ${ROOT_DIR}; \
+	python3 -m src.main; \
 	deactivate; \
 	)
 
