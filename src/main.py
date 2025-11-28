@@ -159,7 +159,7 @@ from src.MainWindow import MainWindow
 # - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
 # - [ ] Fix videos on Windows
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
-
+# - [ ] Fix: add 'ac' s dst, pak add dst for 'a'. pak zkusit 'a + mezernik' -> crash
 
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
