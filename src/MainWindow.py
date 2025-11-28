@@ -132,6 +132,8 @@ class MainWindow(QMainWindow, QObject):
         self.expProgress = QProgressBar()
         self.expProgress.setValue(20)
 
+        self._createActions()
+
         self.copyButton = QPushButton("&Copy", self)
         self.copyButton.setCheckable(True)
         self.copyButton.clicked.connect(self.toggleCopyMode)
@@ -156,7 +158,8 @@ class MainWindow(QMainWindow, QObject):
 
         self.clearTreeButton = QPushButton("&Clear tree", self)
         self.clearTreeButton.setObjectName("clearTreeButton")
-        self.clearTreeButton.clicked.connect(self.clearShortcuts)
+        # self.clearTreeButton.clicked.connect(self.clearShortcuts)
+        self.clearTreeButton.clicked.connect(self.clearTreeAction.activate)
         self.clearTreeButton.setFocusPolicy(Qt.NoFocus)
         self.clearTreeButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.clearTreeButton.setGraphicsEffect(Styles.getShadowEffect())
@@ -234,26 +237,9 @@ class MainWindow(QMainWindow, QObject):
 
 
         # ========== Menu Bar ==========
-        self.newAction = QAction(self)
-        self.newAction.setText("&New")
-        self.newAction.setIcon(QIcon(":file-new.svg"))
-        self.openAction = QAction(QIcon(":file-open.svg"), "&Open...", self)
-        self.saveAction = QAction(QIcon(":file-save.svg"), "&Save", self)
-        self.aboutAction = QAction(QIcon(":file-save.svg"), "&About", self)
-
-        # Context menu - right click to open options
-        # Setting contextMenuPolicy
-        # WIP TODO: A melo by to byt aktivni hlavne po kliknuti pravym na obrazek
-        # WIP TODO: prave by nemelo delat to samo, co leve. Omezit "Otevrit slozku" pouze na leve tlacitko.
-        # WIP TODO: Kdyz EMPTY, pridat tooltip: Left click to open dir.
-        mainWindowWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
-        # Populating the widget with actions
-        mainWindowWidget.addAction(self.newAction)
-        mainWindowWidget.addAction(self.openAction)
-        mainWindowWidget.addAction(self.saveAction)
+        # mainWindowWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
 
         # Create main Menu bar
-        self._createActions()
         self._createMenuBar()
 
         # ========== Tool Bar ==========
@@ -261,25 +247,28 @@ class MainWindow(QMainWindow, QObject):
         self.toolbar.setIconSize(QSize(16,16))
         self.addToolBar(self.toolbar)
 
-        buttonCropImageAction = QAction(QIcon("Resources/image-crop.png"), "Crop", self)
-        buttonCropImageAction.setStatusTip("Crop current image.")
+        self.buttonCropImageAction = QAction(QIcon("Resources/image-crop.png"), "Crop", self)
+        self.buttonCropImageAction.setStatusTip("Crop current image.")
         # buttonCropImageAction.triggered.connect(self.toolbar_button_clicked)
-        buttonCropImageAction.setCheckable(True)
-        buttonCropImageAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
-        self.toolbar.addAction(buttonCropImageAction)
+        self.buttonCropImageAction.setCheckable(True)
+        self.buttonCropImageAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
+        self.toolbar.addAction(self.buttonCropImageAction)
 
         self.toolbar.addSeparator()
 
-        buttonExtractTextAction = QAction(QIcon("Resources/edit-shade.png"), "Extract text", self)
-        buttonExtractTextAction.setStatusTip("Extract text from the image.")
+        self.buttonExtractTextAction = QAction(QIcon("Resources/edit-shade.png"), "Extract text", self)
+        self.buttonExtractTextAction.setStatusTip("Extract text from the image.")
         # buttonExtractTextAction.triggered.connect(self.galleryManager.currentWidget().imageViewWidget.extractTextFromImage)
-        buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage)
-        buttonExtractTextAction.setShortcut("Ctrl+;")
-        self.toolbar.addAction(buttonExtractTextAction)
+        self.buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage)
+        self.buttonExtractTextAction.setShortcut("Ctrl+;")
+        self.toolbar.addAction(self.buttonExtractTextAction)
 
 
         # ========== Signal connections ==========
         self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)  # TODO: do it better
+        self.galleryManager.enableExtractTextButtonSignal.connect(lambda: self.buttonExtractTextAction.setDisabled(False))  # 'lambda' creates 'callable' from the setDisabled method.
+        self.galleryManager.disableExtractTextButtonSignal.connect(lambda: self.buttonExtractTextAction.setDisabled(True))
+
         self.previousImageRequestedSignal.connect(self.galleryManager.setPreviousImage)
         self.nextImageRequestedSignal.connect(self.galleryManager.setNextImage)
         self.firstImageRequestedSignal.connect(self.galleryManager.setFirstImage)
@@ -353,7 +342,9 @@ class MainWindow(QMainWindow, QObject):
         shortcutsMenu.addSeparator()
         shortcutsMenu.addAction(self.loadAction)
         shortcutsMenu.addAction(self.saveAction)
+        shortcutsMenu.addSeparator()
         shortcutsMenu.addAction(self.dropChangesAction)  # TODO
+        shortcutsMenu.addAction(self.clearTreeAction)
 
         # Edit menu
         galleryMenu = QMenu("&Gallery", self)
@@ -413,6 +404,11 @@ class MainWindow(QMainWindow, QObject):
         self.dropChangesAction = QAction("&Drop unsaved changes", self)
         self.dropChangesAction.setStatusTip("Drop unsaved changes in the shortcut tree.")
         self.dropChangesAction.triggered.connect(self.dropUnsavedChanges)
+
+        self.clearTreeAction = QAction("&Clear tree", self)
+        self.clearTreeAction.setStatusTip("Clears all shortcuts from the tree.")
+        self.clearTreeAction.triggered.connect(self.clearShortcuts)
+
 
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):

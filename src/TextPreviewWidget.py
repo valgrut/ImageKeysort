@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtCore import Qt
@@ -15,8 +16,15 @@ class TextPreviewWidget(QPlainTextEdit):
         self.setReadOnly(True)
         self.setLineWrapMode(QPlainTextEdit.NoWrap)
         self.setFocusPolicy(Qt.StrongFocus)
+        self._maxBytes = 10000
 
     def setTextFile(self, path: str):
+        bytesToRead = -1  # Default -1 = Read the whole file.
+
+        # Prevent app freeze when reading very large text files.
+        if Path(path).stat().st_size > self._maxBytes:
+            bytesToRead = 10000
+
         with open(path, "r", encoding="utf-8", errors="replace") as f:
-            self.setPlainText(f.read())
+            self.setPlainText(f.read(bytesToRead))
         self.moveCursor(QTextCursor.Start)

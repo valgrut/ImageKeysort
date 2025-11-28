@@ -83,6 +83,9 @@ from src.MainWindow import MainWindow
 # - [X] Fix Ctrl+O to open new source directory
 # - [X] Reset / Drop all changes in the shortcuts (revert to last saved state) - button vedle ClearTree.
 # - [X] Drop changes / Clear tree -> Add confirmation dialogue.
+# - [X] Pokud aktualni soubor neni obrazek, tak disable TextExtraction tlacitko.
+# - [X] MenuBar -> Shortcuts -> add Clear shortcut tree
+# - [X] Text file Previewer - pridat kontrolu, jak je textak velky. Pokud vic nez X MB (napr rockyou.txt), nacist pouze y prvnich radku.
 
 
 # Important - Misc:
@@ -107,6 +110,7 @@ from src.MainWindow import MainWindow
 # - [X] ShortcutManager
 # - [~] Pridat Type hints ( -> int, myvar: str, ...)
 # - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodovani ohledne zobrazeni (obrazek vs video vs text vs pdf)
+# - [ ] Vytvorit Actions z akci, ktere jeste Action nemaji. Vymenit to za prime volani metod. Zvlast u veci, ktere jsou volane z vice mist (button / shortcut / menu / ...)
 
 
 # Important features TODO:
@@ -127,10 +131,9 @@ from src.MainWindow import MainWindow
 #   - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
 # - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
-# - [ ] MenuBar -> Shortcuts -> add Clear shortcut tree
 # - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
-# - [ ] Text file Previewer - pridat kontrolu, jak je textak velky. Pokud vic nez X MB (napr rockyou.txt), nacist pouze y prvnich radku.
-# - [ ] Pokud aktualni soubor neni obrazek, tak disable TextExtraction tlacitko.
+# - [ ] Mozna pridat zobrazeni metadat doprava (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
+# - [ ] Pokud aktualni soubor neni obrazek (nebo aj video??), tak disable CropImage tlacitko.
 
 
 # Consider (Maybe):
@@ -160,6 +163,7 @@ from src.MainWindow import MainWindow
 # - [ ] Fix videos on Windows
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
 # - [ ] Fix: add 'ac' s dst, pak add dst for 'a'. pak zkusit 'a + mezernik' -> crash
+
 
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
