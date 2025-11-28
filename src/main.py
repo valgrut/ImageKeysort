@@ -87,6 +87,7 @@ from src.MainWindow import MainWindow
 # - [X] MenuBar -> Shortcuts -> add Clear shortcut tree
 # - [X] Text file Previewer - pridat kontrolu, jak je textak velky. Pokud vic nez X MB (napr rockyou.txt), nacist pouze y prvnich radku.
 # - [X] Fix: add 'ac' s dst, pak add dst for 'a'. pak zkusit 'a + mezernik' -> crash. Pricina byla, ze se nekontrolovalo, jestli je vubec nactena nejaka src slozka.
+# - [X] Zprovoznit a spravit ikonky na Linuxu.
 
 
 # Important - Misc:
@@ -133,7 +134,7 @@ from src.MainWindow import MainWindow
 # - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
-# - [ ] Mozna pridat zobrazeni metadat doprava (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
+# - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 # - [ ] Pokud aktualni soubor neni obrazek (nebo aj video??), tak disable CropImage tlacitko.
 
 
@@ -151,7 +152,6 @@ from src.MainWindow import MainWindow
 #   - [ ] `qtsass src/styles/app-styles.scss -o src/styles/app-styles.qss`
 # - [ ] Do kontext menu na Windows (prave kliknuti na slozku nebo ve slozce) pridat moznost otevrit ji jako src v Image Keysort.
 #   - [ ] Do instalace pridat spusteni registr scriptuu (add-image-keysort.reg), ktery to prida do toho kontext menu.
-# - [ ] Zprovoznit a spravit ikonky na Linuxu.
 # - [ ] Upgrade from Qt5 to Qt6
 
 
