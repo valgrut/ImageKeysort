@@ -54,345 +54,383 @@ class SortModeHandler(QObject):
     def updateStatusBarLabel(self, newStatusbarMessage: str):
         self.updateStatusBarLabelSignal.emit(newStatusbarMessage)
 
+    def handleKeyEscape(self):
+        log.debug("handleSortMode: Case 'Escape'")
+        # log.info(f"key_seq: {self.key_seq}")
+        # log.info(f"permanent_key_seq: {self.permanent_key_seq}")
+        # TODO: Refactor this: pridat flag sentinelExists, bude to srozumitelnejsi.
+        if self.keySeq and self.permanentKeySeq:
+            self.keySeq = ""
+        elif not self.keySeq and self.permanentKeySeq:
+            self.permanentKeySeq = ""
+        elif self.keySeq and not self.permanentKeySeq:
+            self.keySeq = ""
+        else:
+            pass
+        self.updateKeySequenceLabel()
+
+    def handleKeyBackspace(self):
+        log.debug("handleSortMode: Case 'Backspace'")
+        if len(self.keySeq) >= 1:
+            self.keySeq = self.keySeq[:-1]
+            self.updateKeySequenceLabel()
+
+    def handleKeyReturn(self):
+        log.debug("handleSortMode: Case 'Enter' (Key_Return)")
+
+        if self.keySeq:
+            self.permanentKeySeq = self.keySeq
+            self.keySeq = ""
+
+        self.updateKeySequenceLabel()
+
+    def handleKeySpace(self):
+        log.debug("handleSortMode: Case 'Space'")
+        log.info("Select destination directory just for the current image.")
+        dst = ""
+
+        # TODO: Nefunguje, kdyz je pouzit sentinel (+).
+
+        # TODO: Refactor celou tuhle hruzu::::::
+        # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
+        # and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
+        if self.keySeq:
+            # TODO: Refactor tuhle divnou if podminku:
+            log.info(f"keySeq is not empty ('{self.keySeq}')")
+            nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq)
+            if nonTerminalKey:
+                dst = nonTerminalKey["dst_path"]
+                if not os.path.exists(dst):
+                    log.info(f"No action. Shortcut probably does not contain dst_path ({dst}).")
+                    self.updateStatusBarLabelSignal.emit(
+                        f"No action. Destination directory is empty or does not exist for shortcut ({self.keySeq}).")
+                    return
+                log.info(f"middle_path {dst}")
+            else:
+                log.info(f"Shortcut sequence {self.keySeq} does not exist.")
+                return
+
+        else:  # KeySeq is empty
+            singleUseDstDirectory = QFileDialog.getExistingDirectory(self.mainWindow, "Select Directory")
+
+            # Check that some directory was selected
+            if not singleUseDstDirectory:
+                self.updateStatusBarLabel(f"No directory was selected.")
+                return
+
+            log.info(singleUseDstDirectory)
+            dst = singleUseDstDirectory
+
+        src = self.galleryManager.getSourcePath()
+        imageName = self.galleryManager.getCurrentFilename()
+        if not imageName:
+            log.warning("There is no gallery currently opened.")
+            self.updateStatusBarLabel(f"There is no gallery currently opened.")
+            return
+
+        # Check that image was not removed from outside of an app
+        if self.srcImageStillExists(src, imageName) is False:
+            self.cleanupMissingImage(src, imageName)
+            return
+
+        # Prevent override of an image in dst, if file with same name exist there.
+        if self.srcImageExistsInDst(dst, imageName):
+            self.handleExistingImageInDst()
+            return
+
+        # Remove current image from the list of images in src directory
+        if not self.copyOnly:
+            self.galleryManager.removeFile(imageName)
+
+            shutil.move(src + "/" + imageName, dst + "/" + imageName)
+            self.mvHistory.append(
+                {
+                    "src": src,
+                    "dst": dst,
+                    "image": imageName,
+                    "gallery_index": self.galleryManager.getGalleryIndex(),
+                    "operation": Operations.MOVE
+                }
+            )
+            self.updateStatusBarLabel(f"File moved to {dst}.")
+        else:
+            shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+            self.mvHistory.append(
+                {
+                    "src": src,
+                    "dst": dst,
+                    "image": imageName,
+                    "gallery_index": self.galleryManager.getGalleryIndex(),
+                    "operation": Operations.COPY
+                }
+            )
+            if SettingsDialog.settingsGetAutoNextAfterCopy():
+                self.galleryManager.decrementGalleryIndex()
+
+            self.updateStatusBarLabel(f"File copied to {dst}.")
+
+        self.keySeq = ""
+        # log.info(f"History entries: {len(self.mvHistory)}")
+        self.updateKeySequenceLabel()
+        self.galleryManager.updateCounterLabelText()
+
+        # Show new image
+        self.galleryManager.updatePreview()
+
+    def handleKeyPeriod(self):
+        log.debug("handleSortMode: Case '.'")
+        # TODO: refactor: Mohlo by to vypadat nejak takhle:
+        # if history is empty:
+        #     return
+        # src = self.mvHistory[-1]["src"]
+        # dst = self.mvHistory[-1]["dst"]
+        # tryToMoveImage(src, dst, currentImage)
+        log.info("Repeat last finished command for current image")
+
+        if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:
+            log.info("History is empty.")
+            return
+
+        log.info(f"Last history entry: {self.keySeqHistory[-1]}")
+
+        imageName = self.galleryManager.getCurrentFilename()
+        if not imageName:
+            log.warning("There is no gallery currently opened.")
+            self.updateStatusBarLabel(f"There is no gallery currently opened.")
+            return
+
+        src = self.mvHistory[-1]["src"]
+        dst = self.mvHistory[-1]["dst"]
+
+        if not self.checkDestinationDirectoryExists(dst):
+            return
+
+        # Check that image was not removed from outside of an app
+        if self.srcImageStillExists(src, imageName) is False:
+            self.cleanupMissingImage(src, imageName)
+            return
+
+        # Prevent override of an image in dst, if file with same name exist there.
+        if self.srcImageExistsInDst(dst, imageName):
+            self.handleExistingImageInDst()
+            return
+
+        # Remove current image from the list of images in src directory
+        if not self.copyOnly:
+            self.galleryManager.removeFile(imageName)
+            shutil.move(src + "/" + imageName, dst + "/" + imageName)
+            self.mvHistory.append(
+                {
+                    "src": src,
+                    "dst": dst,
+                    "image": imageName,
+                    "gallery_index": self.galleryManager.getGalleryIndex(),
+                    "operation": Operations.MOVE
+                }
+            )
+            self.updateStatusBarLabel(f"File moved to {dst}.")
+        else:
+            shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+            self.mvHistory.append(
+                {
+                    "src": src,
+                    "dst": dst,
+                    "image": imageName,
+                    "gallery_index": self.galleryManager.getGalleryIndex(),
+                    "operation": Operations.COPY
+                }
+            )
+            if SettingsDialog.settingsGetAutoNextAfterCopy():
+                self.galleryManager.incrementGalleryIndex()
+
+            self.updateStatusBarLabel(f"File copied to {dst}.")
+
+        log.info(f"History entries: {len(self.mvHistory)}")
+        self.galleryManager.updateCounterLabelText()
+
+        # Show new image
+        self.galleryManager.updatePreview()
+
+    def handleKeyDelete(self):
+        log.debug("handleSortMode: Case 'Delete'")
+        if self.galleryManager.isGalleryEmpty():
+            log.info("Source directory is empty")
+            return
+
+        imageName = self.galleryManager.getCurrentFilename()
+        if not imageName:
+            log.warning("There is no gallery currently opened.")
+            self.updateStatusBarLabel(f"There is no gallery currently opened.")
+            return
+        src = self.galleryManager.getSourcePath()
+        dst = src + "/" + "__DELETED__"
+
+        if not os.path.exists(dst):
+            os.makedirs(dst)
+
+        # Check that image was not removed from outside of an app
+        if self.srcImageStillExists(src, imageName) is False:
+            self.cleanupMissingImage(src, imageName)
+            return
+
+        # Prevent override of an image in dst, if file with same name exist there.
+        if self.srcImageExistsInDst(dst, imageName):
+            self.handleExistingImageInDst()
+            return
+
+        log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
+
+        # Remove current image from the list of images in src directory
+        self.galleryManager.removeFile(imageName)
+        shutil.move(src + "/" + imageName, dst + "/" + imageName)
+        self.mvHistory.append(
+            # TODO: nahradit za objekt OperationRecord, ktery prvne naplnim, a cely append do history.
+            {
+                "src": src,
+                "dst": dst,
+                "image": imageName,
+                "gallery_index": self.galleryManager.getGalleryIndex(),
+                "operation": Operations.MOVE
+            }
+        )
+        self.updateStatusBarLabel(f"File Deleted.")
+
+        self.galleryManager.updateCounterLabelText()
+
+        # Show new image
+        self.galleryManager.updatePreview()
+
+    def handleKeyOthers(self, event):
+        log.debug("handleSortMode: Case _ (other keys)")
+
+        pressedKey = event.text()
+
+        if event.key() not in allowedKeys:
+            log.info("not [a-zA-Z1-9] was pressed, nothing to append to shortcuts.")
+            return
+
+        self.keySeq += pressedKey
+
+        self.updateTreeViewSignal.emit(self.keySeq)
+
+        fullShortcut = ""
+        if self.permanentKeySeq:
+            fullShortcut = self.permanentKeySeq + self.keySeq
+        else:
+            fullShortcut = self.keySeq
+
+        log.info(f"key_seq: {self.keySeq}")
+        log.info(f"full key_seq: {fullShortcut}")
+
+        # log.info(f"dst for shortcut: {self.shortcut_manager.get_dst_for_shortcut(full_shortcut)}")
+        if not self.keySeq:
+            return
+
+        # self.updateStatusBarLabelSignal.emit(f"Hit but No action. Destination directory is empty or does not exist for this shortcut.")
+        if not self.shortcutManager.shortcutExistsAndIsFinal(fullShortcut):
+            self.updateKeySequenceLabel()
+            return
+
+        log.info("HIT!")
+
+        dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
+
+        if self.galleryManager.isGalleryEmpty():
+            log.info("Source directory is empty")
+            self.keySeq = ""
+            self.updateKeySequenceLabel()
+            return
+
+        imageName = self.galleryManager.getCurrentFilename()
+        src = self.galleryManager.getSourcePath()
+        dst = dstPath
+
+        if not self.checkDestinationDirectoryExists(dst):
+            return
+
+        # Check that image was not removed from outside of an app
+        if self.srcImageStillExists(src, imageName) is False:
+            self.cleanupMissingImage(src, imageName)
+            return
+
+        # Prevent override of an image in dst, if file with same name exist there.
+        if self.srcImageExistsInDst(dst, imageName):
+            self.handleExistingImageInDst()
+            return
+
+        self.keySeqHistory.append(fullShortcut)
+
+        log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
+
+        # Remove current image from the list of images in src directory
+        if not self.copyOnly:
+            self.galleryManager.removeFile(imageName)
+            shutil.move(src + "/" + imageName, dst + "/" + imageName)
+            self.mvHistory.append(
+                {
+                    "src": src,
+                    "dst": dst,
+                    "image": imageName,
+                    "gallery_index": self.galleryManager.getGalleryIndex(),
+                    "operation": Operations.MOVE
+                }
+            )
+            self.updateStatusBarLabel(f"File moved to {dst}.")
+        else:
+            shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+            self.mvHistory.append(
+                {
+                    "src": src,
+                    "dst": dst,
+                    "image": imageName,
+                    "gallery_index": self.galleryManager.getGalleryIndex(),
+                    "operation": Operations.COPY
+                }
+            )
+            if SettingsDialog.settingsGetAutoNextAfterCopy():
+                self.galleryManager.incrementGalleryIndex()
+
+            self.updateStatusBarLabel(f"File copied to {dst}.")
+
+        log.info(f"History entries: {len(self.mvHistory)}")
+        # Update counter label
+        self.galleryManager.updateCounterLabelText()
+
+        # Show new image
+        self.galleryManager.updatePreview()
+
+        # Enable temporaly save and reuse partial shortcut
+        self.keySeq = ""
+        self.updateKeySequenceLabel()
+
 
     def handleSortMode(self, event: QKeyEvent):
-        pressedKey = event.text()
+        # pressedKey = event.text()
         # Cancel currently started shortcut or escape from the hold partial sequence
         match event.key():
             case Qt.Key_Escape:
-                log.debug("handleSortMode: Case 'Escape'")
-                # log.info(f"key_seq: {self.key_seq}")
-                # log.info(f"permanent_key_seq: {self.permanent_key_seq}")
-                # TODO: Refactor this: pridat flag sentinelExists, bude to srozumitelnejsi.
-                if self.keySeq and self.permanentKeySeq:
-                    self.keySeq = ""
-                elif not self.keySeq and self.permanentKeySeq:
-                    self.permanentKeySeq = ""
-                elif self.keySeq and not self.permanentKeySeq:
-                    self.keySeq = ""
-                else:
-                    pass
-                self.updateKeySequenceLabel()
+                self.handleKeyEscape()
 
             case Qt.Key_Backspace:
-                log.debug("handleSortMode: Case 'Backspace'")
-                if len(self.keySeq) >= 1:
-                    self.keySeq = self.keySeq[:-1]
-                    self.updateKeySequenceLabel()
+                self.handleKeyBackspace()
 
             # Sentinel: Hold current shortcut and use it as default for upcoming sequences until escape
             case Qt.Key_Return:  # Key_Return is non-numeric Enter key
-                log.debug("handleSortMode: Case 'Enter' (Key_Return)")
-
-                if self.keySeq:
-                    self.permanentKeySeq = self.keySeq
-                    self.keySeq = ""
-
-                self.updateKeySequenceLabel()
+                self.handleKeyReturn()
 
             # Single-time move file
             case Qt.Key_Space:
-                log.debug("handleSortMode: Case 'Space'")
-                log.info("Select destination directory just for the current image.")
-                dst = ""
-
-                # TODO: Refactor celou tuhle hruzu::::::
-                # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
-                # and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
-                if self.keySeq:
-                    # TODO: Refactor tuhle divnou if podminku:
-                    log.info(f"keySeq is not empty ('{self.keySeq}')")
-                    nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq)
-                    if nonTerminalKey:
-                        dst = nonTerminalKey["dst_path"]
-                        if not os.path.exists(dst):
-                            log.info(f"No action. Shortcut probably does not contain dst_path ({dst}).")
-                            self.updateStatusBarLabelSignal.emit(f"No action. Destination directory is empty or does not exist for shortcut ({self.keySeq}).")
-                            return
-                        log.info(f"middle_path {dst}")
-                    else:
-                        log.info(f"Shortcut sequence {self.keySeq} does not exist.")
-                        return
-
-                else:  # KeySeq is empty
-                    singleUseDstDirectory = QFileDialog.getExistingDirectory(self.mainWindow, "Select Directory")
-
-                    # Check that some directory was selected
-                    if not singleUseDstDirectory:
-                        self.updateStatusBarLabel(f"No directory was selected.")
-                        return
-
-                    log.info(singleUseDstDirectory)
-                    dst = singleUseDstDirectory
-
-                src = self.galleryManager.getSourcePath()
-                imageName = self.galleryManager.getCurrentFilename()
-
-                # Check that image was not removed from outside of an app
-                if self.srcImageStillExists(src, imageName) is False:
-                    self.cleanupMissingImage(src, imageName)
-                    return
-
-                # Prevent override of an image in dst, if file with same name exist there.
-                if self.srcImageExistsInDst(dst, imageName):
-
-                    self.handleExistingImageInDst()
-                    return
-
-                # Remove current image from the list of images in src directory
-                if not self.copyOnly:
-                    self.galleryManager.removeFile(imageName)
-                    shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append(
-                        {
-                            "src": src,
-                            "dst": dst,
-                            "image": imageName,
-                            "gallery_index": self.galleryManager.getGalleryIndex(),
-                            "operation": Operations.MOVE
-                        }
-                    )
-                    self.updateStatusBarLabel(f"File moved to {dst}.")
-                else:
-                    shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append(
-                            {
-                                "src": src,
-                                "dst": dst,
-                                "image": imageName,
-                                "gallery_index": self.galleryManager.getGalleryIndex(),
-                                "operation": Operations.COPY
-                            }
-                        )
-                    if SettingsDialog.settingsGetAutoNextAfterCopy():
-                        self.galleryManager.decrementGalleryIndex()
-
-                    self.updateStatusBarLabel(f"File copied to {dst}.")
-
-                self.keySeq = ""
-                # log.info(f"History entries: {len(self.mvHistory)}")
-                self.updateKeySequenceLabel()
-                self.galleryManager.updateCounterLabelText()
-
-                # Show new image
-                self.galleryManager.updatePreview()
+                self.handleKeySpace()
 
             # Repeat last move from src to dst of current image.
             case Qt.Key_Period:
-                log.debug("handleSortMode: Case '.'")
-                # TODO: refactor: Mohlo by to vypadat nejak takhle:
-                # if history is empty:
-                #     return
-                # src = self.mvHistory[-1]["src"]
-                # dst = self.mvHistory[-1]["dst"]
-                # tryToMoveImage(src, dst, currentImage)
-                log.info("Repeat last finished command for current image")
-
-                if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:
-                    log.info("History is empty.")
-                    return
-
-                log.info(f"Last history entry: {self.keySeqHistory[-1]}")
-
-                imageName = self.galleryManager.getCurrentFilename()
-
-                src = self.mvHistory[-1]["src"]
-                dst = self.mvHistory[-1]["dst"]
-
-                if not self.checkDestinationDirectoryExists(dst):
-                    return
-
-                # Check that image was not removed from outside of an app
-                if self.srcImageStillExists(src, imageName) is False:
-                    self.cleanupMissingImage(src, imageName)
-                    return
-
-                # Prevent override of an image in dst, if file with same name exist there.
-                if self.srcImageExistsInDst(dst, imageName):
-                    self.handleExistingImageInDst()
-                    return
-
-                # Remove current image from the list of images in src directory
-                if not self.copyOnly:
-                    self.galleryManager.removeFile(imageName)
-                    shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append(
-                        {
-                            "src": src,
-                            "dst": dst,
-                            "image": imageName,
-                            "gallery_index": self.galleryManager.getGalleryIndex(),
-                            "operation": Operations.MOVE
-                        }
-                    )
-                    self.updateStatusBarLabel(f"File moved to {dst}.")
-                else:
-                    shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append(
-                            {
-                                "src": src,
-                                "dst": dst,
-                                "image": imageName,
-                                "gallery_index": self.galleryManager.getGalleryIndex(),
-                                "operation": Operations.COPY
-                            }
-                        )
-                    if SettingsDialog.settingsGetAutoNextAfterCopy():
-                        self.galleryManager.incrementGalleryIndex()
-
-                    self.updateStatusBarLabel(f"File copied to {dst}.")
-
-
-                log.info(f"History entries: {len(self.mvHistory)}")
-                self.galleryManager.updateCounterLabelText()
-
-                # Show new image
-                self.galleryManager.updatePreview()
-
+                self.handleKeyPeriod()
 
             case Qt.Key_Delete:
-                log.debug("handleSortMode: Case 'Delete'")
-                if self.galleryManager.isGalleryEmpty():
-                    log.info("Source directory is empty")
-                    return
-
-                imageName = self.galleryManager.getCurrentFilename()
-                src = self.galleryManager.getSourcePath()
-                dst = src + "/" + "__DELETED__"
-
-                if not os.path.exists(dst):
-                    os.makedirs(dst)
-
-                # Check that image was not removed from outside of an app
-                if self.srcImageStillExists(src, imageName) is False:
-                    self.cleanupMissingImage(src, imageName)
-                    return
-
-                # Prevent override of an image in dst, if file with same name exist there.
-                if self.srcImageExistsInDst(dst, imageName):
-                    self.handleExistingImageInDst()
-                    return
-
-                log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
-
-                # Remove current image from the list of images in src directory
-                self.galleryManager.removeFile(imageName)
-                shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                self.mvHistory.append(  # TODO: nahradit za objekt OperationRecord, ktery prvne naplnim, a cely append do history.
-                    {
-                        "src": src,
-                        "dst": dst,
-                        "image": imageName,
-                        "gallery_index": self.galleryManager.getGalleryIndex(),
-                        "operation": Operations.MOVE
-                    }
-                )
-                self.updateStatusBarLabel(f"File Deleted.")
-
-                self.galleryManager.updateCounterLabelText()
-
-                # Show new image
-                self.galleryManager.updatePreview()
+                self.handleKeyDelete()
 
             case _: # Other keys
-                log.debug("handleSortMode: Case _ (other keys)")
-                if event.key() not in allowedKeys:
-                    log.info("not [a-zA-Z1-9] was pressed, nothing to append to shortcuts.")
-                    return
-
-                self.keySeq += pressedKey
-
-                self.updateTreeViewSignal.emit(self.keySeq)
-
-                fullShortcut = ""
-                if self.permanentKeySeq:
-                    fullShortcut = self.permanentKeySeq + self.keySeq
-                else:
-                    fullShortcut = self.keySeq
-
-                log.info(f"key_seq: {self.keySeq}")
-                log.info(f"full key_seq: {fullShortcut}")
-
-                # log.info(f"dst for shortcut: {self.shortcut_manager.get_dst_for_shortcut(full_shortcut)}")
-                if not self.keySeq:
-                    return
-
-                # self.updateStatusBarLabelSignal.emit(f"Hit but No action. Destination directory is empty or does not exist for this shortcut.")
-                if not self.shortcutManager.shortcutExistsAndIsFinal(fullShortcut):
-                    self.updateKeySequenceLabel()
-                    return
-
-                log.info("HIT!")
-
-                dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
-
-                if self.galleryManager.isGalleryEmpty():
-                    log.info("Source directory is empty")
-                    self.keySeq = ""
-                    self.updateKeySequenceLabel()
-                    return
-
-                imageName = self.galleryManager.getCurrentFilename()
-                src = self.galleryManager.getSourcePath()
-                dst = dstPath
-
-                if not self.checkDestinationDirectoryExists(dst):
-                    return
-
-                # Check that image was not removed from outside of an app
-                if self.srcImageStillExists(src, imageName) is False:
-                    self.cleanupMissingImage(src, imageName)
-                    return
-
-                # Prevent override of an image in dst, if file with same name exist there.
-                if self.srcImageExistsInDst(dst, imageName):
-                    self.handleExistingImageInDst()
-                    return
-
-                self.keySeqHistory.append(fullShortcut)
-
-                log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
-
-                # Remove current image from the list of images in src directory
-                if not self.copyOnly:
-                    self.galleryManager.removeFile(imageName)
-                    shutil.move(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append(
-                        {
-                            "src": src,
-                            "dst": dst,
-                            "image": imageName,
-                            "gallery_index": self.galleryManager.getGalleryIndex(),
-                            "operation": Operations.MOVE
-                        }
-                    )
-                    self.updateStatusBarLabel(f"File moved to {dst}.")
-                else:
-                    shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-                    self.mvHistory.append(
-                        {
-                            "src": src,
-                            "dst": dst,
-                            "image": imageName,
-                            "gallery_index": self.galleryManager.getGalleryIndex(),
-                            "operation": Operations.COPY
-                        }
-                    )
-                    if SettingsDialog.settingsGetAutoNextAfterCopy():
-                        self.galleryManager.incrementGalleryIndex()
-
-                    self.updateStatusBarLabel(f"File copied to {dst}.")
-
-                log.info(f"History entries: {len(self.mvHistory)}")
-                # Update counter label
-                self.galleryManager.updateCounterLabelText()
-
-                # Show new image
-                self.galleryManager.updatePreview()
-
-                # Enable temporaly save and reuse partial shortcut
-                self.keySeq = ""
-                self.updateKeySequenceLabel()
+                self.handleKeyOthers(event)
 
 
     @pyqtSlot()

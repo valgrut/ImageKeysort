@@ -86,6 +86,7 @@ from src.MainWindow import MainWindow
 # - [X] Pokud aktualni soubor neni obrazek, tak disable TextExtraction tlacitko.
 # - [X] MenuBar -> Shortcuts -> add Clear shortcut tree
 # - [X] Text file Previewer - pridat kontrolu, jak je textak velky. Pokud vic nez X MB (napr rockyou.txt), nacist pouze y prvnich radku.
+# - [X] Fix: add 'ac' s dst, pak add dst for 'a'. pak zkusit 'a + mezernik' -> crash. Pricina byla, ze se nekontrolovalo, jestli je vubec nactena nejaka src slozka.
 
 
 # Important - Misc:
@@ -162,7 +163,7 @@ from src.MainWindow import MainWindow
 # - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
 # - [ ] Fix videos on Windows
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
-# - [ ] Fix: add 'ac' s dst, pak add dst for 'a'. pak zkusit 'a + mezernik' -> crash
+# - [ ] Sentinel set + space key in sort mode. seq: acde; nastavit ac+; acd<mezernik> -> Error zkratka 'd' neexistuje. Mela by se ale pouzit i cast pred sentinelem ('ac').
 
 
 # Shortcuts management, Shortcut Tree (GUI):
