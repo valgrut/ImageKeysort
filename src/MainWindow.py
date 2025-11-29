@@ -221,7 +221,11 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setColumnWidth(2, 50)
 
         # TODO: Rewrite, then use.
-        #self.treeViewWidget = ShortcutsTreeView(self.shortcutManager)
+        # 1. New tree - AI
+        # self.treeViewWidget = ShortcutsTreeView(self.shortcutManager)
+
+        # 2. New tree - My one
+        # self.treeViewWidget = NewTreeView(self.shortcutManager)
 
         self.treeViewWidget.setGraphicsEffect(Styles.getShadowEffect())
         self.treeViewWidget.setMaximumWidth(250)
@@ -374,33 +378,32 @@ class MainWindow(QMainWindow, QObject):
         self.returnToolbarAction.setStatusTip("Returns toolbar, if closed.")
         self.returnToolbarAction.triggered.connect(self.returnToolbar)
 
-        # TODO(QIcon): self.openDirectoryAction = QAction(QIcon('./assets/new.png'), '&New', self)
-        self.openDirectoryAction = QAction("&Open directory", self)
+        self.openDirectoryAction = QAction(QIcon('Resources/inbox-plus.png'), "&Open directory", self)
         self.openDirectoryAction.setShortcut('Ctrl+O')
         self.openDirectoryAction.setStatusTip("Open source directory")
         self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)
 
-        self.saveAction = QAction("&Save shortcuts", self)
+        self.saveAction = QAction(QIcon('Resources/disk-pencil.png'), "&Save shortcuts", self)
         # self.saveAction.setShortcut('Ctrl+S')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.saveAction.setStatusTip("Save current shortcuts to a file")
         self.saveAction.triggered.connect(self.save_data)
 
-        self.loadAction = QAction("&Load shortcuts", self)
+        self.loadAction = QAction(QIcon('Resources/disk-arrow.png'), "&Load shortcuts", self)
         # self.loadAction.setShortcut('Ctrl+L')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.loadAction.setStatusTip("Load shortcuts from a file")
         self.loadAction.triggered.connect(self.load_data)
 
-        self.exitAction = QAction("&Exit", self)
+        self.exitAction = QAction(QIcon('Resources/control-power.png'), "&Exit", self)
         self.exitAction.setStatusTip("Exit application")
         self.exitAction.triggered.connect(self.exitApp)
         # self.exitAction.setShortcut('Ctrl+Q')  # TODO: Fix - I want the shortcuts to be shown in the menu.
 
-        self.undoSortAction = QAction("&Undo move", self)
+        self.undoSortAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo move", self)
         # self.undoSortAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.undoSortAction.setStatusTip("Undo last move/copy operation")
         self.undoSortAction.triggered.connect(self.sortModeHandler.undo_last_operation)
 
-        self.undoShortcutModificationAction = QAction("&Undo modification", self)
+        self.undoShortcutModificationAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo modification", self)
         # self.undoShortcutModificationAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.undoShortcutModificationAction.setStatusTip("Undo last shortcut modification. It could be adding, deleting, ...")
         # self.undoShortcutModificationAction.triggered.connect(TODO)

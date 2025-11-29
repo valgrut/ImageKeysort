@@ -8,7 +8,6 @@ import re
 log = logging.getLogger(__name__)
 
 
-
 class ShortcutManager(QObject):
     """
     Class representing and managing shortcuts data structure in the form of json tree.

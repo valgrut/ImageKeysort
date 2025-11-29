@@ -1,11 +1,9 @@
 import logging
 from pathlib import Path
 
-from PyQt5 import QtGui, QtCore
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor, QKeyEvent, QMouseEvent, QTextCursor
-from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QMessageBox, \
-    QVBoxLayout, QLineEdit, QPlainTextEdit
+from PyQt5.QtGui import QTextCursor
+from PyQt5.QtWidgets import QPlainTextEdit
 
 log = logging.getLogger(__name__)
 

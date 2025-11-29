@@ -7,5 +7,10 @@
         <file>Resources/gear.png</file>
         <file>Resources/image-arrow.png</file>
         <file>Resources/image-crop.png</file>
+        <file>Resources/arrow-circle-left.png</file>
+        <file>Resources/control-power.png</file>
+        <file>Resources/disk-arrow.png</file>
+        <file>Resources/disk-pencil.png</file>
+        <file>Resources/inbox-plus.png</file>
     </qresource>
 </RCC>
