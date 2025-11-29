@@ -89,6 +89,14 @@ from src.MainWindow import MainWindow
 # - [X] Fix: add 'ac' s dst, pak add dst for 'a'. pak zkusit 'a + mezernik' -> crash. Pricina byla, ze se nekontrolovalo, jestli je vubec nactena nejaka src slozka.
 # - [X] Zprovoznit a spravit ikonky na Linuxu.
 # - [X] Pokud aktualni soubor neni obrazek (nebo aj video??), tak disable CropImage tlacitko.
+# - [X] Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
+# - [X] Anonymizovat testovaci data - pro kazdy .py, .md a pod proste jen sebrat neco z netu, neco generickeho. Ne moje scripty!!!
+
+
+# ====== Main features to implement ======
+# - [ ] Change names of the files
+# - [ ] Rework ShortcutTreeView
+# - [ ] Crop image / video
 
 
 # Important - Misc:
@@ -97,7 +105,6 @@ from src.MainWindow import MainWindow
 #   - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
-# - [~~] !!~~!!~~!! Anonymizovat testovaci data - pro kazdy .py, .md a pod proste jen sebrat neco z netu, neco generickeho. Ne moje scripty!!!
 # - [ ] !!!!!!! Setridit a zorganizovat MainWindow init metodu - vsechny Actions k sobe, vsechny .connect k sobe a tak.
 
 
@@ -119,7 +126,6 @@ from src.MainWindow import MainWindow
 # Important features TODO:
 # - [ ] !!!!! Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
 #       - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
-# - [~] !!! Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
 # - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 # - [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
