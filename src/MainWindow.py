@@ -92,7 +92,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.sortModeHandler = SortModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
         self.editModeHandler = EditModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
-        self.textExtractor = TextExtractor(self.galleryManager)
+        self.textExtractor = TextExtractor(self.galleryManager)  # TODO: move elsewhere, since mainWindow does not interact with that directly? Image needs this, not main window...
 
 
         # ========== Layout ==========

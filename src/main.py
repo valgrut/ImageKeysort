@@ -96,7 +96,8 @@ from src.MainWindow import MainWindow
 # ====== Main features to implement ======
 # - [ ] Change names of the files
 # - [ ] Rework ShortcutTreeView
-# - [ ] Crop image / video
+# - [ ] Crop image / video (sources: keyboard shortcut, button in menu, button in toolbar)
+# - [ ] Zoom in/out the image (imageView only)
 
 
 # Important - Misc:
