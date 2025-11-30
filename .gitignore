@@ -4,3 +4,4 @@ venv/
 *.log
 !Resources/*
 testing-data/
+Presets/*

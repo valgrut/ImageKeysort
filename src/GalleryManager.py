@@ -3,8 +3,8 @@ from os.path import isfile, join
 from pathlib import Path
 import logging
 
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QMimeDatabase
-from PyQt5.QtWidgets import QApplication, QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QMimeDatabase, QSize, QRect
+from PyQt5.QtWidgets import QApplication, QFileDialog, QGraphicsDropShadowEffect, QStackedWidget, QRubberBand
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
@@ -237,3 +237,21 @@ class GalleryManager(QStackedWidget):
 
         if self.galleryIndex >= len(self.availableMediaFiles):
             self.galleryIndex = len(self.availableMediaFiles) - 1
+    #
+    #
+    # def mousePressEvent(self, event):
+    #     origin = event.pos()
+    #     log.info(f"Origin position: {origin}")
+    #     if not self.rubberBand:
+    #         self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
+    #     self.rubberBand.setGeometry(QRect(origin, QSize()))
+    #     self.rubberBand.show()
+    #
+    # def mouseMoveEvent(self, event):
+    #     origin = event.pos()
+    #     self.rubberBand.setGeometry(QRect(origin, event.pos()).normalized())
+    #
+    # def mouseReleaseEvent(self, event):
+    #     self.rubberBand.hide()
+    #     # determine selection, for example using QRect.intersects()
+    #     # and QRect.contains().
