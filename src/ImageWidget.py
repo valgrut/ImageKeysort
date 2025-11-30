@@ -25,10 +25,18 @@ class ImageWidget(QWidget):
         self.pixmap = QPixmap()
         self.label.setPixmap(self.pixmap)
 
+        # Coords for the image Crop
         self._pixmapCursorStartPosition = None
         self._pixmapCursorEndPosition = None
-        # self.rubberBand = None
-        # # self.setMouseTracking(True)
+
+        # Coords for the rubberBand drawing
+        self._startingRubberPoint = None
+        self._endingRubberPoint = None
+
+        self._dragging = False
+        
+        self.rubberBand = QRubberBand(QRubberBand.Rectangle, self.label)
+        self.setMouseTracking(True)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.label)
@@ -41,7 +49,6 @@ class ImageWidget(QWidget):
         self.currentImgPath = img_path
         self.updateScaledPixmap()
 
-    # def resizeEvent(self, QKeyEvent: event):
     def resizeEvent(self, event):
         self.updateScaledPixmap()
         super().resizeEvent(event)
@@ -51,14 +58,14 @@ class ImageWidget(QWidget):
             scaledPixmap = self.pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label.setPixmap(scaledPixmap)
 
-    # @staticmethod
-    # def clamp(n, min, max):
-    #     if n < min:
-    #         return min
-    #     elif n > max:
-    #         return max
-    #     else:
-    #         return n
+    @staticmethod
+    def clamp(n, min, max):
+        if n < min:
+            return min
+        elif n > max:
+            return max
+        else:
+            return n
 
     def _transformPositionFromGlobalToPixmap(self, widgetCursorPosition: QPoint) -> QPoint:
         """
@@ -70,24 +77,24 @@ class ImageWidget(QWidget):
         labelWidth = self.label.rect().width()
         labelHeight = self.label.rect().height()
 
-        # The incoming point is expected to be in label-local coordinates (event.pos() from the
-        # label). If a different coordinate space is passed, callers should map it to the label
-        # before calling this function.
-        localPosition = widgetCursorPosition
         xOff = (labelWidth - scaledPixmapWidth) / 2
         yOff = (labelHeight - scaledPixmapHeight) / 2
+
+        localPosition = widgetCursorPosition
         scaledPixmapCursorPositionX = localPosition.x() - xOff
         scaledPixmapCursorPositionY = localPosition.y() - yOff
+
         # print(f"Cursor Offset: {xOff}, {yOff}")
-        # print(f"Click position mapped to the scaled pixmap: ({scaledPixmapCursorPositionX}, {scaledPixmapCursorPositionY})")
+        log.info(f"Click position mapped to the scaled pixmap: ({scaledPixmapCursorPositionX}, {scaledPixmapCursorPositionY})")
 
         # Check, that the clicking outside of pixmap does not have effect
         # TODO - finish clamp()
-        # xw = ImageWidget.clamp(origin.x() - xOff, xOff, scaledPixmapWidth)
-        # yw = ImageWidget.clamp(origin.y() - yOff, yOff, scaledPixmapHeight)
-        # print(xw, yw)
+        xw = ImageWidget.clamp(localPosition.x() - xOff, 0, scaledPixmapCursorPositionX)
+        yw = ImageWidget.clamp(localPosition.y() - yOff, 0, scaledPixmapCursorPositionY)
+        log.info(f"Clamped: {xw}, {yw}")
 
-        return QPoint(int(round(scaledPixmapCursorPositionX)), int(round(scaledPixmapCursorPositionY)))
+        # return QPoint(int(round(scaledPixmapCursorPositionX)), int(round(scaledPixmapCursorPositionY)))
+        return QPoint(int(round(xw)), int(round(yw)))
 
 
     def _transformPositionFromScaledPixmapToUnscaled(self, scaledPixmapCursorPosition: QPoint) -> QPoint:
@@ -99,6 +106,10 @@ class ImageWidget(QWidget):
         pixmapHeight = self.pixmap.rect().height()
         scaledPixmapWidth = self.label.pixmap().rect().width()
         scaledPixmapHeight = self.label.pixmap().rect().height()
+
+        if scaledPixmapWidth == 0 or scaledPixmapHeight == 0:
+            print("NULA!!!!!!")
+            return None
 
         # Translate offset point into original unscaled image (so the original can be cropped then)
         scaleRatio = min(pixmapWidth / scaledPixmapWidth, pixmapHeight / scaledPixmapHeight)
@@ -112,34 +123,97 @@ class ImageWidget(QWidget):
 
     def mousePressEvent(self, event):
         # TODO: move elsewhere???
-        # TODO: QRubberBand nebo QGraphicView (okraje s kruhama v rozich a po stranach)
+        # TODO: V1: QRubberBand nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
+
+        self._dragging = True
 
         # Get cursor click position
         widgetCursorPosition: QPoint = event.pos()
         self._pixmapCursorStartPosition: QPoint = self._transformPositionFromGlobalToPixmap(widgetCursorPosition)
         log.info(f"[mousePressEvent] Pixmap start Position: {self._pixmapCursorStartPosition}")
 
+        # labelWidth = self.pixmap.rect().width()
+        # labelHeight = self.pixmap.rect().height()
+        # self._startingRubberPoint = QPoint(labelWidth, labelHeight)
+        scaledPixmapWidth = self.label.pixmap().rect().width()
+        scaledPixmapHeight = self.label.pixmap().rect().height()
+        labelWidth = self.label.rect().width()
+        labelHeight = self.label.rect().height()
+
+        xOff = int(round((labelWidth - scaledPixmapWidth) / 2))
+        yOff = int(round((labelHeight - scaledPixmapHeight) / 2))
+
+        # Note: Geometry for the rubber band is different, than the pixmap's geometry.
+        if not self.rubberBand:
+            self.rubberBand = QRubberBand(QRubberBand.Rectangle, self.label)
+        self._startingRubberPoint = self._pixmapCursorStartPosition + QPoint(xOff, yOff)
+        self.rubberBand.setGeometry(QRect(self._startingRubberPoint, QSize(0, 0)))
+        self.rubberBand.show()
+
+        super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
-        currentPosition: QPoint = event.pos()
-        self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(currentPosition)
+        """
+        Note: This is executed always when just hovering above image. No click is required.
 
+        :param event:
+        :return:
+        """
+
+        if self._dragging:  # Prevents crash when just moving without initial click.
+            currentPosition: QPoint = event.pos()
+            self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(currentPosition)
+
+            scaledPixmapWidth = self.label.pixmap().rect().width()
+            scaledPixmapHeight = self.label.pixmap().rect().height()
+            labelWidth = self.label.rect().width()
+            labelHeight = self.label.rect().height()
+
+            xOff = int(round((labelWidth - scaledPixmapWidth) / 2))
+            yOff = int(round((labelHeight - scaledPixmapHeight) / 2))
+
+            self._endingRubberPoint = self._pixmapCursorEndPosition + QPoint(xOff, yOff)
+
+            # labelWidth = self.pixmap.rect().width()
+            # labelHeight = self.pixmap.rect().height()
+            # self._endingRubberPoint = QPoint(labelWidth, labelHeight)
+
+            if self._startingRubberPoint and self._endingRubberPoint:
+                self.rubberBand.setGeometry(QRect(self._startingRubberPoint, self._endingRubberPoint))
+            else:
+                log.warning(f"[mouseMoveEvent]: startPosition or endPosition not initialised!")
+
+        super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
+        self._dragging = False
         widgetTargetPosition: QPoint = event.pos()
         self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(widgetTargetPosition)
+        log.info(f"[mouseReleaseEvent] Pixmap start Position: {self._pixmapCursorEndPosition}")
 
         # Crop original image and save
         unscaledStartPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorStartPosition)
         unscaledEndPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorEndPosition)
         cropAreaRect = QRect(unscaledStartPosition, unscaledEndPosition)
+
+        # TODO: save new crop into the list of changes, so we can undo change / completely revert all changes.
         croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)
-        log.info(f"[mouseReleaseEvent] Pixmap start Position: {self._pixmapCursorEndPosition}")
         self.pixmap.swap(croppedPixmap)
         self.updateScaledPixmap()
 
+        # TODO: Save
+        # bool QPixmap::save(const QString &fileName, const char *format = nullptr, int quality = -1) const
+
+        # Clear variables and prepare for next cropping and rubberBand drawing
         self._pixmapCursorStartPosition = None
         self._pixmapCursorEndPosition = None
+
+        self._startingRubberPoint = None
+        self._endingRubberPoint = None
+
+        self.rubberBand.hide()
+
+        super().mouseReleaseEvent(event)
 
 
 
@@ -165,9 +239,7 @@ class ImageWidget(QWidget):
     #     log.info(f"[mouseRelease] Origin position: {origin}")
     #     #self.rubberBand.hide()
     #     rect = self.rubberBand.geometry()
-    #     log.info(f"[mouseRelease] Selected area: {rect}")
-    #     log.info(f"[mouseRelease] pixmap geometry: {self.pixmap.rect()}")
-    #     log.info(f"[mouseRelease] label geometry: {self.label.rect()}")
+
     #     intersection = rect.intersects(self.pixmap.rect())
     #     log.info(f"[mouseRelease] Intersection: {intersection}")
     #     # self.mouseReleaseEvent(self, event)
