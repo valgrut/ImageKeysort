@@ -1,5 +1,5 @@
 import logging
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
@@ -25,6 +25,8 @@ class ImageWidget(QWidget):
         self.pixmap = QPixmap()
         self.label.setPixmap(self.pixmap)
 
+        self._pixmapCursorStartPosition = None
+        self._pixmapCursorEndPosition = None
         # self.rubberBand = None
         # # self.setMouseTracking(True)
 
@@ -58,40 +60,87 @@ class ImageWidget(QWidget):
     #     else:
     #         return n
 
-    def mousePressEvent(self, event):
-        # Get cursor click position
-        origin = event.pos()
+    def _transformPositionFromGlobalToPixmap(self, widgetCursorPosition: QPoint) -> QPoint:
+        """
 
-        # Gather facts about areas
-        pixmapWidth = self.pixmap.rect().width()
-        pixmapHeight = self.pixmap.rect().height()
+        """
+        # Gather facts about label area and current pixmap's area (both original and scaled)
         scaledPixmapWidth = self.label.pixmap().rect().width()
         scaledPixmapHeight = self.label.pixmap().rect().height()
         labelWidth = self.label.rect().width()
         labelHeight = self.label.rect().height()
 
-        # [x] Mapping of the cursor position from the Label area into the scaled pixmap area
-        origin = self.label.mapFrom(self, origin)
+        # The incoming point is expected to be in label-local coordinates (event.pos() from the
+        # label). If a different coordinate space is passed, callers should map it to the label
+        # before calling this function.
+        localPosition = widgetCursorPosition
         xOff = (labelWidth - scaledPixmapWidth) / 2
         yOff = (labelHeight - scaledPixmapHeight) / 2
-        scaledPixmapCursorPositionX = origin.x() - xOff
-        scaledPixmapCursorPositionY = origin.y() - yOff
-        print(f"Cursor Offset: {xOff}, {yOff}")
-        print(f"Click position mapped to the scaled pixmap: ({scaledPixmapCursorPositionX}, {scaledPixmapCursorPositionY})")
+        scaledPixmapCursorPositionX = localPosition.x() - xOff
+        scaledPixmapCursorPositionY = localPosition.y() - yOff
+        # print(f"Cursor Offset: {xOff}, {yOff}")
+        # print(f"Click position mapped to the scaled pixmap: ({scaledPixmapCursorPositionX}, {scaledPixmapCursorPositionY})")
 
         # Check, that the clicking outside of pixmap does not have effect
+        # TODO - finish clamp()
         # xw = ImageWidget.clamp(origin.x() - xOff, xOff, scaledPixmapWidth)
         # yw = ImageWidget.clamp(origin.y() - yOff, yOff, scaledPixmapHeight)
-        # print(xw, yw)  # TODO: Fix
+        # print(xw, yw)
+
+        return QPoint(int(round(scaledPixmapCursorPositionX)), int(round(scaledPixmapCursorPositionY)))
+
+
+    def _transformPositionFromScaledPixmapToUnscaled(self, scaledPixmapCursorPosition: QPoint) -> QPoint:
+        """
+
+        """
+        # Gather facts about label area and current pixmap's area (both original and scaled)
+        pixmapWidth = self.pixmap.rect().width()
+        pixmapHeight = self.pixmap.rect().height()
+        scaledPixmapWidth = self.label.pixmap().rect().width()
+        scaledPixmapHeight = self.label.pixmap().rect().height()
 
         # Translate offset point into original unscaled image (so the original can be cropped then)
         scaleRatio = min(pixmapWidth / scaledPixmapWidth, pixmapHeight / scaledPixmapHeight)
-        log.info(f"Pixmap scale ratio: {scaleRatio}")
-        pixmapCursorPositionX = scaledPixmapCursorPositionX * scaleRatio  # TODO: floor / ceiling
-        pixmapCursorPositionY = scaledPixmapCursorPositionY * scaleRatio  # TODO: floor / ceiling
-        log.info(f"Click position mapped to the Unscaled pixmap: {pixmapCursorPositionX}, {pixmapCursorPositionY}")
+        # log.info(f"Pixmap scale ratio: {scaleRatio}")
+        pixmapCursorPositionX = scaledPixmapCursorPosition.x() * scaleRatio  # TODO: floor / ceiling
+        pixmapCursorPositionY = scaledPixmapCursorPosition.y() * scaleRatio  # TODO: floor / ceiling
+        # log.info(f"Click position mapped to the Unscaled pixmap: {pixmapCursorPositionX}, {pixmapCursorPositionY}")
 
-        # Crop image and save
+        return QPoint(int(round(pixmapCursorPositionX)), int(round(pixmapCursorPositionY)))
+
+
+    def mousePressEvent(self, event):
+        # TODO: move elsewhere???
+        # TODO: QRubberBand nebo QGraphicView (okraje s kruhama v rozich a po stranach)
+
+        # Get cursor click position
+        widgetCursorPosition: QPoint = event.pos()
+        self._pixmapCursorStartPosition: QPoint = self._transformPositionFromGlobalToPixmap(widgetCursorPosition)
+        log.info(f"[mousePressEvent] Pixmap start Position: {self._pixmapCursorStartPosition}")
+
+
+    def mouseMoveEvent(self, event):
+        currentPosition: QPoint = event.pos()
+        self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(currentPosition)
+
+
+    def mouseReleaseEvent(self, event):
+        widgetTargetPosition: QPoint = event.pos()
+        self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(widgetTargetPosition)
+
+        # Crop original image and save
+        unscaledStartPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorStartPosition)
+        unscaledEndPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorEndPosition)
+        cropAreaRect = QRect(unscaledStartPosition, unscaledEndPosition)
+        croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)
+        log.info(f"[mouseReleaseEvent] Pixmap start Position: {self._pixmapCursorEndPosition}")
+        self.pixmap.swap(croppedPixmap)
+        self.updateScaledPixmap()
+
+        self._pixmapCursorStartPosition = None
+        self._pixmapCursorEndPosition = None
+
 
 
     # def mousePressEvent(self, event):
