@@ -67,11 +67,7 @@ class ImageWidget(QWidget):
         else:
             return n
 
-    def _transformPositionFromGlobalToPixmap(self, widgetCursorPosition: QPoint) -> QPoint:
-        """
-
-        """
-        # Gather facts about label area and current pixmap's area (both original and scaled)
+    def _getPixmapCursorOffset(self):
         scaledPixmapWidth = self.label.pixmap().rect().width()
         scaledPixmapHeight = self.label.pixmap().rect().height()
         labelWidth = self.label.rect().width()
@@ -79,6 +75,13 @@ class ImageWidget(QWidget):
 
         xOff = (labelWidth - scaledPixmapWidth) / 2
         yOff = (labelHeight - scaledPixmapHeight) / 2
+        return int(round(xOff)), int(round(yOff))
+
+    def _transformPositionFromGlobalToPixmap(self, widgetCursorPosition: QPoint) -> QPoint:
+        """
+
+        """
+        xOff, yOff = self._getPixmapCursorOffset()
 
         localPosition = widgetCursorPosition
         scaledPixmapCursorPositionX = localPosition.x() - xOff
@@ -88,7 +91,6 @@ class ImageWidget(QWidget):
         log.info(f"Click position mapped to the scaled pixmap: ({scaledPixmapCursorPositionX}, {scaledPixmapCursorPositionY})")
 
         # Check, that the clicking outside of pixmap does not have effect
-        # TODO - finish clamp()
         xw = ImageWidget.clamp(localPosition.x() - xOff, 0, scaledPixmapCursorPositionX)
         yw = ImageWidget.clamp(localPosition.y() - yOff, 0, scaledPixmapCursorPositionY)
         log.info(f"Clamped: {xw}, {yw}")
@@ -107,12 +109,13 @@ class ImageWidget(QWidget):
         scaledPixmapWidth = self.label.pixmap().rect().width()
         scaledPixmapHeight = self.label.pixmap().rect().height()
 
-        if scaledPixmapWidth == 0 or scaledPixmapHeight == 0:
-            print("NULA!!!!!!")
-            return None
+        # if scaledPixmapWidth == 0 or scaledPixmapHeight == 0:
+        #     print("NULA!!!!!!")
+        #     return None
 
         # Translate offset point into original unscaled image (so the original can be cropped then)
         scaleRatio = min(pixmapWidth / scaledPixmapWidth, pixmapHeight / scaledPixmapHeight)
+
         # log.info(f"Pixmap scale ratio: {scaleRatio}")
         pixmapCursorPositionX = scaledPixmapCursorPosition.x() * scaleRatio  # TODO: floor / ceiling
         pixmapCursorPositionY = scaledPixmapCursorPosition.y() * scaleRatio  # TODO: floor / ceiling
@@ -132,16 +135,7 @@ class ImageWidget(QWidget):
         self._pixmapCursorStartPosition: QPoint = self._transformPositionFromGlobalToPixmap(widgetCursorPosition)
         log.info(f"[mousePressEvent] Pixmap start Position: {self._pixmapCursorStartPosition}")
 
-        # labelWidth = self.pixmap.rect().width()
-        # labelHeight = self.pixmap.rect().height()
-        # self._startingRubberPoint = QPoint(labelWidth, labelHeight)
-        scaledPixmapWidth = self.label.pixmap().rect().width()
-        scaledPixmapHeight = self.label.pixmap().rect().height()
-        labelWidth = self.label.rect().width()
-        labelHeight = self.label.rect().height()
-
-        xOff = int(round((labelWidth - scaledPixmapWidth) / 2))
-        yOff = int(round((labelHeight - scaledPixmapHeight) / 2))
+        xOff, yOff = self._getPixmapCursorOffset()
 
         # Note: Geometry for the rubber band is different, than the pixmap's geometry.
         if not self.rubberBand:
@@ -164,19 +158,10 @@ class ImageWidget(QWidget):
             currentPosition: QPoint = event.pos()
             self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(currentPosition)
 
-            scaledPixmapWidth = self.label.pixmap().rect().width()
-            scaledPixmapHeight = self.label.pixmap().rect().height()
-            labelWidth = self.label.rect().width()
-            labelHeight = self.label.rect().height()
+            xOff, yOff = self._getPixmapCursorOffset()
 
-            xOff = int(round((labelWidth - scaledPixmapWidth) / 2))
-            yOff = int(round((labelHeight - scaledPixmapHeight) / 2))
-
+            # RubberBand drawing
             self._endingRubberPoint = self._pixmapCursorEndPosition + QPoint(xOff, yOff)
-
-            # labelWidth = self.pixmap.rect().width()
-            # labelHeight = self.pixmap.rect().height()
-            # self._endingRubberPoint = QPoint(labelWidth, labelHeight)
 
             if self._startingRubberPoint and self._endingRubberPoint:
                 self.rubberBand.setGeometry(QRect(self._startingRubberPoint, self._endingRubberPoint))
@@ -187,6 +172,7 @@ class ImageWidget(QWidget):
 
     def mouseReleaseEvent(self, event):
         self._dragging = False
+
         widgetTargetPosition: QPoint = event.pos()
         self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(widgetTargetPosition)
         log.info(f"[mouseReleaseEvent] Pixmap start Position: {self._pixmapCursorEndPosition}")
@@ -214,33 +200,3 @@ class ImageWidget(QWidget):
         self.rubberBand.hide()
 
         super().mouseReleaseEvent(event)
-
-
-
-    # def mousePressEvent(self, event):
-    #     origin = event.pos()
-    #     log.info(f"[mousePressed] Origin position: {origin}")
-    #     if not self.rubberBand:
-    #         self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
-    #     self.rubberBand.setGeometry(QRect(origin, origin))
-    #     self.rubberBand.setStyleSheet("border: 1px solid black;")
-    #     self.rubberBand.show()
-    #     # self.mousePressEvent(self, event)
-    #
-    # def mouseMoveEvent(self, event):
-    #     origin = event.pos()
-    #     log.info(f"[mouseMove] Origin position: {origin}")
-    #     self.rubberBand.setGeometry(QRect(origin, event.pos()).normalized())
-    #     # self.rubberBand.update()
-    #     # self.mouseMoveEvent(self, event)
-    #
-    # def mouseReleaseEvent(self, event):
-    #     origin = event.pos()
-    #     log.info(f"[mouseRelease] Origin position: {origin}")
-    #     #self.rubberBand.hide()
-    #     rect = self.rubberBand.geometry()
-
-    #     intersection = rect.intersects(self.pixmap.rect())
-    #     log.info(f"[mouseRelease] Intersection: {intersection}")
-    #     # self.mouseReleaseEvent(self, event)
-    #
