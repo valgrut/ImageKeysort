@@ -99,6 +99,18 @@ from src.MainWindow import MainWindow
 # - [ ] Crop image / video (sources: keyboard shortcut, button in menu, button in toolbar)
 # - [ ] Zoom in/out the image (imageView only)
 
+# Cropping
+# - I need to be able to:
+#       - save cropped image into the source directory via GalleryManager
+#           - So, move image cropper to the GalleryManager? Then I could use it even for the video cropping.
+#       - Be able to revert back the cropping (save image before crop internally vs externally to be able to revert back?)
+#           - Shortcut to revert image cropping and start over
+#       - Crop a video too.
+#           - Use ffmpeg app; Will it work on windows too???
+# TODO: V1: QRubberBand nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
+
+# TODO: Fix: still small misalignment between cursor's tip position and rubberband.
+# TODO: Show rubberband to all directions, not just from top left to right down.
 
 # Important - Misc:
 # - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
@@ -143,6 +155,7 @@ from src.MainWindow import MainWindow
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
 # - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
+# - [ ] !!!!! Copy mode: Pridat moznost pred shortcut pridat znak, treba , a ; pro kopirovani bez zapinani copy rezimu (nebo by to mohl zapnout interne pouze docasne a pak vypnout. Jeden znak udela copy a go to next img, druhy pouze copy ale zustane na aktualnim.
 
 
 # Consider (Maybe):

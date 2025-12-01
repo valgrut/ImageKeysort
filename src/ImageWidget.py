@@ -128,6 +128,8 @@ class ImageWidget(QWidget):
         # TODO: move elsewhere???
         # TODO: V1: QRubberBand nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
 
+        # TODO: Fix: still small misalignment between cursor's tip position and rubberband.
+        # TODO: Show rubberband to all directions, not just from top left to right down.
         self._dragging = True
 
         # Get cursor click position
@@ -187,8 +189,10 @@ class ImageWidget(QWidget):
         self.pixmap.swap(croppedPixmap)
         self.updateScaledPixmap()
 
-        # TODO: Save
-        # bool QPixmap::save(const QString &fileName, const char *format = nullptr, int quality = -1) const
+        # TODO: WIP: Save
+        # TODO: Make UndoCrop() possible!!!!!
+        # self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
+        self.pixmap.save(self.currentImgPath+"_cropped.png")  # Save with different name, keep original.
 
         # Clear variables and prepare for next cropping and rubberBand drawing
         self._pixmapCursorStartPosition = None
