@@ -40,7 +40,6 @@ class ImageWidget(QWidget):
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.label)
-        # self.layout.addWidget(self.rubberBand)
         self.setLayout(self.layout)
 
     def updateImage(self, img_path):
@@ -125,11 +124,24 @@ class ImageWidget(QWidget):
 
 
     def mousePressEvent(self, event):
-        # TODO: move elsewhere???
+        # TODO: move elsewhere??? Maybe into GalleryManager, because I want this to use also on Videos...
         # TODO: V1: QRubberBand nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
 
         # TODO: Fix: still small misalignment between cursor's tip position and rubberband.
         # TODO: Show rubberband to all directions, not just from top left to right down.
+        #   This will beed to swap start/end position dynamically based on the position of initial click and actual position before release.
+        #   So, starting position will dynamically swap with current, if current is lesser than start.
+        #   startx = min(startx, currentx)
+        #   endx = max(startx, currentx)
+        #   starty = min(starty, currenty)
+        #   endy = max(starty, currenty)
+        #   tento swap bude volany v mouseMoveEvent().
+        #
+        # TODO: Logika croppingu by mela byt separatni uplne pryc, jako TextExtraction.
+        #
+        # A mouseEvent handling a rubberband drawing presunout do toho GalleryManager asi,
+        # abych to pak mohl pouzit i pro videa.
+        
         self._dragging = True
 
         # Get cursor click position
