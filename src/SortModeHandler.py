@@ -189,6 +189,7 @@ class SortModeHandler(QObject):
 
         if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:
             log.info("History is empty.")
+            self.updateStatusBarLabel(f"Cannot repeat last command. History is Empty!")
             return
 
         log.info(f"Last history entry: {self.keySeqHistory[-1]}")
