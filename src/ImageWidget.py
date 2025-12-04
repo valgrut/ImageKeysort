@@ -67,6 +67,7 @@ class ImageWidget(QWidget):
             return n
 
     def _getPixmapCursorOffset(self):
+        # TODO: Tohle si myslim, ze by tez melo byt asi jinde...
         scaledPixmapWidth = self.label.pixmap().rect().width()
         scaledPixmapHeight = self.label.pixmap().rect().height()
         labelWidth = self.label.rect().width()
@@ -78,7 +79,7 @@ class ImageWidget(QWidget):
 
     def _transformPositionFromGlobalToPixmap(self, widgetCursorPosition: QPoint) -> QPoint:
         """
-
+        # TODO: Tohle si myslim, ze by tez melo byt asi jinde...
         """
         xOff, yOff = self._getPixmapCursorOffset()
 
@@ -100,7 +101,7 @@ class ImageWidget(QWidget):
 
     def _transformPositionFromScaledPixmapToUnscaled(self, scaledPixmapCursorPosition: QPoint) -> QPoint:
         """
-
+        # TODO: Tohle si myslim, ze by tez melo byt asi jinde...
         """
         # Gather facts about label area and current pixmap's area (both original and scaled)
         pixmapWidth = self.pixmap.rect().width()
@@ -122,6 +123,15 @@ class ImageWidget(QWidget):
 
         return QPoint(int(round(pixmapCursorPositionX)), int(round(pixmapCursorPositionY)))
 
+    def swapStartEndRubberPosition(self):
+        if self._startingRubberPoint and self._endingRubberPoint:
+            starting = self._startingRubberPoint
+            ending = self._endingRubberPoint
+
+            self._startingRubberPoint.setX(min(starting.x(), ending.x()))
+            self._startingRubberPoint.setY(min(starting.y(), ending.y()))
+            self._endingRubberPoint.setX(max(starting.x(), ending.x()))
+            self._endingRubberPoint.setY(max(starting.y(), ending.y()))
 
     def mousePressEvent(self, event):
         # TODO: move elsewhere??? Maybe into GalleryManager, because I want this to use also on Videos...
@@ -141,7 +151,7 @@ class ImageWidget(QWidget):
         #
         # A mouseEvent handling a rubberband drawing presunout do toho GalleryManager asi,
         # abych to pak mohl pouzit i pro videa.
-        
+
         self._dragging = True
 
         # Get cursor click position
@@ -178,6 +188,7 @@ class ImageWidget(QWidget):
             self._endingRubberPoint = self._pixmapCursorEndPosition + QPoint(xOff, yOff)
 
             if self._startingRubberPoint and self._endingRubberPoint:
+                # self.swapStartEndRubberPosition()
                 self.rubberBand.setGeometry(QRect(self._startingRubberPoint, self._endingRubberPoint))
             else:
                 log.warning(f"[mouseMoveEvent]: startPosition or endPosition not initialised!")

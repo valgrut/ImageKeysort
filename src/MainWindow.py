@@ -541,6 +541,7 @@ class MainWindow(QMainWindow, QObject):
         self.editButton.setChecked(True)
         self.sortButton.setChecked(False)
         # self.treeViewWidget.setColumnHidden(2, False)
+        self.galleryManager.setDisabled(True)
         self.treeViewWidget.setEnabled(True)
 
     @pyqtSlot()
@@ -551,6 +552,7 @@ class MainWindow(QMainWindow, QObject):
         self.sortButton.setChecked(True)
         # self.treeViewWidget.setColumnHidden(2, True)
         self.treeViewWidget.setEnabled(True)
+        self.galleryManager.setDisabled(False)
         self.galleryManager.updatePreview()
 
     def keyPressEvent(self, event):
@@ -558,10 +560,11 @@ class MainWindow(QMainWindow, QObject):
             return
 
         pressedKey = event.text()
-        # if pressedKey not in self.allowedKeys:
+        # if pressedKey not in self.allowedKeys:  # TODO !!!!! Zadne empty spaces ani zadne takove bullshity.
         #     print(f"!!! {pressedKey} not in AllowedKeys.")
         #     return
         # print("Pressed Key:", pressedKey)
+        # TODO: if sortMode, then one set of allowed keys, else edit mode, then other set of allowed keys.
 
         # Key binding working in both modes:
         match event.key():

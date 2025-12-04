@@ -91,6 +91,7 @@ from src.MainWindow import MainWindow
 # - [X] Pokud aktualni soubor neni obrazek (nebo aj video??), tak disable CropImage tlacitko.
 # - [X] Kdyz zmacknu treba 'f'+ mezernik, jednorazove otevrit dialog, kde bude prednastavena dst pro 'f'.
 # - [X] Anonymizovat testovaci data - pro kazdy .py, .md a pod proste jen sebrat neco z netu, neco generickeho. Ne moje scripty!!!
+# - [X] v edit modu nechat zasednout image cast, aby bylo zretelne ze to neni sort mode...
 
 
 # ====== Main features to implement ======
@@ -155,7 +156,7 @@ from src.MainWindow import MainWindow
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
 # - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
-# - [ ] !!!!! Copy mode: Pridat moznost pred shortcut pridat znak, treba , a ; pro kopirovani bez zapinani copy rezimu (nebo by to mohl zapnout interne pouze docasne a pak vypnout. Jeden znak udela copy a go to next img, druhy pouze copy ale zustane na aktualnim.
+# - [ ] !!!!! Sort mode (Copy option): Pridat moznost pred shortcut pridat znak, treba , a ; pro kopirovani bez zapinani copy rezimu (nebo by to mohl zapnout interne pouze docasne a pak vypnout. Jeden znak udela copy a go to next img, druhy pouze copy ale zustane na aktualnim.
 
 
 # Consider (Maybe):
