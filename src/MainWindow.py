@@ -44,10 +44,16 @@ from src.treeView import ShortcutsTreeView
 screenWidth = 1152
 screenHeight = 864
 
-allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
+allowedKeysSort = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
                 Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
                 Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z, Qt.Key_Escape, Qt.Key_Backspace,
                Qt.Key_Return, Qt.Key_Space, Qt.Key_Period, Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Home, Qt.Key_End]
+
+allowedKeysEdit = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
+                Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
+                Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z, Qt.Key_Escape, Qt.Key_Backspace,
+               Qt.Key_Return, Qt.Key_Left, Qt.Key_Right,  Qt.Key_Greater, Qt.Key_Less]
+
 
 log = logging.getLogger(__name__)
 
@@ -559,12 +565,18 @@ class MainWindow(QMainWindow, QObject):
         if not isinstance(event, QKeyEvent):
             return
 
-        pressedKey = event.text()
-        # if pressedKey not in self.allowedKeys:  # TODO !!!!! Zadne empty spaces ani zadne takove bullshity.
-        #     print(f"!!! {pressedKey} not in AllowedKeys.")
-        #     return
+        # pressedKey = event.text()
+        pressedKey = event.key()
+        if self.currentMode is Modes.SORT:
+            if pressedKey not in allowedKeysSort:  # TODO WIP !!!!! Zadne empty spaces ani zadne takove bullshity.
+                print(f"SortMode: Key {pressedKey} not in AllowedKeys.")
+                return
+        if self.currentMode is Modes.EDIT:
+            if pressedKey not in allowedKeysEdit:  # TODO WIP !!!!! Zadne empty spaces ani zadne takove bullshity.
+                print(f"EditMode: Key {pressedKey} not in AllowedKeys.")
+                return
         # print("Pressed Key:", pressedKey)
-        # TODO: if sortMode, then one set of allowed keys, else edit mode, then other set of allowed keys.
+        # WIP TODO: if sortMode, then one set of allowed keys, else edit mode, then other set of allowed keys.
 
         # Key binding working in both modes:
         match event.key():
@@ -581,7 +593,7 @@ class MainWindow(QMainWindow, QObject):
                 self.lastImageRequestedSignal.emit()
 
             case Qt.Key_Delete:
-                # TODO
+                # TODO???
                 pass
 
             case _:  # Default case
