@@ -12,9 +12,9 @@ from src.SettingsDialog import SettingsDialog
 from src.Operations import Operations
 
 # TODO: tohle by melo ovlivnovat i edit mode, ne???
-allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
-                Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
-                Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
+# allowedKeys = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
+#                 Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
+#                 Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z]
 
 log = logging.getLogger(__name__)
 
@@ -305,9 +305,9 @@ class SortModeHandler(QObject):
 
         pressedKey = event.text()
 
-        if event.key() not in allowedKeys:
-            log.info("not [a-zA-Z1-9] was pressed, nothing to append to shortcuts.")
-            return
+        # if event.key() not in allowedKeys:
+        #     log.info("not [a-zA-Z1-9] was pressed, nothing to append to shortcuts.")
+        #     return
 
         self.keySeq += pressedKey
 
