@@ -619,7 +619,13 @@ class SortModeHandler(QObject):
         self.updateKeySequenceLabel()
         self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 
+    def addEntryIntoHistory(self, src, dst, imageName):
+        pass
+
     def moveImageFromTo(self, src, dst):
+        pass
+
+    def copyImageFromTo(self, src, dst):
         pass
 
 
