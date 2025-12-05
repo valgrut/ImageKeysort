@@ -1,5 +1,6 @@
 import shutil
 import os
+from dataclasses import dataclass
 from pathlib import Path
 import typing
 import logging
@@ -12,6 +13,11 @@ from src.SettingsDialog import SettingsDialog
 from src.Operations import Operations
 
 log = logging.getLogger(__name__)
+
+# @dataclass
+# class HistoryEntry(dataclass):
+#     pass
+
 
 class SortModeHandler(QObject):
     """
@@ -49,6 +55,7 @@ class SortModeHandler(QObject):
     def updateStatusBarLabel(self, newStatusbarMessage: str):
         self.updateStatusBarLabelSignal.emit(newStatusbarMessage)
 
+
     def handleKeyEscape(self):
         log.debug("handleSortMode: Case 'Escape'")
         # log.info(f"key_seq: {self.key_seq}")
@@ -64,11 +71,13 @@ class SortModeHandler(QObject):
             pass
         self.updateKeySequenceLabel()
 
+
     def handleKeyBackspace(self):
         log.debug("handleSortMode: Case 'Backspace'")
         if len(self.keySeq) >= 1:
             self.keySeq = self.keySeq[:-1]
             self.updateKeySequenceLabel()
+
 
     def handleKeyReturn(self):
         log.debug("handleSortMode: Case 'Enter' (Key_Return)")
@@ -81,6 +90,7 @@ class SortModeHandler(QObject):
             self.keySeq = ""
 
         self.updateKeySequenceLabel()
+
 
     def handleKeySpace(self):
         log.debug("handleSortMode: Case 'Space'")
@@ -139,36 +149,13 @@ class SortModeHandler(QObject):
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
             # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
-            self.galleryManager.removeFile(imageName)
-
-            shutil.move(src + "/" + imageName, dst + "/" + imageName)
-            self.mvHistory.append(
-                {
-                    "src": src,
-                    "dst": dst,
-                    "image": imageName,
-                    "gallery_index": self.galleryManager.getGalleryIndex(),
-                    "operation": Operations.MOVE
-                }
-            )
-            self.updateStatusBarLabel(f"File moved to {dst}.")
+            self.moveImageCommand(src, dst, imageName)
         else:
             # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
-            shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-            self.mvHistory.append(
-                {
-                    "src": src,
-                    "dst": dst,
-                    "image": imageName,
-                    "gallery_index": self.galleryManager.getGalleryIndex(),
-                    "operation": Operations.COPY
-                }
-            )
-            self.updateStatusBarLabel(f"File copied to {dst}.")
+            self.copyImageCommand(src, dst, imageName)
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.decrementGalleryIndex()
-
 
         self.keySeq = ""
         # log.info(f"History entries: {len(self.mvHistory)}")
@@ -177,6 +164,7 @@ class SortModeHandler(QObject):
 
         # Show new image
         self.galleryManager.updatePreview()
+
 
     def handleKeyPeriod(self):
         log.debug("handleSortMode: Case '.'")
@@ -220,31 +208,10 @@ class SortModeHandler(QObject):
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
             # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
-            self.galleryManager.removeFile(imageName)
-            shutil.move(src + "/" + imageName, dst + "/" + imageName)
-            self.mvHistory.append(
-                {
-                    "src": src,
-                    "dst": dst,
-                    "image": imageName,
-                    "gallery_index": self.galleryManager.getGalleryIndex(),
-                    "operation": Operations.MOVE
-                }
-            )
-            self.updateStatusBarLabel(f"File moved to {dst}.")
+            self.moveImageCommand(src, dst, imageName)
         else:
             # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
-            shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-            self.mvHistory.append(
-                {
-                    "src": src,
-                    "dst": dst,
-                    "image": imageName,
-                    "gallery_index": self.galleryManager.getGalleryIndex(),
-                    "operation": Operations.COPY
-                }
-            )
-            self.updateStatusBarLabel(f"File copied to {dst}.")
+            self.copyImageCommand(src, dst, imageName)
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.incrementGalleryIndex()
@@ -255,6 +222,7 @@ class SortModeHandler(QObject):
 
         # Show new image
         self.galleryManager.updatePreview()
+
 
     def handleKeyDelete(self):
         log.debug("handleSortMode: Case 'Delete'")
@@ -286,24 +254,14 @@ class SortModeHandler(QObject):
         log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
         # Remove current image from the list of images in src directory
-        self.galleryManager.removeFile(imageName)
-        shutil.move(src + "/" + imageName, dst + "/" + imageName)
-        self.mvHistory.append(
-            # TODO: nahradit za objekt OperationRecord, ktery prvne naplnim, a cely append do history.
-            {
-                "src": src,
-                "dst": dst,
-                "image": imageName,
-                "gallery_index": self.galleryManager.getGalleryIndex(),
-                "operation": Operations.MOVE
-            }
-        )
+        self.moveImageCommand(src, dst, imageName)
         self.updateStatusBarLabel(f"File Deleted.")
 
         self.galleryManager.updateCounterLabelText()
 
         # Show new image
         self.galleryManager.updatePreview()
+
 
     def handleKeyOthers(self, event):
         """
@@ -330,9 +288,7 @@ class SortModeHandler(QObject):
         self.keySeq += pressedKey
         cleanKeySeq = self.keySeq
 
-        # TODO: if ',' or ';' is at [0], remove it before checking the shortcut
-        # TODO: Add allowed syntax: [,|;]?[a-zA-Z0-9].....
-        # TODO: ; or , is not allowed in the permanent (sentinel) part of the shortcut. Or is it???
+        # Handle the ; and ,
         moveToNextImage = False
         instantCopy = False
         if self.keySeq[0] == ',' or self.keySeq[0] == ';':
@@ -398,32 +354,9 @@ class SortModeHandler(QObject):
 
         # Remove current image from the list of images in src directory
         if not self.copyOnly and instantCopy is False:
-            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
-            self.galleryManager.removeFile(imageName)
-            shutil.move(src + "/" + imageName, dst + "/" + imageName)
-            self.mvHistory.append(
-                {
-                    "src": src,
-                    "dst": dst,
-                    "image": imageName,
-                    "gallery_index": self.galleryManager.getGalleryIndex(),
-                    "operation": Operations.MOVE
-                }
-            )
-            self.updateStatusBarLabel(f"File moved to {dst}.")
+            self.moveImageCommand(src, dst, imageName)
         elif self.copyOnly or instantCopy:
-            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
-            shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-            self.mvHistory.append(
-                {
-                    "src": src,
-                    "dst": dst,
-                    "image": imageName,
-                    "gallery_index": self.galleryManager.getGalleryIndex(),
-                    "operation": Operations.COPY
-                }
-            )
-            self.updateStatusBarLabel(f"File copied to {dst}.")
+            self.copyImageCommand(src, dst, imageName)
 
             # TODO: Should instantCopy override Settings?
             # 2 options: 1. Settings->Gotonext overrides everything else.
@@ -441,35 +374,6 @@ class SortModeHandler(QObject):
         # Enable temporaly save and reuse partial shortcut
         self.keySeq = ""
         self.updateKeySequenceLabel()
-
-
-    def handleSortMode(self, event: QKeyEvent):
-        # pressedKey = event.text()
-        # Cancel currently started shortcut or escape from the hold partial sequence
-        match event.key():
-            case Qt.Key_Escape:
-                self.handleKeyEscape()
-
-            case Qt.Key_Backspace:
-                self.handleKeyBackspace()
-
-            # Sentinel: Hold current shortcut and use it as default for upcoming sequences until escape
-            case Qt.Key_Return:  # Key_Return is non-numeric Enter key
-                self.handleKeyReturn()
-
-            # Single-time move file
-            case Qt.Key_Space:
-                self.handleKeySpace()
-
-            # Repeat last move from src to dst of current image.
-            case Qt.Key_Period:
-                self.handleKeyPeriod()
-
-            case Qt.Key_Delete:
-                self.handleKeyDelete()
-
-            case _: # Other keys
-                self.handleKeyOthers(event)
 
 
     @pyqtSlot()
@@ -525,6 +429,36 @@ class SortModeHandler(QObject):
         # Show new image
         self.galleryManager.updatePreview()
         # log.info(self.images)
+
+
+
+    def handleSortMode(self, event: QKeyEvent):
+        # pressedKey = event.text()
+        # Cancel currently started shortcut or escape from the hold partial sequence
+        match event.key():
+            case Qt.Key_Escape:
+                self.handleKeyEscape()
+
+            case Qt.Key_Backspace:
+                self.handleKeyBackspace()
+
+            # Sentinel: Hold current shortcut and use it as default for upcoming sequences until escape
+            case Qt.Key_Return:  # Key_Return is non-numeric Enter key
+                self.handleKeyReturn()
+
+            # Single-time move file
+            case Qt.Key_Space:
+                self.handleKeySpace()
+
+            # Repeat last move from src to dst of current image.
+            case Qt.Key_Period:
+                self.handleKeyPeriod()
+
+            case Qt.Key_Delete:
+                self.handleKeyDelete()
+
+            case _: # Other keys
+                self.handleKeyOthers(event)
 
 
 
@@ -619,14 +553,30 @@ class SortModeHandler(QObject):
         self.updateKeySequenceLabel()
         self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 
-    def addEntryIntoHistory(self, src, dst, imageName):
-        pass
+    def addEntryIntoHistory(self, src: str, dst: str, imageName: str, currentIndex: int, operation: Operations):
+        # TODO: Replace with the Command and UndoStack.
+        newHistoryEntry = {
+            "src": src,
+            "dst": dst,
+            "image": imageName,
+            "gallery_index": currentIndex,  # self.galleryManager.getGalleryIndex()
+            "operation": operation
+        }
+        # Append entry / Push entry to historyStack
+        self.mvHistory.append(newHistoryEntry)
 
-    def moveImageFromTo(self, src, dst):
-        pass
+    def moveImageCommand(self, src: str, dst: str, imageName: str):
+        # TODO: Replace with the Command and UndoStack.
+        shutil.move(src + "/" + imageName, dst + "/" + imageName)
+        self.addEntryIntoHistory(src, dst, imageName, self.galleryManager.getGalleryIndex(), Operations.MOVE)
+        self.galleryManager.removeFile(imageName)
+        self.updateStatusBarLabel(f"File moved to {dst}.")
 
-    def copyImageFromTo(self, src, dst):
-        pass
+    def copyImageCommand(self, src: str, dst: str, imageName: str):
+        # TODO: Replace with the Command and UndoStack.
+        shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
+        self.addEntryIntoHistory(src, dst, imageName, self.galleryManager.getGalleryIndex(), Operations.COPY)
+        self.updateStatusBarLabel(f"File copied to {dst}.")
 
 
     def afterMoveOperations(self):
