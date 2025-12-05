@@ -44,13 +44,14 @@ from src.treeView import ShortcutsTreeView
 screenWidth = 1152
 screenHeight = 864
 
+# https://doc.qt.io/archives/qtforpython-5/PySide2/QtCore/Qt.html
 allowedKeysCommon = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F, Qt.Key_G, Qt.Key_H, Qt.Key_I, Qt.Key_J,
                 Qt.Key_K, Qt.Key_L, Qt.Key_M, Qt.Key_N, Qt.Key_O, Qt.Key_P, Qt.Key_Q, Qt.Key_R, Qt.Key_S, Qt.Key_T,
                 Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z, Qt.Key_0, Qt.Key_1, Qt.Key_2, Qt.Key_3,
                 Qt.Key_4, Qt.Key_5, Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9]
 
 allowedKeysSort = allowedKeysCommon + [Qt.Key_Escape, Qt.Key_Backspace, Qt.Key_Return, Qt.Key_Space, Qt.Key_Period,
-                                       Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Home, Qt.Key_End]
+                                       Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Home, Qt.Key_End, Qt.Key_Comma]
 
 allowedKeysEdit = allowedKeysCommon + [Qt.Key_Escape, Qt.Key_Backspace, Qt.Key_Return, Qt.Key_Left, Qt.Key_Right,
                                        Qt.Key_Greater, Qt.Key_Minus, Qt.Key_Slash]
@@ -86,7 +87,7 @@ class MainWindow(QMainWindow, QObject):
                      f" Presets:     {presetsArg}\n"
                      f" Copy mode:   {setCopyModeArg}")
 
-        
+
         # ========== Main App Window parameters ==========
         self.appTitle = "Image Keysort"
         self.setWindowTitle(self.appTitle)
