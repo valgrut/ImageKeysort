@@ -297,6 +297,16 @@ class SortModeHandler(QObject):
         self.galleryManager.updatePreview()
 
     def handleKeyOthers(self, event):
+        """
+        Appends pressed key into the label in the UI.
+
+        Checks, whether currently pressed key sequence corresponds to some
+        existing shortcut.
+
+        If such shortcut exists, it moves the current image into corresponding destination.
+
+        HIT!
+        """
         log.debug("handleSortMode: Case _ (other keys)")
 
         pressedKey = event.text()
@@ -329,6 +339,8 @@ class SortModeHandler(QObject):
 
         log.info("HIT!")
 
+        # TODO: if ',' or ';' is at [0], remove it before checking the shortcut
+        # existance:
         dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
 
         if self.galleryManager.isGalleryEmpty():
@@ -359,7 +371,7 @@ class SortModeHandler(QObject):
         log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
         # Remove current image from the list of images in src directory
-        if not self.copyOnly:
+        if not self.copyOnly:  # TODO: if self.keySeq[0] != ',' or ...
             self.galleryManager.removeFile(imageName)
             shutil.move(src + "/" + imageName, dst + "/" + imageName)
             self.mvHistory.append(
@@ -372,7 +384,7 @@ class SortModeHandler(QObject):
                 }
             )
             self.updateStatusBarLabel(f"File moved to {dst}.")
-        else:
+        else:  # TODO: if self.keySeq[0] == ',' ...
             shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
             self.mvHistory.append(
                 {
