@@ -50,10 +50,12 @@ allowedKeysCommon = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F,
                 Qt.Key_U, Qt.Key_V, Qt.Key_W, Qt.Key_X, Qt.Key_Y, Qt.Key_Z, Qt.Key_0, Qt.Key_1, Qt.Key_2, Qt.Key_3,
                 Qt.Key_4, Qt.Key_5, Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9]
 
+# TODO: Maybe move into SortModeHandler class
 allowedKeysSort = allowedKeysCommon + [Qt.Key_Escape, Qt.Key_Backspace, Qt.Key_Return, Qt.Key_Space, Qt.Key_Period,
                                        Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Home, Qt.Key_End, Qt.Key_Comma,
                                        Qt.Key_Semicolon]
 
+# TODO: Maybe move into EditModeHandler class
 allowedKeysEdit = allowedKeysCommon + [Qt.Key_Escape, Qt.Key_Backspace, Qt.Key_Return, Qt.Key_Left, Qt.Key_Right,
                                        Qt.Key_Greater, Qt.Key_Minus, Qt.Key_Slash]
 
