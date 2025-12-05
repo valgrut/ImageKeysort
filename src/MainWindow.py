@@ -57,8 +57,6 @@ allowedKeysSort = allowedKeysCommon + [Qt.Key_Escape, Qt.Key_Backspace, Qt.Key_R
 allowedKeysEdit = allowedKeysCommon + [Qt.Key_Escape, Qt.Key_Backspace, Qt.Key_Return, Qt.Key_Left, Qt.Key_Right,
                                        Qt.Key_Greater, Qt.Key_Minus, Qt.Key_Slash]
 
-print("Allowd keys:")
-print(len(allowedKeysSort))
 
 log = logging.getLogger(__name__)
 
@@ -537,11 +535,11 @@ class MainWindow(QMainWindow, QObject):
 
     @pyqtSlot()
     def toggleCopyMode(self):
-        if self.sortModeHandler.getCopyOnlyState() is False:
+        if self.sortModeHandler.isCopyOnly() is False:
             self.setCopyMode()
             return
 
-        if self.sortModeHandler.getCopyOnlyState() is True:
+        if self.sortModeHandler.isCopyOnly() is True:
             self.unsetCopyMode()
             return
 
@@ -554,6 +552,7 @@ class MainWindow(QMainWindow, QObject):
         # self.treeViewWidget.setColumnHidden(2, False)
         self.galleryManager.setDisabled(True)
         self.treeViewWidget.setEnabled(True)
+        self.sortModeHandler.cleanupAndUpdate()
 
     @pyqtSlot()
     def set_sort_mode(self):
@@ -565,44 +564,50 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setEnabled(True)
         self.galleryManager.setDisabled(False)
         self.galleryManager.updatePreview()
+        self.editModeHandler.cleanupAndUpdate()
 
     def keyPressEvent(self, event):
         if not isinstance(event, QKeyEvent):
             return
 
+        log.debug(f"event: {event} ; text: {event.text()} ; key: {event.key()}")
+
         # pressedKey = event.text()
         pressedKey = event.key()
         if self.currentMode is Modes.SORT:
-            if pressedKey not in allowedKeysSort:  # TODO WIP !!!!! Zadne empty spaces ani zadne takove bullshity.
+            if pressedKey not in allowedKeysSort:
                 print(f"SortMode: Key {pressedKey} not in AllowedKeys.")
                 return
         if self.currentMode is Modes.EDIT:
-            if pressedKey not in allowedKeysEdit:  # TODO WIP !!!!! Zadne empty spaces ani zadne takove bullshity.
+            if pressedKey not in allowedKeysEdit:
                 print(f"EditMode: Key {pressedKey} not in AllowedKeys.")
                 return
-        # print("Pressed Key:", pressedKey)
-        # WIP TODO: if sortMode, then one set of allowed keys, else edit mode, then other set of allowed keys.
 
         # Key binding working in both modes:
         match event.key():
             case Qt.Key_Left:
                 self.previousImageRequestedSignal.emit()
+                # TODO: ? Move/remove this whole match-cases into QActions, since both keyboard and button execute this.
+                return
 
             case Qt.Key_Right:
                 self.nextImageRequestedSignal.emit()
+                # TODO: ? Move/remove this whole match-cases into QActions, since both keyboard and button execute this.
+                return
 
             case Qt.Key_Home:
                 self.firstImageRequestedSignal.emit()
+                # TODO: ? Move/remove this whole match-cases into QActions, since both keyboard and button execute this.
+                return
 
             case Qt.Key_End:
                 self.lastImageRequestedSignal.emit()
-
-            case Qt.Key_Delete:
-                # TODO???
-                pass
+                # TODO: ? Move/remove this whole match-cases into QActions, since both keyboard and button execute this.
+                return
 
             case _:  # Default case
                 super().keyPressEvent(event)
+                # Then proceed with the handling Sort or Edit mode... vvv
 
         if self.currentMode == Modes.EDIT:
             self.editModeHandler.handleEditMode(event)

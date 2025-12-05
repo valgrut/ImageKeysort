@@ -74,7 +74,10 @@ class SortModeHandler(QObject):
         log.debug("handleSortMode: Case 'Enter' (Key_Return)")
 
         if self.keySeq:
-            self.permanentKeySeq = self.keySeq
+            if self.keySeq[0] == ',' or self.keySeq[0] == ';':
+                self.permanentKeySeq = self.keySeq[1:]
+            else:
+                self.permanentKeySeq = self.keySeq
             self.keySeq = ""
 
         self.updateKeySequenceLabel()
@@ -135,6 +138,7 @@ class SortModeHandler(QObject):
 
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
+            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             self.galleryManager.removeFile(imageName)
 
             shutil.move(src + "/" + imageName, dst + "/" + imageName)
@@ -149,6 +153,7 @@ class SortModeHandler(QObject):
             )
             self.updateStatusBarLabel(f"File moved to {dst}.")
         else:
+            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
             self.mvHistory.append(
                 {
@@ -159,10 +164,11 @@ class SortModeHandler(QObject):
                     "operation": Operations.COPY
                 }
             )
+            self.updateStatusBarLabel(f"File copied to {dst}.")
+
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.decrementGalleryIndex()
 
-            self.updateStatusBarLabel(f"File copied to {dst}.")
 
         self.keySeq = ""
         # log.info(f"History entries: {len(self.mvHistory)}")
@@ -213,6 +219,7 @@ class SortModeHandler(QObject):
 
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
+            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             self.galleryManager.removeFile(imageName)
             shutil.move(src + "/" + imageName, dst + "/" + imageName)
             self.mvHistory.append(
@@ -226,6 +233,7 @@ class SortModeHandler(QObject):
             )
             self.updateStatusBarLabel(f"File moved to {dst}.")
         else:
+            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
             self.mvHistory.append(
                 {
@@ -236,10 +244,11 @@ class SortModeHandler(QObject):
                     "operation": Operations.COPY
                 }
             )
+            self.updateStatusBarLabel(f"File copied to {dst}.")
+
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.incrementGalleryIndex()
 
-            self.updateStatusBarLabel(f"File copied to {dst}.")
 
         log.info(f"History entries: {len(self.mvHistory)}")
         self.galleryManager.updateCounterLabelText()
@@ -311,25 +320,44 @@ class SortModeHandler(QObject):
 
         pressedKey = event.text()
 
-        # if event.key() not in allowedKeys:
-        #     log.info("not [a-zA-Z1-9] was pressed, nothing to append to shortcuts.")
-        #     return
+        # Validation of InstantCopy feature: ',' or ';' can be only the first char in sequence.
+        # Otherwise, shortcut could match before user could write the ',' or ';'.
+        if len(self.keySeq) > 0 and (pressedKey == ',' or pressedKey == ';'):
+            # ',' or ';' can be only used as the first character of the sequence
+            self.updateStatusBarLabel(f"Temporal copy characters ',' and ';' can only be the used as the first character.")
+            return
 
         self.keySeq += pressedKey
+        cleanKeySeq = self.keySeq
+
+        # TODO: if ',' or ';' is at [0], remove it before checking the shortcut
+        # TODO: Add allowed syntax: [,|;]?[a-zA-Z0-9].....
+        # TODO: ; or , is not allowed in the permanent (sentinel) part of the shortcut. Or is it???
+        moveToNextImage = False
+        instantCopy = False
+        if self.keySeq[0] == ',' or self.keySeq[0] == ';':
+            print("';' or ',' detected in the sequence.")
+            cleanKeySeq = self.keySeq[1:]  # We remove ',' or ';' from the shortcut to use it for matching and HIT.
+            instantCopy = True
+            if self.keySeq[0] == ',':
+                moveToNextImage = True
 
         self.updateTreeViewSignal.emit(self.keySeq)
+        self.updateKeySequenceLabel()
 
         fullShortcut = ""
         if self.permanentKeySeq:
-            fullShortcut = self.permanentKeySeq + self.keySeq
+            fullShortcut = self.permanentKeySeq + cleanKeySeq
         else:
-            fullShortcut = self.keySeq
+            fullShortcut = cleanKeySeq
 
-        log.info(f"key_seq: {self.keySeq}")
-        log.info(f"full key_seq: {fullShortcut}")
+        log.debug(f"self.permanentkeySeq: {self.permanentKeySeq}")
+        log.debug(f"CleanKeySeq: {cleanKeySeq}")
+        log.debug(f"self.keySeq: {self.keySeq}")
+        log.debug(f"permanentSeq + keySeq: {fullShortcut}")
 
-        # log.info(f"dst for shortcut: {self.shortcut_manager.get_dst_for_shortcut(full_shortcut)}")
-        if not self.keySeq:
+        # Prevent matching empty key sequence
+        if not cleanKeySeq:
             return
 
         # self.updateStatusBarLabelSignal.emit(f"Hit but No action. Destination directory is empty or does not exist for this shortcut.")
@@ -339,8 +367,6 @@ class SortModeHandler(QObject):
 
         log.info("HIT!")
 
-        # TODO: if ',' or ';' is at [0], remove it before checking the shortcut
-        # existance:
         dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
 
         if self.galleryManager.isGalleryEmpty():
@@ -371,7 +397,8 @@ class SortModeHandler(QObject):
         log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
         # Remove current image from the list of images in src directory
-        if not self.copyOnly:  # TODO: if self.keySeq[0] != ',' or ...
+        if not self.copyOnly and instantCopy is False:
+            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             self.galleryManager.removeFile(imageName)
             shutil.move(src + "/" + imageName, dst + "/" + imageName)
             self.mvHistory.append(
@@ -384,7 +411,8 @@ class SortModeHandler(QObject):
                 }
             )
             self.updateStatusBarLabel(f"File moved to {dst}.")
-        else:  # TODO: if self.keySeq[0] == ',' ...
+        elif self.copyOnly or instantCopy:
+            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
             self.mvHistory.append(
                 {
@@ -395,10 +423,13 @@ class SortModeHandler(QObject):
                     "operation": Operations.COPY
                 }
             )
-            if SettingsDialog.settingsGetAutoNextAfterCopy():
-                self.galleryManager.incrementGalleryIndex()
-
             self.updateStatusBarLabel(f"File copied to {dst}.")
+
+            # TODO: Should instantCopy override Settings?
+            # 2 options: 1. Settings->Gotonext overrides everything else.
+            #            2. , or ; overrides anything what is set in Settings
+            if SettingsDialog.settingsGetAutoNextAfterCopy() or moveToNextImage:
+                self.galleryManager.incrementGalleryIndex()
 
         log.info(f"History entries: {len(self.mvHistory)}")
         # Update counter label
@@ -581,7 +612,12 @@ class SortModeHandler(QObject):
             return False
         return True
 
-
+    def cleanupAndUpdate(self):
+        self.keySeq = ""
+        self.permanentKeySeq = ""
+        self.updateTreeViewSignal.emit(self.keySeq)
+        self.updateKeySequenceLabel()
+        self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 
     def moveImageFromTo(self, src, dst):
         pass
@@ -619,5 +655,5 @@ class SortModeHandler(QObject):
     def unsetCopyOnly(self):
         self.copyOnly = False
 
-    def getCopyOnlyState(self) -> bool:
+    def isCopyOnly(self) -> bool:
         return self.copyOnly
