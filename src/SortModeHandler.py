@@ -148,10 +148,8 @@ class SortModeHandler(QObject):
 
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
-            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             self.moveImageCommand(src, dst, imageName)
         else:
-            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             self.copyImageCommand(src, dst, imageName)
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
@@ -207,10 +205,8 @@ class SortModeHandler(QObject):
 
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
-            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             self.moveImageCommand(src, dst, imageName)
         else:
-            # TODO: Refactor this into separated method and just call it here... one for move, one for copy calling the one for move.
             self.copyImageCommand(src, dst, imageName)
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
