@@ -611,6 +611,16 @@ class MainWindow(QMainWindow, QObject):
                 super().keyPressEvent(event)
                 # Then proceed with the handling Sort or Edit mode... vvv
 
+        # TODO: Rewrite na neco jako:
+        # self.currentMode.handleEvent(event)
+        # A neco takoveho pouzit na vicero mistech, kde lze overloadnout
+        # metoda.
+        # Napr pri Ctrl+Z se posle do current modu.
+        # Kdyz bude aktualni SortMode, tak se undo presun obrazku
+        # Kdyz bude aktualni EditMode, tak se undo zmena ve zkratkach.
+        # Taky pridat Redo! Undo a Redo bude pohyb po historii s ukazatelem.
+        # Pokud nekdo udela alternativni vetev, puvodni od toho bodu bude
+        # smazana.
         if self.currentMode == Modes.EDIT:
             self.editModeHandler.handleEditMode(event)
 
