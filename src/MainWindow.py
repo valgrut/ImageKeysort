@@ -280,6 +280,8 @@ class MainWindow(QMainWindow, QObject):
         self.buttonExtractTextAction.setDisabled(True)
         self.toolbar.addAction(self.buttonExtractTextAction)
 
+        self.toolbar.addAction(self.renameFileAction)
+
 
         # ========== Signal connections ==========
         self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)  # TODO: do it better
@@ -388,6 +390,11 @@ class MainWindow(QMainWindow, QObject):
         self.returnToolbarAction = QAction("&Return toolbar", self)
         self.returnToolbarAction.setStatusTip("Returns toolbar, if closed.")
         self.returnToolbarAction.triggered.connect(self.returnToolbar)
+
+        self.renameFileAction = QAction("&Rename file", self)
+        self.renameFileAction.setShortcut('Ctrl+F')
+        self.renameFileAction.setStatusTip("Rename current file.")
+        self.renameFileAction.triggered.connect(self.galleryManager.renameFile)
 
         self.openDirectoryAction = QAction(QIcon('Resources/inbox-plus.png'), "&Open directory", self)
         self.openDirectoryAction.setShortcut('Ctrl+O')

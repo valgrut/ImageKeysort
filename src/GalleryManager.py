@@ -101,7 +101,7 @@ class GalleryManager(QStackedWidget):
         db = QMimeDatabase()
         if path is None:
             path = str(Path(self.sourceDirectoryPath + "/" + self.getCurrentFilename()))
-        
+
         # 1) by filename (fast; catches Makefile, Dockerfile, etc. on many systems)
         # mt = db.mimeTypeForFile(path, QMimeDatabase.MatchExtension)
         # if mt.name().startswith("text/"):
@@ -190,12 +190,12 @@ class GalleryManager(QStackedWidget):
             # It is playable
             self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setVideoWidget()
-            
+
             videoPath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
             self.mediaContainerWidget.updateVideo(videoPath)  # Mozna spis prejmenovat na showVideo()
             self.disableExtractTextButtonSignal.emit()
             self.enableCropButtonSignal.emit()
-        
+
         #elif self.getCurrentFilename().lower().endswith(self.textSuffixes):
         elif self.isCurrentTextFile():
             # It is text file
@@ -206,7 +206,7 @@ class GalleryManager(QStackedWidget):
             self.mediaContainerWidget.updateTextFile(textFilePath)
             self.disableExtractTextButtonSignal.emit()
             self.disableCropButtonSignal.emit()
-        
+
         else:
             # It is image
             self.setCurrentWidget(self.mediaContainerWidget)
@@ -230,6 +230,9 @@ class GalleryManager(QStackedWidget):
 
     def addFile(self, fileName, positionIndex=0):
         self.availableMediaFiles.insert(positionIndex, fileName)
+
+    def renameFile(self):
+        pass
 
     def removeFile(self, fileName):
         if fileName in self.availableMediaFiles:
