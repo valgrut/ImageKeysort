@@ -165,6 +165,18 @@ class SortModeHandler(QObject):
 
 
     def handleKeyPeriod(self):
+        """
+        Repeat the move/copy with the same dst path as the last command.
+        Result is identical, as the same key sequence would be pressed again.
+
+        Copy/Move depends only on the currently active mode, not on the
+        mode, in which last operation was performed in.
+
+        Example:
+        Last operation was made in copy mode.
+        Unset copy mode. Press Period.
+        This operation is made in non-copy mode (moves image).
+        """
         log.debug("handleSortMode: Case '.'")
         # TODO: refactor: Mohlo by to vypadat nejak takhle:
         # if history is empty:

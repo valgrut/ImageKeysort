@@ -122,7 +122,8 @@ from src.MainWindow import MainWindow
 # - [ ] Prochazet TODO v souborech a udelat je.
 # - [~] ! Napsat unit testy !!
 # - [ ] !!!!!!! Setridit a zorganizovat MainWindow init metodu - vsechny Actions k sobe, vsechny .connect k sobe a tak.
-
+# - [ ] Help: Pridat examples - jak vypada tree, jak bude vypadat po pridani
+# nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 
 # Settings:
 # - [ ] Settings: Moznost sort podle dst_path, (krom podle insert order (default) a podle Key_char (alphabetically).
