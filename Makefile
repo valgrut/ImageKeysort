@@ -5,6 +5,13 @@ QSS_STYLES=static/app-styles.qss
 PYTEST_ARGS="-v"  # -v | -vv |  
 # PYTEST_ARGS=""  # Empty
 
+# RUN_APP_CMD = python3 -m src.main"
+# RUN_APP_CMD = python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Pictures/test_options.json
+RUN_APP_CMD = /usr/bin/python3 -m src.main --src-path ~/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/ --set-copy-mode
+# RUN_APP_CMD = python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Repositories/WorkstationSetup/scripts/image-sorter/presets/data.json
+# RUN_APP_CMD = python3 -m src.main --src-path /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads
+# RUN_APP_CMD = python3 -m src.main --src-path C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\testing-data\downloads
+
 config:
 	( \
 	python3 -m venv venv; \
@@ -21,7 +28,7 @@ run: config qss
 	source ${ROOT_DIR}/venv/bin/activate; \
 	pyrcc5 ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py; \
 	cd ${ROOT_DIR}; \
-	python3 -m src.main; \
+	$(RUN_APP_CMD) ; \
 	deactivate; \
 	)
 

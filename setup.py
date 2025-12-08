@@ -6,7 +6,7 @@ setup(
     packages=['src'],
     url='',
     license='GPL2',
-    author='Kyuubi',
+    author='Jiri Peska',
     author_email='xpeskajiri@seznam.cz',
     description='Sort photos with custom keyboard shortcuts.'
 )
