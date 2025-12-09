@@ -187,6 +187,7 @@ from src.MainWindow import MainWindow
 # - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
 # - [ ] Sentinel set + space key in sort mode. seq: acde; nastavit ac+; acd<mezernik> -> Error zkratka 'd' neexistuje. Mela by se ale pouzit i cast pred sentinelem ('ac').
 # - [ ] SortMode: abc<enter>cde<enter>xyz<enter> ... vzdy prepisuje predchozi sentinel.
+# - [ ] Textove dokumenty nemaji oranzovy ramecek v Copy modu
 
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
