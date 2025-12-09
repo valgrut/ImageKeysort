@@ -72,5 +72,9 @@ OR
 ## 6. Dependencies
 
 ```
-sudo dnf install python3-qt5
+sudo dnf install
+python3-pip
+python3-qt5
 ```
+
+pip3 install -r requirements.txt

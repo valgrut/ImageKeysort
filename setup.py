@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='image-keysort',
-    version='',
+    version='1',
     packages=['src'],
     url='',
     license='GPL2',

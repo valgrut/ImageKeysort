@@ -111,7 +111,7 @@ class SortModeHandler(QObject):
                 if not os.path.exists(dst):
                     log.info(f"No action. Shortcut probably does not contain dst_path ({dst}).")
                     self.updateStatusBarLabelSignal.emit(
-                        f"No action. Destination directory is empty or does not exist for shortcut ({self.keySeq}).")
+                        f"No action. Destination directory ({dst}) for the sequence {self.keySeq} is empty or does not exist.")
                     return
                 log.info(f"middle_path {dst}")
             else:
