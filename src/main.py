@@ -124,6 +124,7 @@ Features DONE:
 
 
 ### Rename - related todo:
+- [ ] Undo/Redo
 
 
 Important - Misc:
