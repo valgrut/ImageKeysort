@@ -21,6 +21,7 @@ class GalleryManager(QStackedWidget):
     enableExtractTextButtonSignal = pyqtSignal()
     disableCropButtonSignal = pyqtSignal()
     enableCropButtonSignal = pyqtSignal()
+    setFilenameTextEditSignal = pyqtSignal()
 
     def __init__(self, mainWindow):
         super().__init__()
@@ -231,8 +232,23 @@ class GalleryManager(QStackedWidget):
     def addFile(self, fileName, positionIndex=0):
         self.availableMediaFiles.insert(positionIndex, fileName)
 
+    @pyqtSlot()
     def renameFile(self):
-        pass
+        """
+        Renames current file in the gallery.
+        """
+        print("Renaming file...")
+        self.setFilenameTextEditSignal.emit()
+        self.mediaContainerWidget.startFilenameEdit()
+    
+    def commitNewFileName(self, newFileName):
+        """
+        Commits the new filename to the gallery's availableMediaFiles list.
+        """
+        currentFileName = self.getCurrentFilename()
+        if newFileName and newFileName != currentFileName:
+            self.availableMediaFiles[self.galleryIndex] = newFileName
+            self.updateFilenameLabelText()
 
     def removeFile(self, fileName):
         if fileName in self.availableMediaFiles:

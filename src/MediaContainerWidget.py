@@ -1,7 +1,7 @@
 import logging
 
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
 from PyQt5.QtGui import QCursor, QKeyEvent, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QMessageBox, \
     QVBoxLayout, QLineEdit
@@ -44,10 +44,15 @@ class MediaContainerWidget(QWidget):
 
         rightLayout.addWidget(self.sourceDirLabel)
 
-        self.imageFilenameLabel = QLineEdit()
-        self.imageFilenameLabel.setMaximumHeight(30)
+        self.imageFilenameField = QStackedWidget()
+        self.imageFilenameField.setMaximumHeight(30)
+        self.imageFilenameEdit = QLineEdit()
+        self.imageFilenameLabel = QLabel()
+        self.imageFilenameField.addWidget(self.imageFilenameLabel)
+        self.imageFilenameField.addWidget(self.imageFilenameEdit)
+        self.imageFilenameField.setCurrentWidget(self.imageFilenameLabel)
 
-        rightLayout.addWidget(self.imageFilenameLabel)
+        rightLayout.addWidget(self.imageFilenameField)
         rightLayout.addWidget(self.stackedMediaWidget)
 
         self.previousImageButton = QPushButton("&Previous", self)
@@ -99,11 +104,52 @@ class MediaContainerWidget(QWidget):
         # Update Counter label
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
-        # Show ImageViewWidget by default
-        # self.stackedMediaWidget.setCurrentWidget(self.imageViewWidget)
 
+    def keyPressEvent(self, a0):
+        """
+        Handle key press events for filename editing.
+
+        :param a0: QKeyEvent
+        """
+        if isinstance(a0, QKeyEvent):
+            if a0.key() == Qt.Key_Return or a0.key() == Qt.Key_Enter:
+                self.finishFilenameEdit()
+                return
+            if a0.key() == Qt.Key_Escape:
+                self.quitFilenameEdit()
+                return
+        return super().keyPressEvent(a0)
+
+    @pyqtSlot()
+    def startFilenameEdit(self):
+        """
+        Start filename edit process.
+        """
+        self.imageFilenameField.setCurrentWidget(self.imageFilenameEdit)
+        self.imageFilenameEdit.setText(self.galleryManager.getCurrentFilename())
+        self.imageFilenameEdit.setFocus()
+        self.imageFilenameEdit.selectAll()
+
+    @pyqtSlot()
+    def finishFilenameEdit(self):
+        """
+        Finish filename edit and save changes.
+        """
+        self.galleryManager.commitNewFileName(self.imageFilenameEdit.text())
+        self.imageFilenameField.setCurrentWidget(self.imageFilenameLabel)
+        # TODO: 
+        # os.rename() + error handling if file with new name already exists etc.
+
+    def quitFilenameEdit(self):
+        """
+        Quit filename edit without saving changes.
+        """
+        self.imageFilenameField.setCurrentWidget(self.imageFilenameLabel)
 
     def setCopyModeBorderHighlight(self):
+        """
+        Set border highlight for copy mode.
+        """
         # print(self.stackedMediaWidget.currentWidget().styleSheet())
         self.stackedMediaWidget.currentWidget().setStyleSheet(f"""
             border: 5px solid orange;
@@ -114,6 +160,9 @@ class MediaContainerWidget(QWidget):
         # self.stackedMediaWidget.update()
 
     def unsetCopyModeBorderHighlight(self):
+        """
+        Unset border highlight for copy mode.
+        """
         self.stackedMediaWidget.currentWidget().setStyleSheet(f"""
             border: none;
         """)
