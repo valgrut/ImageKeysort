@@ -250,7 +250,7 @@ Minor issues, future features:
 - [ ] Ctrl+F Otevre search bar, a kdyz zadam cast nejake slozky, zobrazi se matchnute slozky s jejich zkratkami. (hlavne kdyz se preset rozroste, tak to muze byt uzitecne)
 - [ ] Jazykova podpora ?
 - [ ] Tooltips
-- [ ] !!! Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj
+- [ ] !!! Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj. Viz GPT rada jak to zmonetizovat. Pohledat i web "How to sell SW".
 - [ ] Pridat komentare metod a trid (Vygenerovat AI)
 
 """

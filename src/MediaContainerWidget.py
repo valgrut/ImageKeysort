@@ -1,4 +1,6 @@
 import logging
+import os
+from pathlib import Path
 
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
@@ -129,7 +131,8 @@ class MediaContainerWidget(QWidget):
         self.imageFilenameField.setCurrentWidget(self.imageFilenameEdit)
         self.imageFilenameEdit.setText(self.galleryManager.getCurrentFilename())
         self.imageFilenameEdit.setFocus()
-        self.imageFilenameEdit.selectAll()
+        #self.imageFilenameEdit.selectAll()  # TODO: Select all but file extension
+        self.imageFilenameEdit.setSelection(0, len(self.galleryManager.getCurrentFilename()) - len(Path(self.galleryManager.getCurrentFilename()).suffix))
 
     @pyqtSlot()
     def finishFilenameEdit(self):
@@ -138,11 +141,6 @@ class MediaContainerWidget(QWidget):
         """
         self.galleryManager.commitNewFileName(self.imageFilenameEdit.text())
         self.imageFilenameField.setCurrentWidget(self.imageFilenameLabel)
-        # TODO [ ] error handling if file with new name already exists etc. Copy to clipboard (so user dont have to write it all again just to append for example number) / remain in edit mode / live check during writing ? Red border if exists green if not.
-        # TODO [ ] Validate new filename (no special chars etc.)
-        # TODO [ ] update status bar label (in case of both error and success)
-        # os.rename(self.galleryManager.getCurrentFilePath(), self.galleryManager.getCurrentDirPath() + "/" + self.imageFilenameEdit.text())
-        # self.galleryManager.updateStatusBarLabel.emit("File with such name already exists.")
         self.galleryManager.setFocus()
 
     def quitFilenameEdit(self):

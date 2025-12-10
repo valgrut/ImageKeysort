@@ -22,6 +22,7 @@ class GalleryManager(QStackedWidget):
     disableCropButtonSignal = pyqtSignal()
     enableCropButtonSignal = pyqtSignal()
     setFilenameTextEditSignal = pyqtSignal()
+    updateStatusBarLabelSignal = pyqtSignal(str)
 
     def __init__(self, mainWindow):
         super().__init__()
@@ -235,9 +236,8 @@ class GalleryManager(QStackedWidget):
     @pyqtSlot()
     def renameFile(self):
         """
-        Renames current file in the gallery.
+        Starts the filename edit process.
         """
-        print("Renaming file...")
         self.setFilenameTextEditSignal.emit()
         self.mediaContainerWidget.startFilenameEdit()
     
@@ -245,10 +245,32 @@ class GalleryManager(QStackedWidget):
         """
         Commits the new filename to the gallery's availableMediaFiles list.
         """
-        currentFileName = self.getCurrentFilename()
-        if newFileName and newFileName != currentFileName:
+        originalFilename = self.getCurrentFilename()
+
+        originalFullPath = Path(self.getSourcePath() + "/" + originalFilename)
+        newFullPath = Path(self.getSourcePath() + "/" + newFileName)
+
+        log.info(f"Original full path: {originalFullPath}")
+        log.info(f"new full path: {newFullPath}")
+
+        # TODO [ ] Validate new filename (no special chars etc.)
+
+        # Check that new filename is not empty (or just suffix)
+        # TODO
+
+        # Check whether the file with the such name already exists
+        if newFullPath.exists():
+            self.updateStatusBarLabelSignal.emit("Error: A file with such name already exists.")
+            log.info("Error: A file with such name already exists.")
+            return
+        
+        # Check if the file is different and if the new name is not empty
+        if newFileName and newFileName != originalFilename:
             self.availableMediaFiles[self.galleryIndex] = newFileName
             self.updateFilenameLabelText()
+            originalFullPath.rename(newFullPath)
+            self.updateStatusBarLabelSignal.emit("File was renamed successfully.")
+            log.info("File was renamed successfully.")
 
     def removeFile(self, fileName):
         if fileName in self.availableMediaFiles:
@@ -256,8 +278,8 @@ class GalleryManager(QStackedWidget):
 
         if self.galleryIndex >= len(self.availableMediaFiles):
             self.galleryIndex = len(self.availableMediaFiles) - 1
-    #
-    #
+
+
     # def mousePressEvent(self, event):
     #     origin = event.pos()
     #     log.info(f"Origin position: {origin}")

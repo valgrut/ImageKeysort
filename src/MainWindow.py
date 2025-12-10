@@ -295,6 +295,8 @@ class MainWindow(QMainWindow, QObject):
         self.firstImageRequestedSignal.connect(self.galleryManager.setFirstImage)
         self.lastImageRequestedSignal.connect(self.galleryManager.setLastImage)
 
+        self.galleryManager.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
+
         self.shortcutManager.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.shortcutManager.updateMainWindowTitleSignal.connect(self.updateWindowTitle)
         self.shortcutManager.updateTreePreviewSignal.connect(self.treeViewWidget.update_tree_view)
