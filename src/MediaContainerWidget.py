@@ -48,6 +48,7 @@ class MediaContainerWidget(QWidget):
         self.imageFilenameField.setMaximumHeight(30)
         self.imageFilenameEdit = QLineEdit()
         self.imageFilenameLabel = QLabel()
+        self.imageFilenameLabel.mouseDoubleClickEvent = lambda event: self.startFilenameEdit()
         self.imageFilenameField.addWidget(self.imageFilenameLabel)
         self.imageFilenameField.addWidget(self.imageFilenameEdit)
         self.imageFilenameField.setCurrentWidget(self.imageFilenameLabel)
@@ -137,14 +138,19 @@ class MediaContainerWidget(QWidget):
         """
         self.galleryManager.commitNewFileName(self.imageFilenameEdit.text())
         self.imageFilenameField.setCurrentWidget(self.imageFilenameLabel)
-        # TODO: 
-        # os.rename() + error handling if file with new name already exists etc.
+        # TODO [ ] error handling if file with new name already exists etc. Copy to clipboard (so user dont have to write it all again just to append for example number) / remain in edit mode / live check during writing ? Red border if exists green if not.
+        # TODO [ ] Validate new filename (no special chars etc.)
+        # TODO [ ] update status bar label (in case of both error and success)
+        # os.rename(self.galleryManager.getCurrentFilePath(), self.galleryManager.getCurrentDirPath() + "/" + self.imageFilenameEdit.text())
+        # self.galleryManager.updateStatusBarLabel.emit("File with such name already exists.")
+        self.galleryManager.setFocus()
 
     def quitFilenameEdit(self):
         """
         Quit filename edit without saving changes.
         """
         self.imageFilenameField.setCurrentWidget(self.imageFilenameLabel)
+        self.galleryManager.setFocus()
 
     def setCopyModeBorderHighlight(self):
         """
