@@ -145,22 +145,22 @@ class GalleryManager(QStackedWidget):
     @pyqtSlot()
     def setNextImage(self):
         self.incrementGalleryIndex()
-        self.updatePreview()  # TODO: sig-slots
+        self.updatePreview()  # TODO: sig-slots ?
 
     @pyqtSlot()
     def setPreviousImage(self):
         self.decrementGalleryIndex()
-        self.updatePreview()  # TODO: sig-slots
+        self.updatePreview()  # TODO: sig-slots ?
 
     @pyqtSlot()
     def setFirstImage(self):
         self.galleryIndex = 0
-        self.updatePreview()  # TODO: sig-slots
+        self.updatePreview()  # TODO: sig-slots ?
 
     @pyqtSlot()
     def setLastImage(self):
         self.galleryIndex = len(self.availableMediaFiles) - 1
-        self.updatePreview()  # TODO: sig-slots
+        self.updatePreview()  # TODO: sig-slots ?
 
     def getCurrentFilename(self):
         if self.availableMediaFiles:
