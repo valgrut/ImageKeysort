@@ -373,6 +373,7 @@ class MainWindow(QMainWindow, QObject):
         galleryMenu.addAction(self.undoSortAction)
         galleryMenu.addSeparator()
         galleryMenu.addAction(self.openDirectoryAction)
+        galleryMenu.addAction(self.renameFileAction)
 
         # Help menu
         helpMenu = QMenu("&Help", self)
@@ -392,7 +393,7 @@ class MainWindow(QMainWindow, QObject):
         self.returnToolbarAction.triggered.connect(self.returnToolbar)
 
         self.renameFileAction = QAction("&Rename file", self)
-        self.renameFileAction.setShortcut('Ctrl+F')
+        self.renameFileAction.setShortcuts(['Ctrl+F', 'F2'])
         self.renameFileAction.setStatusTip("Rename current file.")
         self.renameFileAction.triggered.connect(self.galleryManager.renameFile)
 

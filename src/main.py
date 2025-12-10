@@ -94,12 +94,13 @@ from src.MainWindow import MainWindow
 # - [X] v edit modu nechat zasednout image cast, aby bylo zretelne ze to neni sort mode...
 # - [X] !!!!! Sort mode (Copy option): Pridat moznost pred shortcut pridat znak, treba , a ; pro kopirovani bez zapinani copy rezimu (nebo by to mohl zapnout interne pouze docasne a pak vypnout. Jeden znak udela copy a go to next img, druhy pouze copy ale zustane na aktualnim.
 # - [X] !! Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
+# - [X] Add another keyboard shortcut (F2) to initiate file renaming.
 
 
 # ====== Main features to implement ======
-# - [ ] Change names of the files
+# - [~] Change names of the files
 # - [ ] Rework ShortcutTreeView
-# - [ ] Crop image / video (sources: keyboard shortcut, button in menu, button in toolbar)
+# - [~] Crop image / video (sources: keyboard shortcut, button in menu, button in toolbar)
 # - [ ] Zoom in/out the image (imageView only)
 
 # Cropping
@@ -129,6 +130,7 @@ from src.MainWindow import MainWindow
 # - [ ] Settings: Moznost sort podle dst_path, (krom podle insert order (default) a podle Key_char (alphabetically).
 # - [ ] Settings: Add option which types of files to allow / show (videos/images/pdfs/text files/ ...)
 # - [ ] Settings: show/hide gallery counter label (muze nekoho stresovat, kolik toho jeste zbyva v dane slozce setridit.)
+# - [ ] Pridat do Settings: Otevrit posledni src slozku pri startu aplikace.
 
 
 # Refactoring and code tweaking
@@ -159,7 +161,6 @@ from src.MainWindow import MainWindow
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 
-
 # Consider (Maybe):
 # - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
 # - [ ] separovat layoutovani do buildUI() method.
@@ -188,6 +189,8 @@ from src.MainWindow import MainWindow
 # - [ ] Sentinel set + space key in sort mode. seq: acde; nastavit ac+; acd<mezernik> -> Error zkratka 'd' neexistuje. Mela by se ale pouzit i cast pred sentinelem ('ac').
 # - [ ] SortMode: abc<enter>cde<enter>xyz<enter> ... vzdy prepisuje predchozi sentinel.
 # - [ ] Textove dokumenty nemaji oranzovy ramecek v Copy modu
+# - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
+
 
 # Shortcuts management, Shortcut Tree (GUI):
 # - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
