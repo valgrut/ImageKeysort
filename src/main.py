@@ -143,9 +143,9 @@ from src.MainWindow import MainWindow
 
 
 # Important features TODO:
-# - [ ] !!!!! Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
-#       - [ ] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
-# - [ ] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
+# - [~] !!!!! Moznost prejmenovat obrazek - udelat textfield z labelu pro imagename.
+#       - [~] !!!!! By clicking to image name OR by pressing some shortcut (which?) - rename the file to given string. (!!! Check that new name does not exist in this directory)
+# - [~] Crop image - Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak.
 # - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 # - [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
 # - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
@@ -160,6 +160,8 @@ from src.MainWindow import MainWindow
 # - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
 # - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 # - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
+# - [~] Add ImakeKeysort into Fedora's Files OpenWith. Just like for Windows.
+# - [~] Add Image Keysort into Fedora's app list (so it appears in the app launcher/search).
 
 # Consider (Maybe):
 # - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.
