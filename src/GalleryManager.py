@@ -91,6 +91,9 @@ class GalleryManager(QStackedWidget):
         self.updatePreview()  # TODO
 
     def isGalleryEmpty(self):
+        """
+        returns true if there is no media files in the gallery.
+        """
         if not self.availableMediaFiles:
             return True
         return False
@@ -124,7 +127,7 @@ class GalleryManager(QStackedWidget):
 
     def isCurrentVideo(self) -> bool:
         """
-        returns true if current image is .gif or other video format
+        returns true if current file (given by self.galleryIndex) is a video.
         """
 
         if str(self.availableMediaFiles[self.galleryIndex]).endswith(self.videoSuffixes):
