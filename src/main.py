@@ -206,6 +206,7 @@ To Fix:
 - [ ] SortMode: abc<enter>cde<enter>xyz<enter> ... vzdy prepisuje predchozi sentinel. Udelat s tim neco nebo to tak nechat?
 - [ ] Textove dokumenty nemaji oranzovy ramecek v Copy modu
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
+- [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
 
 
 Shortcuts management, Shortcut Tree (GUI):

@@ -389,9 +389,9 @@ class MainWindow(QMainWindow, QObject):
         self.loadAction.triggered.connect(self.load_data)
 
         self.exitAction = QAction(QIcon('Resources/control-power.png'), "&Exit", self)
+        self.exitAction.setShortcut('Ctrl+Q')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.exitAction.setStatusTip("Exit application")
         self.exitAction.triggered.connect(self.exitApp)
-        self.exitAction.setShortcut('Ctrl+Q')  # TODO: Fix - I want the shortcuts to be shown in the menu.
 
         self.undoSortAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo move", self)
         self.undoSortAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
