@@ -147,7 +147,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.copyButton = QPushButton("&Copy", self)
         self.copyButton.setCheckable(True)
-        self.copyButton.clicked.connect(self.toggleCopyMode)
+        self.copyButton.clicked.connect(self.toggleCopyModeAction.activate)
         self.copyButton.setFocusPolicy(Qt.NoFocus)
         self.copyButton.setGraphicsEffect(Styles.getShadowEffect())
         self.copyButton.setToolTip("Toggle copy mode (switch between copy and move operation).")
@@ -196,32 +196,6 @@ class MainWindow(QMainWindow, QObject):
         self.currentMode = "home"  # Next options: edit, sort
 
 
-        # ========== Register global keyboard shortcuts ==========
-        setEditModeSeq = QKeySequence(Qt.CTRL + Qt.Key_E)
-        self.setEditModeShortcut = QShortcut(setEditModeSeq, self)
-        self.setEditModeShortcut.activated.connect(self.set_edit_mode)
-
-        setSortModeSeq = QKeySequence(Qt.CTRL + Qt.Key_R)
-        self.setSortModeShortcut = QShortcut(setSortModeSeq, self)
-        self.setSortModeShortcut.activated.connect(self.set_sort_mode)
-
-        undoSeq = QKeySequence(Qt.CTRL + Qt.Key_Z)
-        self.undoShortcut = QShortcut(undoSeq, self)
-        self.undoShortcut.activated.connect(self.sortModeHandler.undo_last_operation)
-
-        saveDataSeq = QKeySequence(Qt.CTRL + Qt.Key_S)
-        self.saveDataShortcut = QShortcut(saveDataSeq, self)
-        self.saveDataShortcut.activated.connect(self.save_data)
-
-        loadDataSeq = QKeySequence(Qt.CTRL + Qt.Key_L)
-        self.loadDataShortcut = QShortcut(loadDataSeq, self)
-        self.loadDataShortcut.activated.connect(self.load_data)
-
-        toggleCopySeq = QKeySequence(Qt.CTRL + Qt.Key_C)
-        self.toggleCopyShortcut = QShortcut(toggleCopySeq, self)
-        self.toggleCopyShortcut.activated.connect(self.toggleCopyMode)
-
-
         # ========== User's Shortcuts Tree Structure and Viewer ==========
         # Puvodni verze:
         self.treeViewWidget = CustomTreeWidget(self.shortcutManager)
@@ -232,7 +206,7 @@ class MainWindow(QMainWindow, QObject):
         self.treeViewWidget.setColumnWidth(2, 50)
 
         # TODO: Rewrite, then use.
-        # 1. New tree - AI
+        # 1. New tree - qts example
         # self.treeViewWidget = ShortcutsTreeView(self.shortcutManager)
 
         # 2. New tree - My one
@@ -350,11 +324,11 @@ class MainWindow(QMainWindow, QObject):
         fileMenu.addAction(self.openDirectoryAction)
         fileMenu.addAction(self.returnToolbarAction)
 
-        act_settings = QAction(QIcon("Resources/gear.png"), "Settings", self)
-        act_settings.setShortcut("Ctrl+,")  # common on mac
-        act_settings.triggered.connect(self.open_settings)
+        appSettingsAction = QAction(QIcon("Resources/gear.png"), "Settings", self)
+        appSettingsAction.setShortcut("Ctrl+,")  # common on mac
+        appSettingsAction.triggered.connect(self.open_settings)
 
-        fileMenu.addAction(act_settings)
+        fileMenu.addAction(appSettingsAction)
         fileMenu.addSeparator()
         fileMenu.addAction(self.exitAction)
 
@@ -405,22 +379,22 @@ class MainWindow(QMainWindow, QObject):
         self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)
 
         self.saveAction = QAction(QIcon('Resources/disk-pencil.png'), "&Save shortcuts", self)
-        # self.saveAction.setShortcut('Ctrl+S')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.saveAction.setShortcut('Ctrl+S')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.saveAction.setStatusTip("Save current shortcuts to a file")
         self.saveAction.triggered.connect(self.save_data)
 
         self.loadAction = QAction(QIcon('Resources/disk-arrow.png'), "&Load shortcuts", self)
-        # self.loadAction.setShortcut('Ctrl+L')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.loadAction.setShortcut('Ctrl+L')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.loadAction.setStatusTip("Load shortcuts from a file")
         self.loadAction.triggered.connect(self.load_data)
 
         self.exitAction = QAction(QIcon('Resources/control-power.png'), "&Exit", self)
         self.exitAction.setStatusTip("Exit application")
         self.exitAction.triggered.connect(self.exitApp)
-        # self.exitAction.setShortcut('Ctrl+Q')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.exitAction.setShortcut('Ctrl+Q')  # TODO: Fix - I want the shortcuts to be shown in the menu.
 
         self.undoSortAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo move", self)
-        # self.undoSortAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.undoSortAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
         self.undoSortAction.setStatusTip("Undo last move/copy operation")
         self.undoSortAction.triggered.connect(self.sortModeHandler.undo_last_operation)
 
@@ -437,6 +411,24 @@ class MainWindow(QMainWindow, QObject):
         self.clearTreeAction.setStatusTip("Clears all shortcuts from the tree.")
         self.clearTreeAction.triggered.connect(self.clearShortcuts)
 
+        self.toggleCopyModeAction = QAction("&Toggle copy mode", self)
+        self.toggleCopyModeAction.setShortcut('Ctrl+C')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.toggleCopyModeAction.setStatusTip("Toggle copy mode. Switch between copy and move operation.")
+        self.toggleCopyModeAction.triggered.connect(self.toggleCopyMode)
+        self.addAction(self.toggleCopyModeAction)  # Needed to make the shortcut work.
+
+        self.setEditModeAction = QAction("&Set edit mode", self)
+        self.setEditModeAction.setShortcut('Ctrl+E')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.setEditModeAction.setStatusTip("Sets Edit mode.")
+        self.setEditModeAction.triggered.connect(self.set_edit_mode)
+        self.addAction(self.setEditModeAction)  # Needed to make the shortcut work.
+
+        self.setSortModeAction = QAction("&Set sort mode", self)
+        self.setSortModeAction.setShortcut('Ctrl+R')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.setSortModeAction.setStatusTip("Sets Sort mode.")
+        self.setSortModeAction.triggered.connect(self.set_sort_mode)
+        self.addAction(self.setSortModeAction)  # Needed to make the shortcut work.
+        
 
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):
