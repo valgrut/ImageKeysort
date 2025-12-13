@@ -1,4 +1,8 @@
 import logging
+import os
+import pathlib
+import shutil
+
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
@@ -207,15 +211,46 @@ class ImageWidget(QWidget):
         unscaledEndPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorEndPosition)
         cropAreaRect = QRect(unscaledStartPosition, unscaledEndPosition)
 
+
+        # Prepare useful paths and names
+        currentFilePath = pathlib.Path(self.currentImgPath)
+        print(f"Full path: {currentFilePath}")
+        currentFileNameNoExt = currentFilePath.stem
+        print(f"File without ext: {currentFileNameNoExt}")
+        currentSrcDirPath = currentFilePath.parent
+        print(f"Source dir: {currentSrcDirPath}")
+        extension = currentFilePath.suffix
+        print(f"Extension: {extension}")
+        currentFile = currentFilePath.name
+        print(f"File name: {currentFile}")
+
+        # Backup original image
+        #   Move original image into trash, so It can be recovered with Undo operation.
+        #   Only original image is moved there.
+        #   In case of multiple crops of the current image, original wont be overriden and therefore lost.
+        trashDir = pathlib.Path(currentSrcDirPath) / "__DELETED__"
+        trashDir.mkdir(exist_ok=True)
+        if not pathlib.Path(trashDir, currentFile).is_file():
+            shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
+
+        # TODO: Check that QRect je podmnozina image.rect()
         # TODO: save new crop into the list of changes, so we can undo change / completely revert all changes.
+        # TODO: Make UndoCrop() possible!!!!!
+
+        # Crop original image and save update the preview
         croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)
         self.pixmap.swap(croppedPixmap)
         self.updateScaledPixmap()
 
-        # TODO: WIP: Save
-        # TODO: Make UndoCrop() possible!!!!!
-        # self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
-        self.pixmap.save(self.currentImgPath+"_cropped.png")  # Save with different name, keep original.
+        # Perform crop
+        # Variant 1 - create cropped image with different name than original
+        # croppedFileName = pathlib.Path(currentSrcDirPath / (currentFileNameNoExt + "_cropped" + extension))
+        # print(f"Cropped file name: {croppedFileName}")
+        # self.pixmap.save(str(croppedFileName))  # Save with different name, keep original.
+
+        # Variant 2 - Override original file with the cropped one
+        self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
+
 
         # Clear variables and prepare for next cropping and rubberBand drawing
         self._pixmapCursorStartPosition = None

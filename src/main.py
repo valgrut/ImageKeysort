@@ -117,6 +117,8 @@ Features DONE:
 - [ ] Fix: still small misalignment between cursor's tip position and rubberband.
 - [ ] Show rubberband to all directions, not just from top left to right down.
 - [ ] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
+- [ ] REPEAT last crop!!!!!!!! (start + end coords).
+- [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 
 
 ### Zoom - related todo:
