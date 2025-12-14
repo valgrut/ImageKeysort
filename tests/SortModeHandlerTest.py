@@ -245,3 +245,30 @@ class TestSortModeHandler(unittest.TestCase):
         self.assertEqual(self.countFiles(self.aaDstDir), 4)
 
         self.tearDown()
+
+
+    def test_hit_empty_dst(self):
+        self.prepare(1)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "a": {
+                            "dst_path": "",
+                            "keys": {}
+                        }
+                    }
+                }
+            }
+        }
+
+        QTest.keySequence(self.window, "a")
+        try:
+            QTest.keySequence(self.window, "a")
+        except:
+            print("Error")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+
+        self.tearDown()

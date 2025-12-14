@@ -99,10 +99,14 @@ Features DONE:
 
 
 ====== Main features to implement ======
-- [~] Change names of the files
+- [X] Change names of the files
 - [ ] Rework ShortcutTreeView
 - [~] Crop image / video (sources: keyboard shortcut, button in menu, button in toolbar)
+        - [X] Crop image by mouse click + drag
 - [ ] Zoom in/out the image (imageView only)
+- [ ] Add tags into the filename
+        - [ ] Just for me - define shortcuts (ctrl+1, ctrl+2 ...) a k nim priradit konkretni " [xyz]".
+- [ ] Tabs (vice "instanci" v jednom okne, kde kazda instance bude mit svou galerii a shortcuts otevrene.
 
 
 ### Crop - related todo:
@@ -126,6 +130,16 @@ Features DONE:
 
 
 ### Rename - related todo:
+- [ ] Undo/Redo
+
+
+### Tagging (sub-feature pro Rename)
+- [ ] Moznost zadefinovat TAGY, ktery se pri rename zobrazi naboku, a kliknutim na nejaky tag se prida do nazvu.
+        - Napr.: Tagy: IG, Vertigo, PoledancerXYZ  ->  se do nazvu (pred suffix) pridat treba " [PoledancerXYZ]".
+        - [ ] Popremyslet treba nad zkratkama pro treba vyskoceni rolovaci nabidky s tagama, a sipkama a enter pridavat.
+            - [ ] Treba Ctrl+T
+        - [ ] Edit mode Ctrl+T /klik na menu - Vyskoci popup okno, ktere se otevre v Edit modu pro editaci/pridavani/odebirani.
+        - [ ] Tagy by se mohly definovat v popup okne, ktere se otevre v Edit modu pro editaci/pridavani/odebirani
 - [ ] Undo/Redo
 
 
@@ -210,6 +224,8 @@ To Fix:
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
+- [ ] !!!!!!!!!!!!!! Kdyz pridam zkratku s prazdnou cestou a chci to HIT v sort modu, crash !!!!!!!!!!!!!!
+- [ ] !!!!!!! Crash behem cropu tesne po prejmenovani obrazku.
 
 
 Shortcuts management, Shortcut Tree (GUI):
@@ -233,6 +249,7 @@ Shortcuts management, Shortcut Tree (GUI):
 - [ ] Expand / Collapse all shortcuts - button in Edit mode.
 - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
 - [ ] Tag / color nodes - Add a color or tag (e.g. game, editing, global) for quick visual scanning.
+- [ ] Mozna nekde zobrazovat dynamicky, ktery nasledujici keychar je k dispozici. pak nejaky zmacknu, a vypise to jeho dalsi.
 
 
 Misc:
@@ -258,6 +275,12 @@ Minor issues, future features:
 - [ ] Tooltips
 - [ ] !!! Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj. Viz GPT rada jak to zmonetizovat. Pohledat i web "How to sell SW".
 - [ ] Pridat komentare metod a trid (Vygenerovat AI)
+
+
+### App description, features, usage
+- Quickly rename files
+- Quickly add tags into the file names
+- Super simple image cropping (e.g. instagram screenshots)
 
 """
 
