@@ -189,6 +189,9 @@ Important features TODO:
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 - [ ] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
 - [ ] Zopakovat posledni copy operaci pomoci ',. a ;.'
+- [ ] Delete button do menu a do toolbaru !!!!!
+- [ ] Rotate image button (staci 1 smer) do toolbaru
+- [ ] !!!!! crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 
 
 Consider (Maybe):
