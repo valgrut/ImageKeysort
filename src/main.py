@@ -224,7 +224,7 @@ To Fix:
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
-- [ ] !!!!!!!!!!!!!! Kdyz pridam zkratku s prazdnou cestou a chci to HIT v sort modu, crash !!!!!!!!!!!!!!
+- [ ] !!!!!!!!!!!!!! Kdyz pridam zkratku s prazdnou cestou a chci ji HIT v sort modu, crash !!!!!!!!!!!!!!
 - [ ] !!!!!!! Crash behem cropu tesne po prejmenovani obrazku.
 
 
@@ -249,7 +249,7 @@ Shortcuts management, Shortcut Tree (GUI):
 - [ ] Expand / Collapse all shortcuts - button in Edit mode.
 - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
 - [ ] Tag / color nodes - Add a color or tag (e.g. game, editing, global) for quick visual scanning.
-- [ ] Mozna nekde zobrazovat dynamicky, ktery nasledujici keychar je k dispozici. pak nejaky zmacknu, a vypise to jeho dalsi.
+- [ ] Mozna nekde zobrazovat dynamicky, ktery nasledujici keychar je k dispozici. pak nejaky zmacknu, a vypise to jeho dalsi. Uzitecne pro vetsi presety.
 
 
 Misc:
