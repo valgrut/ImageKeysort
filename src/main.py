@@ -104,6 +104,7 @@ Features DONE:
 - [~] Crop image / video (sources: keyboard shortcut, button in menu, button in toolbar)
         - [X] Crop image by mouse click + drag
 - [ ] Zoom in/out the image (imageView only)
+        - Kvuli velkym obrazkum s textem, ktery je kvuli velikosti uz skoro necitelny.
 - [ ] Add tags into the filename
         - [ ] Just for me - define shortcuts (ctrl+1, ctrl+2 ...) a k nim priradit konkretni " [xyz]".
 - [ ] Tabs (vice "instanci" v jednom okne, kde kazda instance bude mit svou galerii a shortcuts otevrene.
@@ -131,6 +132,11 @@ Features DONE:
 
 ### Rename - related todo:
 - [ ] Undo/Redo
+
+
+### Text extraction
+- [ ] Ukladat do souboru ve slozce extracted/<nazev-obrazku> [extracted].txt
+        - [ ] Pred extrahovanim se podivat, jestli tam uz soubor s extrahovanym textem pro tento obrazek neni.
 
 
 ### Tagging (sub-feature pro Rename)
