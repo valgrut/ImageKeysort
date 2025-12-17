@@ -122,6 +122,7 @@ Features DONE:
 - [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
 - [ ] Fix: still small misalignment between cursor's tip position and rubberband.
 - [ ] Show rubberband to all directions, not just from top left to right down.
+        - [ ] Show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
 - [ ] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
 - [ ] REPEAT last crop!!!!!!!! (start + end coords).
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
@@ -226,7 +227,7 @@ Design:
 
 To Fix:
 - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
-- [ ] Fix videos on Windows
+- [ ] Fix videos on Windows (Codec?)
 - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
 - [ ] Sentinel set + space key in sort mode. seq: acde; nastavit ac+; acd<mezernik> -> Error zkratka 'd' neexistuje. Mela by se ale pouzit i cast pred sentinelem ('ac').
 - [ ] SortMode: abc<enter>cde<enter>xyz<enter> ... vzdy prepisuje predchozi sentinel. Udelat s tim neco nebo to tak nechat?
@@ -235,6 +236,27 @@ To Fix:
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
 - [ ] !!!!!!! Crash behem cropu tesne po prejmenovani obrazku.
+  
+    ```
+    Full path: /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/BA-program-2024.jpeg_cropped_small.png
+    File without ext: BA-program-2024.jpeg_cropped_small
+    Source dir: /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads
+    Extension: .png
+    File name: BA-program-2024.jpeg_cropped_small.png
+
+    Traceback (most recent call last):
+      File "/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/src/ImageWidget.py", line 234, in mouseReleaseEvent
+        shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
+        ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/usr/lib64/python3.13/shutil.py", line 468, in copy2
+        copyfile(src, dst, follow_symlinks=follow_symlinks)
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/usr/lib64/python3.13/shutil.py", line 260, in copyfile
+        with open(src, 'rb') as fsrc:
+            ~~~~^^^^^^^^^^^
+    FileNotFoundError: [Errno 2] No such file or directory: 
+      '/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/BA-program-2024.jpeg_cropped_small.png'
+    ```
 
 
 Shortcuts management, Shortcut Tree (GUI):
@@ -284,6 +306,7 @@ Minor issues, future features:
 - [ ] Tooltips
 - [ ] !!! Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj. Viz GPT rada jak to zmonetizovat. Pohledat i web "How to sell SW".
 - [ ] Pridat komentare metod a trid (Vygenerovat AI)
+- [ ] Pridat treba nejake ADHD notes...
 
 
 ### App description, features, usage

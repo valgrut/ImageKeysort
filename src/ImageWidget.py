@@ -2,6 +2,7 @@ import logging
 import os
 import pathlib
 import shutil
+import copy
 
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 from PyQt5.QtGui import QPixmap
@@ -39,7 +40,7 @@ class ImageWidget(QWidget):
 
         self._dragging = False
         
-        self.rubberBand = QRubberBand(QRubberBand.Rectangle, self.label)
+        self.rubberBand = None #  QRubberBand(QRubberBand.Rectangle, self.label)
         self.setMouseTracking(True)
 
         self.layout = QVBoxLayout()
@@ -127,15 +128,42 @@ class ImageWidget(QWidget):
 
         return QPoint(int(round(pixmapCursorPositionX)), int(round(pixmapCursorPositionY)))
 
-    def swapStartEndRubberPosition(self):
-        if self._startingRubberPoint and self._endingRubberPoint:
-            starting = self._startingRubberPoint
-            ending = self._endingRubberPoint
 
-            self._startingRubberPoint.setX(min(starting.x(), ending.x()))
-            self._startingRubberPoint.setY(min(starting.y(), ending.y()))
-            self._endingRubberPoint.setX(max(starting.x(), ending.x()))
-            self._endingRubberPoint.setY(max(starting.y(), ending.y()))
+    def augmentStartAndEndRubberCoords(self, currentCursorPosition: QPoint = None):
+        print(f"InitialPos: {self._initialRubberClickPosition}")
+        print(f"StartingPos: {self._startingRubberPoint}")
+        print(f"current position: {currentCursorPosition}")
+        print(f"EndingPos: {self._endingRubberPoint}")
+
+        # Cursor is moved to left from initial click
+        if self._initialRubberClickPosition.x() > currentCursorPosition.x():
+            self._startingRubberPoint.setX(currentCursorPosition.x())
+            self._endingRubberPoint.setX(self._initialRubberClickPosition.x())
+
+        # Cursor is moved to right from initial click
+        if self._initialRubberClickPosition.x() <= currentCursorPosition.x():
+            self._startingRubberPoint.setX(self._initialRubberClickPosition.x())
+            self._endingRubberPoint.setX(currentCursorPosition.x())
+
+        # Cursor is moved above from initial click
+        if self._initialRubberClickPosition.y() > currentCursorPosition.y():
+            self._startingRubberPoint.setY(currentCursorPosition.y())
+            self._endingRubberPoint.setY(self._initialRubberClickPosition.y())
+        
+        # Cursor is moved below from initial click
+        if self._initialRubberClickPosition.y() <= currentCursorPosition.y():
+            self._startingRubberPoint.setY(self._initialRubberClickPosition.y())
+            self._endingRubberPoint.setY(currentCursorPosition.y())
+
+        # if self._startingRubberPoint and self._endingRubberPoint:
+        #     starting = self._startingRubberPoint
+        #     ending = self._endingRubberPoint
+
+        #     self._startingRubberPoint.setX(min(starting.x(), ending.x()))
+        #     self._startingRubberPoint.setY(min(starting.y(), ending.y()))
+        #     self._endingRubberPoint.setX(max(starting.x(), ending.x()))
+        #     self._endingRubberPoint.setY(max(starting.y(), ending.y()))
+
 
     def mousePressEvent(self, event):
         # TODO: move elsewhere??? Maybe into GalleryManager, because I want this to use also on Videos...
@@ -168,9 +196,11 @@ class ImageWidget(QWidget):
         # Note: Geometry for the rubber band is different, than the pixmap's geometry.
         if not self.rubberBand:
             self.rubberBand = QRubberBand(QRubberBand.Rectangle, self.label)
-        self._startingRubberPoint = self._pixmapCursorStartPosition + QPoint(xOff, yOff)
-        self.rubberBand.setGeometry(QRect(self._startingRubberPoint, QSize(0, 0)))
-        self.rubberBand.show()
+            self._initialRubberClickPosition = self._pixmapCursorStartPosition + QPoint(xOff, yOff)
+            self._startingRubberPoint = copy.deepcopy(self._initialRubberClickPosition)
+            self._endingRubberPoint = copy.deepcopy(self._initialRubberClickPosition)  # Init both start and end points
+            self.rubberBand.setGeometry(QRect(self._startingRubberPoint, QSize(0, 0)))
+            self.rubberBand.show()
 
         super().mousePressEvent(event)
 
@@ -189,15 +219,17 @@ class ImageWidget(QWidget):
             xOff, yOff = self._getPixmapCursorOffset()
 
             # RubberBand drawing
-            self._endingRubberPoint = self._pixmapCursorEndPosition + QPoint(xOff, yOff)
+            currentTransformedCursorPosition = self._pixmapCursorEndPosition + QPoint(xOff, yOff)
+            # self._endingRubberPoint = currentTransformedCursorPosition
 
             if self._startingRubberPoint and self._endingRubberPoint:
-                # self.swapStartEndRubberPosition()
+                self.augmentStartAndEndRubberCoords(currentTransformedCursorPosition)
                 self.rubberBand.setGeometry(QRect(self._startingRubberPoint, self._endingRubberPoint))
             else:
                 log.warning(f"[mouseMoveEvent]: startPosition or endPosition not initialised!")
 
         super().mouseMoveEvent(event)
+
 
     def mouseReleaseEvent(self, event):
         self._dragging = False
@@ -260,5 +292,6 @@ class ImageWidget(QWidget):
         self._endingRubberPoint = None
 
         self.rubberBand.hide()
+        self.rubberBand = None
 
         super().mouseReleaseEvent(event)

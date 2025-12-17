@@ -242,6 +242,7 @@ class MainWindow(QMainWindow, QObject):
         self.buttonCropImageAction.setCheckable(True)
         self.buttonCropImageAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
         self.buttonCropImageAction.setDisabled(True)
+        # self.buttonCropImageAction.triggered.connect(self.toggleCropImage)
         self.toolbar.addAction(self.buttonCropImageAction)
 
         self.toolbar.addSeparator()
@@ -522,6 +523,14 @@ class MainWindow(QMainWindow, QObject):
     def clearShortcuts(self):
         self.shortcutManager.clearShortcuts()
         self.treeViewWidget.update_tree_view() # TODO: emit signal?  Mozna nahradit toto volani za emit signalu pro update_tree_viw()
+
+    # def toggleCropImage(self):
+    #     if self.buttonCropImageAction.isEnabled():
+    #         self.buttonCropImageAction.setDisabled(True)
+    #         return
+    #     if self.buttonCropImageAction.isEnabled() is False:
+    #         self.buttonCropImageAction.setDisabled(False)
+    #         return
 
     def setCopyMode(self):
         log.info("Toggle Copy mode ON.")
