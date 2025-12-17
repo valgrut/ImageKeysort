@@ -155,32 +155,12 @@ class ImageWidget(QWidget):
             self._startingRubberPoint.setY(self._initialRubberClickPosition.y())
             self._endingRubberPoint.setY(currentCursorPosition.y())
 
-        # if self._startingRubberPoint and self._endingRubberPoint:
-        #     starting = self._startingRubberPoint
-        #     ending = self._endingRubberPoint
-
-        #     self._startingRubberPoint.setX(min(starting.x(), ending.x()))
-        #     self._startingRubberPoint.setY(min(starting.y(), ending.y()))
-        #     self._endingRubberPoint.setX(max(starting.x(), ending.x()))
-        #     self._endingRubberPoint.setY(max(starting.y(), ending.y()))
-
 
     def mousePressEvent(self, event):
         # TODO: move elsewhere??? Maybe into GalleryManager, because I want this to use also on Videos...
         # TODO: V1: QRubberBand nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
-
         # TODO: Fix: still small misalignment between cursor's tip position and rubberband.
-        # TODO: Show rubberband to all directions, not just from top left to right down.
-        #   This will beed to swap start/end position dynamically based on the position of initial click and actual position before release.
-        #   So, starting position will dynamically swap with current, if current is lesser than start.
-        #   startx = min(startx, currentx)
-        #   endx = max(startx, currentx)
-        #   starty = min(starty, currenty)
-        #   endy = max(starty, currenty)
-        #   tento swap bude volany v mouseMoveEvent().
-        #
         # TODO: Logika croppingu by mela byt separatni uplne pryc, jako TextExtraction.
-        #
         # A mouseEvent handling a rubberband drawing presunout do toho GalleryManager asi,
         # abych to pak mohl pouzit i pro videa.
 
@@ -237,6 +217,13 @@ class ImageWidget(QWidget):
         widgetTargetPosition: QPoint = event.pos()
         self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(widgetTargetPosition)
         log.info(f"[mouseReleaseEvent] Pixmap start Position: {self._pixmapCursorEndPosition}")
+
+        # TODO: There has to be again constructed the rubberBand rectangle properly after the:
+        # self.augmentStartAndEndRubberCoords(currentTransformedCursorPosition)
+        # So that cropping rectangle is correct and starts from top-left corner.
+        print("FINAL positions to work with:")
+        print(f"  StartingPos: {self._startingRubberPoint}")
+        print(f"  EndingPos: {self._endingRubberPoint}")
 
         # Crop original image and save
         unscaledStartPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorStartPosition)
