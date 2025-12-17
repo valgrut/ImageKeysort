@@ -546,13 +546,14 @@ class SortModeHandler(QObject):
         Check, whether destination directory exists.
         If it does NOT, return False.
         """
-        if not os.path.exists(dst):
+        if dst is None or dst == "" or os.path.exists(dst) is False:
             log.info(f"ERROR: Destination directory {dst} does not exist.")
             self.updateStatusBarLabel(f"ERROR: Destination directory {dst} does not exist.")
             self.keySeq = ""
             self.updateKeySequenceLabel()
             return False
         return True
+
 
     def cleanupAndUpdate(self):
         self.keySeq = ""

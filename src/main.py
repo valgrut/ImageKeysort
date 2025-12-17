@@ -96,6 +96,7 @@ Features DONE:
 - [X] !!!!! Sort mode (Copy option): Pridat moznost pred shortcut pridat znak, treba , a ; pro kopirovani bez zapinani copy rezimu (nebo by to mohl zapnout interne pouze docasne a pak vypnout. Jeden znak udela copy a go to next img, druhy pouze copy ale zustane na aktualnim.
 - [X] !! Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
 - [X] Add another keyboard shortcut (F2) to initiate file renaming.
+- [X] Kdyz pridam zkratku s prazdnou cestou a chci ji HIT v sort modu, crash!!!!
 
 
 ====== Main features to implement ======
@@ -173,7 +174,7 @@ Refactoring and code tweaking
 - [X] ShortcutManager
 - [~] Pridat Type hints ( -> int, myvar: str, ...)
 - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodovani ohledne zobrazeni (obrazek vs video vs text vs pdf)
-- [ ] Vytvorit Actions z akci, ktere jeste Action nemaji. Vymenit to za prime volani metod. Zvlast u veci, ktere jsou volane z vice mist (button / shortcut / menu / ...)
+- [~] Vytvorit Actions z akci, ktere jeste Action nemaji. Vymenit to za prime volani metod. Zvlast u veci, ktere jsou volane z vice mist (button / shortcut / menu / ...)
 
 
 Important features TODO:
@@ -233,7 +234,6 @@ To Fix:
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
-- [ ] !!!!!!!!!!!!!! Kdyz pridam zkratku s prazdnou cestou a chci ji HIT v sort modu, crash !!!!!!!!!!!!!!
 - [ ] !!!!!!! Crash behem cropu tesne po prejmenovani obrazku.
 
 
