@@ -40,12 +40,13 @@ class ImageWidget(QWidget):
 
         self._dragging = False
         
-        self.rubberBand = None #  QRubberBand(QRubberBand.Rectangle, self.label)
+        self.rubberBand = None  # QRubberBand(QRubberBand.Rectangle, self.label)
         self.setMouseTracking(True)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
+
 
     def updateImage(self, img_path):
         # TODO: Use cache?
@@ -53,14 +54,17 @@ class ImageWidget(QWidget):
         self.currentImgPath = img_path
         self.updateScaledPixmap()
 
+
     def resizeEvent(self, event):
         self.updateScaledPixmap()
         super().resizeEvent(event)
+
 
     def updateScaledPixmap(self):
         if self.pixmap:
             scaledPixmap = self.pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label.setPixmap(scaledPixmap)
+
 
     @staticmethod
     def clamp(n, min, max):
@@ -70,6 +74,7 @@ class ImageWidget(QWidget):
             return max
         else:
             return n
+
 
     def _getPixmapCursorOffset(self):
         # TODO: Tohle si myslim, ze by tez melo byt asi jinde...
@@ -81,6 +86,7 @@ class ImageWidget(QWidget):
         xOff = (labelWidth - scaledPixmapWidth) / 2
         yOff = (labelHeight - scaledPixmapHeight) / 2
         return int(round(xOff)), int(round(yOff))
+
 
     def _transformPositionFromGlobalToPixmap(self, widgetCursorPosition: QPoint) -> QPoint:
         """
@@ -277,3 +283,27 @@ class ImageWidget(QWidget):
         self.rubberBand = None
 
         super().mouseReleaseEvent(event)
+
+
+    # TODO: WIP: Does not work. Event is not registered. It is caught by SortModeHandler instead.
+    def keyPressEvent(self, event):
+        log.info(f"Key pressed: {event.key()}")
+        if event.key() == Qt.Key_Escape:
+
+            # Cancel current cropping operation
+            self._dragging = False
+
+            self._pixmapCursorStartPosition = None
+            self._pixmapCursorEndPosition = None
+
+            self._startingRubberPoint = None
+            self._endingRubberPoint = None
+
+            if self.rubberBand:
+                self.rubberBand.hide()
+                self.rubberBand = None
+
+            log.info("Cropping operation cancelled.")
+            return
+
+        return super().keyPressEvent(event)
