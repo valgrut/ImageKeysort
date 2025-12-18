@@ -184,6 +184,7 @@ class ImageWidget(QWidget):
 
         super().mousePressEvent(event)
 
+
     def mouseMoveEvent(self, event):
         """
         Note: This is executed always when just hovering above image. No click is required.
@@ -213,35 +214,30 @@ class ImageWidget(QWidget):
 
     def mouseReleaseEvent(self, event):
         self._dragging = False
-
-        widgetTargetPosition: QPoint = event.pos()
-        self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(widgetTargetPosition)
-        log.info(f"[mouseReleaseEvent] Pixmap start Position: {self._pixmapCursorEndPosition}")
-
-        # TODO: There has to be again constructed the rubberBand rectangle properly after the:
-        # self.augmentStartAndEndRubberCoords(currentTransformedCursorPosition)
-        # So that cropping rectangle is correct and starts from top-left corner.
-        print("FINAL positions to work with:")
-        print(f"  StartingPos: {self._startingRubberPoint}")
-        print(f"  EndingPos: {self._endingRubberPoint}")
+        
+        # Calculate final positions based on the rubberBand coords (not dependent on the drag direction)
+        # The calculation takes into account the augmented start and end rubber coords, so all directions are handled.
+        self._pixmapCursorStartPosition: QPoint = self._transformPositionFromGlobalToPixmap(self._startingRubberPoint)
+        self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(self._endingRubberPoint)
+        # log.info(f"[mouseReleaseEvent] Pixmap start Position: {self._pixmapCursorEndPosition}")
 
         # Crop original image and save
         unscaledStartPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorStartPosition)
         unscaledEndPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorEndPosition)
         cropAreaRect = QRect(unscaledStartPosition, unscaledEndPosition)
 
-
         # Prepare useful paths and names
         currentFilePath = pathlib.Path(self.currentImgPath)
-        print(f"Full path: {currentFilePath}")
         currentFileNameNoExt = currentFilePath.stem
-        print(f"File without ext: {currentFileNameNoExt}")
         currentSrcDirPath = currentFilePath.parent
-        print(f"Source dir: {currentSrcDirPath}")
         extension = currentFilePath.suffix
-        print(f"Extension: {extension}")
         currentFile = currentFilePath.name
+        
+        print(f"Source dir: {currentSrcDirPath}")
+        print(f"Full path: {currentFilePath}")
         print(f"File name: {currentFile}")
+        print(f"File without ext: {currentFileNameNoExt}")
+        print(f"Extension: {extension}")
 
         # Backup original image
         #   Move original image into trash, so It can be recovered with Undo operation.
@@ -254,7 +250,7 @@ class ImageWidget(QWidget):
 
         # TODO: Check that QRect je podmnozina image.rect()
         # TODO: save new crop into the list of changes, so we can undo change / completely revert all changes.
-        # TODO: Make UndoCrop() possible!!!!!
+        # TODO: Make UndoCrop() possible!!!!! -> Create CropCommand, ktery bude mit undo/redo metody.
 
         # Crop original image and save update the preview
         croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)
@@ -269,7 +265,6 @@ class ImageWidget(QWidget):
 
         # Variant 2 - Override original file with the cropped one
         self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
-
 
         # Clear variables and prepare for next cropping and rubberBand drawing
         self._pixmapCursorStartPosition = None
