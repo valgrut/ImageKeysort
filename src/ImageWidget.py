@@ -257,6 +257,7 @@ class ImageWidget(QWidget):
         # TODO: Check that QRect je podmnozina image.rect()
         # TODO: save new crop into the list of changes, so we can undo change / completely revert all changes.
         # TODO: Make UndoCrop() possible!!!!! -> Create CropCommand, ktery bude mit undo/redo metody.
+        # TODO: Implement repeat cropping with the same start and end points, !! IF the size of an images are the same !! (screenshots from phone...) Fakt pouzit originalni velikost obrazku, aby bylo jendo, jak naskaluju okno.
 
         # Crop original image and save update the preview
         croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)

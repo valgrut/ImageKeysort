@@ -121,7 +121,7 @@ Features DONE:
           - Use ffmpeg app; Will it work on windows too???
 - [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
 - [ ] Fix: still small misalignment between cursor's tip position and rubberband.
-- [ ] Show rubberband to all directions, not just from top left to right down.
+- [X] Show rubberband to all directions, not just from top left to right down.
         - [ ] Show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
 - [ ] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
 - [ ] REPEAT last crop!!!!!!!! (start + end coords).
@@ -198,7 +198,7 @@ Important features TODO:
 - [ ] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
 - [ ] Zopakovat posledni copy operaci pomoci ',. a ;.'
 - [ ] Delete button do menu a do toolbaru !!!!!
-- [ ] Rotate image button (staci 1 smer) do toolbaru
+- [ ] Rotate image button (staci 1 smer) do toolbaru. Pozor ale, ty obrazky se obcas zobrazuji jinak, nez jse zobrazuje windows explorer. Proc???
 - [ ] !!!!! crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 
 
