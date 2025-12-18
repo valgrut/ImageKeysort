@@ -3,6 +3,7 @@ import json
 import datetime
 import typing
 import logging
+import pathlib
 
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
 from PyQt5.QtWidgets import (
@@ -380,27 +381,27 @@ class MainWindow(QMainWindow, QObject):
         self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)
 
         self.saveAction = QAction(QIcon('Resources/disk-pencil.png'), "&Save shortcuts", self)
-        self.saveAction.setShortcut('Ctrl+S')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.setStatusTip("Save current shortcuts to a file")
         self.saveAction.triggered.connect(self.save_data)
 
         self.loadAction = QAction(QIcon('Resources/disk-arrow.png'), "&Load shortcuts", self)
-        self.loadAction.setShortcut('Ctrl+L')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.loadAction.setShortcut('Ctrl+L')
         self.loadAction.setStatusTip("Load shortcuts from a file")
         self.loadAction.triggered.connect(self.load_data)
 
         self.exitAction = QAction(QIcon('Resources/control-power.png'), "&Exit", self)
-        self.exitAction.setShortcut('Ctrl+Q')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.exitAction.setShortcut('Ctrl+Q')
         self.exitAction.setStatusTip("Exit application")
         self.exitAction.triggered.connect(self.exitApp)
 
         self.undoSortAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo move", self)
-        self.undoSortAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.undoSortAction.setShortcut('Ctrl+Z')
         self.undoSortAction.setStatusTip("Undo last move/copy operation")
         self.undoSortAction.triggered.connect(self.sortModeHandler.undo_last_operation)
 
         self.undoShortcutModificationAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo modification", self)
-        # self.undoShortcutModificationAction.setShortcut('Ctrl+Z')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        # self.undoShortcutModificationAction.setShortcut('Ctrl+Z')
         self.undoShortcutModificationAction.setStatusTip("Undo last shortcut modification. It could be adding, deleting, ...")
         # self.undoShortcutModificationAction.triggered.connect(TODO)
 
@@ -413,23 +414,41 @@ class MainWindow(QMainWindow, QObject):
         self.clearTreeAction.triggered.connect(self.clearShortcuts)
 
         self.toggleCopyModeAction = QAction("&Toggle copy mode", self)
-        self.toggleCopyModeAction.setShortcut('Ctrl+C')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.toggleCopyModeAction.setShortcut('Ctrl+C')
         self.toggleCopyModeAction.setStatusTip("Toggle copy mode. Switch between copy and move operation.")
         self.toggleCopyModeAction.triggered.connect(self.toggleCopyMode)
         self.addAction(self.toggleCopyModeAction)  # Needed to make the shortcut work.
 
         self.setEditModeAction = QAction("&Set edit mode", self)
-        self.setEditModeAction.setShortcut('Ctrl+E')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.setEditModeAction.setShortcut('Ctrl+E')
         self.setEditModeAction.setStatusTip("Sets Edit mode.")
         self.setEditModeAction.triggered.connect(self.set_edit_mode)
         self.addAction(self.setEditModeAction)  # Needed to make the shortcut work.
 
         self.setSortModeAction = QAction("&Set sort mode", self)
-        self.setSortModeAction.setShortcut('Ctrl+R')  # TODO: Fix - I want the shortcuts to be shown in the menu.
+        self.setSortModeAction.setShortcut('Ctrl+R')
         self.setSortModeAction.setStatusTip("Sets Sort mode.")
         self.setSortModeAction.triggered.connect(self.set_sort_mode)
         self.addAction(self.setSortModeAction)  # Needed to make the shortcut work.
+
+        # TODO: WIP; experiment / temporal
+        self.appendTag1Action = QAction("&Append tag: Tag1", self)
+        self.appendTag1Action.setShortcut('Ctrl+T')
+        self.appendTag1Action.triggered.connect(self.appendTagToName)
+        self.addAction(self.appendTag1Action)
         
+    def appendTagToName(self):
+        currentFilePath = pathlib.Path(self.galleryManager.getCurrentFilename())
+        currentFileNameNoExt = currentFilePath.stem
+        currentSrcDirPath = currentFilePath.parent
+        extension = currentFilePath.suffix
+        currentFile = currentFilePath.name
+
+        if "[Tag1]" in currentFileNameNoExt:
+            log.info("Filename already contains the tag.")
+            return
+        tagged = currentFileNameNoExt + " [Tag1]" + extension
+        log.info(f"Appending tag to filename: {tagged}")
 
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):
