@@ -22,7 +22,9 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QToolBar,
     QApplication,
-    QStatusBar
+    QStatusBar,
+    QUndoStack,
+    QUndoCommand
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -97,6 +99,7 @@ class MainWindow(QMainWindow, QObject):
         self.setMinimumWidth(screenWidth)
         self.setMinimumHeight(screenHeight)
 
+        self.commandsStack = QUndoStack(self)
 
         # ========== Management Objects instantiation ==========
         self.shortcutManager = ShortcutManager(self)  # deps are injected
@@ -436,7 +439,10 @@ class MainWindow(QMainWindow, QObject):
         self.appendTag1Action.setShortcut('Ctrl+T')
         self.appendTag1Action.triggered.connect(self.appendTagToName)
         self.addAction(self.appendTag1Action)
-        
+    
+    def _getCommandsStack(self):
+        return self.commandsStack
+
     def appendTagToName(self):
         currentFilePath = pathlib.Path(self.galleryManager.getCurrentFilename())
         currentFileNameNoExt = currentFilePath.stem
