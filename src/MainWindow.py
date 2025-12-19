@@ -476,6 +476,7 @@ class MainWindow(QMainWindow, QObject):
     def apply_settings(self):
         log.info("Apply new settings")
         app = QApplication.instance()
+
         # app.setPalette(SettingsDialog.settingsGetTheme())
         # app.setPalette(Styles.get_dark_palette())
 

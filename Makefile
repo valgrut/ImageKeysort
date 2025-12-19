@@ -1,16 +1,24 @@
-ROOT_DIR=.
-NAME=main.py
-SCSS_STYLES=static/app-styles.scss
-QSS_STYLES=static/app-styles.qss
-PYTEST_ARGS="-v"  # -v | -vv |  
+
+ROOT_DIR	:= $(abspath .)
+VENV_DIR	?= $(ROOT_DIR)/.venv
+
+NAME		?= main.py
+APP_NAME    ?= image-keysort
+APP_MODULE	?= src.main
+REQ_FILE    ?= requirements.txt
+
+SCSS_STYLES	?= static/app-styles.scss
+QSS_STYLES	?= static/app-styles.qss
+
+PYTEST_ARGS	?= "-v"  # -v | -vv |
 # PYTEST_ARGS=""  # Empty
 
-# RUN_APP_CMD = python3 -m src.main"
-# RUN_APP_CMD = python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Pictures/test_options.json
-RUN_APP_CMD = /usr/bin/python3 -m src.main --src-path ~/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/ --set-copy-mode
-# RUN_APP_CMD = python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Repositories/WorkstationSetup/scripts/image-sorter/presets/data.json
-# RUN_APP_CMD = python3 -m src.main --src-path /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads
-# RUN_APP_CMD = python3 -m src.main --src-path C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\testing-data\downloads
+# RUN_ARGS = python3 -m src.main
+# RUN_ARGS = python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Pictures/test_options.json
+# RUN_ARGS = /usr/bin/python3 -m src.main --src-path ~/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/ --set-copy-mode
+RUN_ARGS ?= python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Repositories/WorkstationSetup/scripts/image-sorter/presets/data.json
+# RUN_ARGS = python3 -m src.main --src-path /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads
+# RUN_ARGS = python3 -m src.main --src-path C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\testing-data\downloads
 
 config:
 	( \
@@ -28,7 +36,7 @@ run: config qss
 	source ${ROOT_DIR}/venv/bin/activate; \
 	pyrcc5 ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py; \
 	cd ${ROOT_DIR}; \
-	$(RUN_APP_CMD) ; \
+	$(RUN_ARGS) ; \
 	deactivate; \
 	)
 
@@ -44,7 +52,7 @@ qss:
 	qtsass $(SCSS_STYLES) -o $(QSS_STYLES)
 
 build:
-	pyinstaller --onefile ${ROOT_DIR}/${NAME}
+	pyinstaller --onefile ${ROOT_DIR}/src/${NAME}
 
 clean:
 	rm -rf dist

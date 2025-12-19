@@ -119,10 +119,12 @@ class SettingsDialog(QDialog):
         # Load settings on open
         self.load_settings()
 
-    # ---------- Persistence ----------
     def load_settings(self):
-        # Values have to be saved as a string, so the form state is restored
-        # from the config file based on the saved "true" or "false" strings.
+        """
+        Values have to be saved as a string, so the form state is restored
+        from the config file based on the saved "true" or "false" strings.
+        """
+
         settings = QSettings()
 
         settings.beginGroup("shortcuts")
@@ -150,9 +152,13 @@ class SettingsDialog(QDialog):
         self.cfg_app_theme.setCurrentIndex(themeIndex if themeIndex >= 0 else 0)
         settings.endGroup()
 
+
     def save_settings(self):
-        # Values have to be saved as a string, so checking form state, and
-        # based on that the "true" of "false" string is selected and saved.
+        """
+        Values have to be saved as a string, so checking form state, and
+        based on that the "true" of "false" string is selected and saved.
+        """
+
         settings = QSettings()
         settings.beginGroup("shortcuts")
         settings.setValue("allowNoDest", "true" if self.cb_allow_no_dest.isChecked() else "false")
@@ -192,6 +198,42 @@ class SettingsDialog(QDialog):
         self.cfg_app_theme.setCurrentText("Light")
 
 
+    @staticmethod
+    def initializeSettings():
+        """
+        Create initial settings if they do not exist yet.
+
+        Called on application start, so some settings are always present.
+        """
+        try:
+            SettingsDialog.settingsGetNestingLevels()
+        except:
+            log.info("Settings do not exist yet, creating default settings.")
+            settings = QSettings()
+            settings.beginGroup("shortcuts")
+            settings.setValue("allowNoDest", "true")
+            settings.setValue("confirmToOverride", "true")
+            settings.setValue("sortShortcuts", "true")
+            settings.endGroup()
+
+            settings.beginGroup("treeview")
+            settings.setValue("nestedLevels", 4)
+            settings.endGroup()
+
+            settings.beginGroup("copy")
+            settings.setValue("autoNextAfterCopy", "true")
+            settings.setValue("otherOpt1", "true")
+            settings.setValue("otherOpt2", "true")
+            settings.endGroup()
+
+            settings.beginGroup("video")
+            settings.setValue("muteDefault", "true")
+            settings.endGroup()
+
+            settings.beginGroup("theme")
+            settings.setValue("currentTheme", "Light")
+            settings.endGroup()
+
     # Make sure clicking OK persists
     def accept(self):
         self.save_settings()
@@ -200,7 +242,7 @@ class SettingsDialog(QDialog):
 
 
     @staticmethod
-    def checkSetting(optionToRetrieve: str):
+    def _checkSetting(optionToRetrieve: str):
         settings = QSettings()
 
         if settings.contains(optionToRetrieve):
@@ -208,31 +250,30 @@ class SettingsDialog(QDialog):
         else:
             log.info(f"Setting {optionToRetrieve} does not exist in the Settings")
             return None
-
-
+    
     @staticmethod
     def settingsGetNestingLevels() -> int:
-        return int(SettingsDialog.checkSetting("treeview/nestedLevels"))
+        return int(SettingsDialog._checkSetting("treeview/nestedLevels"))
 
     @staticmethod
     def settingsGetAllowNoDest() -> bool:
         # return SettingsDialog.checkSetting("shortcuts/allowNoDest")
-        return True if SettingsDialog.checkSetting("shortcuts/allowNoDest") == "true" else False
+        return True if SettingsDialog._checkSetting("shortcuts/allowNoDest") == "true" else False
 
     @staticmethod
     def settingsGetConfirmToOverride() -> bool:
         # return SettingsDialog.checkSetting("shortcuts/confirmToOverride")
-        return True if SettingsDialog.checkSetting("shortcuts/confirmToOverride") == "true" else False
+        return True if SettingsDialog._checkSetting("shortcuts/confirmToOverride") == "true" else False
 
     @staticmethod
     def settingsGetSortShortcuts() -> bool:
         # return SettingsDialog.checkSetting("shortcuts/sortShortcuts")
-        return True if SettingsDialog.checkSetting("shortcuts/sortShortcuts") == "true" else False
+        return True if SettingsDialog._checkSetting("shortcuts/sortShortcuts") == "true" else False
 
     @staticmethod
     def settingsGetAutoNextAfterCopy() -> bool:
         # return SettingsDialog.checkSetting("copy/autoNextAfterCopy")
-        return True if SettingsDialog.checkSetting("copy/autoNextAfterCopy") == "true" else False
+        return True if SettingsDialog._checkSetting("copy/autoNextAfterCopy") == "true" else False
 
     @staticmethod
     def settingsGetMuteDefault() -> bool:
@@ -240,12 +281,12 @@ class SettingsDialog(QDialog):
         # Prozatimni reseni. Mozna udelat druhou tridu jako Config, ze ktere se
         # to pak bude brat. Ta bude staticka a staticky se zavola i to
         # load_config().
-        return True if SettingsDialog.checkSetting("video/muteDefault") == "true" else False
+        return True if SettingsDialog._checkSetting("video/muteDefault") == "true" else False
         # return self.cb_mute_videos
 
     @staticmethod
     def settingsGetTheme() -> str:
-        return SettingsDialog.checkSetting("theme/currentTheme")
+        return SettingsDialog._checkSetting("theme/currentTheme")
 
 
 

@@ -359,6 +359,10 @@ def main():
     QCoreApplication.setOrganizationDomain("wogon.cz")
     QCoreApplication.setApplicationName("Image Keysort")
 
+    # # Initialize Settings on first run to prevent non-existing config
+    from src.SettingsDialog import SettingsDialog
+    SettingsDialog.initializeSettings()
+
     # Build qss file on the start (in case app started without Makefile)
     # TODO: Does not work:
     # import qtsass
