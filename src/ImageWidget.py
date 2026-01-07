@@ -8,6 +8,10 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
+# from CropUtils import CropUtils
+from CropImageCommand import CropImageCommand
+
+
 log = logging.getLogger(__name__)
 
 
@@ -273,6 +277,9 @@ class ImageWidget(QWidget):
 
         # Variant 2 - Override original file with the cropped one
         self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
+
+        # TODO: Create and push CropImageCommand to the UndoStack
+        # TODO: How to provide UndoStack reference here from the MainWindow / GalleryManager???
 
         # Clear variables and prepare for next cropping and rubberBand drawing
         self._pixmapCursorStartPosition = None
