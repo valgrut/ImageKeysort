@@ -481,7 +481,7 @@ class MainWindow(QMainWindow, QObject):
         else:
             self.commandsStack.push(CropImageCommand(command.imageName, command.imageSrcPath, command.cropRectangle, command.originalImageSize))
 
-        # TODO: Make possible to Undo cropping only on image we are currently on !!!!!!!
+        # TODO: Make possible to Undo cropping only of the image we are currently on !!!!!!!
 
         print()
         print("After push:")
@@ -510,6 +510,8 @@ class MainWindow(QMainWindow, QObject):
 
     def reuseCommand(self):
         """
+        Enable reuse only if the current image has the same original size as the last command on the stack.
+        For the Reuse, last command is used, not any command.
         """
         currentImageOriginalSize = 123
 
