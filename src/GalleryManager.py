@@ -10,6 +10,8 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 from src.EmptyGalleryWidget import EmptyGalleryImageWidget
 from src.MediaContainerWidget import MediaContainerWidget
+from src.CropData import CropData
+
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +25,7 @@ class GalleryManager(QStackedWidget):
     enableCropButtonSignal = pyqtSignal()
     setFilenameTextEditSignal = pyqtSignal()
     updateStatusBarLabelSignal = pyqtSignal(str)
+    pushCropCommandRequestCommand = pyqtSignal(CropData)
 
     def __init__(self, mainWindow):
         super().__init__()
@@ -57,6 +60,9 @@ class GalleryManager(QStackedWidget):
 
         self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
         # log.info(f"[INIT] mediaContainerWidget: {id(self.mediaContainerWidget)}")
+
+        self.mediaContainerWidget.pushCropCommandRequestCommand.connect(self.pushCropCommandRequestCommand)  # Re-emit signal
+        self.mainWindow.updateMediaPreviewSignal.connect(self.updatePreview)
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path

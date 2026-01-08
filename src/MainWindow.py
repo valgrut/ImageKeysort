@@ -40,6 +40,8 @@ from src.SortModeHandler import SortModeHandler
 from src.EditModeHandler import EditModeHandler
 from src.Modes import Modes
 from src.TextExtractor import TextExtractor
+from src.CropImageCommand import CropImageCommand
+from src.CropData import CropData
 
 from src.treeView import ShortcutsTreeView
 
@@ -72,6 +74,7 @@ class MainWindow(QMainWindow, QObject):
     nextImageRequestedSignal = pyqtSignal()
     firstImageRequestedSignal = pyqtSignal()
     lastImageRequestedSignal = pyqtSignal()
+    updateMediaPreviewSignal = pyqtSignal()
 
     def __init__(self, parent=None, args=None):
         super().__init__(parent)
@@ -292,6 +295,8 @@ class MainWindow(QMainWindow, QObject):
 
         self.dropChangesTreeButton.clicked.connect(self.dropChangesAction.activate)
 
+        self.galleryManager.pushCropCommandRequestCommand.connect(self.pushOrUpdateCommand)
+
         # ========== Apply the provided CLI options, if any ==========
         if srcPathArg:
             self.galleryManager.setSourcePath(srcPathArg)
@@ -439,9 +444,70 @@ class MainWindow(QMainWindow, QObject):
         self.appendTag1Action.setShortcut('Ctrl+T')
         self.appendTag1Action.triggered.connect(self.appendTagToName)
         self.addAction(self.appendTag1Action)
+
+        self.undoCommandOnStack = QAction("&Undo Command operation on stack", self)
+        self.undoCommandOnStack.setShortcut('Ctrl+Shift+Z')
+        self.undoCommandOnStack.triggered.connect(self.undoCommand)
+        self.addAction(self.undoCommandOnStack)
     
     def _getCommandsStack(self):
         return self.commandsStack
+
+
+    def pushOrUpdateCommand(self, command: CropData):
+        """
+        TODO: Derive my own QUndoStack class, which will have this method.
+        """
+        print()
+        print("pushOrUpdateCommand called")
+        print("Command:", command)
+        print("Stack size:", self.commandsStack.count())
+        
+        lastCommand = self.commandsStack.command(self.commandsStack.count() - 1)
+        # TODO: Add check, that the imageName is not in the stack multiple times (this prevents new entry when i crop img1, then move to and crop img2, and then go back to img1 and crop. It will create third entry.)
+        if lastCommand is not None and lastCommand.imageName == command.imageName:
+            print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
+            log.info(">>> Editing the last command in the stack.")
+            print(">>> Editing the last command in the stack.")
+            # lastCommand.cropRectangle = command.cropRectangle
+            self.commandsStack.push(CropImageCommand(lastCommand.imageName, lastCommand.imageSrcPath, command.cropRectangle, lastCommand.originalImageSize))
+            #return
+        else:
+            self.commandsStack.push(CropImageCommand(command.imageName, command.imageSrcPath, command.cropRectangle, command.originalImageSize))
+
+        # TODO: Make possible to Undo cropping only on image we are currently on !!!!!!!
+
+        print()
+        print("After push:")
+        print("Stack size:", self.commandsStack.count())
+        lastCommand = self.commandsStack.command(self.commandsStack.count() - 1)
+        print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
+        print()
+
+
+    def undoCommand(self):
+        """
+        TODO: Derive my own QUndoStack class, which will have this method.
+        """
+        print("Stack size:", self.commandsStack.count())
+        self.commandsStack.undo()
+        print("Stack size:", self.commandsStack.count())
+        
+        # TODO: Update image preview after undoing the crop command.
+        #self.updateMediaPreviewSignal.emit()
+        self.galleryManager.updatePreview()
+
+
+    def reuseCommand(self):
+        """
+        
+        """
+        currentImageOriginalSize = 123
+
+        lastCommand = self.commandsStack.command(self.commandsStack.count() - 1)
+        if lastCommand is not None and lastCommand.originalImageSize == currentImageOriginalSize:
+            # TODO
+            pass
 
     def appendTagToName(self):
         currentFilePath = pathlib.Path(self.galleryManager.getCurrentFilename())
@@ -455,6 +521,7 @@ class MainWindow(QMainWindow, QObject):
             return
         tagged = currentFileNameNoExt + " [Tag1]" + extension
         log.info(f"Appending tag to filename: {tagged}")
+
 
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):

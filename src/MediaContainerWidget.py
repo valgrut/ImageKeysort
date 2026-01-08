@@ -13,6 +13,9 @@ from src.VideoWidget import VideoWidget
 from src.TextPreviewWidget import TextPreviewWidget
 from src.Styles import Styles
 
+from src.CropData import CropData
+
+
 # class ClickableLabel(QLabel):
 #     def __init__(self, parent):
 #         super().__init__(parent)
@@ -26,6 +29,9 @@ log = logging.getLogger(__name__)
 
 
 class MediaContainerWidget(QWidget):
+
+    pushCropCommandRequestCommand = pyqtSignal(CropData)
+
     def __init__(self, galleryManager):
         super().__init__()
         self.galleryManager = galleryManager  # toto dat pryc... nahradit za emit()
@@ -106,6 +112,8 @@ class MediaContainerWidget(QWidget):
 
         # Update Counter label
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
+
+        self.imageViewWidget.pushCropCommandRequestCommand.connect(self.pushCropCommandRequestCommand)  # Re-emit signal
 
 
     def keyPressEvent(self, a0):

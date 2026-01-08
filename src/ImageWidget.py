@@ -9,7 +9,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
 # from CropUtils import CropUtils
-from CropImageCommand import CropImageCommand
+# from CropImageCommand import CropImageCommand
+from src.CropData import CropData
 
 
 log = logging.getLogger(__name__)
@@ -22,6 +23,8 @@ class ImageWidget(QWidget):
 
     No other operations over Images should be there (like extracting text and so on)
     """
+
+    pushCropCommandRequestCommand = pyqtSignal(CropData)
 
     def __init__(self):
         super().__init__()
@@ -103,12 +106,12 @@ class ImageWidget(QWidget):
         scaledPixmapCursorPositionY = localPosition.y() - yOff
 
         # print(f"Cursor Offset: {xOff}, {yOff}")
-        log.info(f"Click position mapped to the scaled pixmap: ({scaledPixmapCursorPositionX}, {scaledPixmapCursorPositionY})")
+        # log.info(f"Click position mapped to the scaled pixmap: ({scaledPixmapCursorPositionX}, {scaledPixmapCursorPositionY})")
 
         # Check, that the clicking outside of pixmap does not have effect
         xw = ImageWidget.clamp(localPosition.x() - xOff, 0, scaledPixmapCursorPositionX)
         yw = ImageWidget.clamp(localPosition.y() - yOff, 0, scaledPixmapCursorPositionY)
-        log.info(f"Clamped: {xw}, {yw}")
+        # log.info(f"Clamped: {xw}, {yw}")
 
         # return QPoint(int(round(scaledPixmapCursorPositionX)), int(round(scaledPixmapCursorPositionY)))
         return QPoint(int(round(xw)), int(round(yw)))
@@ -140,10 +143,10 @@ class ImageWidget(QWidget):
 
 
     def augmentStartAndEndRubberCoords(self, currentCursorPosition: QPoint = None):
-        print(f"InitialPos: {self._initialRubberClickPosition}")
-        print(f"StartingPos: {self._startingRubberPoint}")
-        print(f"current position: {currentCursorPosition}")
-        print(f"EndingPos: {self._endingRubberPoint}")
+        # print(f"InitialPos: {self._initialRubberClickPosition}")
+        # print(f"StartingPos: {self._startingRubberPoint}")
+        # print(f"current position: {currentCursorPosition}")
+        # print(f"EndingPos: {self._endingRubberPoint}")
 
         # Cursor is moved to left from initial click
         if self._initialRubberClickPosition.x() > currentCursorPosition.x():
@@ -280,6 +283,14 @@ class ImageWidget(QWidget):
 
         # TODO: Create and push CropImageCommand to the UndoStack
         # TODO: How to provide UndoStack reference here from the MainWindow / GalleryManager???
+        cropData = CropData(
+            imageName = currentFile,
+            imageSrcPath = str(currentSrcDirPath),
+            cropRectangle = cropAreaRect,
+            originalImageSize = self.pixmap.size()
+        )
+        self.pushCropCommandRequestCommand.emit(cropData)
+        log.info(f"Image Widget: CropData emitted: {cropData}")
 
         # Clear variables and prepare for next cropping and rubberBand drawing
         self._pixmapCursorStartPosition = None

@@ -203,7 +203,7 @@ Important features TODO:
 - [ ] Delete button do menu a do toolbaru !!!!!
 - [ ] Rotate image button (staci 1 smer) do toolbaru. Pozor ale, ty obrazky se obcas zobrazuji jinak, nez jse zobrazuje windows explorer. Proc???
 - [ ] !!!!! crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
-- [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those);
+- [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those); 
       - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
       - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
 
@@ -241,7 +241,7 @@ To Fix:
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
 - [ ] !!!!!!! Crash behem cropu tesne po prejmenovani obrazku.
-
+  
     ```
     Full path: /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/BA-program-2024.jpeg_cropped_small.png
     File without ext: BA-program-2024.jpeg_cropped_small
@@ -259,7 +259,7 @@ To Fix:
       File "/usr/lib64/python3.13/shutil.py", line 260, in copyfile
         with open(src, 'rb') as fsrc:
             ~~~~^^^^^^^^^^^
-    FileNotFoundError: [Errno 2] No such file or directory:
+    FileNotFoundError: [Errno 2] No such file or directory: 
       '/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/BA-program-2024.jpeg_cropped_small.png'
     ```
 
