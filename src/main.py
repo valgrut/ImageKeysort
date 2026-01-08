@@ -163,6 +163,7 @@ Important - Misc:
 - [ ] !!!!!!! Setridit a zorganizovat MainWindow init metodu - vsechny Actions k sobe, vsechny .connect k sobe a tak.
 - [ ] Help: Pridat examples - jak vypada tree, jak bude vypadat po pridani
 nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
+- [ ] Add "__DELETED__" string for the trash folder into settings (or at least into variable and use that everywhere instead of hardcoded string)
 
 
 Settings:
