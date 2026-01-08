@@ -456,7 +456,13 @@ class MainWindow(QMainWindow, QObject):
 
     def pushOrUpdateCommand(self, command: CropData):
         """
-        TODO: Derive my own QUndoStack class, which will have this method.
+        TODO: Derive my own QUndoStack class, which will have this method, So it is clean and I can add some logging.
+        
+        TODO: Expected behavior:
+        - It does not matter whether the entry is the last one or not. Just find the correct one.
+            - TODO: Move this method into my UndoStack and implement method to find entry by image name.
+        - if there is no entry, add it.
+        - If there is an entry somewhere on the stack, find it and update it.
         """
         print()
         print("pushOrUpdateCommand called")
@@ -487,7 +493,11 @@ class MainWindow(QMainWindow, QObject):
 
     def undoCommand(self):
         """
-        TODO: Derive my own QUndoStack class, which will have this method.
+        TODO: Derive my own QUndoStack class, which will have this method, So it is clean and I can add some logging.
+        TODO: Expected behavior:
+            - Execute undo only for the current image, if there is some entry for it.
+            - It does not matter whether the entry is the last one or not. Just find the correct one.
+            - If there is no entry for the current image, do nothing.
         """
         print("Stack size:", self.commandsStack.count())
         self.commandsStack.undo()
@@ -500,7 +510,6 @@ class MainWindow(QMainWindow, QObject):
 
     def reuseCommand(self):
         """
-        
         """
         currentImageOriginalSize = 123
 
