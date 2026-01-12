@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
-# from CropUtils import CropUtils
+from CropUtils import CropUtils
 # from CropImageCommand import CropImageCommand
 from src.CropData import CropData
 
@@ -268,11 +268,10 @@ class ImageWidget(QWidget):
         # TODO: Vymyslet, jak to spravne separovat, jak to vse spravne zavolat, a kam hodit tu undo/redo logiku.
 
         # Crop original image and save update the preview
-        croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)
+        croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)  # Tohle je to, co se pouzije pri repeatCrop() - pouze pixmap a cropAreaRect.
         self.pixmap.swap(croppedPixmap)
         self.updateScaledPixmap()
 
-        # Perform crop
         # Variant 1 - create cropped image with different name than original
         # croppedFileName = pathlib.Path(currentSrcDirPath / (currentFileNameNoExt + "_cropped" + extension))
         # print(f"Cropped file name: {croppedFileName}")

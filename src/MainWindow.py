@@ -530,8 +530,11 @@ class MainWindow(QMainWindow, QObject):
         if "[Tag1]" in currentFileNameNoExt:
             log.info("Filename already contains the tag.")
             return
+        
         tagged = currentFileNameNoExt + " [Tag1]" + extension
         log.info(f"Appending tag to filename: {tagged}")
+
+        # TODO: Add command into stack so it can be Undone.
 
 
     @pyqtSlot(str)
