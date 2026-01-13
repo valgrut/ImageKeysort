@@ -130,6 +130,7 @@ Links:
 - [ ] REPEAT last crop!!!!!!!! (start + end coords).
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [ ] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
+- [ ] Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
 
 ### Zoom - related todo:
 - [ ] implement zoom
