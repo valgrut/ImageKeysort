@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize, QRect
 from PyQt5.QtGui import QCursor, QKeyEvent, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QMessageBox, \
     QVBoxLayout, QLineEdit
@@ -31,6 +31,7 @@ log = logging.getLogger(__name__)
 class MediaContainerWidget(QWidget):
 
     pushCropCommandRequestCommand = pyqtSignal(CropData)
+    repeatCropCommandSignal = pyqtSignal(QSize, QRect)
 
     def __init__(self, galleryManager):
         super().__init__()
@@ -114,6 +115,11 @@ class MediaContainerWidget(QWidget):
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
         self.imageViewWidget.pushCropCommandRequestCommand.connect(self.pushCropCommandRequestCommand)  # Re-emit signal
+        self.repeatCropCommandSignal.connect(self.imageViewWidget.repeatCropCommandSlot)
+        
+
+    # def getOriginalImageSize(self) -> QSize:
+    #     self.imageViewWidget.getOriginalImageSize()
 
 
     def keyPressEvent(self, a0):

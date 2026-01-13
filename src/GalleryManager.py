@@ -26,6 +26,7 @@ class GalleryManager(QStackedWidget):
     setFilenameTextEditSignal = pyqtSignal()
     updateStatusBarLabelSignal = pyqtSignal(str)
     pushCropCommandRequestCommand = pyqtSignal(CropData)
+    repeatCropCommandSignal = pyqtSignal(QSize, QRect)
 
     def __init__(self, mainWindow):
         super().__init__()
@@ -63,6 +64,7 @@ class GalleryManager(QStackedWidget):
 
         self.mediaContainerWidget.pushCropCommandRequestCommand.connect(self.pushCropCommandRequestCommand)  # Re-emit signal
         self.mainWindow.updateMediaPreviewSignal.connect(self.updatePreview)
+        self.mainWindow.repeatCropCommandSignal.connect(self.mediaContainerWidget.repeatCropCommandSignal)
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path

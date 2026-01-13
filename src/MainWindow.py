@@ -5,7 +5,7 @@ import typing
 import logging
 import pathlib
 
-from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize, QRect
 from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -75,6 +75,7 @@ class MainWindow(QMainWindow, QObject):
     firstImageRequestedSignal = pyqtSignal()
     lastImageRequestedSignal = pyqtSignal()
     updateMediaPreviewSignal = pyqtSignal()
+    repeatCropCommandSignal = pyqtSignal(QSize, QRect)
 
     def __init__(self, parent=None, args=None):
         super().__init__(parent)
@@ -296,6 +297,8 @@ class MainWindow(QMainWindow, QObject):
         self.dropChangesTreeButton.clicked.connect(self.dropChangesAction.activate)
 
         self.galleryManager.pushCropCommandRequestCommand.connect(self.pushOrUpdateCommand)
+        self.repeatCropCommandSignal.connect(self.galleryManager.repeatCropCommandSignal)
+
 
         # ========== Apply the provided CLI options, if any ==========
         if srcPathArg:
@@ -449,6 +452,11 @@ class MainWindow(QMainWindow, QObject):
         self.undoCommandOnStack.setShortcut('Ctrl+Shift+Z')
         self.undoCommandOnStack.triggered.connect(self.undoCommand)
         self.addAction(self.undoCommandOnStack)
+
+        self.repeatCommandOnStack = QAction("&Repeat Command operation on stack", self)
+        self.repeatCommandOnStack.setShortcut('Ctrl+Shift+R')  # TODO: Maybe change shortcut to something else.
+        self.repeatCommandOnStack.triggered.connect(self.reuseCommand)
+        self.addAction(self.repeatCommandOnStack)
     
     def _getCommandsStack(self):
         return self.commandsStack
@@ -499,12 +507,18 @@ class MainWindow(QMainWindow, QObject):
             - It does not matter whether the entry is the last one or not. Just find the correct one.
             - If there is no entry for the current image, do nothing.
         """
+
+        # TODO: Add check to only execute if current image name matches the one from the current command.
+        #       NEBO
+        #       Find the command for the current image in the stack and undo only that one.
+
+        # TODO: Pridat indikaci k obrazku, ze jsou dostupne operace k undo.
+
         print("Stack size:", self.commandsStack.count())
         self.commandsStack.undo()
         print("Stack size:", self.commandsStack.count())
         
-        # TODO: Update image preview after undoing the crop command.
-        #self.updateMediaPreviewSignal.emit()
+        # Update image preview after undoing the crop command.
         self.galleryManager.updatePreview()
 
 
@@ -513,12 +527,16 @@ class MainWindow(QMainWindow, QObject):
         Enable reuse only if the current image has the same original size as the last command on the stack.
         For the Reuse, last command is used, not any command.
         """
-        currentImageOriginalSize = 123
+        # currentImageOriginalSize = self.galleryManager.mediaContainerWidget.getOriginalImageSize()  # TODO: De-chain this shit.
+
+        log.info("Repeat command from stack on current image.")
 
         lastCommand = self.commandsStack.command(self.commandsStack.count() - 1)
-        if lastCommand is not None and lastCommand.originalImageSize == currentImageOriginalSize:
-            # TODO
-            pass
+        # if lastCommand is not None and lastCommand.originalImageSize == currentImageOriginalSize:
+        if lastCommand is not None:
+            log.info(f"RepeatCropCommand emitted! Sending: {lastCommand.originalImageSize} and {lastCommand.cropRectangle}")
+            self.repeatCropCommandSignal.emit(lastCommand.originalImageSize, lastCommand.cropRectangle)
+
 
     def appendTagToName(self):
         currentFilePath = pathlib.Path(self.galleryManager.getCurrentFilename())

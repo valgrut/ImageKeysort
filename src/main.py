@@ -129,7 +129,7 @@ Links:
 - [ ] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
 - [ ] REPEAT last crop!!!!!!!! (start + end coords).
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
-
+- [ ] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
 
 ### Zoom - related todo:
 - [ ] implement zoom

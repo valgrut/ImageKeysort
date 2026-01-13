@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
-from CropUtils import CropUtils
+from src.CropUtils import CropUtils
 # from CropImageCommand import CropImageCommand
 from src.CropData import CropData
 
@@ -72,6 +72,10 @@ class ImageWidget(QWidget):
             scaledPixmap = self.pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label.setPixmap(scaledPixmap)
 
+    # def getOriginalImageSize(self) -> QSize:
+    #     if self.pixmap:
+    #         return self.pixmap.size()
+    #     return None
 
     @staticmethod
     def clamp(n, min, max):
@@ -302,6 +306,69 @@ class ImageWidget(QWidget):
         self.rubberBand = None
 
         super().mouseReleaseEvent(event)
+
+    @pyqtSlot(QSize, QRect)
+    def repeatCropCommandSlot(self, sizeOfBaseImage: QSize, cropRect: QRect):
+        cropAreaRect = cropRect
+
+        log.info(f"repeatCropCommandSlot called with sizeOfBaseImage: {sizeOfBaseImage}, cropRect: {cropRect}")
+
+        # Prepare useful paths and names
+        currentFilePath = pathlib.Path(self.currentImgPath)
+        currentFileNameNoExt = currentFilePath.stem
+        currentSrcDirPath = currentFilePath.parent
+        extension = currentFilePath.suffix
+        currentFile = currentFilePath.name
+        
+        # Enable crop action only if original and current image's size is equal.
+        # if sizeOfBaseImage != self.pixmap.size():
+        #     log.warning(f"Cannot repeat crop operation, because size of the base image has changed! Original: {sizeOfBaseImage}, current: {self.pixmap.size()}")
+        #     return
+
+        print(f"Source dir: {currentSrcDirPath}")
+        print(f"Full path: {currentFilePath}")
+        print(f"File name: {currentFile}")
+        print(f"File without ext: {currentFileNameNoExt}")
+        print(f"Extension: {extension}")
+
+        # Backup original image
+        #   Move original image into trash, so It can be recovered with Undo operation.
+        #   Only original image is moved there.
+        #   In case of multiple crops of the current image, original wont be overriden and therefore lost.
+        trashDir = pathlib.Path(currentSrcDirPath) / "__DELETED__"
+        trashDir.mkdir(exist_ok=True)
+        if not pathlib.Path(trashDir, currentFile).is_file():
+            shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
+
+        # TODO: Check that QRect je podmnozina image.rect()
+        # TODO: save new crop into the list of changes, so we can undo change / completely revert all changes.
+        # TODO: Make UndoCrop() possible!!!!! -> Create CropCommand, ktery bude mit undo/redo metody.
+        # TODO: Implement repeat cropping with the same start and end points, !! IF the size of an images are the same !! (screenshots from phone...) Fakt pouzit originalni velikost obrazku, aby bylo jendo, jak naskaluju okno.
+        # TODO: Vymyslet, jak to spravne separovat, jak to vse spravne zavolat, a kam hodit tu undo/redo logiku.
+
+        # Crop original image and save update the preview
+        croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)  # Tohle je to, co se pouzije pri repeatCrop() - pouze pixmap a cropAreaRect.
+        self.pixmap.swap(croppedPixmap)
+        self.updateScaledPixmap()
+
+        # Variant 1 - create cropped image with different name than original
+        # croppedFileName = pathlib.Path(currentSrcDirPath / (currentFileNameNoExt + "_cropped" + extension))
+        # print(f"Cropped file name: {croppedFileName}")
+        # self.pixmap.save(str(croppedFileName))  # Save with different name, keep original.
+
+        # Variant 2 - Override original file with the cropped one
+        self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
+
+        # TODO: Create and push CropImageCommand to the UndoStack
+        # TODO: How to provide UndoStack reference here from the MainWindow / GalleryManager???
+        cropData = CropData(
+            imageName = currentFile,
+            imageSrcPath = str(currentSrcDirPath),
+            cropRectangle = cropAreaRect,
+            originalImageSize = self.pixmap.size()
+        )
+        self.pushCropCommandRequestCommand.emit(cropData)
+        log.info(f"Image Widget: CropData emitted: {cropData}")
 
 
     # TODO: WIP: Does not work. Event is not registered. It is caught by SortModeHandler instead.
