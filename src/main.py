@@ -167,6 +167,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Add "__DELETED__" string for the trash folder into settings (or at least into variable and use that everywhere instead of hardcoded string)
 - [ ] !!! Pridat nahled predchoziho a nasledujiciho obrazku. Hodi se, kdyz chci fotky tridit mega rychle (treba jen 2 kategorie).
 - [ ] While left/right arrow is pressed, move images (prevent need to press it tousands of times) - jde to, ale zpomalit malinko.
+- [ ] Hide number showing number of images in the source directory.
 
 
 Settings:
