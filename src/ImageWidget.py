@@ -242,6 +242,22 @@ class ImageWidget(QWidget):
         unscaledStartPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorStartPosition)
         unscaledEndPosition = self._transformPositionFromScaledPixmapToUnscaled(self._pixmapCursorEndPosition)
         cropAreaRect = QRect(unscaledStartPosition, unscaledEndPosition)
+        
+        # Prevent cropping to too small area
+        if cropAreaRect.height() < 6 or cropAreaRect.width() < 6:
+            log.warning("Crop area too small, cancelling cropping operation.")
+            # Clear variables and prepare for next cropping and rubberBand drawing
+            self._pixmapCursorStartPosition = None
+            self._pixmapCursorEndPosition = None
+
+            self._startingRubberPoint = None
+            self._endingRubberPoint = None
+
+            self.rubberBand.hide()
+            self.rubberBand = None
+
+            super().mouseReleaseEvent(event)
+            return
 
         # Prepare useful paths and names
         currentFilePath = pathlib.Path(self.currentImgPath)

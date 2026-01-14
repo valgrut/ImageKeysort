@@ -126,11 +126,15 @@ Links:
 - [ ] Fix: still small misalignment between cursor's tip position and rubberband.
 - [X] Show rubberband to all directions, not just from top left to right down.
         - [ ] Show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
-- [ ] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
-- [ ] REPEAT last crop!!!!!!!! (start + end coords).
+- [X] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
+- [X] REPEAT last crop!!!!!!!! (start + end coords).
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [ ] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
 - [ ] Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
+- [ ] Vymyslet jinou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
+- [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne operace k undo. (renaming, cropping)
+- [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
+
 
 ### Zoom - related todo:
 - [ ] implement zoom
@@ -204,13 +208,14 @@ Important features TODO:
 - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 - [ ] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
-- [ ] Zopakovat posledni copy operaci pomoci ',. a ;.'
+- [X] Zopakovat posledni copy operaci pomoci ',. a ;.'
 - [ ] Delete button do menu a do toolbaru !!!!!
 - [ ] Rotate image button (staci 1 smer) do toolbaru. Pozor ale, ty obrazky se obcas zobrazuji jinak, nez jse zobrazuje windows explorer. Proc???
 - [ ] !!!!! crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 - [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those); 
       - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
       - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
+
 
 Consider (Maybe):
 - [ ] ? mozna: Zobrazit historii v History Label kde bude historie zmacknutych zkratek ('afg', ...), aby clovek videl, co se stane, kdyz zmackne '.' (Repeat). Mozna ji pridat POD aktualne mackanou zkratku, sedou barvou.

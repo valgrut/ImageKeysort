@@ -458,6 +458,7 @@ class MainWindow(QMainWindow, QObject):
         self.repeatCommandOnStack.triggered.connect(self.reuseCommand)
         self.addAction(self.repeatCommandOnStack)
     
+    
     def _getCommandsStack(self):
         return self.commandsStack
 
@@ -482,11 +483,11 @@ class MainWindow(QMainWindow, QObject):
         if lastCommand is not None and lastCommand.imageName == command.imageName:
             print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
             log.info(">>> Editing the last command in the stack.")
-            print(">>> Editing the last command in the stack.")
             # lastCommand.cropRectangle = command.cropRectangle
             self.commandsStack.push(CropImageCommand(lastCommand.imageName, lastCommand.imageSrcPath, command.cropRectangle, lastCommand.originalImageSize))
             #return
         else:
+            log.info(">>> Pushing new command into the stack.")
             self.commandsStack.push(CropImageCommand(command.imageName, command.imageSrcPath, command.cropRectangle, command.originalImageSize))
 
         # TODO: Make possible to Undo cropping only of the image we are currently on !!!!!!!
@@ -510,13 +511,13 @@ class MainWindow(QMainWindow, QObject):
 
         # TODO: Add check to only execute if current image name matches the one from the current command.
         #       NEBO
-        #       Find the command for the current image in the stack and undo only that one.
+        #       !!! Find the command for the current image in the stack and undo only that one. Then Remove that entry from the Stack.
 
-        # TODO: Pridat indikaci k obrazku, ze jsou dostupne operace k undo.
 
-        print("Stack size:", self.commandsStack.count())
+        print("Stack size before undo:", self.commandsStack.count())
         self.commandsStack.undo()
-        print("Stack size:", self.commandsStack.count())
+        # TODO: And Remove from the stack
+        print("Stack size after undo:", self.commandsStack.count())
         
         # Update image preview after undoing the crop command.
         self.galleryManager.updatePreview()
@@ -528,6 +529,8 @@ class MainWindow(QMainWindow, QObject):
         For the Reuse, last command is used, not any command.
         """
         # currentImageOriginalSize = self.galleryManager.mediaContainerWidget.getOriginalImageSize()  # TODO: De-chain this shit.
+
+        # TODO: size of original image and current image must match!!!
 
         log.info("Repeat command from stack on current image.")
 
