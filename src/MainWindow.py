@@ -466,24 +466,12 @@ class MainWindow(QMainWindow, QObject):
 
 
     def pushOrUpdateCommand(self, command: CropData):
+        """        
+        Push a new crop command into the command stack or update the existing command if it belongs to the same image.
         """
-        TODO: Derive my own QUndoStack class, which will have this method, So it is clean and I can add some logging.
-        
-        TODO: Expected behavior:
-        - It does not matter whether the entry is the last one or not. Just find the correct one.
-            - TODO: Move this method into my UndoStack and implement method to find entry by image name.
-        - if there is no entry, add it.
-        - If there is an entry somewhere on the stack, find it and update it.
-        """
-        print()
-        print("pushOrUpdateCommand called")
-        print("Command:", command)
-        print("Stack size:", self.commandsStack.count())
         
         lastCommand = self.commandsStack.top()
-        # TODO: Add check, that the imageName is not in the stack multiple times (this prevents new entry when i crop img1, then move to and crop img2, and then go back to img1 and crop. It will create third entry.)
         if lastCommand is not None and lastCommand.imageName == command.imageName:
-            print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
             log.info(">>> Editing the last command in the stack.")
             # lastCommand.cropRectangle = command.cropRectangle
             self.commandsStack.push(CropImageCommand(lastCommand.imageName, lastCommand.imageSrcPath, command.cropRectangle, lastCommand.originalImageSize))
@@ -492,34 +480,31 @@ class MainWindow(QMainWindow, QObject):
             log.info(">>> Pushing new command into the stack.")
             self.commandsStack.push(CropImageCommand(command.imageName, command.imageSrcPath, command.cropRectangle, command.originalImageSize))
 
-        # TODO: Make possible to Undo cropping only of the image we are currently on !!!!!!!
-
-        print()
-        print("After push:")
-        print("Stack size:", self.commandsStack.count())
-        lastCommand = self.commandsStack.top()
-        print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
-        print()
+        # Check output:
+        # lastCommand = self.commandsStack.top()
+        # print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
 
 
     def undoCommand(self):
         """
-        TODO: [ ] Derive my own QUndoStack class, which will have this method, So it is clean and I can add some logging.
-        TODO: Expected behavior:
-            - [ ] Execute undo only for the current image, if there is some entry for it.
-            - [ ] It does not matter whether the entry is the last one or not. Just find the correct one.
-            - [ ] If there is no entry for the current image, do nothing.
+        Undo the command performed on the current image.
         """
 
-        # TODO: Add check to only execute if current image name matches the one from the current command.
-        #       NEBO
-        #       !!! Find the command for the current image in the stack and undo only that one. Then Remove that entry from the Stack.
+        # Get the command associated with the current image
+        currentFilename = self.galleryManager.getCurrentFilename()
+        associatedCommand = self.commandsStack.getCommandByFilename(currentFilename)
+        if associatedCommand is None:
+            log.info("No command associated with the current image. Cannot undo.")
+            return
+        
+        # Allow undo only if there is a command on the stack associated with the current image.
+        # TODO: Mozna neni nutne, protoze to dela uz ta podminka vyse...
+        if associatedCommand.imageName != currentFilename:
+            log.info("The last command on the stack does not belong to the current image. Cannot undo.")
+            return
 
-
-        print("Stack size before undo:", self.commandsStack.count())
+        # Undo and remove command from the stack
         self.commandsStack.undo()
-        # TODO: And Remove from the stack
-        print("Stack size after undo:", self.commandsStack.count())
         
         # Update image preview after undoing the crop command.
         self.galleryManager.updatePreview()
@@ -530,14 +515,9 @@ class MainWindow(QMainWindow, QObject):
         Enable reuse only if the current image has the same original size as the last command on the stack.
         For the Reuse, last command is used, not any command.
         """
-        # currentImageOriginalSize = self.galleryManager.mediaContainerWidget.getOriginalImageSize()  # TODO: De-chain this shit.
-
-        # TODO: size of original image and current image must match!!!
-
         log.info("Repeat command from stack on current image.")
 
         lastCommand = self.commandsStack.top()
-        # if lastCommand is not None and lastCommand.originalImageSize == currentImageOriginalSize:
         if lastCommand is not None:
             log.info(f"RepeatCropCommand emitted! Sending: {lastCommand.originalImageSize} and {lastCommand.cropRectangle}")
             self.repeatCropCommandSignal.emit(lastCommand.originalImageSize, lastCommand.cropRectangle)

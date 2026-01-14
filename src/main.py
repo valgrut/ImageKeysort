@@ -127,14 +127,17 @@ Links:
 - [X] Show rubberband to all directions, not just from top left to right down.
         - [ ] Show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
 - [X] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
-- [X] REPEAT last crop!!!!!!!! (start + end coords).
+- [X] REPEAT last crop! (start + end coords).
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [X] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
 - [X] Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
 - [ ] Vymyslet jinou klavesovou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
-- [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne operace k undo. (renaming, tags, cropping)
+    - Zkratka 1 zopakuje posledni crop operaci na aktualni obrazek.
+    - Zkratka 2 zopakuje posledni tag operaci na aktualni obrazek.
+- [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne nejake operace k undo. (renaming, tags, cropping)
 - [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 - [ ] Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
+- [ ] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
 
 
 ### Zoom - related todo:
@@ -155,7 +158,7 @@ Links:
         - Napr.: Tagy: IG, Vertigo, PoledancerXYZ  ->  se do nazvu (pred suffix) pridat treba " [PoledancerXYZ]".
         - [ ] Popremyslet treba nad zkratkama pro treba vyskoceni rolovaci nabidky s tagama, a sipkama a enter pridavat.
             - [ ] Treba Ctrl+T
-        - [ ] Edit mode Ctrl+T /klik na menu - Vyskoci popup okno, ktere se otevre v Edit modu pro editaci/pridavani/odebirani.
+        - [ ] Edit mode -> Ctrl+T nebo klik na menu -> Vyskoci popup okno, ktere se otevre v Edit modu pro editaci/pridavani/odebirani.
         - [ ] Tagy by se mohly definovat v popup okne, ktere se otevre v Edit modu pro editaci/pridavani/odebirani
 - [ ] Undo/Redo
 

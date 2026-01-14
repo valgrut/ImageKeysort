@@ -10,15 +10,10 @@ class CommandStack:
     #     self._commands.append(command)
     #     self._index += 1
 
-    # def undo(self):
-    #     if self._index >= 0:
-    #         command = self._commands[self._index]
-    #         command.undo()
-    #         self._index -= 1
-
     def undo(self, filename: str = None):
         """
         Undo the last command or the command associated with the given filename.
+        Removes the undone command from the stack.
         """
         if self.count() <= 0:
             return
@@ -27,6 +22,7 @@ class CommandStack:
             command = self.pop()
             command.undo()
             return
+
         elif filename is not None:
             command = self.getCommandByFilename(filename)
             if command:
