@@ -285,10 +285,6 @@ class ImageWidget(QWidget):
             shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
 
         # TODO: Check that QRect je podmnozina image.rect()
-        # TODO: save new crop into the list of changes, so we can undo change / completely revert all changes.
-        # TODO: Make UndoCrop() possible!!!!! -> Create CropCommand, ktery bude mit undo/redo metody.
-        # TODO: Implement repeat cropping with the same start and end points, !! IF the size of an images are the same !! (screenshots from phone...) Fakt pouzit originalni velikost obrazku, aby bylo jendo, jak naskaluju okno.
-        # TODO: Vymyslet, jak to spravne separovat, jak to vse spravne zavolat, a kam hodit tu undo/redo logiku.
 
         # Crop original image and save update the preview
         croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)  # Tohle je to, co se pouzije pri repeatCrop() - pouze pixmap a cropAreaRect.
@@ -303,8 +299,6 @@ class ImageWidget(QWidget):
         # Variant 2 - Override original file with the cropped one
         self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
 
-        # TODO: Create and push CropImageCommand to the UndoStack
-        # TODO: How to provide UndoStack reference here from the MainWindow / GalleryManager???
         cropData = CropData(
             imageName = currentFile,
             imageSrcPath = str(currentSrcDirPath),
@@ -346,11 +340,6 @@ class ImageWidget(QWidget):
         currentSrcDirPath = currentFilePath.parent
         extension = currentFilePath.suffix
         currentFile = currentFilePath.name
-        
-        # Enable crop action only if original and current image's size is equal.
-        # if sizeOfBaseImage != self.pixmap.size():
-        #     log.warning(f"Cannot repeat crop operation, because size of the base image has changed! Original: {sizeOfBaseImage}, current: {self.pixmap.size()}")
-        #     return
 
         print(f"Source dir: {currentSrcDirPath}")
         print(f"Full path: {currentFilePath}")
@@ -368,10 +357,6 @@ class ImageWidget(QWidget):
             shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
 
         # TODO: Check that QRect je podmnozina image.rect()
-        # TODO: save new crop into the list of changes, so we can undo change / completely revert all changes.
-        # TODO: Make UndoCrop() possible!!!!! -> Create CropCommand, ktery bude mit undo/redo metody.
-        # TODO: Implement repeat cropping with the same start and end points, !! IF the size of an images are the same !! (screenshots from phone...) Fakt pouzit originalni velikost obrazku, aby bylo jendo, jak naskaluju okno.
-        # TODO: Vymyslet, jak to spravne separovat, jak to vse spravne zavolat, a kam hodit tu undo/redo logiku.
 
         # Crop original image and save update the preview
         croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)  # Tohle je to, co se pouzije pri repeatCrop() - pouze pixmap a cropAreaRect.
@@ -386,8 +371,6 @@ class ImageWidget(QWidget):
         # Variant 2 - Override original file with the cropped one
         self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
 
-        # TODO: Create and push CropImageCommand to the UndoStack
-        # TODO: How to provide UndoStack reference here from the MainWindow / GalleryManager???
         cropData = CropData(
             imageName = currentFile,
             imageSrcPath = str(currentSrcDirPath),

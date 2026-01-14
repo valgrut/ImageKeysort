@@ -130,10 +130,11 @@ Links:
 - [X] REPEAT last crop!!!!!!!! (start + end coords).
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [X] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
-- [ ] Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
+- [X] Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
 - [ ] Vymyslet jinou klavesovou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
 - [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne operace k undo. (renaming, tags, cropping)
 - [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
+- [ ] Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
 
 
 ### Zoom - related todo:
