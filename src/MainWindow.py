@@ -43,6 +43,8 @@ from src.TextExtractor import TextExtractor
 from src.CropImageCommand import CropImageCommand
 from src.CropData import CropData
 from src.CommandStack import CommandStack
+from src.TagSelectionDialog import TagSelectionDialog
+
 
 from src.treeView import ShortcutsTreeView
 
@@ -450,6 +452,11 @@ class MainWindow(QMainWindow, QObject):
         self.appendTag1Action.triggered.connect(self.appendTagToName)
         self.addAction(self.appendTag1Action)
 
+        self.appendTagFromDialogAction = QAction("&Select Tag and append", self)
+        self.appendTagFromDialogAction.setShortcut('Ctrl+Shift+T')
+        self.appendTagFromDialogAction.triggered.connect(self.selectTagFromDialog)
+        self.addAction(self.appendTagFromDialogAction)
+
         self.undoCommandOnStack = QAction("&Undo Command operation on stack", self)
         self.undoCommandOnStack.setShortcut('Ctrl+Shift+Z')
         self.undoCommandOnStack.triggered.connect(self.undoCommand)
@@ -471,14 +478,16 @@ class MainWindow(QMainWindow, QObject):
         """
         
         lastCommand = self.commandsStack.top()
+        newCommand = None
+
         if lastCommand is not None and lastCommand.imageName == command.imageName:
             log.info(">>> Editing the last command in the stack.")
-            # lastCommand.cropRectangle = command.cropRectangle
-            self.commandsStack.push(CropImageCommand(lastCommand.imageName, lastCommand.imageSrcPath, command.cropRectangle, lastCommand.originalImageSize))
-            #return
+            newCommand = CropImageCommand(lastCommand.imageName, lastCommand.imageSrcPath, command.cropRectangle, lastCommand.originalImageSize) 
         else:
             log.info(">>> Pushing new command into the stack.")
-            self.commandsStack.push(CropImageCommand(command.imageName, command.imageSrcPath, command.cropRectangle, command.originalImageSize))
+            newCommand = CropImageCommand(command.imageName, command.imageSrcPath, command.cropRectangle, command.originalImageSize)
+        
+        self.commandsStack.push(newCommand)
 
         # Check output:
         # lastCommand = self.commandsStack.top()
@@ -522,6 +531,12 @@ class MainWindow(QMainWindow, QObject):
             log.info(f"RepeatCropCommand emitted! Sending: {lastCommand.originalImageSize} and {lastCommand.cropRectangle}")
             self.repeatCropCommandSignal.emit(lastCommand.originalImageSize, lastCommand.cropRectangle)
 
+
+    def selectTagFromDialog(self):
+        tags = ["work", "family", "anime", "urgent", "todo"]
+        picked = TagSelectionDialog.selectTag(None, tags)
+        print("Vybraný tag:", picked)
+        pass
 
     def appendTagToName(self):
         currentFilePath = pathlib.Path(self.galleryManager.getCurrentFilename())
