@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import (
 # TODO: Rewrite to be more readable.
 
 class TagSelectionDialog(QDialog):
-    def __init__(self, tags: Iterable[str], parent=None, title: str = "Vyber tag"):
+    def __init__(self, tags: Iterable[str], parent=None, title: str = "Select tag"):
         super().__init__(parent)
         self.setWindowTitle(title)
         self.setModal(True)
@@ -24,7 +24,7 @@ class TagSelectionDialog(QDialog):
 
         layout = QVBoxLayout(self)
 
-        layout.addWidget(QLabel("Vyber tag (šipky ↑↓, Enter = OK, Esc = zrušit):"))
+        layout.addWidget(QLabel("Select tag (Arrows up/down, Enter = OK, Esc = Cancel):"))
 
         self.list = QListWidget(self)
         self.list.setSelectionMode(QListWidget.SingleSelection)
@@ -46,7 +46,7 @@ class TagSelectionDialog(QDialog):
         btn_row = QHBoxLayout()
         btn_row.addStretch(1)
         self.ok_btn = QPushButton("OK")
-        self.cancel_btn = QPushButton("Zrušit")
+        self.cancel_btn = QPushButton("Cancel")
         self.ok_btn.clicked.connect(self._accept_current)
         self.cancel_btn.clicked.connect(self.reject)
         btn_row.addWidget(self.ok_btn)
@@ -67,7 +67,7 @@ class TagSelectionDialog(QDialog):
         self.accept()
 
     @staticmethod
-    def selectTag(parent, tags: Iterable[str], title: str = "Vyber tag") -> Optional[str]:
+    def selectTag(parent, tags: Iterable[str], title: str = "Select tag") -> Optional[str]:
         dlg = TagSelectionDialog(tags, parent=parent, title=title)
         result = dlg.exec_()
         if result == QDialog.Accepted:
