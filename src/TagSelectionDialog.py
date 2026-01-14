@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
     QPushButton
 )
 
+# TODO: Rewrite to be more readable.
 
 class TagSelectionDialog(QDialog):
     def __init__(self, tags: Iterable[str], parent=None, title: str = "Vyber tag"):
