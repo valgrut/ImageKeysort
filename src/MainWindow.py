@@ -504,11 +504,11 @@ class MainWindow(QMainWindow, QObject):
 
     def undoCommand(self):
         """
-        TODO: Derive my own QUndoStack class, which will have this method, So it is clean and I can add some logging.
+        TODO: [ ] Derive my own QUndoStack class, which will have this method, So it is clean and I can add some logging.
         TODO: Expected behavior:
-            - Execute undo only for the current image, if there is some entry for it.
-            - It does not matter whether the entry is the last one or not. Just find the correct one.
-            - If there is no entry for the current image, do nothing.
+            - [ ] Execute undo only for the current image, if there is some entry for it.
+            - [ ] It does not matter whether the entry is the last one or not. Just find the correct one.
+            - [ ] If there is no entry for the current image, do nothing.
         """
 
         # TODO: Add check to only execute if current image name matches the one from the current command.

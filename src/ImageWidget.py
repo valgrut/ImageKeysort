@@ -271,6 +271,9 @@ class ImageWidget(QWidget):
         print(f"File name: {currentFile}")
         print(f"File without ext: {currentFileNameNoExt}")
         print(f"Extension: {extension}")
+        print(f"Image size: {self.pixmap.size()} and {self.label.pixmap().size()} and {self.label.size()}")
+
+        originalPixmapSize = self.pixmap.size()
 
         # Backup original image
         #   Move original image into trash, so It can be recovered with Undo operation.
@@ -306,7 +309,7 @@ class ImageWidget(QWidget):
             imageName = currentFile,
             imageSrcPath = str(currentSrcDirPath),
             cropRectangle = cropAreaRect,
-            originalImageSize = self.pixmap.size()
+            originalImageSize = originalPixmapSize
         )
         self.pushCropCommandRequestCommand.emit(cropData)
         log.info(f"Image Widget: CropData emitted: {cropData}")
@@ -323,9 +326,17 @@ class ImageWidget(QWidget):
 
         super().mouseReleaseEvent(event)
 
+
     @pyqtSlot(QSize, QRect)
     def repeatCropCommandSlot(self, sizeOfBaseImage: QSize, cropRect: QRect):
         cropAreaRect = cropRect
+        
+        # Enable crop repetition only if original and current image's size is equal.
+        if sizeOfBaseImage != self.pixmap.size():
+            log.warning(f"Cannot repeat crop operation, because size of the base image is different! Original: {sizeOfBaseImage}, current: {self.pixmap.size()}")
+            return
+        
+        originalPixmapSize = self.pixmap.size()
 
         log.info(f"repeatCropCommandSlot called with sizeOfBaseImage: {sizeOfBaseImage}, cropRect: {cropRect}")
 
@@ -381,7 +392,7 @@ class ImageWidget(QWidget):
             imageName = currentFile,
             imageSrcPath = str(currentSrcDirPath),
             cropRectangle = cropAreaRect,
-            originalImageSize = self.pixmap.size()
+            originalImageSize = originalPixmapSize
         )
         self.pushCropCommandRequestCommand.emit(cropData)
         log.info(f"Image Widget: CropData emitted: {cropData}")

@@ -115,8 +115,8 @@ Links:
 
 
 ### Crop - related todo:
-- I need to be able to:
-      - save cropped image into the source directory via GalleryManager
+- Features:
+      - save cropped image into the source directory via GalleryManager's method, to keep all logic in one place.
           - So, move image cropper to the GalleryManager? Then I could use it even for the video cropping.
       - Be able to revert back the cropping (save image before crop internally vs externally to be able to revert back?)
           - Shortcut to revert image cropping and start over
@@ -129,10 +129,10 @@ Links:
 - [X] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
 - [X] REPEAT last crop!!!!!!!! (start + end coords).
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
-- [ ] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
+- [X] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
 - [ ] Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
-- [ ] Vymyslet jinou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
-- [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne operace k undo. (renaming, cropping)
+- [ ] Vymyslet jinou klavesovou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
+- [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne operace k undo. (renaming, tags, cropping)
 - [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 
 
