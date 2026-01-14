@@ -42,6 +42,7 @@ from src.Modes import Modes
 from src.TextExtractor import TextExtractor
 from src.CropImageCommand import CropImageCommand
 from src.CropData import CropData
+from src.CommandStack import CommandStack
 
 from src.treeView import ShortcutsTreeView
 
@@ -103,7 +104,8 @@ class MainWindow(QMainWindow, QObject):
         self.setMinimumWidth(screenWidth)
         self.setMinimumHeight(screenHeight)
 
-        self.commandsStack = QUndoStack(self)
+        # self.commandsStack = QUndoStack(self)
+        self.commandsStack = CommandStack()
 
         # ========== Management Objects instantiation ==========
         self.shortcutManager = ShortcutManager(self)  # deps are injected
@@ -458,7 +460,7 @@ class MainWindow(QMainWindow, QObject):
         self.repeatCommandOnStack.triggered.connect(self.reuseCommand)
         self.addAction(self.repeatCommandOnStack)
     
-    
+
     def _getCommandsStack(self):
         return self.commandsStack
 
@@ -478,7 +480,7 @@ class MainWindow(QMainWindow, QObject):
         print("Command:", command)
         print("Stack size:", self.commandsStack.count())
         
-        lastCommand = self.commandsStack.command(self.commandsStack.count() - 1)
+        lastCommand = self.commandsStack.top()
         # TODO: Add check, that the imageName is not in the stack multiple times (this prevents new entry when i crop img1, then move to and crop img2, and then go back to img1 and crop. It will create third entry.)
         if lastCommand is not None and lastCommand.imageName == command.imageName:
             print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
@@ -495,7 +497,7 @@ class MainWindow(QMainWindow, QObject):
         print()
         print("After push:")
         print("Stack size:", self.commandsStack.count())
-        lastCommand = self.commandsStack.command(self.commandsStack.count() - 1)
+        lastCommand = self.commandsStack.top()
         print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
         print()
 
@@ -534,7 +536,7 @@ class MainWindow(QMainWindow, QObject):
 
         log.info("Repeat command from stack on current image.")
 
-        lastCommand = self.commandsStack.command(self.commandsStack.count() - 1)
+        lastCommand = self.commandsStack.top()
         # if lastCommand is not None and lastCommand.originalImageSize == currentImageOriginalSize:
         if lastCommand is not None:
             log.info(f"RepeatCropCommand emitted! Sending: {lastCommand.originalImageSize} and {lastCommand.cropRectangle}")
