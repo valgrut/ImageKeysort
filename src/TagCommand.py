@@ -26,12 +26,11 @@ class TagCommand(QUndoCommand):
     def mergeWith(self, other) -> bool:
         if not isinstance(other, TagCommand):
             return False
-        if self.imageSrcPath != other.imageSrcPath:
+        
+        if self.imageName != other.imageName:
             return False
-
-        # update stored state
-        self.cropRectangle = QRect(other.cropRectangle)
-        self.originalImageSize = QSize(other.originalImageSize)
+        
+        # TODO: ??? Handle multiple tags?
 
         # Optional but often useful: make redo idempotent and re-apply:
         # self.redo()

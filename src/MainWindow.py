@@ -482,7 +482,8 @@ class MainWindow(QMainWindow, QObject):
 
         if lastCommand is not None and lastCommand.imageName == command.imageName:
             log.info(">>> Editing the last command in the stack.")
-            newCommand = CropImageCommand(lastCommand.imageName, lastCommand.imageSrcPath, command.cropRectangle, lastCommand.originalImageSize) 
+            newCommand = CropImageCommand(lastCommand.imageName, lastCommand.imageSrcPath, command.cropRectangle, lastCommand.originalImageSize)
+            # TODO: This will not work since it is just my implementation of the QUndoStack.
         else:
             log.info(">>> Pushing new command into the stack.")
             newCommand = CropImageCommand(command.imageName, command.imageSrcPath, command.cropRectangle, command.originalImageSize)
