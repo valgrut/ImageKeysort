@@ -161,6 +161,7 @@ Links:
         - [ ] Edit mode -> Ctrl+T nebo klik na menu -> Vyskoci popup okno, ktere se otevre v Edit modu pro editaci/pridavani/odebirani.
         - [ ] Tagy by se mohly definovat v popup okne, ktere se otevre v Edit modu pro editaci/pridavani/odebirani
 - [ ] Undo/Redo
+- [ ] 2 moznosti - Tag popup menu a tag shortcuts (nastavitelne v settings)
 
 
 Important - Misc:

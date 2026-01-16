@@ -12,7 +12,6 @@ from PyQt5.QtWidgets import (
     QPushButton
 )
 
-# TODO: Rewrite to be more readable.
 
 class TagSelectionDialog(QDialog):
     def __init__(self, tags: Iterable[str], parent=None, title: str = "Select tag"):
@@ -20,56 +19,70 @@ class TagSelectionDialog(QDialog):
         self.setWindowTitle(title)
         self.setModal(True)
 
-        self._selected_tag: Optional[str] = None
+        self._selectedTag: Optional[str] = None
 
         layout = QVBoxLayout(self)
-
         layout.addWidget(QLabel("Select tag (Arrows up/down, Enter = OK, Esc = Cancel):"))
 
-        self.list = QListWidget(self)
-        self.list.setSelectionMode(QListWidget.SingleSelection)
-        self.list.setUniformItemSizes(True)
+        self.tagList = QListWidget(self)
+        self.tagList.setSelectionMode(QListWidget.SingleSelection)
+        self.tagList.setUniformItemSizes(True)
 
-        for t in tags:
-            self.list.addItem(QListWidgetItem(t))
+        # TODO: Sort tags alphabetically
+        # TODO: Sort tags by usage frequency
+        for tag in tags:
+            # TODO: Load tags from file or settings, not hardcoded
+            self.tagList.addItem(QListWidgetItem(tag))
+        
+        # Default selection to first item
+        if self.tagList.count() > 0:
+            self.tagList.setCurrentRow(0)
+        self.tagList.setFocus()
 
-        # Pokud jsou nějaké položky, předvyber první a dej fokus
-        if self.list.count() > 0:
-            self.list.setCurrentRow(0)
-        self.list.setFocus()
+        # Connect double-click or Enter key to accept
+        self.tagList.itemActivated.connect(self._acceptCurrent)
+        layout.addWidget(self.tagList)
 
-        # Enter/dvojklik -> accept
-        self.list.itemActivated.connect(self._accept_current)  # aktivace klávesou/klikem
-        layout.addWidget(self.list)
+        # Layout for buttons
+        buttonsLayout = QHBoxLayout()
+        buttonsLayout.addStretch(1)
+        
+        self.okButton = QPushButton("OK")
+        self.okButton.clicked.connect(self._acceptCurrent)
+        self.okButton.setDefault(True)
+        
+        self.cancelButton = QPushButton("Cancel")
+        self.cancelButton.clicked.connect(self.reject)
+        
+        buttonsLayout.addWidget(self.okButton)
+        buttonsLayout.addWidget(self.cancelButton)
+        layout.addLayout(buttonsLayout)
 
-        # Tlačítka (volitelné, ale užitečné pro UX)
-        btn_row = QHBoxLayout()
-        btn_row.addStretch(1)
-        self.ok_btn = QPushButton("OK")
-        self.cancel_btn = QPushButton("Cancel")
-        self.ok_btn.clicked.connect(self._accept_current)
-        self.cancel_btn.clicked.connect(self.reject)
-        btn_row.addWidget(self.ok_btn)
-        btn_row.addWidget(self.cancel_btn)
-        layout.addLayout(btn_row)
-
-        # Default akce Enter -> OK tlačítko
-        self.ok_btn.setDefault(True)
-
-        # Zajistí, že šipky a Enter fungují i kdyby se fokus ztratil na tlačítka
         self.setFocusPolicy(Qt.StrongFocus)
 
-    def _accept_current(self):
-        item = self.list.currentItem()
+
+    def _acceptCurrent(self):
+        item = self.tagList.currentItem()
         if item is None:
             return
-        self._selected_tag = item.text()
+        self._selectedTag = item.text()
         self.accept()
 
+
     @staticmethod
-    def selectTag(parent, tags: Iterable[str], title: str = "Select tag") -> Optional[str]:
-        dlg = TagSelectionDialog(tags, parent=parent, title=title)
-        result = dlg.exec_()
+    def selectTag(parent, tags: Iterable[str], title: str = "Select tag to append") -> Optional[str]:
+        dialogue = TagSelectionDialog(tags, parent=parent, title=title)
+        result = dialogue.exec_()
         if result == QDialog.Accepted:
-            return dlg._selected_tag
+            return dialogue._selectedTag
         return None
+
+
+    # TODO: N - add new tag
+    # TODO: Del - delete selected tag
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_N:
+            print("N pressed - Create new Tag")
+            return
+
+        return super().keyPressEvent(event)
