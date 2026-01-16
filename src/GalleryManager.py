@@ -283,6 +283,42 @@ class GalleryManager(QStackedWidget):
             self.updateStatusBarLabelSignal.emit("File was renamed successfully.")
             log.info("File was renamed successfully.")
 
+        
+    def appendTagToName(self, tag: str = None):
+        currentFilePath = Path(self.getCurrentFilename())
+        currentFileNameNoExt = currentFilePath.stem
+        currentSrcDirPath = currentFilePath.parent
+        extension = currentFilePath.suffix
+        currentFile = currentFilePath.name
+
+        # A) Test tag appending
+        # if tag is None:
+        #     if "[Tag1]" in currentFileNameNoExt:
+        #         log.info("Filename already contains the tag.")
+        #         return
+            
+        #     tagged = currentFileNameNoExt + " [Tag1]" + extension
+        #     log.info(f"Appending tag to filename: {tagged}")
+
+        #     # TODO: Add command into stack so it can be Undone.
+        #     return
+        
+        # B) Production version:
+        if tag in currentFileNameNoExt:
+            log.info(f"Filename already contains the tag '[{tag}]'.")
+            return
+        
+        nameWithTag = f"{currentFileNameNoExt} [{tag}]{extension}"
+        log.info(f"Appending tag to filename: {nameWithTag}")
+
+        # TODO: Add command into stack so it can be Undone.
+
+        # Commit new filename
+        self.commitNewFileName(nameWithTag)
+        
+        return
+
+
     def removeFile(self, fileName):
         if fileName in self.availableMediaFiles:
             self.availableMediaFiles.remove(fileName)

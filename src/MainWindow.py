@@ -447,10 +447,10 @@ class MainWindow(QMainWindow, QObject):
         self.addAction(self.setSortModeAction)  # Needed to make the shortcut work.
 
         # TODO: WIP; experiment / temporal
-        self.appendTag1Action = QAction("&Append tag: Tag1", self)
-        self.appendTag1Action.setShortcut('Ctrl+T')
-        self.appendTag1Action.triggered.connect(self.appendTagToName)
-        self.addAction(self.appendTag1Action)
+        # self.appendTag1Action = QAction("&Append tag: Tag1", self)
+        # self.appendTag1Action.setShortcut('Ctrl+T')
+        # self.appendTag1Action.triggered.connect(self.appendTagToName)
+        # self.addAction(self.appendTag1Action)
 
         self.appendTagFromDialogAction = QAction("&Select Tag and append", self)
         self.appendTagFromDialogAction.setShortcut('Ctrl+Shift+T')
@@ -538,42 +538,13 @@ class MainWindow(QMainWindow, QObject):
         
         print(f"Selected tag: {picked}")
         
-        self.appendTagToName(picked)
+        self.galleryManager.appendTagToName(picked)
         
         # TODO: Append the picked tag to the filename
         # TODO: Create TagCommand with append/ remove tag functionality.
         # TODO: Add command into stack so it can be Undone.
-        
-
-    def appendTagToName(self, tag: str = None):
-        currentFilePath = pathlib.Path(self.galleryManager.getCurrentFilename())
-        currentFileNameNoExt = currentFilePath.stem
-        currentSrcDirPath = currentFilePath.parent
-        extension = currentFilePath.suffix
-        currentFile = currentFilePath.name
-
-        # Experimental tag appending
-        if tag is None:
-            if "[Tag1]" in currentFileNameNoExt:
-                log.info("Filename already contains the tag.")
-                return
-            
-            tagged = currentFileNameNoExt + " [Tag1]" + extension
-            log.info(f"Appending tag to filename: {tagged}")
-
-            # TODO: Add command into stack so it can be Undone.
-            return
-        
-        # Production version:
-        if tag in currentFileNameNoExt:
-            log.info(f"Filename already contains the tag '[{tag}]'.")
-            return
-            
-        tagged = f"{currentFileNameNoExt} [{tag}]{extension}"
-        log.info(f"Appending tag to filename: {tagged}")
-
-        # TODO: Add command into stack so it can be Undone.
-        return
+        # TODO: Here: Show only those tags not already assigned to the image.
+        # TODO: Load tags from file or settings, not hardcoded
 
 
     @pyqtSlot(str)

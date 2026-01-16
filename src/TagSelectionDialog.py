@@ -30,6 +30,7 @@ class TagSelectionDialog(QDialog):
 
         # TODO: Sort tags alphabetically
         # TODO: Sort tags by usage frequency
+        # TODO: Show (offer) only tags not already assigned to the image
         for tag in tags:
             # TODO: Load tags from file or settings, not hardcoded
             self.tagList.addItem(QListWidgetItem(tag))

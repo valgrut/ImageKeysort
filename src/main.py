@@ -138,6 +138,7 @@ Links:
 - [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 - [ ] Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
 - [ ] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
+- [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 
 
 ### Zoom - related todo:
@@ -177,6 +178,9 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] !!! Pridat nahled predchoziho a nasledujiciho obrazku. Hodi se, kdyz chci fotky tridit mega rychle (treba jen 2 kategorie).
 - [ ] While left/right arrow is pressed, move images (prevent need to press it tousands of times) - jde to, ale zpomalit malinko.
 - [ ] Hide number showing number of images in the source directory.
+- [ ] Menu: Open recent source directories / shortcuts files.
+- [ ] Pridat pod zobrazeny obrazek operace (crop/rename/tag), ktere na nem byly provedeny jako mala kulata tlacitka -> po kliknuti na ne se dana operace provede Undo().
+- [ ] !!! TODO poznamky a ukoly primo v src souborech.
 
 
 Settings:
