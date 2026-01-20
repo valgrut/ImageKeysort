@@ -88,7 +88,27 @@ class ImageWidget(QWidget):
 
 
     def _getPixmapCursorOffset(self):
+        """
         # TODO: Tohle si myslim, ze by tez melo byt asi jinde...
+
+        Returns the OFFSET of the pixmap's (0, 0) inside the label container.
+
+        |<-----------label width------------>|
+        |                  ^                 |
+        |                  |                 |
+        |                off_y               |
+        |                  |                 |
+        |                  v                 |
+        |<---offsetX--->|~~~~|               |
+        |               |~~~~|               |
+        |               |~~~~|               |
+        |               |____|               |
+        |                                    |
+        |                                    |
+        |____________________________________|
+
+        """
+
         scaledPixmapWidth = self.label.pixmap().rect().width()
         scaledPixmapHeight = self.label.pixmap().rect().height()
         labelWidth = self.label.rect().width()
@@ -96,6 +116,10 @@ class ImageWidget(QWidget):
 
         xOff = (labelWidth - scaledPixmapWidth) / 2
         yOff = (labelHeight - scaledPixmapHeight) / 2
+
+        # log.info("Pixmap Offset before round: ({}, {})".format(xOff, yOff))
+        # log.info("Pixmap Offset after round: ({}, {})".format(round(xOff), round(yOff)))
+
         return int(round(xOff)), int(round(yOff))
 
 
@@ -124,6 +148,7 @@ class ImageWidget(QWidget):
     def _transformPositionFromScaledPixmapToUnscaled(self, scaledPixmapCursorPosition: QPoint) -> QPoint:
         """
         # TODO: Tohle si myslim, ze by tez melo byt asi jinde...
+        
         """
         # Gather facts about label area and current pixmap's area (both original and scaled)
         pixmapWidth = self.pixmap.rect().width()
@@ -176,7 +201,6 @@ class ImageWidget(QWidget):
     def mousePressEvent(self, event):
         # TODO: move elsewhere??? Maybe into GalleryManager, because I want this to use also on Videos...
         # TODO: V1: QRubberBand nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
-        # TODO: Fix: still small misalignment between cursor's tip position and rubberband.
         # TODO: Logika croppingu by mela byt separatni uplne pryc, jako TextExtraction.
         # A mouseEvent handling a rubberband drawing presunout do toho GalleryManager asi,
         # abych to pak mohl pouzit i pro videa.
@@ -189,11 +213,12 @@ class ImageWidget(QWidget):
         log.info(f"[mousePressEvent] Pixmap start Position: {self._pixmapCursorStartPosition}")
 
         xOff, yOff = self._getPixmapCursorOffset()
+        rubberBandDrawOffsetCompensation = QPoint(10, 10)  # Compensation for small misalignment between cursor tip and rubberband start.
 
         # Note: Geometry for the rubber band is different, than the pixmap's geometry.
         if not self.rubberBand:
             self.rubberBand = QRubberBand(QRubberBand.Rectangle, self.label)
-            self._initialRubberClickPosition = self._pixmapCursorStartPosition + QPoint(xOff, yOff)
+            self._initialRubberClickPosition = self._pixmapCursorStartPosition + QPoint(xOff, yOff) - rubberBandDrawOffsetCompensation
             self._startingRubberPoint = copy.deepcopy(self._initialRubberClickPosition)
             self._endingRubberPoint = copy.deepcopy(self._initialRubberClickPosition)  # Init both start and end points
             self.rubberBand.setGeometry(QRect(self._startingRubberPoint, QSize(0, 0)))
@@ -215,9 +240,10 @@ class ImageWidget(QWidget):
             self._pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(currentPosition)
 
             xOff, yOff = self._getPixmapCursorOffset()
+            rubberBandDrawOffsetCompensation = QPoint(10, 10)  # Compensation for small misalignment between cursor tip and rubberband start.
 
             # RubberBand drawing
-            currentTransformedCursorPosition = self._pixmapCursorEndPosition + QPoint(xOff, yOff)
+            currentTransformedCursorPosition = self._pixmapCursorEndPosition + QPoint(xOff, yOff) - rubberBandDrawOffsetCompensation
             # self._endingRubberPoint = currentTransformedCursorPosition
 
             if self._startingRubberPoint and self._endingRubberPoint:
