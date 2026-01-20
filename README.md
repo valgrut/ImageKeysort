@@ -44,7 +44,12 @@ OR
   then hit just the last part of the sequence: 'n' for naruto, 'd' for deathnote and so on.
 - Create a subset of gallery photos: Select Copy mode and just copy some photos to target directory, for example to
   show just subset of photos to your family.
-
+- Crop images
+  - Repeat previous crop on the same-sized images (e.g. multiple screenshots of the same page)
+  - Undo crop
+- Tags
+  - Add custom tag(s) into the current file
+- Rename files
 
 ## 4. How to build the app
 

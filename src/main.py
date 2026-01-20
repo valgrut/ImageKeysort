@@ -123,9 +123,9 @@ Links:
       - Crop a video too.
           - Use ffmpeg app; Will it work on windows too???
 - [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
-- [ ] Fix: still small misalignment between cursor's tip position and rubberband.
+- [X] Fix: still small misalignment between cursor's tip position and rubberband. TODO: What is the cause? I fixed it, but dont know the cause of that 10,10 misalignment.
 - [X] Show rubberband to all directions, not just from top left to right down.
-        - [ ] Show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
+- [ ] Turn on/off to show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
 - [X] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
 - [X] REPEAT last crop! (start + end coords).
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
@@ -137,7 +137,7 @@ Links:
 - [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne nejake operace k undo. (renaming, tags, cropping)
 - [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 - [ ] Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
-- [ ] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
+- [X] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 
 
@@ -216,7 +216,7 @@ Important features TODO:
 - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
 - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
-- [ ] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
+- [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
 - [X] Zopakovat posledni copy operaci pomoci ',. a ;.'
 - [ ] Delete button do menu a do toolbaru !!!!!
 - [ ] Rotate image button (staci 1 smer) do toolbaru. Pozor ale, ty obrazky se obcas zobrazuji jinak, nez jse zobrazuje windows explorer. Proc???
