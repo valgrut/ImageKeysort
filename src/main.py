@@ -225,6 +225,8 @@ Important features TODO:
 - [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those); 
       - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
       - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
+- [ ] Na aktualnim obrazku by se mohla ukazat dostupna tlacitka pro repeat tag, repeat rename, repeat crop (pokud size je stejna) a pod. A po provedeni dane operace by se odpovidajici tlacitko z repeat last zmenilo na Undo.
+- [ ] Undo zkratky: Ctrl+z - undo moving/copying; Ctrl+shift+z - undo renaming/tagging/cropping.
 
 
 Consider (Maybe):
