@@ -535,16 +535,16 @@ class MainWindow(QMainWindow, QObject):
 
     def selectTagFromDialog(self):
         tags = ["work", "family", "anime", "urgent", "todo"]  # TODO: Save/Load from the file
-        picked = TagSelectionDialog.selectTag(None, tags)
+        
+        tagsNotAlreadyUsed = [tag for tag in tags if tag not in self.galleryManager.getCurrentFilename()]
+        picked = TagSelectionDialog.selectTag(None, tagsNotAlreadyUsed)
         
         print(f"Selected tag: {picked}")
         
         self.galleryManager.appendTagToName(picked)
         
-        # TODO: Append the picked tag to the filename
         # TODO: Create TagCommand with append/ remove tag functionality.
-        # TODO: Add command into stack so it can be Undone.
-        # TODO: Here: Show only those tags not already assigned to the image.
+            # TODO: Add command into stack so it can be Undone.
         # TODO: Load tags from file or settings, not hardcoded
 
 
