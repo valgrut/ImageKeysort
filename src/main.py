@@ -262,28 +262,8 @@ To Fix:
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
-- [ ] !!!!!!! Crash behem cropu tesne po prejmenovani obrazku.
-  
-    ```
-    Full path: /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/BA-program-2024.jpeg_cropped_small.png
-    File without ext: BA-program-2024.jpeg_cropped_small
-    Source dir: /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads
-    Extension: .png
-    File name: BA-program-2024.jpeg_cropped_small.png
-
-    Traceback (most recent call last):
-      File "/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/src/ImageWidget.py", line 234, in mouseReleaseEvent
-        shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
-        ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      File "/usr/lib64/python3.13/shutil.py", line 468, in copy2
-        copyfile(src, dst, follow_symlinks=follow_symlinks)
-        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      File "/usr/lib64/python3.13/shutil.py", line 260, in copyfile
-        with open(src, 'rb') as fsrc:
-            ~~~~^^^^^^^^^^^
-    FileNotFoundError: [Errno 2] No such file or directory: 
-      '/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/BA-program-2024.jpeg_cropped_small.png'
-    ```
+- [ ] !!!!!!! Crash behem cropu tesne po prejmenovani obrazku. 
+    Duvod: Protoze se obrazek prejmenuje fyzicky, ale zustane v galleryManager poli nezmeneny.
 
 
 Shortcuts management, Shortcut Tree (GUI):
