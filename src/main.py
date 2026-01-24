@@ -139,6 +139,11 @@ Links:
 - [ ] Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
 - [X] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
+- [ ] !!!! Kdyz udelam crop obrazku, v __deleted__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
+- [ ] !!!! Kdyz pouziju mezernik pro presun ((asi) uplne prvniho) obrazku, nelze udelat ctrl+z. Neulozi se tento presun do Historie!!!!! (Nelze dat tecku pro repeat)
+- [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
+- [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
+- [ ] Mozna: Moct pridat ke zkratce vice cest, kam zkopirovat dany obrazek/soubor pri jeji aktivaci.
 
 
 ### Zoom - related todo:
