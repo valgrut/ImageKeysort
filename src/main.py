@@ -140,10 +140,12 @@ Links:
 - [X] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 - [ ] !!!! Kdyz udelam crop obrazku, v __deleted__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
-- [ ] !!!! Kdyz pouziju mezernik pro presun ((asi) uplne prvniho) obrazku, nelze udelat ctrl+z. Neulozi se tento presun do Historie!!!!! (Nelze dat tecku pro repeat)
+        - Obrazek v __delete__ musi mit stejny nazev a rozmer x a/nebo y vetsi nez ten, kteri je jeste ve slozce!!!
+- [ ] !!!! Kdyz pouziju mezernik pro presun obrazku, nelze udelat ctrl+z. Neulozi se tento presun do Historie!!!!! (Nelze dat tecku pro repeat)
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
-- [ ] Mozna: Moct pridat ke zkratce vice cest, kam zkopirovat dany obrazek/soubor pri jeji aktivaci.
+- [ ] !!!! Fix Crash Po otevreni tag selection a zavreni s Escape po nevybrani zadneho tagu.
+- [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi.
 
 
 ### Zoom - related todo:
@@ -240,6 +242,8 @@ Consider (Maybe):
 - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni.
 - [ ] textExtraction: Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
 - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
+- [ ] Mozna: Moct pridat ke zkratce vice cest, kam zkopirovat dany obrazek/soubor pri jeji aktivaci.
+        - V edit modu: zkratka a '+' znak ??? Napr: "fcg+"
 
 
 Installation, Building
