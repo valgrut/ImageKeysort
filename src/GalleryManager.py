@@ -27,6 +27,8 @@ class GalleryManager(QStackedWidget):
     updateStatusBarLabelSignal = pyqtSignal(str)
     pushCropCommandRequestCommand = pyqtSignal(CropData)
     repeatCropCommandSignal = pyqtSignal(QSize, QRect)
+    rotateImageSignal = pyqtSignal()
+
 
     def __init__(self, mainWindow):
         super().__init__()
@@ -65,6 +67,8 @@ class GalleryManager(QStackedWidget):
         self.mediaContainerWidget.pushCropCommandRequestCommand.connect(self.pushCropCommandRequestCommand)  # Re-emit signal
         self.mainWindow.updateMediaPreviewSignal.connect(self.updatePreview)
         self.mainWindow.repeatCropCommandSignal.connect(self.mediaContainerWidget.repeatCropCommandSignal)
+        # self.rotateImageSignal.connect(self.mediaContainerWidget.rotateImageSignal)
+
 
     def setSourcePath(self, path):
         self.sourceDirectoryPath = path
@@ -251,6 +255,17 @@ class GalleryManager(QStackedWidget):
         """
         self.setFilenameTextEditSignal.emit()
         self.mediaContainerWidget.startFilenameEdit()
+
+    @pyqtSlot()
+    def rotateImageRight(self):
+        """
+        Rotates the current image 90 degrees to the right.
+        """
+        print("rotateImageRight called")
+        # self.rotateImageSignal.emit()
+        self.mediaContainerWidget.rotateImageSignal.emit()
+        self.updatePreview()
+
     
     def commitNewFileName(self, newFileName):
         """

@@ -5,7 +5,7 @@ import shutil
 import copy
 
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QTransform
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
 from src.CropUtils import CropUtils
@@ -71,6 +71,50 @@ class ImageWidget(QWidget):
         if self.pixmap:
             scaledPixmap = self.pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label.setPixmap(scaledPixmap)
+
+    def rotateImage(self):
+        if not self.pixmap:
+            print("Pixmap does not exist, cannot rotate.")
+            return
+        
+        print("Pixmap exists, rotating...")
+        
+        # Prepare useful paths and names
+        currentFilePath = pathlib.Path(self.currentImgPath)
+        currentFileNameNoExt = currentFilePath.stem
+        currentSrcDirPath = currentFilePath.parent
+        extension = currentFilePath.suffix
+        currentFile = currentFilePath.name
+        
+        # WIP: Backup original image
+        # TODO: Co kdyz se v __delete__ nachazi tento file jiz z operace Crop treba, nebo naopak v operaci crop narazi ze tam je z rotate operace?
+        trashDir = pathlib.Path(currentSrcDirPath) / "__DELETED__"
+        trashDir.mkdir(exist_ok=True)
+        if not pathlib.Path(trashDir, currentFile).is_file():
+            shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
+        
+        # Rotate image
+        rotatedPixmap: QPixmap = self.pixmap.transformed(QTransform().rotate(90));
+        self.pixmap.swap(rotatedPixmap)
+        self.label.setPixmap(rotatedPixmap)
+
+        # Save rotated pixmap back int the file. Overrides original image file!
+        self.pixmap.save(self.currentImgPath)
+
+        # Save rotation as new Command to be undoable
+        # TODO:
+        # cropData = CropData(
+        #     imageName = currentFile,
+        #     imageSrcPath = str(currentSrcDirPath),
+        #     cropRectangle = cropAreaRect,
+        #     originalImageSize = originalPixmapSize
+        # )
+        # self.pushCropCommandRequestCommand.emit(cropData)
+        # log.info(f"Image Widget: CropData emitted: {cropData}")
+
+        print("Pixmap rotation finished.")
+        log.info("Pixmap rotation finished.")
+
 
     # def getOriginalImageSize(self) -> QSize:
     #     if self.pixmap:

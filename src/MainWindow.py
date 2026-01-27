@@ -257,6 +257,14 @@ class MainWindow(QMainWindow, QObject):
         # self.buttonCropImageAction.triggered.connect(self.toggleCropImage)
         self.toolbar.addAction(self.buttonCropImageAction)
 
+        self.buttonRotateImageAction = QAction(QIcon("Resources/image-crop.png"), "Crop", self)
+        self.buttonRotateImageAction.setStatusTip("Rotate image right 90 degrees.")
+        self.buttonRotateImageAction.triggered.connect(self.galleryManager.rotateImageRight)
+        self.buttonRotateImageAction.setCheckable(True)
+        self.buttonRotateImageAction.setShortcut("Ctrl+G")
+        # self.buttonRotateImageAction.setDisabled(True)
+        self.toolbar.addAction(self.buttonRotateImageAction)
+
         self.toolbar.addSeparator()
 
         self.buttonExtractTextAction = QAction(QIcon("Resources/edit-shade.png"), "Extract text", self)

@@ -97,10 +97,24 @@ Features DONE:
 - [X] !! Omezit, aby se do aktualne zmacknutych shortcuts v keyLabel nezapisovaly emptyspaces, ctrl a ruzne hovadiny. Jen a-zA-Z0-9.
 - [X] Add another keyboard shortcut (F2) to initiate file renaming.
 - [X] Kdyz pridam zkratku s prazdnou cestou a chci ji HIT v sort modu, crash!!!!
+- [X] Zopakovat posledni copy operaci pomoci ',. a ;.'
+- [X] Crop: Fix: still small misalignment between cursor's tip position and rubberband. TODO: What is the cause? I fixed it, but dont know the cause of that 10,10 misalignment.
+- [X] Crop: Show rubberband to all directions, not just from top left to right down.
+- [X] Crop: Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
+- [X] Crop: REPEAT last crop! (start + end coords).
+- [X] Crop: Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
+- [X] Crop: Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
+- [X] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
+- [X] Kdyz pouziju mezernik pro presun obrazku, nelze dat tecku pro repeat (v historii pry neni zaznam - je, jen tam byla outdated podminka).
+- [X] Fix Crash Po otevreni tag selection a zavreni s Escape po nevybrani zadneho tagu.
+- [X] Feature: Rename current file. (Details above.)
+- [X] Feature: Crop image. (Details above.)
+
 
 Links:
     - https://doc.qt.io/archives/qt-5.15/stylesheet-examples.html#customizing-qmenu
     - Manage pytest output: https://docs.pytest.org/en/stable/how-to/output.html
+
 
 ====== Main features to implement ======
 - [X] Change names of the files
@@ -122,13 +136,7 @@ Links:
           - Shortcut to revert image cropping and start over
       - Crop a video too.
           - Use ffmpeg app; Will it work on windows too???
-- [X] Fix: still small misalignment between cursor's tip position and rubberband. TODO: What is the cause? I fixed it, but dont know the cause of that 10,10 misalignment.
-- [X] Show rubberband to all directions, not just from top left to right down.
-- [X] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
-- [X] REPEAT last crop! (start + end coords).
-- [X] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
-- [X] Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
-- [X] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
+
 - [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
 - [ ] Turn on/off to show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
@@ -168,6 +176,14 @@ Links:
 - [ ] 2 moznosti - Tag popup menu a tag shortcuts (nastavitelne v settings)
 
 
+### Image rotation
+- Note: Pozor, obrazky se obcas zobrazuji jinak natocene, nez je zobrazuje windows explorer. Proc?
+- [X] Rotate image button (staci 1 smer) do toolbaru.
+- [ ] Dat jinou ikonku pro rotateButton v Toolbaru.
+- [ ] Pridat nejakou klavesovou zkratku
+- [ ] Undo - udelat Command pro rotaci
+
+
 ### Poznamky k novym zkratkam:
 - Undo pro Crop/Tag/Rename nebude uplne super caste, vetsinou jen kdyz se user splete.
 - Ctrl+R a Ctrl+E pro prepinani mezi Edit a Sort modem je docela neprijemne, kdyz se to dela casto. Mozna "tab"?
@@ -195,11 +211,10 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Pridat pod zobrazeny obrazek operace (crop/rename/tag), ktere na nem byly provedeny jako mala kulata tlacitka -> po kliknuti na ne se dana operace provede Undo().
 - [ ] !!! TODO poznamky a ukoly primo v src souborech.
 - [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi.
-- [X] !!!! Kdyz pouziju mezernik pro presun obrazku, Nelze dat tecku pro repeat (v historii chybi zaznam).
 - [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
-- [X] Fix Crash Po otevreni tag selection a zavreni s Escape po nevybrani zadneho tagu.
-- [ ] Reload gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
+- [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
+- [ ] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
 
 
 Settings:
@@ -219,8 +234,6 @@ Refactoring and code tweaking
 
 
 Important features TODO:
-- [~] Feature: Rename current file. (Details above.)
-- [~] Feature: Crop image. (Details above.)
 - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 - [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
 - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
@@ -236,9 +249,7 @@ Important features TODO:
 - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 - [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
-- [X] Zopakovat posledni copy operaci pomoci ',. a ;.'
 - [ ] Delete button do menu a do toolbaru !!!!!
-- [ ] Rotate image button (staci 1 smer) do toolbaru. Pozor ale, ty obrazky se obcas zobrazuji jinak, nez jse zobrazuje windows explorer. Proc???
 - [ ] !!!!! crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 - [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those); 
       - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".

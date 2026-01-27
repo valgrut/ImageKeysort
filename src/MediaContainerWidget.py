@@ -32,6 +32,7 @@ class MediaContainerWidget(QWidget):
 
     pushCropCommandRequestCommand = pyqtSignal(CropData)
     repeatCropCommandSignal = pyqtSignal(QSize, QRect)
+    rotateImageSignal = pyqtSignal()
 
     def __init__(self, galleryManager):
         super().__init__()
@@ -114,8 +115,10 @@ class MediaContainerWidget(QWidget):
         # Update Counter label
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
+        # Connect signals
         self.imageViewWidget.pushCropCommandRequestCommand.connect(self.pushCropCommandRequestCommand)  # Re-emit signal
         self.repeatCropCommandSignal.connect(self.imageViewWidget.repeatCropCommandSlot)
+        self.rotateImageSignal.connect(self.imageViewWidget.rotateImage)
         
 
     # def getOriginalImageSize(self) -> QSize:
