@@ -304,7 +304,7 @@ class GalleryManager(QStackedWidget):
         #     return
         
         # B) Production version:
-        if tag in currentFileNameNoExt:
+        if tag is None or tag in currentFileNameNoExt:
             log.info(f"Filename already contains the tag '[{tag}]'.")
             return
         

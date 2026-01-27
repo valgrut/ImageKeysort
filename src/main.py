@@ -122,30 +122,25 @@ Links:
           - Shortcut to revert image cropping and start over
       - Crop a video too.
           - Use ffmpeg app; Will it work on windows too???
-- [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
 - [X] Fix: still small misalignment between cursor's tip position and rubberband. TODO: What is the cause? I fixed it, but dont know the cause of that 10,10 misalignment.
 - [X] Show rubberband to all directions, not just from top left to right down.
-- [ ] Turn on/off to show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
 - [X] Undo/Redo: Melo by jit ctrl+z nebo nejaka podobna zkratka, protoze samozrejme to lze podelat nejak. Nekolidovat s undo/redo pro move/copy.
 - [X] REPEAT last crop! (start + end coords).
-- [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [X] Fix: Cannot Undo crop operation on an image that is cropped using repeatCrop().
 - [X] Fix: Add check that the image size of template image is the same as current image size when repeating last crop.
+- [X] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
+- [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
+- [ ] Turn on/off to show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
+- [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [ ] Vymyslet jinou klavesovou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
     - Zkratka 1 zopakuje posledni crop operaci na aktualni obrazek.
     - Zkratka 2 zopakuje posledni tag operaci na aktualni obrazek.
 - [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne nejake operace k undo. (renaming, tags, cropping)
 - [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 - [ ] Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
-- [X] Zabranit operacim undo na jinych obrazcich, nez je aktualne zobrazeny obrazek.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 - [ ] !!!! Kdyz udelam crop obrazku, v __deleted__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
         - Obrazek v __delete__ musi mit stejny nazev a rozmer x a/nebo y vetsi nez ten, kteri je jeste ve slozce!!!
-- [ ] !!!! Kdyz pouziju mezernik pro presun obrazku, nelze udelat ctrl+z. Neulozi se tento presun do Historie!!!!! (Nelze dat tecku pro repeat)
-- [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
-- [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
-- [ ] !!!! Fix Crash Po otevreni tag selection a zavreni s Escape po nevybrani zadneho tagu.
-- [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi.
 
 
 ### Zoom - related todo:
@@ -189,6 +184,12 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Menu: Open recent source directories / shortcuts files.
 - [ ] Pridat pod zobrazeny obrazek operace (crop/rename/tag), ktere na nem byly provedeny jako mala kulata tlacitka -> po kliknuti na ne se dana operace provede Undo().
 - [ ] !!! TODO poznamky a ukoly primo v src souborech.
+- [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi.
+- [ ] !!!! Kdyz pouziju mezernik pro presun obrazku, nelze udelat ctrl+z. Neulozi se tento presun do Historie!!!!! (Nelze dat tecku pro repeat)
+- [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
+- [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
+- [X] Fix Crash Po otevreni tag selection a zavreni s Escape po nevybrani zadneho tagu.
+- [ ] Reload gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
 
 
 Settings:
