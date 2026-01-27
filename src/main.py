@@ -137,7 +137,7 @@ Links:
     - Zkratka 2 zopakuje posledni tag operaci na aktualni obrazek.
 - [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne nejake operace k undo. (renaming, tags, cropping)
 - [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
-- [ ] Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
+- [ ] !! Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 - [ ] !!!! Kdyz udelam crop obrazku, v __deleted__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
         - Obrazek v __delete__ musi mit stejny nazev a rozmer x a/nebo y vetsi nez ten, kteri je jeste ve slozce!!!
@@ -164,8 +164,18 @@ Links:
         - [ ] Edit mode -> Ctrl+T nebo klik na menu -> Vyskoci popup okno, ktere se otevre v Edit modu pro editaci/pridavani/odebirani.
         - [ ] Tagy by se mohly definovat v popup okne, ktere se otevre v Edit modu pro editaci/pridavani/odebirani
 - [ ] Undo/Redo (spise pouze jako tlacitko)
-- [ ] Repeat adding tag to next image
+- [ ] Repeat adding tag to next image (chtelo by to neco jako ".t" pro repeat tagging, ale nechci to komplikovat s ohledem na sorting, coz je hlavni featura.)
 - [ ] 2 moznosti - Tag popup menu a tag shortcuts (nastavitelne v settings)
+
+
+### Poznamky k novym zkratkam:
+- Undo pro Crop/Tag/Rename nebude uplne super caste, vetsinou jen kdyz se user splete.
+- Ctrl+R a Ctrl+E pro prepinani mezi Edit a Sort modem je docela neprijemne, kdyz se to dela casto. Mozna "tab"?
+    - Pak by slo pouzit Ctrl+R pro Rename a Ctrl+E pro Extract text.
+    - Ctrl+T pro tagging (Misto Ctrl+Shift+T, coz je neprijemne dlouhe)
+- Ctrl+Shift+R pro Repeat posledni Rename operace. ???
+- Ctrl+Shift+T pro Repeat posledni Tag operace. ???
+
 
 
 Important - Misc:
@@ -185,7 +195,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Pridat pod zobrazeny obrazek operace (crop/rename/tag), ktere na nem byly provedeny jako mala kulata tlacitka -> po kliknuti na ne se dana operace provede Undo().
 - [ ] !!! TODO poznamky a ukoly primo v src souborech.
 - [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi.
-- [ ] !!!! Kdyz pouziju mezernik pro presun obrazku, nelze udelat ctrl+z. Neulozi se tento presun do Historie!!!!! (Nelze dat tecku pro repeat)
+- [X] !!!! Kdyz pouziju mezernik pro presun obrazku, Nelze dat tecku pro repeat (v historii chybi zaznam).
 - [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [X] Fix Crash Po otevreni tag selection a zavreni s Escape po nevybrani zadneho tagu.

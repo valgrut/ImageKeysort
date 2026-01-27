@@ -35,7 +35,6 @@ class SortModeHandler(QObject):
         self.shortcutManager = shortcutManager
         self.galleryManager = galleryManager
 
-        self.keySeqHistory = []
         self.mvHistory = []
         self.keySeq = ""
         self.permanentKeySeq = ""
@@ -186,12 +185,10 @@ class SortModeHandler(QObject):
         # tryToMoveImage(src, dst, currentImage)
         log.info("Repeat last finished command for current image")
 
-        if len(self.mvHistory) <= 0 or len(self.keySeqHistory) <= 0:
+        if len(self.mvHistory) <= 0:
             log.info("History is empty.")
             self.updateStatusBarLabel(f"Cannot repeat last command. History is Empty!")
             return
-
-        log.info(f"Last history entry: {self.keySeqHistory[-1]}")
 
         imageName = self.galleryManager.getCurrentFilename()
         if not imageName:
@@ -355,8 +352,6 @@ class SortModeHandler(QObject):
         if self.srcImageExistsInDst(dst, imageName):
             self.handleExistingImageInDst()
             return
-
-        self.keySeqHistory.append(fullShortcut)
 
         log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
 
