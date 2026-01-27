@@ -298,7 +298,7 @@ class GalleryManager(QStackedWidget):
             self.updateStatusBarLabelSignal.emit("File was renamed successfully.")
             log.info("File was renamed successfully.")
 
-        
+
     def appendTagToName(self, tag: str = None):
         currentFilePath = Path(self.getCurrentFilename())
         currentFileNameNoExt = currentFilePath.stem
