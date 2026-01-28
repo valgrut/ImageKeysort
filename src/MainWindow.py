@@ -257,7 +257,7 @@ class MainWindow(QMainWindow, QObject):
         # self.buttonCropImageAction.triggered.connect(self.toggleCropImage)
         self.toolbar.addAction(self.buttonCropImageAction)
 
-        self.buttonRotateImageAction = QAction(QIcon("Resources/image-crop.png"), "Crop", self)
+        self.buttonRotateImageAction = QAction(QIcon("Resources/arrow-circle-right.png"), "Rotate image right", self)
         self.buttonRotateImageAction.setStatusTip("Rotate image right 90 degrees.")
         self.buttonRotateImageAction.triggered.connect(self.galleryManager.rotateImageRight)
         self.buttonRotateImageAction.setCheckable(True)
@@ -267,7 +267,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.toolbar.addSeparator()
 
-        self.buttonExtractTextAction = QAction(QIcon("Resources/edit-shade.png"), "Extract text", self)
+        self.buttonExtractTextAction = QAction(QIcon("Resources/clipboard-pencil.png"), "Extract text", self)
         self.buttonExtractTextAction.setStatusTip("Extract text from the image.")
         # buttonExtractTextAction.triggered.connect(self.galleryManager.currentWidget().imageViewWidget.extractTextFromImage)
         self.buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage)
@@ -393,7 +393,7 @@ class MainWindow(QMainWindow, QObject):
         self.returnToolbarAction.setStatusTip("Returns toolbar, if closed.")
         self.returnToolbarAction.triggered.connect(self.returnToolbar)
 
-        self.renameFileAction = QAction("&Rename file", self)
+        self.renameFileAction = QAction(QIcon("Resources/pencil.png"), "&Rename file", self)
         self.renameFileAction.setShortcuts(['Ctrl+F', 'F2'])
         self.renameFileAction.setStatusTip("Rename current file.")
         self.renameFileAction.triggered.connect(self.galleryManager.renameFile)

@@ -179,7 +179,7 @@ Links:
 ### Image rotation
 - Note: Pozor, obrazky se obcas zobrazuji jinak natocene, nez je zobrazuje windows explorer. Proc?
 - [X] Rotate image button (staci 1 smer) do toolbaru.
-- [ ] Dat jinou ikonku pro rotateButton v Toolbaru.
+- [X] Dat jinou ikonku pro rotateButton v Toolbaru.
 - [ ] Pridat nejakou klavesovou zkratku
 - [ ] Undo - udelat Command pro rotaci
 
@@ -215,6 +215,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
 - [ ] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
+- [ ] !!!!! Copy mode border se zobrazi az pri druhem kliknuti na CopyButton.
 
 
 Settings:
@@ -281,6 +282,7 @@ Installation, Building
 
 Design:
 - [ ] Pridat do next/first/previous/last image buttons Ikonku sipky.
+- [ ] ! Zmenit v ruznych themes pismo a pozadi. V nekterych kombinacich je to kompletne necitelne.
 
 
 To Fix:
