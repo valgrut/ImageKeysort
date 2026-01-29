@@ -176,6 +176,7 @@ Links:
 - [ ] Undo/Redo (spise pouze jako tlacitko)
 - [ ] Repeat adding tag to next image (chtelo by to neco jako ".t" pro repeat tagging, ale nechci to komplikovat s ohledem na sorting, coz je hlavni featura.)
 - [~] 2 moznosti - Tag popup menu a tag shortcuts (nastavitelne v settings)
+- [ ] AddTagButton into the Tab pop-up window.
 
 
 ### Image rotation
