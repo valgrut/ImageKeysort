@@ -180,8 +180,8 @@ Links:
 - Note: Pozor, obrazky se obcas zobrazuji jinak natocene, nez je zobrazuje windows explorer. Proc?
 - [X] Rotate image button (staci 1 smer) do toolbaru.
 - [X] Dat jinou ikonku pro rotateButton v Toolbaru.
-- [ ] Pridat nejakou klavesovou zkratku
-- [ ] Undo - udelat Command pro rotaci
+- [X] Pridat nejakou klavesovou zkratku
+- [ ] ? Undo - udelat Command pro rotaci
 
 
 ### Poznamky k novym zkratkam:
@@ -250,7 +250,7 @@ Important features TODO:
 - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 - [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
-- [ ] Delete button do menu a do toolbaru !!!!!
+- [X] Delete button do menu a do toolbaru !!!!!
 - [ ] !!!!! crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 - [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those); 
       - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".

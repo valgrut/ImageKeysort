@@ -357,7 +357,7 @@ class MainWindow(QMainWindow, QObject):
         fileMenu.addSeparator()
         fileMenu.addAction(self.exitAction)
 
-        # Edit menu
+        # Edit menu - Shortcuts
         shortcutsMenu = QMenu("&Shortcuts", self)
         menuBar.addMenu(shortcutsMenu)
         shortcutsMenu.addAction(self.undoShortcutModificationAction) # TODO WIP
@@ -368,13 +368,15 @@ class MainWindow(QMainWindow, QObject):
         shortcutsMenu.addAction(self.dropChangesAction)  # TODO
         shortcutsMenu.addAction(self.clearTreeAction)
 
-        # Edit menu
+        # Edit menu - Gallery
         galleryMenu = QMenu("&Gallery", self)
         menuBar.addMenu(galleryMenu)
         galleryMenu.addAction(self.undoSortAction)
         galleryMenu.addSeparator()
         galleryMenu.addAction(self.openDirectoryAction)
+        galleryMenu.addSeparator()
         galleryMenu.addAction(self.renameFileAction)
+        galleryMenu.addAction(self.deleteCurrentImageAction)
 
         # Help menu
         helpMenu = QMenu("&Help", self)
@@ -435,6 +437,10 @@ class MainWindow(QMainWindow, QObject):
         self.clearTreeAction = QAction("&Clear tree", self)
         self.clearTreeAction.setStatusTip("Clears all shortcuts from the tree.")
         self.clearTreeAction.triggered.connect(self.clearShortcuts)
+
+        self.deleteCurrentImageAction = QAction("&Delete image", self)
+        self.deleteCurrentImageAction.setStatusTip("Delete current image.")
+        self.deleteCurrentImageAction.triggered.connect(self.sortModeHandler.handleKeyDelete)
 
         self.toggleCopyModeAction = QAction("&Toggle copy mode", self)
         self.toggleCopyModeAction.setShortcut('Ctrl+C')
