@@ -374,6 +374,7 @@ class MainWindow(QMainWindow, QObject):
         galleryMenu.addAction(self.undoSortAction)
         galleryMenu.addSeparator()
         galleryMenu.addAction(self.openDirectoryAction)
+        galleryMenu.addAction(self.reloadDirectoryAction)
         galleryMenu.addSeparator()
         galleryMenu.addAction(self.renameFileAction)
         galleryMenu.addAction(self.deleteCurrentImageAction)
@@ -441,6 +442,10 @@ class MainWindow(QMainWindow, QObject):
         self.deleteCurrentImageAction = QAction("&Delete image", self)
         self.deleteCurrentImageAction.setStatusTip("Delete current image.")
         self.deleteCurrentImageAction.triggered.connect(self.sortModeHandler.handleKeyDelete)
+
+        self.reloadDirectoryAction = QAction("&Reload directory", self)
+        self.reloadDirectoryAction.setStatusTip("Reload to synchronize source directory with images in the app.")
+        self.reloadDirectoryAction.triggered.connect(self.galleryManager.loadImagesInDirectory)
 
         self.toggleCopyModeAction = QAction("&Toggle copy mode", self)
         self.toggleCopyModeAction.setShortcut('Ctrl+C')
