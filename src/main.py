@@ -173,10 +173,11 @@ Links:
             - [ ] Treba Ctrl+T
         - [ ] Edit mode -> Ctrl+T nebo klik na menu -> Vyskoci popup okno, ktere se otevre v Edit modu pro editaci/pridavani/odebirani.
         - [ ] Tagy by se mohly definovat v popup okne, ktere se otevre v Edit modu pro editaci/pridavani/odebirani
+        - [ ] Pridat moznost k pridanym tagum zadefinovat shortcut viz option 2 pro pouziti.
 - [ ] Undo/Redo (spise pouze jako tlacitko)
 - [ ] Repeat adding tag to next image (chtelo by to neco jako ".t" pro repeat tagging, ale nechci to komplikovat s ohledem na sorting, coz je hlavni featura.)
 - [~] 2 moznosti - Tag popup menu a tag shortcuts (nastavitelne v settings)
-- [ ] AddTagButton into the Tab pop-up window.
+- [~] AddTagButton into the Tab pop-up window.
 
 
 ### Image rotation
@@ -219,6 +220,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
 - [ ] !!!!! Copy mode border se zobrazi az pri druhem kliknuti na CopyButton.
+- [ ] Zobrazit nekde/nejak list nactenych souboru ze source dir abecedne. Treba zase pop-up okno jen. Proste tak pro prehled, protoze proc ne. Po kliknuti na nejaky se tento nacte jako aktualni.
 
 
 Settings:
