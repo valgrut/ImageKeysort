@@ -140,6 +140,7 @@ Links:
 - [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
 - [X] Show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
         - [ ] Button to toggle guide lines on/off.
+        - [ ] Settings: jestli by default On nebo by default Off.
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [ ] Vymyslet jinou klavesovou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
     - Zkratka 1 zopakuje posledni crop operaci na aktualni obrazek.
