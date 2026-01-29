@@ -377,7 +377,7 @@ class MainWindow(QMainWindow, QObject):
         galleryMenu.addAction(self.reloadDirectoryAction)
         galleryMenu.addSeparator()
         galleryMenu.addAction(self.renameFileAction)
-        galleryMenu.addAction(self.deleteCurrentImageAction)
+        galleryMenu.addAction(self.deleteCurrentFileAction)
 
         # Help menu
         helpMenu = QMenu("&Help", self)
@@ -439,9 +439,9 @@ class MainWindow(QMainWindow, QObject):
         self.clearTreeAction.setStatusTip("Clears all shortcuts from the tree.")
         self.clearTreeAction.triggered.connect(self.clearShortcuts)
 
-        self.deleteCurrentImageAction = QAction("&Delete image", self)
-        self.deleteCurrentImageAction.setStatusTip("Delete current image.")
-        self.deleteCurrentImageAction.triggered.connect(self.sortModeHandler.handleKeyDelete)
+        self.deleteCurrentFileAction = QAction("&Delete file", self)
+        self.deleteCurrentFileAction.setStatusTip("Delete current file.")
+        self.deleteCurrentFileAction.triggered.connect(self.sortModeHandler.handleKeyDelete)
 
         self.reloadDirectoryAction = QAction("&Reload directory", self)
         self.reloadDirectoryAction.setStatusTip("Reload to synchronize source directory with images in the app.")
