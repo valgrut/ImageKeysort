@@ -5,7 +5,7 @@ import shutil
 import copy
 
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
-from PyQt5.QtGui import QPixmap, QTransform
+from PyQt5.QtGui import QPixmap, QTransform, QPainter, QPen
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
 from src.CropUtils import CropUtils
@@ -49,6 +49,7 @@ class ImageWidget(QWidget):
         
         self.rubberBand = None  # QRubberBand(QRubberBand.Rectangle, self.label)
         self.setMouseTracking(True)
+        self.label.setMouseTracking(True)  # Needed for mouseMoveEvent to be called without pressing any button.
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.label)
@@ -170,6 +171,7 @@ class ImageWidget(QWidget):
     def _transformPositionFromGlobalToPixmap(self, widgetCursorPosition: QPoint) -> QPoint:
         """
         # TODO: Tohle si myslim, ze by tez melo byt asi jinde...
+        # TODO: Zkusit event.globalPos(), screenPos(), localPos(). Mozna budu tyhle metody moct odstranit.
         """
         xOff, yOff = self._getPixmapCursorOffset()
 
@@ -278,6 +280,7 @@ class ImageWidget(QWidget):
         :param event:
         :return:
         """
+        super().mouseMoveEvent(event)
 
         if self._dragging:  # Prevents crash when just moving without initial click.
             currentPosition: QPoint = event.pos()
@@ -295,9 +298,22 @@ class ImageWidget(QWidget):
                 self.rubberBand.setGeometry(QRect(self._startingRubberPoint, self._endingRubberPoint))
             else:
                 log.warning(f"[mouseMoveEvent]: startPosition or endPosition not initialised!")
+        
+        # Draw cross line to indicate boundaries of the start of the crop area relative to cursor
+        # - [ ] TODO: enable/disable by clicking to the crop button
+        pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(event.pos())
+        px = self.pixmap.copy()
+        scaledTmpPixmap = px.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        painter = QPainter(scaledTmpPixmap)
+        painter.setPen(QPen(Qt.red, 1, Qt.DashLine))
+        painter.drawLine(pixmapCursorEndPosition.x()-10, 0, pixmapCursorEndPosition.x()-10, self.label.height())
+        painter.drawLine(0, pixmapCursorEndPosition.y()-10, self.label.width(), pixmapCursorEndPosition.y()-10)
+        painter.end()
+        self.label.setPixmap(scaledTmpPixmap)
 
-        super().mouseMoveEvent(event)
-
+    def leaveEvent(self, a0):
+        self.updateScaledPixmap()  # Draw original image back when cursor leaves the widget area.
+        return super().leaveEvent(a0)
 
     def mouseReleaseEvent(self, event):
         self._dragging = False
@@ -473,3 +489,5 @@ class ImageWidget(QWidget):
             return
 
         return super().keyPressEvent(event)
+    
+

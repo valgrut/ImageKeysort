@@ -138,7 +138,8 @@ Links:
           - Use ffmpeg app; Will it work on windows too???
 
 - [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
-- [ ] Turn on/off to show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
+- [X] Show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
+        - [ ] Button to toggle guide lines on/off.
 - [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [ ] Vymyslet jinou klavesovou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
     - Zkratka 1 zopakuje posledni crop operaci na aktualni obrazek.
@@ -173,7 +174,7 @@ Links:
         - [ ] Tagy by se mohly definovat v popup okne, ktere se otevre v Edit modu pro editaci/pridavani/odebirani
 - [ ] Undo/Redo (spise pouze jako tlacitko)
 - [ ] Repeat adding tag to next image (chtelo by to neco jako ".t" pro repeat tagging, ale nechci to komplikovat s ohledem na sorting, coz je hlavni featura.)
-- [ ] 2 moznosti - Tag popup menu a tag shortcuts (nastavitelne v settings)
+- [~] 2 moznosti - Tag popup menu a tag shortcuts (nastavitelne v settings)
 
 
 ### Image rotation
@@ -214,7 +215,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
-- [ ] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
+- [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
 - [ ] !!!!! Copy mode border se zobrazi az pri druhem kliknuti na CopyButton.
 
 
