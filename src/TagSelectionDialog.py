@@ -44,6 +44,9 @@ class TagSelectionDialog(QDialog):
         self.tagList.itemActivated.connect(self._acceptCurrent)
         layout.addWidget(self.tagList)
 
+        self.addNewTagButton = QPushButton("Add New Tag")
+        layout.addWidget(self.addNewTagButton)
+
         # Layout for buttons
         buttonsLayout = QHBoxLayout()
         buttonsLayout.addStretch(1)
@@ -55,6 +58,8 @@ class TagSelectionDialog(QDialog):
         self.cancelButton = QPushButton("Cancel")
         self.cancelButton.clicked.connect(self.reject)
         
+        #self.addNewTagButton.clicked.connect(self.addNewTag)
+
         buttonsLayout.addWidget(self.okButton)
         buttonsLayout.addWidget(self.cancelButton)
         layout.addLayout(buttonsLayout)
@@ -87,3 +92,12 @@ class TagSelectionDialog(QDialog):
             return
 
         return super().keyPressEvent(event)
+    
+
+    # def addNewTag(self):
+    # TODO: WIP - implement adding new tag
+    #     dialogue = Dialog(tags, parent=parent, title=title)
+    #     result = dialogue.exec_()
+    #     if result == QDialog.Accepted:
+    #         return dialogue._selectedTag
+    #     self.tagList.addItem(QListWidgetItem("NewTag"))
