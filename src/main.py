@@ -262,6 +262,8 @@ Important features TODO:
       - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
 - [ ] Na aktualnim obrazku by se mohla ukazat dostupna tlacitka pro repeat tag, repeat rename, repeat crop (pokud size je stejna) a pod. A po provedeni dane operace by se odpovidajici tlacitko z repeat last zmenilo na Undo.
 - [ ] Undo zkratky: Ctrl+z - undo moving/copying; Ctrl+shift+z - undo renaming/tagging/cropping.
+- [ ] Mozna dat doleva listu jako je ve VSCode, kde jde prepnout mezi overview, dir/file explorer a tak. Bylo by to dir explorer kde po kliknuti by se otevrel dir jako src dir. Pak druhy tab by byly shortcuts.
+- [ ] Taby - vice instanci v jednom okne.
 
 
 Consider (Maybe):
@@ -341,7 +343,7 @@ Minor issues, future features:
 - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
 - [ ] Vyresit ? pomale nacitani velkych obrazku (6MB+)
 - [~] Separatni repozitar, hodit na reddit, na RH, kolegum,
-- [ ] Pridat slovo "EMPTY" do Inbox obrazku
+- [X] Pridat slovo "EMPTY" do Inbox obrazku
 - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 - [ ] Dodelat progress widget
 - [ ] MAYBE: Pridat AI advices based on keywords on image.
@@ -349,7 +351,7 @@ Minor issues, future features:
 - [ ] Ctrl+F Otevre search bar, a kdyz zadam cast nejake slozky, zobrazi se matchnute slozky s jejich zkratkami. (hlavne kdyz se preset rozroste, tak to muze byt uzitecne)
 - [ ] Jazykova podpora ?
 - [ ] Tooltips
-- [ ] !!! Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj. Viz GPT rada jak to zmonetizovat. Pohledat i web "How to sell SW".
+- [ ] $$$ Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj. Viz GPT rada jak to zmonetizovat. Pohledat i web "How to sell SW".
 - [ ] Pridat komentare metod a trid (Vygenerovat AI)
 - [ ] Pridat treba nejake ADHD notes...
 
