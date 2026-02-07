@@ -221,6 +221,11 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
 - [ ] !!!!! Copy mode border se zobrazi az pri druhem kliknuti na CopyButton.
 - [ ] Zobrazit nekde/nejak list nactenych souboru ze source dir abecedne. Treba zase pop-up okno jen. Proste tak pro prehled, protoze proc ne. Po kliknuti na nejaky se tento nacte jako aktualni.
+- [ ] Disable to go to the next/prev picture - force user to process the picture instead of skipping it.
+- [ ] !!! Poklikanim na zkratku otevrit cestu
+- [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
+- [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
+- [ ] Moznost vytvorit nejak rychle slozku pro nejakou skupinu fotek v aktualne otevrene src slozce. Je to totiz x kroku, kdyz chci udelat novou kategorii. Napr vim, ze dalsich x fotek bude nevim barveni mece u miniatur, tak musim stisknout zkratku, otevre se dialog okno pro vyber dst. Vytvorim slozku s nejakym nazvem, potvrdim. Pak ji zvolim jako dst pro slozku. Bud udelat dialog rovnou po odklepnuti nove zkratky, nebo nevim. Urcite jako moznost, nedelat to tak vzdy. Mozna v edit modu, kdyz napisu treba "~" pred zkratku, tak se otevre dialog pro zadani jmena slozky pro tuto zkratku a ta se vytvori v src diru. Rozvest napad...
 
 
 Settings:
