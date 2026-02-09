@@ -226,6 +226,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [ ] Moznost vytvorit nejak rychle slozku pro nejakou skupinu fotek v aktualne otevrene src slozce. Je to totiz x kroku, kdyz chci udelat novou kategorii. Napr vim, ze dalsich x fotek bude nevim barveni mece u miniatur, tak musim stisknout zkratku, otevre se dialog okno pro vyber dst. Vytvorim slozku s nejakym nazvem, potvrdim. Pak ji zvolim jako dst pro slozku. Bud udelat dialog rovnou po odklepnuti nove zkratky, nebo nevim. Urcite jako moznost, nedelat to tak vzdy. Mozna v edit modu, kdyz napisu treba "~" pred zkratku, tak se otevre dialog pro zadani jmena slozky pro tuto zkratku a ta se vytvori v src diru. Rozvest napad...
+- [ ] Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
 
 
 Settings:
