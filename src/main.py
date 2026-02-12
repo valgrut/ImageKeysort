@@ -230,6 +230,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Zacit pouzivat v tomto projektu static code analysis tool 
 - [ ] Git project and actions - implementovat nejakou pipeline ?
 
+Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
 
 
 Settings:
