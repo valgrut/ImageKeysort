@@ -385,6 +385,8 @@ class ImageWidget(QWidget):
         # Variant 2 - Override original file with the cropped one
         self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
 
+        # Recalculate the cropAreaRect to be relative to the original image, not the already cropped one.
+
         cropData = CropData(
             imageName = currentFile,
             imageSrcPath = str(currentSrcDirPath),

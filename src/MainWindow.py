@@ -496,6 +496,8 @@ class MainWindow(QMainWindow, QObject):
         Push a new crop command into the command stack or update the existing command if it belongs to the same image.
         """
         
+        # TODO: Refactor this. I say this method is pushOrUpdate, but actual update happens in the commandsStack.push() method.
+
         lastCommand = self.commandsStack.top()
         newCommand = None
 
