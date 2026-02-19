@@ -1,3 +1,5 @@
+from PyQt5.QtCore import QRect, QPoint
+
 class CommandStack:
     def __init__(self):
         self._commands = []
@@ -54,7 +56,16 @@ class CommandStack:
         # Why? Because user can adjust crop multiple times for the same image and we want to keep only the latest crop, so it can be reused for RepeatCrop().
         
         # !!!!!! TODO: This has to be refactored to use mergeWith() method of QUndoCommand. In this way it is not functionable for other Commands, like TagCommand.
+        
+        # Recalculate the crop rectangle of the cropped image to correspond to its original size, not the cropped one.
+        # _globStartX = existingCommand.cropRectangle.height() + command.cropRectangle.height()
+        # _globStartY = existingCommand.cropRectangle.width() + command.cropRectangle.width()
+        # _globEndX = min(existingCommand.cropRectangle.width(), command.cropRectangle.width())
+        # _globEndY = max(existingCommand.cropRectangle.height(), command.cropRectangle.height())
+        # existingCommand.cropRectangle = QRect(QPoint(_globStartX, _globStartY), QPoint(_globEndX, _globEndY))
+
         existingCommand.cropRectangle = command.cropRectangle
+
         print(f"CHECK: {existingCommand.cropRectangle} updated to {command.cropRectangle}")
         idx = self.getIndexOfCommandByFilename(command.imageName)
         print(f"CHECK: Command in the list: {self._commands[idx].cropRectangle}")
