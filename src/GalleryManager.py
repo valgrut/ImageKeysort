@@ -3,6 +3,7 @@ from os.path import isfile, join
 from pathlib import Path
 import logging
 
+from PyQt5 import Qt
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QMimeDatabase, QSize, QRect
 from PyQt5.QtWidgets import QApplication, QFileDialog, QGraphicsDropShadowEffect, QStackedWidget, QRubberBand
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
@@ -39,6 +40,9 @@ class GalleryManager(QStackedWidget):
         shadowEffect.setBlurRadius(10)
         self.setGraphicsEffect(shadowEffect)
 
+        # Enable drag and drop of directory from outside of this app
+        self.setAcceptDrops(True)
+
         # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
 
         # Variables:
@@ -70,7 +74,7 @@ class GalleryManager(QStackedWidget):
         # self.rotateImageSignal.connect(self.mediaContainerWidget.rotateImageSignal)
 
 
-    def setSourcePath(self, path):
+    def setSourcePath(self, path: str):
         self.sourceDirectoryPath = path
         self.mediaContainerWidget.setSourceDirLabelText(path)
         self.loadImagesInDirectory()
@@ -358,3 +362,38 @@ class GalleryManager(QStackedWidget):
     #     self.rubberBand.hide()
     #     # determine selection, for example using QRect.intersects()
     #     # and QRect.contains().
+
+    def dragEnterEvent(self, event) -> None:
+        """
+        Enables drag and drop of directory from the outside of an app and set it as source directory.
+        :param event:
+        :return:
+        """
+        if event.mimeData().hasUrls:
+            event.accept()
+            log.info(f"Drag enter: Has URL")
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event) -> None:
+        if event.mimeData().hasUrls:
+            event.accept()
+            log.info(f"Drag Move: Has URL")
+        else:
+            event.ignore()
+
+    def dropEvent(self, event) -> None:
+        if event.mimeData().hasUrls:
+            log.info(f"{event.mimeData().urls()}")
+            directory_uri = Path(event.mimeData().urls()[0].toLocalFile())
+            if not directory_uri.is_dir():
+                log.info(f"Dropped file {directory_uri} is not directory.")
+                # TODO: status bar info
+                return
+            log.info(f"Drag URL: {directory_uri}")
+            # TODO: status bar info
+            # TODO: Drop current commands history and commands stack.
+            self.setSourcePath(str(directory_uri))
+            event.accept()
+        else:
+            event.ignore()

@@ -199,6 +199,7 @@ Links:
 
 
 Important - Misc:
+- [x] !!!!!!! Drag and Drop slozku z file-browseru do IK, coz ji otevre okamzite jako src dir. !!!!!!!!!!
 - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
   - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
