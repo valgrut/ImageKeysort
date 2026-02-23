@@ -33,7 +33,7 @@ class EmptyGalleryImageWidget(QWidget):
         self.label = QLabel()
         self.label.setPixmap(icon)
         self.label.setAlignment(Qt.AlignCenter)
-        self.label.setToolTip("Click to select source directory of the gallery.")
+        self.label.setToolTip("Click or drag and drop to select source directory of the gallery.")
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.label)
