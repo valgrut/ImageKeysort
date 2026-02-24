@@ -24,7 +24,8 @@ from PyQt5.QtWidgets import (
     QApplication,
     QStatusBar,
     QUndoStack,
-    QUndoCommand
+    QUndoCommand,
+    QTabWidget
 )
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
 
@@ -133,9 +134,14 @@ class MainWindow(QMainWindow, QObject):
         mainLayout.addLayout(rightInnerLayout)
 
         # Right side of the main layout
+        # self.galleryTabs = QTabWidget(self)
+        # self.galleryTabs.setTabsClosable(True)
+        # self.galleryTabs.setShortcutEnabled(True)
+        # self.galleryTabs.addTab(self.galleryManager, "gallery 1")
+        # self.galleryTabs.addTab(GalleryManager(self), "gallery 2")
+        # rightInnerLayout.addWidget(self.galleryTabs)
         rightInnerLayout.addWidget(self.galleryManager)
 
-        #self.statusBarLabel = QLabel("Status bar")
         self.statusBarLabel = QStatusBar()
         # self.statusBarLabel.addPermanentWidget(QLabel())
         self.statusBarLabel.setObjectName("statusBarLabel")

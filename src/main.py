@@ -218,7 +218,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Menu: Open recent source directories / shortcuts files.
 - [ ] Pridat pod zobrazeny obrazek operace (crop/rename/tag), ktere na nem byly provedeny jako mala kulata tlacitka -> po kliknuti na ne se dana operace provede Undo().
 - [ ] !!! TODO poznamky a ukoly primo v src souborech.
-- [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi.
+- [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi. Mozna QSaveFile?
 - [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
@@ -270,7 +270,7 @@ Important features TODO:
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 - [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
 - [X] Delete button do menu a do toolbaru !!!!!
-- [ ] !!!!! crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
+- [ ] !!!!! On/Off crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 - [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those); 
       - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
       - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
