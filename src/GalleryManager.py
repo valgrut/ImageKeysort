@@ -346,23 +346,6 @@ class GalleryManager(QStackedWidget):
             self.galleryIndex = len(self.availableMediaFiles) - 1
 
 
-    # def mousePressEvent(self, event):
-    #     origin = event.pos()
-    #     log.info(f"Origin position: {origin}")
-    #     if not self.rubberBand:
-    #         self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
-    #     self.rubberBand.setGeometry(QRect(origin, QSize()))
-    #     self.rubberBand.show()
-    #
-    # def mouseMoveEvent(self, event):
-    #     origin = event.pos()
-    #     self.rubberBand.setGeometry(QRect(origin, event.pos()).normalized())
-    #
-    # def mouseReleaseEvent(self, event):
-    #     self.rubberBand.hide()
-    #     # determine selection, for example using QRect.intersects()
-    #     # and QRect.contains().
-
     def dragEnterEvent(self, event) -> None:
         """
         Enables drag and drop of directory from the outside of an app and set it as source directory.
@@ -371,14 +354,14 @@ class GalleryManager(QStackedWidget):
         """
         if event.mimeData().hasUrls:
             event.accept()
-            log.info(f"Drag enter: Has URL")
+            # log.info(f"Drag enter: Has URL")
         else:
             event.ignore()
 
     def dragMoveEvent(self, event) -> None:
         if event.mimeData().hasUrls:
             event.accept()
-            log.info(f"Drag Move: Has URL")
+            # log.info(f"Drag Move: Has URL")
         else:
             event.ignore()
 
@@ -388,10 +371,10 @@ class GalleryManager(QStackedWidget):
             directory_uri = Path(event.mimeData().urls()[0].toLocalFile())
             if not directory_uri.is_dir():
                 log.info(f"Dropped file {directory_uri} is not directory.")
-                # TODO: status bar info
+                self.updateStatusBarLabelSignal.emit(f"Dropped file {directory_uri} is not directory.")
                 return
-            log.info(f"Drag URL: {directory_uri}")
-            # TODO: status bar info
+            log.info(f"Successful drop - Opening a directory {directory_uri} as gallery source.")
+            self.updateStatusBarLabelSignal.emit(f"Successful drop - Opening a directory {directory_uri} as gallery source.")
             # TODO: Drop current commands history and commands stack.
             self.setSourcePath(str(directory_uri))
             event.accept()
