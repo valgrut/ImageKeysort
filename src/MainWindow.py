@@ -503,6 +503,7 @@ class MainWindow(QMainWindow, QObject):
         """
         
         # TODO: Refactor this. I say this method is pushOrUpdate, but actual update happens in the commandsStack.push() method.
+        #   Move whole thing into the commandsStack.
 
         lastCommand = self.commandsStack.top()
         newCommand = None
