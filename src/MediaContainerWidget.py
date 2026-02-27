@@ -145,11 +145,13 @@ class MediaContainerWidget(QWidget):
         """
         Start filename edit process.
         """
+        currentFilename = self.galleryManager.getCurrentFilename()
+
         self.imageFilenameField.setCurrentWidget(self.imageFilenameEdit)
-        self.imageFilenameEdit.setText(self.galleryManager.getCurrentFilename())
+        self.imageFilenameEdit.setText(currentFilename)
         self.imageFilenameEdit.setFocus()
         #self.imageFilenameEdit.selectAll()  # TODO: Select all but file extension
-        self.imageFilenameEdit.setSelection(0, len(self.galleryManager.getCurrentFilename()) - len(Path(self.galleryManager.getCurrentFilename()).suffix))
+        self.imageFilenameEdit.setSelection(0, len(currentFilename) - len(Path(currentFilename).suffix))
 
     @pyqtSlot()
     def finishFilenameEdit(self):

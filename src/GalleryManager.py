@@ -223,33 +223,36 @@ class GalleryManager(QStackedWidget):
         self._currentFileIndex = len(self._availableMediaFiles) - 1
         self.updatePreview()  # TODO: sig-slots ?
 
-    def getCurrentGalleryItem(self) -> GalleryItem:
+    def getCurrentGalleryItem(self) -> None | GalleryItem:
         """
         Returns gallery item (picture/text/video/...) object given by the index.
-        :return:
+        :return: GalleryItem on given index
         """
+        if self.isGalleryEmpty():
+            return None
+
         return self._availableMediaFiles[self._currentFileIndex]
 
     def getCurrentFilename(self) -> str:
         """
         Returns just the string representation of the current file without its path.
-        :return: current filename
+        :return: current file's filename
         """
         if self.isGalleryEmpty():
-            raise Exception("Gallery is empty.")
+            # raise Exception("Gallery is empty.")
             return ""
 
         return self.getCurrentGalleryItem().fileName
 
-    def getCurrentFullFilename(self) -> str:
-        """
-        Returns just the string representation of the current file without its path.
-        :return: current filename
-        """
-        if self._availableMediaFiles:
-            currentFile = self.getCurrentGalleryItem()
-            return currentFile.asStr()
-        return ""
+    # def getCurrentFullFilename(self) -> str:
+    #     """
+    #     Returns just the string representation of the current file without its path.
+    #     :return: current file's path + filename
+    #     """
+    #     if not self.isGalleryEmpty():
+    #         currentFile = self.getCurrentGalleryItem()
+    #         return currentFile.asStr()
+    #     return ""
 
     def updateCounterLabelText(self):
         self.mediaContainerWidget.updateCounterLabelText(self.getCounterString())
@@ -307,12 +310,11 @@ class GalleryManager(QStackedWidget):
         # Set focus to back to Gallery Manager so after adding shortcut, arrows still can be used to show next/previous image.
         self.setFocus()
 
-
     def getCounterString(self) -> str:
         counter: str = str(self._currentFileIndex + 1) + "/" + str(len(self._availableMediaFiles))
         return counter
 
-    def addFile(self, fileName, positionIndex=0):
+    def addFile(self, fileName: str, positionIndex:int=0):
         self._availableMediaFiles.insert(positionIndex, fileName)
 
     @pyqtSlot()
@@ -338,10 +340,12 @@ class GalleryManager(QStackedWidget):
         """
         Commits the new filename to the gallery's availableMediaFiles list.
         """
+        currentGalleryItem = self.getCurrentGalleryItem()
+
         originalFilename = self.getCurrentFilename()
 
-        originalFullPath = Path(self.getSourcePath() + "/" + originalFilename)
-        newFullPath = Path(self.getSourcePath() + "/" + newFileName)
+        originalFullPath = currentGalleryItem.asPath()
+        newFullPath = self.getSourcePath() / Path(newFileName)
 
         log.info(f"Original full path: {originalFullPath}")
         log.info(f"new full path: {newFullPath}")
@@ -359,9 +363,9 @@ class GalleryManager(QStackedWidget):
         
         # Check if the file is different and if the new name is not empty
         if newFileName and newFileName != originalFilename:
-            self._availableMediaFiles[self._currentFileIndex] = newFileName
-            self.updateFilenameLabelText()
+            currentGalleryItem.fileName = newFileName
             originalFullPath.rename(newFullPath)
+            self.updateFilenameLabelText()
             self.updateStatusBarLabelSignal.emit("File was renamed successfully.")
             log.info("File was renamed successfully.")
 
@@ -405,8 +409,15 @@ class GalleryManager(QStackedWidget):
 
 
     def removeFile(self, fileName):
-        if fileName in self._availableMediaFiles:
-            self._availableMediaFiles.remove(fileName)
+        isFound = False
+        for file in self._availableMediaFiles:
+            if file.fileName == fileName:
+                self._availableMediaFiles.remove(file)
+                isFound = True
+                break
+
+        if not isFound:
+            return
 
         if self._currentFileIndex >= len(self._availableMediaFiles):
             self._currentFileIndex = len(self._availableMediaFiles) - 1
