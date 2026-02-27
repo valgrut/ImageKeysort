@@ -116,6 +116,8 @@ class MainWindow(QMainWindow, QObject):
 
         self.sortModeHandler = SortModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
         self.editModeHandler = EditModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
+
+        # TODO: Tohle pryc. Nebude to instancovane, kdyz se to mozna vubec nepouzije........
         self.textExtractor = TextExtractor(self.galleryManager)  # TODO: move elsewhere, since mainWindow does not interact with that directly? Image needs this, not main window...
 
 
@@ -276,7 +278,7 @@ class MainWindow(QMainWindow, QObject):
         self.buttonExtractTextAction = QAction(QIcon("Resources/clipboard-pencil.png"), "Extract text", self)
         self.buttonExtractTextAction.setStatusTip("Extract text from the image.")
         # buttonExtractTextAction.triggered.connect(self.galleryManager.currentWidget().imageViewWidget.extractTextFromImage)
-        self.buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage)
+        self.buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage) # Todo: Zavolat metodu, ktera si extractor prvne instanciuje.
         self.buttonExtractTextAction.setShortcut("Ctrl+;")
         self.buttonExtractTextAction.setDisabled(True)
         self.toolbar.addAction(self.buttonExtractTextAction)

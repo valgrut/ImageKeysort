@@ -1,3 +1,4 @@
+import pathlib
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
@@ -12,9 +13,11 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 from src.EmptyGalleryWidget import EmptyGalleryImageWidget
 from src.MediaContainerWidget import MediaContainerWidget
 from src.CropData import CropData
-
+# from Gallery import Gallery
+from src.GalleryItem import GalleryItem
 
 log = logging.getLogger(__name__)
+
 
 class GalleryManager(QStackedWidget):
 
@@ -46,14 +49,19 @@ class GalleryManager(QStackedWidget):
         # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
 
         # Variables:
-        self.availableMediaFiles = []
-        self.galleryIndex = 0
-        self.sourceDirectoryPath = ""
+        self._sourceDirectoryPath: pathlib.Path = None
+        self._availableMediaFiles: list[GalleryItem] = []
+        self._currentFileIndex: int = -1  # Index with a value -1 represents empty gallery.
+
+        # TODO: Future feature (multiple opened tabs representing separated galleries (source directories). vvvvv
+        # self._galleryIndex = -1  # No gallery is currently available (loaded)
+        # self._galleries: list[Gallery] = []
+        # ^^^^^
 
         #self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp')
         self.textSuffixes = (".txt", ".log", ".csv", ".ini", ".json", ".xml", ".md", ".yaml", ".yml", ".py", ".cpp", ".c", ".h", ".html", ".htm", ".css", ".js")  # TODO: presunout do Settings a pridat dalsi text formaty (nebo to udelat nejak genericky)
         self.videoSuffixes = ("gif", "mp4", "avi", "mkv", "mov", "wmv", "flv", "webm")  # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
-        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp') + self.videoSuffixes  + self.textSuffixes # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
+        self.allowedSuffixes = ('.png', '.jpg', '.jpeg', '.webp') + self.videoSuffixes + self.textSuffixes # TODO: presunout do Settings; spravit avi, zprovoznit mp4.
 
         # Stacked widgets:
         self.emptyInboxWidget = EmptyGalleryImageWidget()
@@ -73,46 +81,90 @@ class GalleryManager(QStackedWidget):
         self.mainWindow.repeatCropCommandSignal.connect(self.mediaContainerWidget.repeatCropCommandSignal)
         # self.rotateImageSignal.connect(self.mediaContainerWidget.rotateImageSignal)
 
+    # TODO: future feature.
+    # def getActiveGallery(self):
+    #     if self._galleryIndex >= 0:
+    #         return self._galleries[self._galleryIndex]
+    #     return None
 
-    def setSourcePath(self, path: str):
-        self.sourceDirectoryPath = path
-        self.mediaContainerWidget.setSourceDirLabelText(path)
+    def setSourcePath(self, source_path: pathlib.Path | str):
+        # TODO: future feature.
+        # activeGallery = self.getActiveGallery()
+        # if activeGallery is None:
+        #     return
+
+        if isinstance(source_path, str):
+            resultPath = pathlib.Path(source_path)
+        if isinstance(source_path, pathlib.Path):
+            resultPath = source_path
+
+        self._sourceDirectoryPath = resultPath
+        self.mediaContainerWidget.setSourceDirLabelText(str(resultPath))
         self.loadImagesInDirectory()
 
-    def getSourcePath(self) -> str:
-        return self.sourceDirectoryPath
+    def getSourcePath(self) -> pathlib.Path:
+        return self._sourceDirectoryPath
 
     def selectSourceDirectory(self):
         srcPath = QFileDialog.getExistingDirectory(self.mainWindow, "Select source directory")
         if not srcPath:
             return
-        self.sourceDirectoryPath = srcPath
-        self.mediaContainerWidget.setSourceDirLabelText(self.sourceDirectoryPath)
+
+        self._sourceDirectoryPath = srcPath
+        self.mediaContainerWidget.setSourceDirLabelText(self._sourceDirectoryPath)
         self.loadImagesInDirectory()
 
     def loadImagesInDirectory(self):
-        if not self.sourceDirectoryPath:
+        if not self._sourceDirectoryPath:
             log.info("DEBUG: Error, src dir path is empty")
             return
 
-        self.availableMediaFiles = []
+        self._availableMediaFiles.clear()
         # self.images = [f for f in listdir(self.sourceDirectoryPath) if isfile(join(self.sourceDirectoryPath, f))]
         # TODO: Refactor this to only include allowed file types based on enabled types in Settings.
-        self.availableMediaFiles = [
-            f for f in listdir(self.sourceDirectoryPath)
-            if isfile(join(self.sourceDirectoryPath, f)) and (f.lower().endswith(self.allowedSuffixes) or self.isCurrentTextFile(join(self.sourceDirectoryPath, f)))
-        ]
-        self.availableMediaFiles.sort()
-        self.galleryIndex = 0
+
+        for mediaItem in listdir(self._sourceDirectoryPath):
+            # Skip directories and such
+            if not isfile(join(self._sourceDirectoryPath, mediaItem)):
+                continue
+
+            # Skip files with undesired suffix and which are not text files (by its content)
+            if not mediaItem.lower().endswith(self.allowedSuffixes) and not self.isCurrentTextFile(join(self._sourceDirectoryPath, mediaItem)):
+                continue
+
+            # Populate a gallery list with the allowed files
+            newGalleryItem = GalleryItem(fileName=mediaItem, sourcePath=self._sourceDirectoryPath)
+            self._availableMediaFiles.append(newGalleryItem)
+
+        # self._availableMediaFiles = [
+        #     f for f in listdir(self._sourceDirectoryPath)
+        #     if isfile(join(self._sourceDirectoryPath, f)) and (f.lower().endswith(self.allowedSuffixes) or self.isCurrentTextFile(join(self._sourceDirectoryPath, f)))
+        # ]
+        self._availableMediaFiles.sort()
+        self._currentFileIndex = 0
         self.updatePreview()  # TODO
 
     def isGalleryEmpty(self):
         """
         returns true if there is no media files in the gallery.
         """
-        if not self.availableMediaFiles:
+        if not self._availableMediaFiles:
             return True
         return False
+
+    def getGalleryIndex(self):
+        return self._currentFileIndex
+
+    def incrementGalleryIndex(self):
+        if self._currentFileIndex < len(self._availableMediaFiles) -1:
+            self._currentFileIndex += 1
+        # log.info(f"DBG: new gallery_index: {self._currentFileIndex} out of {len(self.availableMediaFiles) - 1}")
+
+    def decrementGalleryIndex(self):
+        if self._currentFileIndex >= 1:
+            self._currentFileIndex -= 1
+        # log.info(f"DBG: new gallery_index: {self._currentFileIndex} out of {len(self.availableMediaFiles) - 1}")
+
 
     def isCurrentTextFile(self, path=None) -> bool:
         """
@@ -121,7 +173,7 @@ class GalleryManager(QStackedWidget):
 
         db = QMimeDatabase()
         if path is None:
-            path = str(Path(self.sourceDirectoryPath + "/" + self.getCurrentFilename()))
+            path = str(self._sourceDirectoryPath / Path(self.getCurrentFilename()))
 
         # 1) by filename (fast; catches Makefile, Dockerfile, etc. on many systems)
         # mt = db.mimeTypeForFile(path, QMimeDatabase.MatchExtension)
@@ -130,38 +182,26 @@ class GalleryManager(QStackedWidget):
 
         # 2) by content (slower; best for “no suffix” or wrong suffix)
         mt = db.mimeTypeForFile(path, QMimeDatabase.MatchContent)
+        currentFilename = self.getCurrentFilename()
         if mt.name().startswith("text/"):
-            log.info(f"Preview file: {self.getCurrentFilename()} of the type: {QMimeDatabase().mimeTypeForFile(self.getCurrentFilename()).name()}")
+            log.info(f"Preview file: {currentFilename} of the type: {QMimeDatabase().mimeTypeForFile(currentFilename).name()}")
             return True
 
         # sometimes scripts/configs come as application/x-... but are still text
         if mt.inherits("text/plain"):
-            log.info(f"Preview file: {self.getCurrentFilename()} of the type: {QMimeDatabase().mimeTypeForFile(self.getCurrentFilename()).name()}")
+            log.info(f"Preview file: {currentFilename} of the type: {QMimeDatabase().mimeTypeForFile(currentFilename).name()}")
             return True
 
         return False
 
     def isCurrentVideo(self) -> bool:
         """
-        returns true if current file (given by self.galleryIndex) is a video.
+        returns true if current file (given by self._currentFileIndex) is a video.
         """
 
-        if str(self.availableMediaFiles[self.galleryIndex]).endswith(self.videoSuffixes):
+        if str(self._availableMediaFiles[self._currentFileIndex]).endswith(self.videoSuffixes):
             return True
         return False
-
-    def getGalleryIndex(self):
-        return self.galleryIndex
-
-    def incrementGalleryIndex(self):
-        if self.galleryIndex < len(self.availableMediaFiles) -1:
-            self.galleryIndex += 1
-        # log.info(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
-
-    def decrementGalleryIndex(self):
-        if self.galleryIndex >= 1:
-            self.galleryIndex -= 1
-        # log.info(f"DBG: new gallery_index: {self.galleryIndex} out of {len(self.availableMediaFiles) - 1}")
 
     @pyqtSlot()
     def setNextImage(self):
@@ -175,17 +215,40 @@ class GalleryManager(QStackedWidget):
 
     @pyqtSlot()
     def setFirstImage(self):
-        self.galleryIndex = 0
+        self._currentFileIndex = 0
         self.updatePreview()  # TODO: sig-slots ?
 
     @pyqtSlot()
     def setLastImage(self):
-        self.galleryIndex = len(self.availableMediaFiles) - 1
+        self._currentFileIndex = len(self._availableMediaFiles) - 1
         self.updatePreview()  # TODO: sig-slots ?
 
-    def getCurrentFilename(self):
-        if self.availableMediaFiles:
-            return self.availableMediaFiles[self.galleryIndex]
+    def getCurrentGalleryItem(self) -> GalleryItem:
+        """
+        Returns gallery item (picture/text/video/...) object given by the index.
+        :return:
+        """
+        return self._availableMediaFiles[self._currentFileIndex]
+
+    def getCurrentFilename(self) -> str:
+        """
+        Returns just the string representation of the current file without its path.
+        :return: current filename
+        """
+        if self.isGalleryEmpty():
+            raise Exception("Gallery is empty.")
+            return ""
+
+        return self.getCurrentGalleryItem().fileName
+
+    def getCurrentFullFilename(self) -> str:
+        """
+        Returns just the string representation of the current file without its path.
+        :return: current filename
+        """
+        if self._availableMediaFiles:
+            currentFile = self.getCurrentGalleryItem()
+            return currentFile.asStr()
         return ""
 
     def updateCounterLabelText(self):
@@ -212,7 +275,7 @@ class GalleryManager(QStackedWidget):
             self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setVideoWidget()
 
-            videoPath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
+            videoPath = self.getCurrentGalleryItem().asStr()
             self.mediaContainerWidget.updateVideo(videoPath)  # Mozna spis prejmenovat na showVideo()
             self.disableExtractTextButtonSignal.emit()
             self.enableCropButtonSignal.emit()
@@ -223,7 +286,7 @@ class GalleryManager(QStackedWidget):
             self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setTextWidget()
 
-            textFilePath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
+            textFilePath = self.getCurrentGalleryItem().asStr()
             self.mediaContainerWidget.updateTextFile(textFilePath)
             self.disableExtractTextButtonSignal.emit()
             self.disableCropButtonSignal.emit()
@@ -235,7 +298,7 @@ class GalleryManager(QStackedWidget):
             self.enableExtractTextButtonSignal.emit()
             self.enableCropButtonSignal.emit()
 
-            imagePath = str(Path(self.sourceDirectoryPath + "/" + self.availableMediaFiles[self.galleryIndex]))
+            imagePath = self.getCurrentGalleryItem().asStr()
             self.mediaContainerWidget.updatePreviewImage(imagePath)  # Mozna spis prejmenovat na showImage()
 
         self.updateFilenameLabelText()  # TODO: sig-slots
@@ -246,11 +309,11 @@ class GalleryManager(QStackedWidget):
 
 
     def getCounterString(self) -> str:
-        counter: str = str(self.galleryIndex + 1) + "/" + str(len(self.availableMediaFiles))
+        counter: str = str(self._currentFileIndex + 1) + "/" + str(len(self._availableMediaFiles))
         return counter
 
     def addFile(self, fileName, positionIndex=0):
-        self.availableMediaFiles.insert(positionIndex, fileName)
+        self._availableMediaFiles.insert(positionIndex, fileName)
 
     @pyqtSlot()
     def renameFile(self):
@@ -296,7 +359,7 @@ class GalleryManager(QStackedWidget):
         
         # Check if the file is different and if the new name is not empty
         if newFileName and newFileName != originalFilename:
-            self.availableMediaFiles[self.galleryIndex] = newFileName
+            self._availableMediaFiles[self._currentFileIndex] = newFileName
             self.updateFilenameLabelText()
             originalFullPath.rename(newFullPath)
             self.updateStatusBarLabelSignal.emit("File was renamed successfully.")
@@ -304,6 +367,9 @@ class GalleryManager(QStackedWidget):
 
 
     def appendTagToName(self, tag: str = None):
+        # TODO: Refactor this into FileTagger class.
+        # TODO: Refactor this out - HIGH PRIORITY!!!
+
         currentFilePath = Path(self.getCurrentFilename())
         currentFileNameNoExt = currentFilePath.stem
         currentSrcDirPath = currentFilePath.parent
@@ -339,18 +405,18 @@ class GalleryManager(QStackedWidget):
 
 
     def removeFile(self, fileName):
-        if fileName in self.availableMediaFiles:
-            self.availableMediaFiles.remove(fileName)
+        if fileName in self._availableMediaFiles:
+            self._availableMediaFiles.remove(fileName)
 
-        if self.galleryIndex >= len(self.availableMediaFiles):
-            self.galleryIndex = len(self.availableMediaFiles) - 1
+        if self._currentFileIndex >= len(self._availableMediaFiles):
+            self._currentFileIndex = len(self._availableMediaFiles) - 1
 
 
     def dragEnterEvent(self, event) -> None:
         """
         Enables drag and drop of directory from the outside of an app and set it as source directory.
-        :param event:
-        :return:
+
+        Multiple directories are opened as multiple tabs.
         """
         if event.mimeData().hasUrls:
             event.accept()
@@ -359,6 +425,11 @@ class GalleryManager(QStackedWidget):
             event.ignore()
 
     def dragMoveEvent(self, event) -> None:
+        """
+        Enables drag and drop of directory from the outside of an app and set it as source directory.
+
+        Multiple directories are opened as multiple tabs.
+        """
         if event.mimeData().hasUrls:
             event.accept()
             # log.info(f"Drag Move: Has URL")
@@ -366,6 +437,11 @@ class GalleryManager(QStackedWidget):
             event.ignore()
 
     def dropEvent(self, event) -> None:
+        """
+        Enables drag and drop of directory from the outside of an app and set it as source directory.
+
+        Multiple directories are opened as multiple tabs.
+        """
         if event.mimeData().hasUrls:
             log.info(f"{event.mimeData().urls()}")
             directory_uri = Path(event.mimeData().urls()[0].toLocalFile())

@@ -6,6 +6,9 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 
 # TODO: Rozhodnuti
 # - Co delat v pripade rucni zmeny nazvu souboru? Zmenit basename pak i v odpovidajicim TagCommandu pro dany filename?
+# TODO: Vsak tady muzu import Classu, ktera vezme srcpath a img_name a udelat kyzene zmeny proste. LOL.
+# TODO: After RENAME / Adding tag / removing tag - nutno update filenames v Gallery.loadedFiles a pak v ostatnich Commands, pokud se tam nachazi obrazek s danym jmenem pred modifikaci.
+
 
 class TagCommand(QUndoCommand):
 

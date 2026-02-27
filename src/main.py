@@ -278,6 +278,7 @@ Important features TODO:
 - [ ] Undo zkratky: Ctrl+z - undo moving/copying; Ctrl+shift+z - undo renaming/tagging/cropping.
 - [ ] Mozna dat doleva listu jako je ve VSCode, kde jde prepnout mezi overview, dir/file explorer a tak. Bylo by to dir explorer kde po kliknuti by se otevrel dir jako src dir. Pak druhy tab by byly shortcuts.
 - [ ] Taby - vice instanci v jednom okne.
+- [ ] Maybe save the whole session (including the history and commandStack).
 
 
 Consider (Maybe):

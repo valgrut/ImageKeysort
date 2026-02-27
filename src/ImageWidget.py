@@ -471,6 +471,10 @@ class ImageWidget(QWidget):
 
     # TODO: WIP: Does not work. Event is not registered. It is caught by SortModeHandler instead.
     def keyPressEvent(self, event):
+        """
+        Cancel the cropping when ESC key is pressed.
+        """
+
         log.info(f"Key pressed: {event.key()}")
         if event.key() == Qt.Key_Escape:
 

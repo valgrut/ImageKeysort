@@ -12,6 +12,13 @@ class CommandStack:
     #     self._commands.append(command)
     #     self._index += 1
 
+    def clearStack(self):
+        """
+        Drop all command from the stack leaving it empty.
+        """
+        self._commands = []
+        self._index = -1
+
     def undo(self, filename: str = None):
         """
         Undo the last command or the command associated with the given filename.

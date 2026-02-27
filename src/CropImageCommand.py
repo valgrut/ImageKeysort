@@ -8,6 +8,9 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 # from send2trash import send2trash
 # send2trash(str(p))
 
+# TODO: Vsak tady muzu import Crop Classu, ktera vezme srcpath a img_name a cropRect a udelat kyzene zmeny proste. LOL.
+
+
 class CropImageCommand(QUndoCommand):
 
     CMD_ID = 1001
