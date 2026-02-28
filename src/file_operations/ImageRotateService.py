@@ -2,7 +2,6 @@ import logging
 import pathlib
 import shutil
 
-from PyQt5.QtCore import QRect, QSize
 from PyQt5.QtGui import QPixmap, QTransform
 
 log = logging.getLogger(__name__)

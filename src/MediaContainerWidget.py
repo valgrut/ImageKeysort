@@ -17,16 +17,6 @@ from src.Styles import Styles
 
 from src.CropData import CropData
 
-
-# class ClickableLabel(QLabel):
-#     def __init__(self, parent):
-#         super().__init__(parent)
-#
-#     def mousePressEvent(self, event):
-#         if not isinstance(event, QMouseEvent):
-#             return
-#         QMessageBox.about(self, "Hello!")
-
 log = logging.getLogger(__name__)
 
 
