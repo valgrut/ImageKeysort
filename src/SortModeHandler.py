@@ -230,6 +230,8 @@ class SortModeHandler(QObject):
 
 
     def handleKeyDelete(self):
+        # TODO: instead of removing the GalleryItem from the availableMediaFiles, move it to deletedMediaFiles.
+        # TODO: _deletedMediaFiles pak budou dropnuty, kdyz se zmeni galerie a pod...
         log.debug("handleSortMode: Case 'Delete'")
         if self.galleryManager.isGalleryEmpty():
             log.info("Source directory is empty")

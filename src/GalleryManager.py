@@ -292,6 +292,10 @@ class GalleryManager(QStackedWidget):
         return counter
 
     # TODO: Update to ImgDataObj version:
+    # TODO: 1. Deleting of entry z availableMediaFiles se bude jen presouvat do deletedMediaFiles
+    # TODO: 2. Undo move to presune zase zpet (nechci ztratit reference na dany GalleryItem v Commands)
+    # TODO: tento addFile vrati soubor z deletedMediaFiles zpet do _availableMediaFiles.
+    # TODO: _deletedMediaFiles pak budou dropnuty, kdyz se zmeni galerie a pod...
     def addFile(self, fileName: str, positionIndex:int=0):
         self._availableMediaFiles.insert(positionIndex, GalleryItem(fileName, self.getSourcePath()))
 
