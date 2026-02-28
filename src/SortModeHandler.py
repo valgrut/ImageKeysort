@@ -128,7 +128,7 @@ class SortModeHandler(QObject):
             log.info(singleUseDstDirectory)
             dst = singleUseDstDirectory
 
-        src = self.galleryManager.getSourcePath()
+        src = str(self.galleryManager.getSourcePath())
         imageName = self.galleryManager.getCurrentFilename()
         if not imageName:
             log.warning("There is no gallery currently opened.")
@@ -240,7 +240,7 @@ class SortModeHandler(QObject):
             log.warning("There is no gallery currently opened.")
             self.updateStatusBarLabel(f"There is no gallery currently opened.")
             return
-        src = self.galleryManager.getSourcePath()
+        src = str(self.galleryManager.getSourcePath())
         dst = src + "/" + "__DELETED__"
 
         if not os.path.exists(dst):
@@ -256,7 +256,7 @@ class SortModeHandler(QObject):
             self.handleExistingImageInDst()
             return
 
-        log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
+        log.info(f"It is found. Possible to move from {src} into {dst}!")
 
         # Remove current image from the list of images in src directory
         self.moveImageCommand(src, dst, imageName)
@@ -337,7 +337,7 @@ class SortModeHandler(QObject):
             return
 
         imageName = self.galleryManager.getCurrentFilename()
-        src = self.galleryManager.getSourcePath()
+        src = str(self.galleryManager.getSourcePath())
         dst = dstPath
 
         if not self.checkDestinationDirectoryExists(dst):
@@ -353,7 +353,7 @@ class SortModeHandler(QObject):
             self.handleExistingImageInDst()
             return
 
-        log.info(f"It is found. Possible to move from {self.galleryManager.getSourcePath()} into {dst}!")
+        log.info(f"It is found. Possible to move from {src} into {dst}!")
 
         # Remove current image from the list of images in src directory
         if not self.copyOnly and instantCopy is False:

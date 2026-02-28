@@ -119,7 +119,9 @@ Links:
 ====== Main features to implement ======
 - [X] Change names of the files
 - [ ] Rework ShortcutTreeView
-- [~] Crop image / video (sources: keyboard shortcut, button in menu, button in toolbar)
+- [~] Crop (sources: keyboard shortcut, button in menu, button in toolbar)
+        - [~] Crop image
+        - [ ] Crop video (sources: keyboard shortcut, button in menu, button in toolbar)
         - [X] Crop image by mouse click + drag
 - [ ] Zoom in/out the image (imageView only)
         - Kvuli velkym obrazkum s textem, ktery je kvuli velikosti uz skoro necitelny.
@@ -137,11 +139,12 @@ Links:
       - Crop a video too.
           - Use ffmpeg app; Will it work on windows too???
 
-- [ ] V1: QRubberBand (simple) nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
+- [X] V1: QRubberBand (simple)
+        - [ ] OPTIONAL V2: QGraphicView (okraje s kruhama v rozich a po stranach)
 - [X] Show guide lines (dashed vertical and horizontal from the point of first click to the all way up and all way down) (center vertical/horizontal, thirds, ...), so user can better align the crop area.
-        - [ ] Button to toggle guide lines on/off.
+        - [X] Button to toggle guide lines on/off.
         - [ ] Settings: jestli by default On nebo by default Off.
-- [ ] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
+- [X] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
 - [ ] Vymyslet jinou klavesovou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
     - Zkratka 1 zopakuje posledni crop operaci na aktualni obrazek.
     - Zkratka 2 zopakuje posledni tag operaci na aktualni obrazek.
@@ -158,7 +161,7 @@ Links:
 
 
 ### Rename - related todo:
-- [ ] Undo/Redo
+- [N] Undo/Redo
 
 
 ### Text extraction
@@ -202,7 +205,7 @@ Important - Misc:
 - [x] !!!!!!! Drag and Drop slozku z file-browseru do IK, coz ji otevre okamzite jako src dir. !!!!!!!!!!
     - [ ] Allow only 1 directory (currently, multiple is possible). 
     - Na multiple chci mit taby, pripadne povolit multiple s tim, ze kazda slozka se otevre ve svem tabu!!!. To je napad!
-    - [ ] Otestovat na linuxu
+    - [X] Otestovat na linuxu
 - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
   - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
@@ -223,7 +226,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
-- [ ] !!!!! Copy mode border se zobrazi az pri druhem kliknuti na CopyButton.
+- [ ] !!!!! Copy mode border se zobrazi az pri druhem kliknuti na CopyButton (Zkratka je OK)
 - [ ] Zobrazit nekde/nejak list nactenych souboru ze source dir abecedne. Treba zase pop-up okno jen. Proste tak pro prehled, protoze proc ne. Po kliknuti na nejaky se tento nacte jako aktualni.
 - [ ] Disable to go to the next/prev picture - force user to process the picture instead of skipping it.
 - [ ] !!! Poklikanim na zkratku otevrit cestu

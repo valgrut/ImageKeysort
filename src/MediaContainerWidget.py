@@ -104,7 +104,7 @@ class MediaContainerWidget(QWidget):
 
         # Connect signals
         self.imageViewWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
-        self.galleryManager.setEnabledCursorGuidelinesSignal.connect(self.imageViewWidget.setMouseGuidelines)
+        self.galleryManager.setEnabledCursorGuidelinesSignal.connect(self.imageViewWidget.showMouseGuidelines)
 
 
     def keyPressEvent(self, a0):

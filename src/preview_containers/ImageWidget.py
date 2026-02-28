@@ -74,7 +74,7 @@ class ImageWidget(QWidget):
     #     return None
 
     @pyqtSlot(bool)
-    def setMouseGuidelines(self, enabled: bool):
+    def showMouseGuidelines(self, enabled: bool):
         self._showMouseGuideLines = enabled
         print(self._showMouseGuideLines)
 

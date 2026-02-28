@@ -293,7 +293,7 @@ class GalleryManager(QStackedWidget):
 
     # TODO: Update to ImgDataObj version:
     def addFile(self, fileName: str, positionIndex:int=0):
-        self._availableMediaFiles.insert(positionIndex, fileName)
+        self._availableMediaFiles.insert(positionIndex, GalleryItem(fileName, self.getSourcePath()))
 
     @pyqtSlot()
     def renameFile(self):
