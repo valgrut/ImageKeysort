@@ -109,22 +109,25 @@ class CommandStack:
 
         self.top().execute()
 
-    def undo(self, filename: str = None):
+    def undo(self, filename: str = None) -> bool:
         """
         Undo the last command or the command associated with the given filename.
         Removes the undone command from the stack.
         """
-        if self.count() <= 0:
-            return
+        if self.empty():
+            log.info("Warning: CommandStack is empty, nothing to execute.")
+            return False
 
         if filename is None:
             command = self.pop()
             command.undo()
-            return
+            return True
 
         elif filename is not None:
             command = self.getCommandByFilename(filename)
             if command:
                 command.undo()
                 self.removeCommandByFilename(filename)
-                return
+                return True
+
+        return False

@@ -516,21 +516,13 @@ class MainWindow(QMainWindow, QObject):
         Undo the command performed on the current image.
         """
 
-        # Get the command associated with the current image
+        # Get currently shown file's name
         currentFilename = self.galleryManager.getCurrentFilename()
-        associatedCommand = self.commandsStack.getCommandByFilename(currentFilename)
-        if associatedCommand is None:
-            log.info("No command associated with the current image. Cannot undo.")
-            return
-        
-        # Allow undo only if there is a command on the stack associated with the current image.
-        # TODO: Mozna neni nutne, protoze to dela uz ta podminka vyse...
-        if associatedCommand.imageName != currentFilename:
-            log.info("The last command on the stack does not belong to the current image. Cannot undo.")
-            return
 
         # Undo and remove command from the stack
-        self.commandsStack.undo()
+        if not self.commandsStack.undo(currentFilename):
+            log.info("No command associated with the current image. Cannot undo.")
+            return
         
         # Update image preview after undoing the crop command.
         self.galleryManager.updatePreview()

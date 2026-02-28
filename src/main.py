@@ -319,6 +319,7 @@ To Fix:
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
 - [x] Crash behem cropu provedenem hned po prejmenovani obrazku (i po pridani tagu). 
 
+
 Shortcuts management, Shortcut Tree (GUI):
 - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
 - [ ] CustomTreeWidget:  2. Jak prizpusobit sirku - mozna na zaklade poctu zobrazenych sloupcu?
