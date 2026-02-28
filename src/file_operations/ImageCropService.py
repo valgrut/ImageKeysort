@@ -1,16 +1,9 @@
 import logging
-import os
 import pathlib
 import shutil
 
-import ffmpeg
-
-from PyQt5.QtCore import QRect, QPoint
+from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget, QLabel
-
-# TODO: priority: Make command Undo-able even in this WIP version.
-
 
 log = logging.getLogger(__name__)
 
@@ -22,10 +15,8 @@ class ImageCropService:
     SHOULD be independent of any Commands and such. Just provide image uri and crop data and perform the crop.
     """
 
-    def __init__(self):
-        pass
-
-    def crop(self, imageUri: str, cropRectangle: QRect):
+    @staticmethod
+    def crop(imageUri: str, cropRectangle: QRect):
         """
         Perform crop based on the given data.
 

@@ -9,48 +9,67 @@ log = logging.getLogger(__name__)
 class CommandStack:
     def __init__(self):
         self._commands = []
-        # self._index = -1
-
-    # def execute(self, command):
-    #     # Remove any commands that are ahead of the current index
-    #     del self._commands[self._index + 1:]
-    #     command.execute()
-    #     self._commands.append(command)
-    #     self._index += 1
 
     def clearStack(self):
         """
         Drop all command from the stack leaving it empty.
         """
         self._commands.clear()
-        # self._index = -1
 
-    def undo(self, filename: str = None):
+    def empty(self) -> bool:
+        return False if self._commands else True
+
+    def count(self) -> int:
         """
-        Undo the last command or the command associated with the given filename.
-        Removes the undone command from the stack.
+        Get the number of commands in the stack.
         """
-        if self.count() <= 0:
-            return
+        return len(self._commands)
 
-        if filename is None:
-            command = self.pop()
-            command.undo()
-            return
+    def getCommandByFilename(self, filename: str) -> QUndoCommand | None:
+        """
+        Retrieve a command from the stack by its associated filename.
+        """
+        for cmd in self._commands:
+            # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
+            if cmd.imageData.fileName == filename:
+                return cmd
+        return None
 
-        elif filename is not None:
-            command = self.getCommandByFilename(filename)
-            if command:
-                command.undo()
-                self.removeCommandByFilename(filename)
-                return
+    def removeCommandByFilename(self, filename: str) -> bool:
+        """
+        Remove a command from the stack by its associated filename.
+        """
+        for i, cmd in enumerate(self._commands):
+            # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
+            if cmd.imageData.fileName == filename:
+                del self._commands[i]
+                return True
+        return False
 
-    def top(self):
+    def getIndexOfCommandByFilename(self, filename: str) -> int:
+        """
+        Get the index of a specific command in the stack.
+        """
+        for i, cmd in enumerate(self._commands):
+            # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
+            if cmd.imageData.fileName == filename:
+                return i
+        return -1
+
+    def top(self) -> QUndoCommand | None:
         """
         Get the last command from the stack without removing it.
         """
         if self.count() > 0:
             return self._commands[-1]
+        return None
+
+    def pop(self) -> QUndoCommand | None:
+        """
+        Pop (and remove) the last command from the stack.
+        """
+        if self._commands:
+            return self._commands.pop()
         return None
 
     def push(self, command: QUndoCommand) -> QUndoCommand:
@@ -79,54 +98,6 @@ class CommandStack:
 
         return command
 
-    def pop(self) -> QUndoCommand | None:
-        """
-        Pop (and remove) the last command from the stack.
-        """
-        if self._commands:
-            return self._commands.pop()
-        return None
-
-    def getCommandByFilename(self, filename: str) -> QUndoCommand | None:
-        """
-        Retrieve a command from the stack by its associated filename.
-        """
-        for cmd in self._commands:
-            # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
-            if cmd.imageData.fileName == filename:
-                return cmd
-        return None
-
-    def removeCommandByFilename(self, filename: str) -> bool:
-        """
-        Remove a command from the stack by its associated filename.
-        """
-        for i, cmd in enumerate(self._commands):
-            # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
-            if cmd.imageData.fileName == filename:
-                del self._commands[i]
-                return True
-        return False
-
-    def count(self) -> int:
-        """
-        Get the number of commands in the stack.
-        """
-        return len(self._commands)
-
-    def getIndexOfCommandByFilename(self, filename: str) -> int:
-        """
-        Get the index of a specific command in the stack.
-        """
-        for i, cmd in enumerate(self._commands):
-            # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
-            if cmd.imageData.fileName == filename:
-                return i
-        return -1
-
-    def empty(self) -> bool:
-        return False if self._commands else True
-
     def execute(self, command: QUndoCommand = None):
         if self.empty():
             log.info("Warning: CommandStack is empty, nothing to execute.")
@@ -138,3 +109,22 @@ class CommandStack:
 
         self.top().execute()
 
+    def undo(self, filename: str = None):
+        """
+        Undo the last command or the command associated with the given filename.
+        Removes the undone command from the stack.
+        """
+        if self.count() <= 0:
+            return
+
+        if filename is None:
+            command = self.pop()
+            command.undo()
+            return
+
+        elif filename is not None:
+            command = self.getCommandByFilename(filename)
+            if command:
+                command.undo()
+                self.removeCommandByFilename(filename)
+                return

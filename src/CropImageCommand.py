@@ -1,3 +1,4 @@
+import pathlib
 import shutil
 import os
 
@@ -25,7 +26,7 @@ class CropImageCommand(QUndoCommand):
     def id(self) -> int:
         return self.CMD_ID
 
-    def mergeWith(self, otherCommand: QUndoCommand) -> bool:
+    def mergeWith(self, otherCommand: QUndoCommand):
         # TODO: Recalculate the crop rectangle of the cropped image to correspond to its original size, not the cropped one.
         #   (in case of recropping the same picture multiple times)
         # _globStartX = existingCommand.cropRectangle.height() + command.cropRectangle.height()
@@ -40,21 +41,20 @@ class CropImageCommand(QUndoCommand):
         self.cropRectangle = QRect(otherCommand.cropRectangle)
         self.originalImageSize = QSize(otherCommand.originalImageSize)
 
-        return True
 
     def execute(self):
-        print("Execute")
-        cropService = ImageCropService()
-        cropService.crop(self.imageData.pathAsStr(), self.cropRectangle)
+        ImageCropService().crop(self.imageData.pathAsStr(), self.cropRectangle)
 
     def undo(self):
+        # TODO:
         # 1. Check, that original image still exists in the __deleted__ directory
         # 2. Move it back to the source directory (override the cropped one)
         # 3. Pop this command from the command stack
         
-        # TMP solution (no checks)
+        # TMP solution (no checks):
         # Remove cropped image
-        os.remove(self.imageSrcPath + "/" + self.imageName)
+        os.remove(self.imageData.pathAsStr())
 
         # Restore original image
-        shutil.move(self.imageSrcPath + "/__DELETED__/" + self.imageName, self.imageSrcPath + "/" + self.imageName)
+        deleteDirectory = str(self.imageData.sourcePath / pathlib.Path("__DELETED__") / pathlib.Path(self.imageData.fileName))
+        shutil.move(deleteDirectory, self.imageData.pathAsStr())

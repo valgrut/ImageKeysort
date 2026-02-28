@@ -496,10 +496,6 @@ class MainWindow(QMainWindow, QObject):
         self.repeatCommandOnStack.setShortcut('Ctrl+Shift+R')  # TODO: Maybe change shortcut to something else.
         self.repeatCommandOnStack.triggered.connect(self.reuseCommand)
         self.addAction(self.repeatCommandOnStack)
-    
-
-    def _getCommandsStack(self):
-        return self.commandsStack
 
 
     def createAndExecuteCropCommand(self, commandCropData: CropData):

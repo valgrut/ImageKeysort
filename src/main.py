@@ -317,9 +317,7 @@ To Fix:
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
-- [ ] !!!!!!! Crash behem cropu provedenem hned po prejmenovani obrazku (i po pridani tagu). 
-    Duvod: Protoze se obrazek prejmenuje fyzicky, ale zustane v galleryManager poli nezmeneny.
-
+- [x] Crash behem cropu provedenem hned po prejmenovani obrazku (i po pridani tagu). 
 
 Shortcuts management, Shortcut Tree (GUI):
 - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
