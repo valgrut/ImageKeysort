@@ -45,7 +45,7 @@ from src.CropImageCommand import CropImageCommand
 from src.CropData import CropData
 from src.CommandStack import CommandStack
 from src.TagSelectionDialog import TagSelectionDialog
-
+from src.commands.ImageRotateCommand import ImageRotateCommand
 
 from src.treeView import ShortcutsTreeView
 
@@ -270,7 +270,8 @@ class MainWindow(QMainWindow, QObject):
 
         self.buttonRotateImageAction = QAction(QIcon("Resources/arrow-circle-right.png"), "Rotate image right", self)
         self.buttonRotateImageAction.setStatusTip("Rotate image right 90 degrees.")
-        self.buttonRotateImageAction.triggered.connect(self.galleryManager.rotateImageRight)
+        # self.buttonRotateImageAction.triggered.connect(self.galleryManager.rotateImageRight)
+        self.buttonRotateImageAction.triggered.connect(self.createAndExecuteRotateCommand)
         self.buttonRotateImageAction.setCheckable(True)
         self.buttonRotateImageAction.setShortcut("Ctrl+G")
         # self.buttonRotateImageAction.setDisabled(True)
@@ -497,6 +498,21 @@ class MainWindow(QMainWindow, QObject):
         self.repeatCommandOnStack.triggered.connect(self.reuseLastCropCommand)
         self.addAction(self.repeatCommandOnStack)
 
+    def createAndExecuteRotateCommand(self):
+        """
+        Rotate image 90 degrees right.
+        """
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
+
+        currentFile = self.galleryManager.getCurrentGalleryItem()
+        rotateCommand = ImageRotateCommand(currentFile)
+        # TODO: After inventing, how to manage multiple operations above 1 image, uncomment those 2 lines:
+        #   pushed = self.commandsStack.push(rotateCommand)
+        #   self.commandsStack.execute(rotateCommand)
+        rotateCommand.execute()
+
+        # self.updateMediaPreviewSignal.emit()  # TODO maybe rename to redrawMediaPreview().
+        self.galleryManager.updatePreview()
 
     def createAndExecuteCropCommand(self, commandCropData: CropData):
         """
@@ -504,6 +520,7 @@ class MainWindow(QMainWindow, QObject):
 
         Then perform the Crop.
         """
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
         cropCommand = CropImageCommand(commandCropData.imageData, commandCropData.cropRectangle, commandCropData.originalImageSize)
         pushed = self.commandsStack.push(cropCommand)
         self.commandsStack.execute(pushed)
@@ -515,6 +532,7 @@ class MainWindow(QMainWindow, QObject):
         """
         Undo the command performed on the current image.
         """
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
 
         # Get currently shown file's name
         currentFilename = self.galleryManager.getCurrentFilename()
@@ -532,10 +550,11 @@ class MainWindow(QMainWindow, QObject):
         Enable reuse only if the current image has the same original size as the last command on the stack.
         For the Reuse, last command is used, not any command.
         """
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
+
         log.info("Repeat command from stack on current image.")
 
         currentFile = self.galleryManager.getCurrentGalleryItem()
-        filename = currentFile
         pixmapSize = QPixmap(currentFile.pathAsStr()).size()
 
         lastCropCommand = self.commandsStack.top()
@@ -560,6 +579,7 @@ class MainWindow(QMainWindow, QObject):
 
 
     def selectTagFromDialog(self):
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
         tags = ["work", "family", "anime", "urgent", "todo"]  # TODO: Save/Load from the file
         
         tagsNotAlreadyUsed = [tag for tag in tags if tag not in self.galleryManager.getCurrentFilename()]
