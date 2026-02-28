@@ -110,9 +110,6 @@ class MediaContainerWidget(QWidget):
         self.imageViewWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
         self.galleryManager.setEnabledCursorGuidelinesSignal.connect(self.imageViewWidget.setMouseGuidelines)
 
-    # def getOriginalImageSize(self) -> QSize:
-    #     self.imageViewWidget.getOriginalImageSize()
-
 
     def keyPressEvent(self, a0):
         """

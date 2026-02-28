@@ -31,12 +31,12 @@ from src.SettingsDialog import SettingsDialog
 from src.SortModeHandler import SortModeHandler
 from src.EditModeHandler import EditModeHandler
 from src.Modes import Modes
-from src.TextExtractor import TextExtractor
+from src.file_operations.TextExtractor import TextExtractor
 from src.commands.CropImageCommand import CropImageCommand
 from src.CropData import CropData
 from src.CommandStack import CommandStack
 from src.TagSelectionDialog import TagSelectionDialog
-from src.commands.ImageRotateCommand import ImageRotateCommand
+from src.commands.RotateImageCommand import ImageRotateCommand
 
 # TODO: Tohle jinam; Kam?
 screenWidth = 1152
@@ -486,6 +486,10 @@ class MainWindow(QMainWindow, QObject):
         self.addAction(self.repeatCommandOnStack)
 
     def extractTextFromImage(self):
+        """
+        Extract text from the given image
+        """
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
         textExtractor = TextExtractor(self.galleryManager)
         textExtractor.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         textExtractor.extractTextFromImage()
