@@ -165,14 +165,14 @@ class MainWindow(QMainWindow, QObject):
 
         self.editButton = QPushButton("&Edit", self)
         self.editButton.setCheckable(True)
-        self.editButton.clicked.connect(self.set_edit_mode)
+        self.editButton.clicked.connect(self.setEditMode)
         self.editButton.setFocusPolicy(Qt.NoFocus)
         self.editButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.editButton.setGraphicsEffect(Styles.getShadowEffect())
 
         self.sortButton = QPushButton("&Sort", self)
         self.sortButton.setCheckable(True)
-        self.sortButton.clicked.connect(self.set_sort_mode)
+        self.sortButton.clicked.connect(self.setSortMode)
         self.sortButton.setFocusPolicy(Qt.NoFocus)
         self.sortButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.sortButton.setGraphicsEffect(Styles.getShadowEffect())
@@ -326,7 +326,7 @@ class MainWindow(QMainWindow, QObject):
 
 
         # ========== Start the App with the Sort mode as default ==========
-        self.set_sort_mode()
+        self.setSortMode()
         self.setFocusPolicy(Qt.NoFocus)
         if setCopyModeArg is True:  # --set-copy-mode
             self.setCopyMode()
@@ -455,13 +455,13 @@ class MainWindow(QMainWindow, QObject):
         self.setEditModeAction = QAction("&Set edit mode", self)
         self.setEditModeAction.setShortcut('Ctrl+E')
         self.setEditModeAction.setStatusTip("Sets Edit mode.")
-        self.setEditModeAction.triggered.connect(self.set_edit_mode)
+        self.setEditModeAction.triggered.connect(self.setEditMode)
         self.addAction(self.setEditModeAction)  # Needed to make the shortcut work.
 
         self.setSortModeAction = QAction("&Set sort mode", self)
         self.setSortModeAction.setShortcut('Ctrl+R')
         self.setSortModeAction.setStatusTip("Sets Sort mode.")
-        self.setSortModeAction.triggered.connect(self.set_sort_mode)
+        self.setSortModeAction.triggered.connect(self.setSortMode)
         self.addAction(self.setSortModeAction)  # Needed to make the shortcut work.
 
         # TODO: WIP; experiment / temporal
@@ -720,7 +720,7 @@ class MainWindow(QMainWindow, QObject):
             return
 
     @pyqtSlot()
-    def set_edit_mode(self):
+    def setEditMode(self):
         log.info("Mode Changed to: Edit")
         self.currentMode = Modes.EDIT
         self.editButton.setChecked(True)
@@ -731,7 +731,7 @@ class MainWindow(QMainWindow, QObject):
         self.sortModeHandler.cleanupAndUpdate()
 
     @pyqtSlot()
-    def set_sort_mode(self):
+    def setSortMode(self):
         log.info("Mode Changed to: Sort")
         self.currentMode = Modes.SORT
         self.editButton.setChecked(False)

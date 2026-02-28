@@ -1,18 +1,14 @@
 import logging
-import os
-import pathlib
 from pathlib import Path
 
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize, QRect
-from PyQt5.QtGui import QCursor, QKeyEvent, QMouseEvent
-from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QMessageBox, \
-    QVBoxLayout, QLineEdit
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
+from PyQt5.QtGui import QCursor, QKeyEvent
+from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QVBoxLayout, QLineEdit
 
 from src.GalleryItem import GalleryItem
-from src.ImageWidget import ImageWidget
-from src.VideoWidget import VideoWidget
-from src.TextPreviewWidget import TextPreviewWidget
+from src.preview_containers.ImageWidget import ImageWidget
+from src.preview_containers.VideoWidget import VideoWidget
+from src.preview_containers.TextPreviewWidget import TextPreviewWidget
 from src.Styles import Styles
 
 from src.CropData import CropData

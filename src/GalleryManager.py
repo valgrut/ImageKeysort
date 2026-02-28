@@ -4,13 +4,10 @@ from os.path import isfile, join
 from pathlib import Path
 import logging
 
-from PyQt5 import Qt
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QMimeDatabase, QSize, QRect
-from PyQt5.QtWidgets import QApplication, QFileDialog, QGraphicsDropShadowEffect, QStackedWidget, QRubberBand
-from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
-from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QMimeDatabase
+from PyQt5.QtWidgets import QFileDialog, QGraphicsDropShadowEffect, QStackedWidget
 
-from src.EmptyGalleryWidget import EmptyGalleryImageWidget
+from src.preview_containers.EmptyGalleryWidget import EmptyGalleryImageWidget
 from src.MediaContainerWidget import MediaContainerWidget
 from src.CropData import CropData
 # from Gallery import Gallery
@@ -109,8 +106,8 @@ class GalleryManager(QStackedWidget):
         if not srcPath:
             return
 
-        self._sourceDirectoryPath = srcPath
-        self.mediaContainerWidget.setSourceDirLabelText(self._sourceDirectoryPath)
+        self._sourceDirectoryPath = pathlib.Path(srcPath)
+        self.mediaContainerWidget.setSourceDirLabelText(str(self._sourceDirectoryPath))
         self.loadImagesInDirectory()
 
     def loadImagesInDirectory(self):
@@ -194,7 +191,7 @@ class GalleryManager(QStackedWidget):
         returns true if current file (given by self._currentFileIndex) is a video.
         """
 
-        if str(self._availableMediaFiles[self._currentFileIndex]).endswith(self.videoSuffixes):
+        if str(self._availableMediaFiles[self._currentFileIndex].fileName).endswith(self.videoSuffixes):
             return True
         return False
 

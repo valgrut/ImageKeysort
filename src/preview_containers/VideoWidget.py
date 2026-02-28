@@ -1,4 +1,5 @@
 import logging
+import pathlib
 
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import QDir, Qt, QUrl, QSize, pyqtSlot, QSizeF
@@ -6,6 +7,7 @@ from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget, QGraphicsVideoItem
 from PyQt5.QtWidgets import (QGraphicsScene, QGraphicsView, QApplication, QFileDialog, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget, QStatusBar)
 
+from src.GalleryItem import GalleryItem
 from src.SettingsDialog import SettingsDialog
 from src.Styles import Styles
 
@@ -95,11 +97,11 @@ class VideoWidget(QWidget):
     def stopVideo(self):
         self.mediaPlayer.stop()
 
-    def updateVideo(self, videoPath):
+    def updateVideo(self, videoPath: GalleryItem):
         """
         Load a video file into the player.
         """
-        fileName = videoPath
+        fileName = videoPath.pathAsStr()
 
         if not fileName:
             return

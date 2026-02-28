@@ -5,6 +5,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QPlainTextEdit
 
+from src.GalleryItem import GalleryItem
+
 log = logging.getLogger(__name__)
 
 
@@ -16,8 +18,10 @@ class TextPreviewWidget(QPlainTextEdit):
         self.setFocusPolicy(Qt.StrongFocus)
         self._maxBytes = 10000
 
-    def setTextFile(self, path: str):
+    def setTextFile(self, textFile: GalleryItem):
         bytesToRead = -1  # Default -1 = Read the whole file.
+
+        path = textFile.pathAsStr()
 
         # Prevent app freeze when reading very large text files.
         if Path(path).stat().st_size > self._maxBytes:
