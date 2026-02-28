@@ -1,10 +1,11 @@
 import dataclasses
 from PyQt5.QtCore import QRect, QSize
 
+from src.GalleryItem import GalleryItem
 
-@dataclasses.dataclass(frozen=True)
+
+@dataclasses.dataclass
 class CropData:
-    imageName: str
-    imageSrcPath: str
+    imageData: GalleryItem
     cropRectangle: QRect
     originalImageSize: QSize

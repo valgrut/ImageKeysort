@@ -4,48 +4,48 @@ import os
 from PyQt5.QtWidgets import QUndoCommand
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 
-# TODO:
+from src.GalleryItem import GalleryItem
+from src.file_operations.ImageCropService import ImageCropService
+
+# TODO - utilize computer's trash instead of custom __delete__ directory:
 # from send2trash import send2trash
 # send2trash(str(p))
-
-# TODO: Vsak tady muzu import Crop Classu, ktera vezme srcpath a img_name a cropRect a udelat kyzene zmeny proste. LOL.
 
 
 class CropImageCommand(QUndoCommand):
 
     CMD_ID = 1001
 
-    def __init__(self, image, imageSrcPath, cropRectangle, originalImageSize):
+    def __init__(self, imageData: GalleryItem, cropRectangle: QRect, originalImageSize: QSize):
         super().__init__()
-        self.imageName = image
-        self.imageSrcPath = imageSrcPath
+        self.imageData: GalleryItem = imageData
         self.cropRectangle: QRect = cropRectangle
         self.originalImageSize: QSize = originalImageSize
-    
 
     def id(self) -> int:
         return self.CMD_ID
 
+    def mergeWith(self, otherCommand: QUndoCommand) -> bool:
+        # TODO: Recalculate the crop rectangle of the cropped image to correspond to its original size, not the cropped one.
+        #   (in case of recropping the same picture multiple times)
+        # _globStartX = existingCommand.cropRectangle.height() + command.cropRectangle.height()
+        # _globStartY = existingCommand.cropRectangle.width() + command.cropRectangle.width()
+        # _globEndX = min(existingCommand.cropRectangle.width(), command.cropRectangle.width())
+        # _globEndY = max(existingCommand.cropRectangle.height(), command.cropRectangle.height())
+        # existingCommand.cropRectangle = QRect(QPoint(_globStartX, _globStartY), QPoint(_globEndX, _globEndY))
 
-    def mergeWith(self, other) -> bool:
-        if not isinstance(other, CropImageCommand):
-            return False
-        if self.imageSrcPath != other.imageSrcPath:
-            return False
+        print(f"CHECK: {self.cropRectangle} updated to {otherCommand.cropRectangle}")
 
-        # update stored state
-        self.cropRectangle = QRect(other.cropRectangle)
-        self.originalImageSize = QSize(other.originalImageSize)
-
-        # Optional but often useful: make redo idempotent and re-apply:
-        # self.redo()
+        # update stored crop data
+        self.cropRectangle = QRect(otherCommand.cropRectangle)
+        self.originalImageSize = QSize(otherCommand.originalImageSize)
 
         return True
 
-
     def execute(self):
-        pass
-        #self.image.crop(self.crop_rectangle)
+        print("Execute")
+        cropService = ImageCropService()
+        cropService.crop(self.imageData.pathAsStr(), self.cropRectangle)
 
     def undo(self):
         # 1. Check, that original image still exists in the __deleted__ directory

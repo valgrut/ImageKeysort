@@ -1,5 +1,6 @@
 import logging
 import os
+import pathlib
 from pathlib import Path
 
 from PyQt5 import QtGui, QtCore
@@ -8,6 +9,7 @@ from PyQt5.QtGui import QCursor, QKeyEvent, QMouseEvent
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QMessageBox, \
     QVBoxLayout, QLineEdit
 
+from src.GalleryItem import GalleryItem
 from src.ImageWidget import ImageWidget
 from src.VideoWidget import VideoWidget
 from src.TextPreviewWidget import TextPreviewWidget
@@ -30,7 +32,7 @@ log = logging.getLogger(__name__)
 
 class MediaContainerWidget(QWidget):
 
-    pushCropCommandRequestCommand = pyqtSignal(CropData)
+    requestImageCropSignal = pyqtSignal(CropData)
     repeatCropCommandSignal = pyqtSignal(QSize, QRect)
     rotateImageSignal = pyqtSignal()
 
@@ -116,7 +118,7 @@ class MediaContainerWidget(QWidget):
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
         # Connect signals
-        self.imageViewWidget.pushCropCommandRequestCommand.connect(self.pushCropCommandRequestCommand)  # Re-emit signal
+        self.imageViewWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
         self.repeatCropCommandSignal.connect(self.imageViewWidget.repeatCropCommandSlot)
         self.rotateImageSignal.connect(self.imageViewWidget.rotateImage)
         
@@ -235,15 +237,15 @@ class MediaContainerWidget(QWidget):
     def updateFilenameLabelText(self, text):
         self.imageFilenameLabel.setText(text)
 
-
+    # TODO: Prejmenovat na update, nebo ty 2 metody vyse na set?
     def setSourceDirLabelText(self, path: str):
         self.sourceDirLabel.setText(path)
 
-    def updateVideo(self, videoPath):
-        self.videoViewWidget.updateVideo(videoPath)
+    def updateVideo(self, mediaFile: GalleryItem):
+        self.videoViewWidget.updateVideo(mediaFile)
 
-    def updatePreviewImage(self, path):
-        self.imageViewWidget.updateImage(path)
+    def updatePreviewImage(self, mediaFile: GalleryItem):
+        self.imageViewWidget.updateImage(mediaFile)
     
-    def updateTextFile(self, path: str):
-        self.textPreviewWidget.setTextFile(path)
+    def updateTextFile(self, mediaFile: GalleryItem):
+        self.textPreviewWidget.setTextFile(mediaFile)

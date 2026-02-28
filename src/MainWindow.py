@@ -73,6 +73,9 @@ log = logging.getLogger(__name__)
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow, QObject):
+    """
+    [Composition root]
+    """
 
     previousImageRequestedSignal = pyqtSignal()
     nextImageRequestedSignal = pyqtSignal()
@@ -316,7 +319,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.dropChangesTreeButton.clicked.connect(self.dropChangesAction.activate)
 
-        self.galleryManager.pushCropCommandRequestCommand.connect(self.pushOrUpdateCommand)
+        self.galleryManager.requestImageCropSignal.connect(self.createAndExecuteCropCommand)
         self.repeatCropCommandSignal.connect(self.galleryManager.repeatCropCommandSignal)
 
 
@@ -499,31 +502,18 @@ class MainWindow(QMainWindow, QObject):
         return self.commandsStack
 
 
-    def pushOrUpdateCommand(self, command: CropData):
-        """        
-        Push a new crop command into the command stack or update the existing command if it belongs to the same image.
+    def createAndExecuteCropCommand(self, commandCropData: CropData):
         """
-        
-        # TODO: Refactor this. I say this method is pushOrUpdate, but actual update happens in the commandsStack.push() method.
-        #   Move whole thing into the commandsStack.
+        Push a new crop command into the command stack or update the existing command if it belongs to the same image.
 
-        lastCommand = self.commandsStack.top()
-        newCommand = None
+        Then perform the Crop.
+        """
+        cropCommand = CropImageCommand(commandCropData.imageData, commandCropData.cropRectangle, commandCropData.originalImageSize)
+        pushed = self.commandsStack.push(cropCommand)
+        self.commandsStack.execute(pushed)
 
-        if lastCommand is not None and lastCommand.imageName == command.imageName:
-            log.info(">>> Editing the last command in the stack.")
-            newCommand = CropImageCommand(lastCommand.imageName, lastCommand.imageSrcPath, command.cropRectangle, lastCommand.originalImageSize)
-            # TODO: This will not work since it is just my implementation of the QUndoStack.
-        else:
-            log.info(">>> Pushing new command into the stack.")
-            newCommand = CropImageCommand(command.imageName, command.imageSrcPath, command.cropRectangle, command.originalImageSize)
-        
-        self.commandsStack.push(newCommand)
-
-        # Check output:
-        # lastCommand = self.commandsStack.top()
-        # print("LastCommand Data:", lastCommand.imageName, lastCommand.imageSrcPath, lastCommand.cropRectangle, lastCommand.originalImageSize)
-
+        # self.updateMediaPreviewSignal.emit()  # TODO maybe rename to redrawMediaPreview().
+        self.galleryManager.updatePreview()
 
     def undoCommand(self):
         """

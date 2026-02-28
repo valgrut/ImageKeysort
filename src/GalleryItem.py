@@ -15,19 +15,19 @@ class GalleryItem:
     fileName: str
     sourcePath: pathlib.Path
 
-    def asStr(self) -> str:
+    def pathAsStr(self) -> str:
         """
         Return full path as a string.
         :return:
         """
         return str(self.sourcePath / pathlib.Path(self.fileName))
 
-    def asPath(self) -> pathlib.Path:
+    def pathAsPath(self) -> pathlib.Path:
         """
         Return full path as a pathlib.Path.
         :return:
         """
         return self.sourcePath / pathlib.Path(self.fileName)
 
-    def __repr__(self):
-        return f'{self.fileName}'
+    # def __repr__(self):
+    #     return f'{self.fileName}'

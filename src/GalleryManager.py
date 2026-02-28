@@ -29,7 +29,7 @@ class GalleryManager(QStackedWidget):
     enableCropButtonSignal = pyqtSignal()
     setFilenameTextEditSignal = pyqtSignal()
     updateStatusBarLabelSignal = pyqtSignal(str)
-    pushCropCommandRequestCommand = pyqtSignal(CropData)
+    requestImageCropSignal = pyqtSignal(CropData)
     repeatCropCommandSignal = pyqtSignal(QSize, QRect)
     rotateImageSignal = pyqtSignal()
 
@@ -76,7 +76,7 @@ class GalleryManager(QStackedWidget):
         self.setCurrentIndex(self.EMPTY_INBOX_WIDGET)
         # log.info(f"[INIT] mediaContainerWidget: {id(self.mediaContainerWidget)}")
 
-        self.mediaContainerWidget.pushCropCommandRequestCommand.connect(self.pushCropCommandRequestCommand)  # Re-emit signal
+        self.mediaContainerWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
         self.mainWindow.updateMediaPreviewSignal.connect(self.updatePreview)
         self.mainWindow.repeatCropCommandSignal.connect(self.mediaContainerWidget.repeatCropCommandSignal)
         # self.rotateImageSignal.connect(self.mediaContainerWidget.rotateImageSignal)
@@ -244,16 +244,6 @@ class GalleryManager(QStackedWidget):
 
         return self.getCurrentGalleryItem().fileName
 
-    # def getCurrentFullFilename(self) -> str:
-    #     """
-    #     Returns just the string representation of the current file without its path.
-    #     :return: current file's path + filename
-    #     """
-    #     if not self.isGalleryEmpty():
-    #         currentFile = self.getCurrentGalleryItem()
-    #         return currentFile.asStr()
-    #     return ""
-
     def updateCounterLabelText(self):
         self.mediaContainerWidget.updateCounterLabelText(self.getCounterString())
 
@@ -273,36 +263,31 @@ class GalleryManager(QStackedWidget):
         # if ext == ".pdf":
         # if .......
 
-        if self.isCurrentVideo():
-            # It is playable
-            self.setCurrentWidget(self.mediaContainerWidget)
-            self.mediaContainerWidget.setVideoWidget()
+        # Common operations for all types of file
+        currentFile = self.getCurrentGalleryItem()
 
-            videoPath = self.getCurrentGalleryItem().asStr()
-            self.mediaContainerWidget.updateVideo(videoPath)  # Mozna spis prejmenovat na showVideo()
+        self.setCurrentWidget(self.mediaContainerWidget)
+
+        # TODO: Refactor - prakticky se vsechny 3 opakuji, jen prvne nastavim VideoWidget, pak TextWidget...
+        # Specific operations by the file type
+        if self.isCurrentVideo():
+            self.mediaContainerWidget.setVideoWidget()
+            self.mediaContainerWidget.updateVideo(currentFile)  # Mozna spis prejmenovat na showVideo()
             self.disableExtractTextButtonSignal.emit()
             self.enableCropButtonSignal.emit()
 
-        #elif self.getCurrentFilename().lower().endswith(self.textSuffixes):
         elif self.isCurrentTextFile():
-            # It is text file
-            self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setTextWidget()
-
-            textFilePath = self.getCurrentGalleryItem().asStr()
-            self.mediaContainerWidget.updateTextFile(textFilePath)
+            self.mediaContainerWidget.updateTextFile(currentFile)
             self.disableExtractTextButtonSignal.emit()
             self.disableCropButtonSignal.emit()
 
         else:
             # It is image
-            self.setCurrentWidget(self.mediaContainerWidget)
             self.mediaContainerWidget.setImageWidget()
+            self.mediaContainerWidget.updatePreviewImage(currentFile)  # Mozna spis prejmenovat na showImage()
             self.enableExtractTextButtonSignal.emit()
             self.enableCropButtonSignal.emit()
-
-            imagePath = self.getCurrentGalleryItem().asStr()
-            self.mediaContainerWidget.updatePreviewImage(imagePath)  # Mozna spis prejmenovat na showImage()
 
         self.updateFilenameLabelText()  # TODO: sig-slots
         self.updateCounterLabelText()  # TODO: sig-slots
@@ -314,6 +299,7 @@ class GalleryManager(QStackedWidget):
         counter: str = str(self._currentFileIndex + 1) + "/" + str(len(self._availableMediaFiles))
         return counter
 
+    # TODO: Update to ImgDataObj version:
     def addFile(self, fileName: str, positionIndex:int=0):
         self._availableMediaFiles.insert(positionIndex, fileName)
 
@@ -344,7 +330,7 @@ class GalleryManager(QStackedWidget):
 
         originalFilename = self.getCurrentFilename()
 
-        originalFullPath = currentGalleryItem.asPath()
+        originalFullPath = currentGalleryItem.pathAsPath()
         newFullPath = self.getSourcePath() / Path(newFileName)
 
         log.info(f"Original full path: {originalFullPath}")

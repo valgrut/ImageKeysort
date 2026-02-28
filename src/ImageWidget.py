@@ -8,10 +8,9 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 from PyQt5.QtGui import QPixmap, QTransform, QPainter, QPen
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
-from src.CropUtils import CropUtils
 # from CropImageCommand import CropImageCommand
 from src.CropData import CropData
-
+from src.GalleryItem import GalleryItem
 
 log = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ class ImageWidget(QWidget):
     No other operations over Images should be there (like extracting text and so on)
     """
 
-    pushCropCommandRequestCommand = pyqtSignal(CropData)
+    requestImageCropSignal = pyqtSignal(CropData)
 
     def __init__(self):
         super().__init__()
@@ -33,9 +32,9 @@ class ImageWidget(QWidget):
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setScaledContents(False)
 
-        self.currentImgPath = ""
-        self.pixmap = QPixmap()
-        self.label.setPixmap(self.pixmap)
+        self._imageData: GalleryItem = None
+        self._pixmap = QPixmap()
+        self.label.setPixmap(self._pixmap)
 
         # Coords for the image Crop
         self._pixmapCursorStartPosition = None
@@ -51,30 +50,31 @@ class ImageWidget(QWidget):
         self.setMouseTracking(True)
         self.label.setMouseTracking(True)  # Needed for mouseMoveEvent to be called without pressing any button.
 
+        self._showMouseGuideLines = True
+
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
 
 
-    def updateImage(self, img_path):
+    def updateImage(self, imageData: GalleryItem):
         # TODO: Use cache?
-        self.pixmap.load(img_path)
-        self.currentImgPath = img_path
+        self._imageData = imageData
+        self._pixmap.load(imageData.pathAsStr())
         self.updateScaledPixmap()
-
 
     def resizeEvent(self, event):
         self.updateScaledPixmap()
         super().resizeEvent(event)
 
-
     def updateScaledPixmap(self):
-        if self.pixmap:
-            scaledPixmap = self.pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        if self._pixmap:
+            scaledPixmap = self._pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label.setPixmap(scaledPixmap)
 
+    # TODO: Refactor this OUT!.
     def rotateImage(self):
-        if not self.pixmap:
+        if not self._pixmap:
             print("Pixmap does not exist, cannot rotate.")
             return
         
@@ -95,12 +95,12 @@ class ImageWidget(QWidget):
             shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
         
         # Rotate image
-        rotatedPixmap: QPixmap = self.pixmap.transformed(QTransform().rotate(90));
-        self.pixmap.swap(rotatedPixmap)
+        rotatedPixmap: QPixmap = self._pixmap.transformed(QTransform().rotate(90));
+        self._pixmap.swap(rotatedPixmap)
         self.label.setPixmap(rotatedPixmap)
 
         # Save rotated pixmap back int the file. Overrides original image file!
-        self.pixmap.save(self.currentImgPath)
+        self._pixmap.save(self.currentImgPath)
 
         # Save rotation as new Command to be undoable
         # TODO:
@@ -197,8 +197,8 @@ class ImageWidget(QWidget):
         
         """
         # Gather facts about label area and current pixmap's area (both original and scaled)
-        pixmapWidth = self.pixmap.rect().width()
-        pixmapHeight = self.pixmap.rect().height()
+        pixmapWidth = self._pixmap.rect().width()
+        pixmapHeight = self._pixmap.rect().height()
         scaledPixmapWidth = self.label.pixmap().rect().width()
         scaledPixmapHeight = self.label.pixmap().rect().height()
 
@@ -248,7 +248,7 @@ class ImageWidget(QWidget):
         # TODO: move elsewhere??? Maybe into GalleryManager, because I want this to use also on Videos...
         # TODO: V1: QRubberBand nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
         # TODO: Logika croppingu by mela byt separatni uplne pryc, jako TextExtraction.
-        # A mouseEvent handling a rubberband drawing presunout do toho GalleryManager asi,
+        # TODO: A mouseEvent handling a rubberband drawing presunout do toho GalleryManager asi,
         # abych to pak mohl pouzit i pro videa.
 
         self._dragging = True
@@ -302,7 +302,7 @@ class ImageWidget(QWidget):
         # Draw cross line to indicate boundaries of the start of the crop area relative to cursor
         # - [ ] TODO: enable/disable by clicking to the crop button
         pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(event.pos())
-        px = self.pixmap.copy()
+        px = self._pixmap.copy()
         scaledTmpPixmap = px.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         painter = QPainter(scaledTmpPixmap)
         painter.setPen(QPen(Qt.red, 1, Qt.DashLine))
@@ -311,13 +311,15 @@ class ImageWidget(QWidget):
         painter.end()
         self.label.setPixmap(scaledTmpPixmap)
 
+
     def leaveEvent(self, a0):
         self.updateScaledPixmap()  # Draw original image back when cursor leaves the widget area.
         return super().leaveEvent(a0)
 
+
     def mouseReleaseEvent(self, event):
         self._dragging = False
-        
+
         # Calculate final positions based on the rubberBand coords (not dependent on the drag direction)
         # The calculation takes into account the augmented start and end rubber coords, so all directions are handled.
         self._pixmapCursorStartPosition: QPoint = self._transformPositionFromGlobalToPixmap(self._startingRubberPoint)
@@ -345,58 +347,17 @@ class ImageWidget(QWidget):
             super().mouseReleaseEvent(event)
             return
 
-        # Prepare useful paths and names
-        currentFilePath = pathlib.Path(self.currentImgPath)
-        currentFileNameNoExt = currentFilePath.stem
-        currentSrcDirPath = currentFilePath.parent
-        extension = currentFilePath.suffix
-        currentFile = currentFilePath.name
-        
-        print(f"Source dir: {currentSrcDirPath}")
-        print(f"Full path: {currentFilePath}")
-        print(f"File name: {currentFile}")
-        print(f"File without ext: {currentFileNameNoExt}")
-        print(f"Extension: {extension}")
-        print(f"Image size: {self.pixmap.size()} and {self.label.pixmap().size()} and {self.label.size()}")
-
-        originalPixmapSize = self.pixmap.size()
-
-        # Backup original image
-        #   Move original image into trash, so It can be recovered with Undo operation.
-        #   Only original image is moved there.
-        #   In case of multiple crops of the current image, original wont be overriden and therefore lost.
-        trashDir = pathlib.Path(currentSrcDirPath) / "__DELETED__"
-        trashDir.mkdir(exist_ok=True)
-        if not pathlib.Path(trashDir, currentFile).is_file():
-            shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
-
-        # TODO: Check that QRect je podmnozina image.rect()
-
-        # Crop original image and save update the preview
-        croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)  # Tohle je to, co se pouzije pri repeatCrop() - pouze pixmap a cropAreaRect.
-        self.pixmap.swap(croppedPixmap)
-        self.updateScaledPixmap()
-
-        # Variant 1 - create cropped image with different name than original
-        # croppedFileName = pathlib.Path(currentSrcDirPath / (currentFileNameNoExt + "_cropped" + extension))
-        # print(f"Cropped file name: {croppedFileName}")
-        # self.pixmap.save(str(croppedFileName))  # Save with different name, keep original.
-
-        # Variant 2 - Override original file with the cropped one
-        self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
-
-        # Recalculate the cropAreaRect to be relative to the original image, not the already cropped one.
-
+        # Harvest crop data and send them for processing
         cropData = CropData(
-            imageName = currentFile,
-            imageSrcPath = str(currentSrcDirPath),
-            cropRectangle = cropAreaRect,
-            originalImageSize = originalPixmapSize
+            imageData=self._imageData,
+            cropRectangle=cropAreaRect,
+            originalImageSize=self._pixmap.size()
         )
-        self.pushCropCommandRequestCommand.emit(cropData)
+
+        self.requestImageCropSignal.emit(cropData)
         log.info(f"Image Widget: CropData emitted: {cropData}")
 
-        # Clear variables and prepare for next cropping and rubberBand drawing
+        # Clean-up variables and prepare for next cropping and rubberBand drawing
         self._pixmapCursorStartPosition = None
         self._pixmapCursorEndPosition = None
 
@@ -405,7 +366,6 @@ class ImageWidget(QWidget):
 
         self.rubberBand.hide()
         self.rubberBand = None
-
         super().mouseReleaseEvent(event)
 
 
@@ -414,11 +374,11 @@ class ImageWidget(QWidget):
         cropAreaRect = cropRect
         
         # Enable crop repetition only if original and current image's size is equal.
-        if sizeOfBaseImage != self.pixmap.size():
-            log.warning(f"Cannot repeat crop operation, because size of the base image is different! Original: {sizeOfBaseImage}, current: {self.pixmap.size()}")
+        if sizeOfBaseImage != self._pixmap.size():
+            log.warning(f"Cannot repeat crop operation, because size of the base image is different! Original: {sizeOfBaseImage}, current: {self._pixmap.size()}")
             return
         
-        originalPixmapSize = self.pixmap.size()
+        originalPixmapSize = self._pixmap.size()
 
         log.info(f"repeatCropCommandSlot called with sizeOfBaseImage: {sizeOfBaseImage}, cropRect: {cropRect}")
 
@@ -447,8 +407,8 @@ class ImageWidget(QWidget):
         # TODO: Check that QRect je podmnozina image.rect()
 
         # Crop original image and save update the preview
-        croppedPixmap: QPixmap = self.pixmap.copy(cropAreaRect)  # Tohle je to, co se pouzije pri repeatCrop() - pouze pixmap a cropAreaRect.
-        self.pixmap.swap(croppedPixmap)
+        croppedPixmap: QPixmap = self._pixmap.copy(cropAreaRect)  # Tohle je to, co se pouzije pri repeatCrop() - pouze pixmap a cropAreaRect.
+        self._pixmap.swap(croppedPixmap)
         self.updateScaledPixmap()
 
         # Variant 1 - create cropped image with different name than original
@@ -457,7 +417,7 @@ class ImageWidget(QWidget):
         # self.pixmap.save(str(croppedFileName))  # Save with different name, keep original.
 
         # Variant 2 - Override original file with the cropped one
-        self.pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
+        self._pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
 
         cropData = CropData(
             imageName = currentFile,
@@ -465,7 +425,7 @@ class ImageWidget(QWidget):
             cropRectangle = cropAreaRect,
             originalImageSize = originalPixmapSize
         )
-        self.pushCropCommandRequestCommand.emit(cropData)
+        self.requestImageCropSignal.emit(cropData)
         log.info(f"Image Widget: CropData emitted: {cropData}")
 
 
