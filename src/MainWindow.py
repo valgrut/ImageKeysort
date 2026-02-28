@@ -27,7 +27,7 @@ from PyQt5.QtWidgets import (
     QUndoCommand,
     QTabWidget
 )
-from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon
+from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon, QPixmap
 
 # pip3 install pyqt5
 # pip3 install keyboard
@@ -82,7 +82,7 @@ class MainWindow(QMainWindow, QObject):
     firstImageRequestedSignal = pyqtSignal()
     lastImageRequestedSignal = pyqtSignal()
     updateMediaPreviewSignal = pyqtSignal()
-    repeatCropCommandSignal = pyqtSignal(QSize, QRect)
+    repeatCropCommandSignal = pyqtSignal()
 
     def __init__(self, parent=None, args=None):
         super().__init__(parent)
@@ -320,7 +320,7 @@ class MainWindow(QMainWindow, QObject):
         self.dropChangesTreeButton.clicked.connect(self.dropChangesAction.activate)
 
         self.galleryManager.requestImageCropSignal.connect(self.createAndExecuteCropCommand)
-        self.repeatCropCommandSignal.connect(self.galleryManager.repeatCropCommandSignal)
+        self.repeatCropCommandSignal.connect(self.reuseLastCropCommand)
 
 
         # ========== Apply the provided CLI options, if any ==========
@@ -494,7 +494,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.repeatCommandOnStack = QAction("&Repeat Command operation on stack", self)
         self.repeatCommandOnStack.setShortcut('Ctrl+Shift+R')  # TODO: Maybe change shortcut to something else.
-        self.repeatCommandOnStack.triggered.connect(self.reuseCommand)
+        self.repeatCommandOnStack.triggered.connect(self.reuseLastCropCommand)
         self.addAction(self.repeatCommandOnStack)
 
 
@@ -527,18 +527,36 @@ class MainWindow(QMainWindow, QObject):
         # Update image preview after undoing the crop command.
         self.galleryManager.updatePreview()
 
-
-    def reuseCommand(self):
+    def reuseLastCropCommand(self):
         """
         Enable reuse only if the current image has the same original size as the last command on the stack.
         For the Reuse, last command is used, not any command.
         """
         log.info("Repeat command from stack on current image.")
 
-        lastCommand = self.commandsStack.top()
-        if lastCommand is not None:
-            log.info(f"RepeatCropCommand emitted! Sending: {lastCommand.originalImageSize} and {lastCommand.cropRectangle}")
-            self.repeatCropCommandSignal.emit(lastCommand.originalImageSize, lastCommand.cropRectangle)
+        currentFile = self.galleryManager.getCurrentGalleryItem()
+        filename = currentFile
+        pixmapSize = QPixmap(currentFile.pathAsStr()).size()
+
+        lastCropCommand = self.commandsStack.top()
+        if not lastCropCommand:
+            log.info("There are no commands to repeat.")
+            return
+
+        if lastCropCommand.originalImageSize != pixmapSize:
+            log.info("Source image's original size and size of current image's size does not match.")
+            return
+
+        cropData = CropData(
+            imageData=currentFile,
+            cropRectangle=lastCropCommand.cropRectangle,
+            originalImageSize=lastCropCommand.originalImageSize
+        )
+
+        log.info(f"RepeatCropCommand emitted! Sending: {lastCropCommand.originalImageSize} and {lastCropCommand.cropRectangle}")
+        self.createAndExecuteCropCommand(cropData)
+
+        log.info(f"Crop repeat successful.")
 
 
     def selectTagFromDialog(self):

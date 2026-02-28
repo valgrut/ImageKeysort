@@ -33,7 +33,6 @@ log = logging.getLogger(__name__)
 class MediaContainerWidget(QWidget):
 
     requestImageCropSignal = pyqtSignal(CropData)
-    repeatCropCommandSignal = pyqtSignal(QSize, QRect)
     rotateImageSignal = pyqtSignal()
 
     def __init__(self, galleryManager):
@@ -119,7 +118,6 @@ class MediaContainerWidget(QWidget):
 
         # Connect signals
         self.imageViewWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
-        self.repeatCropCommandSignal.connect(self.imageViewWidget.repeatCropCommandSlot)
         self.rotateImageSignal.connect(self.imageViewWidget.rotateImage)
         
 

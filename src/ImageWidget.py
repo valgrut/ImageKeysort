@@ -369,66 +369,6 @@ class ImageWidget(QWidget):
         super().mouseReleaseEvent(event)
 
 
-    @pyqtSlot(QSize, QRect)
-    def repeatCropCommandSlot(self, sizeOfBaseImage: QSize, cropRect: QRect):
-        cropAreaRect = cropRect
-        
-        # Enable crop repetition only if original and current image's size is equal.
-        if sizeOfBaseImage != self._pixmap.size():
-            log.warning(f"Cannot repeat crop operation, because size of the base image is different! Original: {sizeOfBaseImage}, current: {self._pixmap.size()}")
-            return
-        
-        originalPixmapSize = self._pixmap.size()
-
-        log.info(f"repeatCropCommandSlot called with sizeOfBaseImage: {sizeOfBaseImage}, cropRect: {cropRect}")
-
-        # Prepare useful paths and names
-        currentFilePath = pathlib.Path(self.currentImgPath)
-        currentFileNameNoExt = currentFilePath.stem
-        currentSrcDirPath = currentFilePath.parent
-        extension = currentFilePath.suffix
-        currentFile = currentFilePath.name
-
-        print(f"Source dir: {currentSrcDirPath}")
-        print(f"Full path: {currentFilePath}")
-        print(f"File name: {currentFile}")
-        print(f"File without ext: {currentFileNameNoExt}")
-        print(f"Extension: {extension}")
-
-        # Backup original image
-        #   Move original image into trash, so It can be recovered with Undo operation.
-        #   Only original image is moved there.
-        #   In case of multiple crops of the current image, original wont be overriden and therefore lost.
-        trashDir = pathlib.Path(currentSrcDirPath) / "__DELETED__"
-        trashDir.mkdir(exist_ok=True)
-        if not pathlib.Path(trashDir, currentFile).is_file():
-            shutil.copy2(currentFilePath, pathlib.Path(trashDir, currentFile))
-
-        # TODO: Check that QRect je podmnozina image.rect()
-
-        # Crop original image and save update the preview
-        croppedPixmap: QPixmap = self._pixmap.copy(cropAreaRect)  # Tohle je to, co se pouzije pri repeatCrop() - pouze pixmap a cropAreaRect.
-        self._pixmap.swap(croppedPixmap)
-        self.updateScaledPixmap()
-
-        # Variant 1 - create cropped image with different name than original
-        # croppedFileName = pathlib.Path(currentSrcDirPath / (currentFileNameNoExt + "_cropped" + extension))
-        # print(f"Cropped file name: {croppedFileName}")
-        # self.pixmap.save(str(croppedFileName))  # Save with different name, keep original.
-
-        # Variant 2 - Override original file with the cropped one
-        self._pixmap.save(self.currentImgPath)  # Override the image. WORKING! ... Dangerous !!! Must implement UndoCrop().
-
-        cropData = CropData(
-            imageName = currentFile,
-            imageSrcPath = str(currentSrcDirPath),
-            cropRectangle = cropAreaRect,
-            originalImageSize = originalPixmapSize
-        )
-        self.requestImageCropSignal.emit(cropData)
-        log.info(f"Image Widget: CropData emitted: {cropData}")
-
-
     # TODO: WIP: Does not work. Event is not registered. It is caught by SortModeHandler instead.
     def keyPressEvent(self, event):
         """

@@ -39,7 +39,7 @@ class CropImageCommand(QUndoCommand):
 
         # update stored crop data
         self.cropRectangle = QRect(otherCommand.cropRectangle)
-        self.originalImageSize = QSize(otherCommand.originalImageSize)
+        # self.originalImageSize = QSize(otherCommand.originalImageSize)
 
 
     def execute(self):

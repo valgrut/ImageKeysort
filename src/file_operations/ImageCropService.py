@@ -2,7 +2,7 @@ import logging
 import pathlib
 import shutil
 
-from PyQt5.QtCore import QRect
+from PyQt5.QtCore import QRect, QSize
 from PyQt5.QtGui import QPixmap
 
 log = logging.getLogger(__name__)
@@ -50,3 +50,8 @@ class ImageCropService:
 
         # Override original file with the cropped one in current directory
         croppedPixmap.save(imageUri)
+
+    @staticmethod
+    def getOriginalPixmapSize(imageUri: str) -> QSize:
+        pixmap = QPixmap(imageUri)
+        return pixmap.size()

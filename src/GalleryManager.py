@@ -30,7 +30,6 @@ class GalleryManager(QStackedWidget):
     setFilenameTextEditSignal = pyqtSignal()
     updateStatusBarLabelSignal = pyqtSignal(str)
     requestImageCropSignal = pyqtSignal(CropData)
-    repeatCropCommandSignal = pyqtSignal(QSize, QRect)
     rotateImageSignal = pyqtSignal()
 
 
@@ -78,7 +77,6 @@ class GalleryManager(QStackedWidget):
 
         self.mediaContainerWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
         self.mainWindow.updateMediaPreviewSignal.connect(self.updatePreview)
-        self.mainWindow.repeatCropCommandSignal.connect(self.mediaContainerWidget.repeatCropCommandSignal)
         # self.rotateImageSignal.connect(self.mediaContainerWidget.rotateImageSignal)
 
     # TODO: future feature.
@@ -136,10 +134,6 @@ class GalleryManager(QStackedWidget):
             newGalleryItem = GalleryItem(fileName=mediaItem, sourcePath=self._sourceDirectoryPath)
             self._availableMediaFiles.append(newGalleryItem)
 
-        # self._availableMediaFiles = [
-        #     f for f in listdir(self._sourceDirectoryPath)
-        #     if isfile(join(self._sourceDirectoryPath, f)) and (f.lower().endswith(self.allowedSuffixes) or self.isCurrentTextFile(join(self._sourceDirectoryPath, f)))
-        # ]
         self._availableMediaFiles.sort()
         self._currentFileIndex = 0
         self.updatePreview()  # TODO
