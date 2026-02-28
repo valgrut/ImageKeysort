@@ -83,6 +83,7 @@ class MainWindow(QMainWindow, QObject):
     lastImageRequestedSignal = pyqtSignal()
     updateMediaPreviewSignal = pyqtSignal()
     repeatCropCommandSignal = pyqtSignal()
+    setEnabledCursorGuidelinesSignal = pyqtSignal(bool)
 
     def __init__(self, parent=None, args=None):
         super().__init__(parent)
@@ -263,9 +264,10 @@ class MainWindow(QMainWindow, QObject):
         self.buttonCropImageAction.setStatusTip("Crop current image.")
         # buttonCropImageAction.triggered.connect(self.toolbar_button_clicked)
         self.buttonCropImageAction.setCheckable(True)
+        self.buttonCropImageAction.setChecked(False)
         self.buttonCropImageAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
         self.buttonCropImageAction.setDisabled(True)
-        # self.buttonCropImageAction.triggered.connect(self.toggleCropImage)
+        self.buttonCropImageAction.triggered.connect(self.toggleCropImage)
         self.toolbar.addAction(self.buttonCropImageAction)
 
         self.buttonRotateImageAction = QAction(QIcon("Resources/arrow-circle-right.png"), "Rotate image right", self)
@@ -322,6 +324,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.galleryManager.requestImageCropSignal.connect(self.createAndExecuteCropCommand)
         self.repeatCropCommandSignal.connect(self.reuseLastCropCommand)
+        self.setEnabledCursorGuidelinesSignal.connect(self.galleryManager.setEnabledCursorGuidelinesSignal)
 
 
         # ========== Apply the provided CLI options, if any ==========
@@ -688,13 +691,15 @@ class MainWindow(QMainWindow, QObject):
         self.shortcutManager.clearShortcuts()
         self.treeViewWidget.update_tree_view() # TODO: emit signal?  Mozna nahradit toto volani za emit signalu pro update_tree_viw()
 
-    # def toggleCropImage(self):
-    #     if self.buttonCropImageAction.isEnabled():
-    #         self.buttonCropImageAction.setDisabled(True)
-    #         return
-    #     if self.buttonCropImageAction.isEnabled() is False:
-    #         self.buttonCropImageAction.setDisabled(False)
-    #         return
+    def toggleCropImage(self):
+        if self.buttonCropImageAction.isChecked():
+            self.buttonCropImageAction.setChecked(True)
+            self.setEnabledCursorGuidelinesSignal.emit(False)
+            return
+        if self.buttonCropImageAction.isChecked() is False:
+            self.buttonCropImageAction.setChecked(False)
+            self.setEnabledCursorGuidelinesSignal.emit(True)
+            return
 
     def setCopyMode(self):
         log.info("Toggle Copy mode ON.")

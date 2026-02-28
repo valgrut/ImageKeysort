@@ -42,7 +42,7 @@ class ImageWidget(QWidget):
 
         self._dragging = False
         
-        self.rubberBand = None  # QRubberBand(QRubberBand.Rectangle, self.label)
+        self.rubberBand = None
         self.setMouseTracking(True)
         self.label.setMouseTracking(True)  # Needed for mouseMoveEvent to be called without pressing any button.
 
@@ -72,6 +72,11 @@ class ImageWidget(QWidget):
     #     if self.pixmap:
     #         return self.pixmap.size()
     #     return None
+
+    @pyqtSlot(bool)
+    def setMouseGuidelines(self, enabled: bool):
+        self._showMouseGuideLines = enabled
+        print(self._showMouseGuideLines)
 
     @staticmethod
     def clamp(n, min, max):
@@ -252,15 +257,16 @@ class ImageWidget(QWidget):
         
         # Draw cross line to indicate boundaries of the start of the crop area relative to cursor
         # - [ ] TODO: enable/disable by clicking to the crop button
-        pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(event.pos())
-        px = self._pixmap.copy()
-        scaledTmpPixmap = px.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        painter = QPainter(scaledTmpPixmap)
-        painter.setPen(QPen(Qt.red, 1, Qt.DashLine))
-        painter.drawLine(pixmapCursorEndPosition.x()-10, 0, pixmapCursorEndPosition.x()-10, self.label.height())
-        painter.drawLine(0, pixmapCursorEndPosition.y()-10, self.label.width(), pixmapCursorEndPosition.y()-10)
-        painter.end()
-        self.label.setPixmap(scaledTmpPixmap)
+        if self._showMouseGuideLines:
+            pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(event.pos())
+            px = self._pixmap.copy()
+            scaledTmpPixmap = px.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            painter = QPainter(scaledTmpPixmap)
+            painter.setPen(QPen(Qt.red, 1, Qt.DashLine))
+            painter.drawLine(pixmapCursorEndPosition.x()-10, 0, pixmapCursorEndPosition.x()-10, self.label.height())
+            painter.drawLine(0, pixmapCursorEndPosition.y()-10, self.label.width(), pixmapCursorEndPosition.y()-10)
+            painter.end()
+            self.label.setPixmap(scaledTmpPixmap)
 
 
     def leaveEvent(self, a0):

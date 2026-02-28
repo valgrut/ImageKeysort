@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 class MediaContainerWidget(QWidget):
 
     requestImageCropSignal = pyqtSignal(CropData)
-    # rotateImageSignal = pyqtSignal()
+    setEnabledCursorGuidelinesSignal = pyqtSignal(bool)
 
     def __init__(self, galleryManager):
         super().__init__()
@@ -108,7 +108,7 @@ class MediaContainerWidget(QWidget):
 
         # Connect signals
         self.imageViewWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
-
+        self.galleryManager.setEnabledCursorGuidelinesSignal.connect(self.imageViewWidget.setMouseGuidelines)
 
     # def getOriginalImageSize(self) -> QSize:
     #     self.imageViewWidget.getOriginalImageSize()

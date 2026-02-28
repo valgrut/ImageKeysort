@@ -30,8 +30,7 @@ class GalleryManager(QStackedWidget):
     setFilenameTextEditSignal = pyqtSignal()
     updateStatusBarLabelSignal = pyqtSignal(str)
     requestImageCropSignal = pyqtSignal(CropData)
-    # rotateImageSignal = pyqtSignal()
-
+    setEnabledCursorGuidelinesSignal = pyqtSignal(bool)
 
     def __init__(self, mainWindow):
         super().__init__()
@@ -78,6 +77,8 @@ class GalleryManager(QStackedWidget):
         self.mediaContainerWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
         self.mainWindow.updateMediaPreviewSignal.connect(self.updatePreview)
         # self.rotateImageSignal.connect(self.mediaContainerWidget.rotateImageSignal)
+        self.mainWindow.setEnabledCursorGuidelinesSignal.connect(self.setEnabledCursorGuidelinesSignal)
+
 
     # TODO: future feature.
     # def getActiveGallery(self):
