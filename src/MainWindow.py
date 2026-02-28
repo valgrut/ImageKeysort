@@ -1,11 +1,8 @@
 import sys
-import json
 import datetime
-import typing
 import logging
-import pathlib
 
-from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize, QRect
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
 from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -13,21 +10,15 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QWidget,
-    QFileDialog,
-    QShortcut,
     QMenu,
     QAction,
-    QSplitter,
     QProgressBar,
     QMessageBox,
     QToolBar,
     QApplication,
-    QStatusBar,
-    QUndoStack,
-    QUndoCommand,
-    QTabWidget
+    QStatusBar
 )
-from PyQt5.QtGui import QKeyEvent, QKeySequence, QCursor, QIcon, QPixmap
+from PyQt5.QtGui import QKeyEvent, QCursor, QIcon, QPixmap
 
 # pip3 install pyqt5
 # pip3 install keyboard
@@ -41,13 +32,11 @@ from src.SortModeHandler import SortModeHandler
 from src.EditModeHandler import EditModeHandler
 from src.Modes import Modes
 from src.TextExtractor import TextExtractor
-from src.CropImageCommand import CropImageCommand
+from src.commands.CropImageCommand import CropImageCommand
 from src.CropData import CropData
 from src.CommandStack import CommandStack
 from src.TagSelectionDialog import TagSelectionDialog
 from src.commands.ImageRotateCommand import ImageRotateCommand
-
-from src.treeView import ShortcutsTreeView
 
 # TODO: Tohle jinam; Kam?
 screenWidth = 1152
@@ -121,10 +110,6 @@ class MainWindow(QMainWindow, QObject):
         self.sortModeHandler = SortModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
         self.editModeHandler = EditModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
 
-        # TODO: Tohle pryc. Nebude to instancovane, kdyz se to mozna vubec nepouzije........
-        self.textExtractor = TextExtractor(self.galleryManager)  # TODO: move elsewhere, since mainWindow does not interact with that directly? Image needs this, not main window...
-
-
         # ========== Layout ==========
         mainLayout = QHBoxLayout()
         leftInnerLayout = QVBoxLayout()
@@ -140,6 +125,7 @@ class MainWindow(QMainWindow, QObject):
         mainLayout.addLayout(rightInnerLayout)
 
         # Right side of the main layout
+        # TODO: Tabs - future feature
         # self.galleryTabs = QTabWidget(self)
         # self.galleryTabs.setTabsClosable(True)
         # self.galleryTabs.setShortcutEnabled(True)
@@ -284,7 +270,7 @@ class MainWindow(QMainWindow, QObject):
         self.buttonExtractTextAction = QAction(QIcon("Resources/clipboard-pencil.png"), "Extract text", self)
         self.buttonExtractTextAction.setStatusTip("Extract text from the image.")
         # buttonExtractTextAction.triggered.connect(self.galleryManager.currentWidget().imageViewWidget.extractTextFromImage)
-        self.buttonExtractTextAction.triggered.connect(self.textExtractor.extractTextFromImage) # Todo: Zavolat metodu, ktera si extractor prvne instanciuje.
+        self.buttonExtractTextAction.triggered.connect(self.extractTextFromImage)
         self.buttonExtractTextAction.setShortcut("Ctrl+;")
         self.buttonExtractTextAction.setDisabled(True)
         self.toolbar.addAction(self.buttonExtractTextAction)
@@ -317,8 +303,6 @@ class MainWindow(QMainWindow, QObject):
         self.editModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
         self.editModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.editModeHandler.updateTreeViewSignal.connect(self.treeViewWidget.update_tree_view)
-
-        self.textExtractor.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
 
         self.dropChangesTreeButton.clicked.connect(self.dropChangesAction.activate)
 
@@ -500,6 +484,12 @@ class MainWindow(QMainWindow, QObject):
         self.repeatCommandOnStack.setShortcut('Ctrl+Shift+R')  # TODO: Maybe change shortcut to something else.
         self.repeatCommandOnStack.triggered.connect(self.reuseLastCropCommand)
         self.addAction(self.repeatCommandOnStack)
+
+    def extractTextFromImage(self):
+        textExtractor = TextExtractor(self.galleryManager)
+        textExtractor.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
+        textExtractor.extractTextFromImage()
+        textExtractor.updateStatusBarLabelSignal.disconnect(self.updateStatusBarLabel)
 
     def createAndExecuteRotateCommand(self):
         """
