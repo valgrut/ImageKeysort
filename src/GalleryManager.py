@@ -307,18 +307,6 @@ class GalleryManager(QStackedWidget):
         self.setFilenameTextEditSignal.emit()
         self.mediaContainerWidget.startFilenameEdit()
 
-    # @pyqtSlot()
-    # def rotateImageRight(self):
-    #     """
-    #     Rotates the current image 90 degrees to the right.
-    #     TODO: Maybe move Rotate method here from MainWindow.
-    #     """
-    #     print("rotateImageRight called")
-    #     # self.rotateImageSignal.emit()
-    #     self.mediaContainerWidget.rotateImageSignal.emit()
-    #     self.updatePreview()
-
-    
     def commitNewFileName(self, newFileName):
         """
         Commits the new filename to the gallery's availableMediaFiles list.

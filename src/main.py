@@ -236,6 +236,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
 - [ ] Zacit pouzivat v tomto projektu static code analysis tool 
 - [ ] Git project and actions - implementovat nejakou pipeline ?
+- [ ] Zarovnat kod tak, aby nepresahoval pres krajnici napravo (80 znaku nebo kolik) !!
 
 Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
 
