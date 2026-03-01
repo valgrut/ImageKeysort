@@ -476,14 +476,16 @@ class MainWindow(QMainWindow, QObject):
         self.appendTagFromDialogAction.triggered.connect(self.selectTagFromDialog)
         self.addAction(self.appendTagFromDialogAction)
 
+        # TODO: How to undo specific Command performed on current file? Like CropCommand or TagCommand?
         self.undoCommandOnStack = QAction("&Undo Command operation on stack", self)
         self.undoCommandOnStack.setShortcut('Ctrl+Shift+Z')
         self.undoCommandOnStack.triggered.connect(self.undoCommand)
         self.addAction(self.undoCommandOnStack)
 
+        # TODO: How to Repeat specific Command performed on current file? Like CropCommand or TagCommand?
         self.repeatCommandOnStack = QAction("&Repeat Command operation on stack", self)
         self.repeatCommandOnStack.setShortcut('Ctrl+Shift+R')  # TODO: Maybe change shortcut to something else.
-        self.repeatCommandOnStack.triggered.connect(self.reuseLastCropCommand)
+        self.repeatCommandOnStack.triggered.connect(self.reuseLastCropCommand)  # TODO: Currently repeats Crop command!!!!
         self.addAction(self.repeatCommandOnStack)
 
     def extractTextFromImage(self):

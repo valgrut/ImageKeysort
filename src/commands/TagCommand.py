@@ -13,9 +13,13 @@ log = logging.getLogger(__name__)
 # TODO: How to handle the case, when tag is added from Selection, but removed by hand with normal rename???
 
 # TODO: Finish command repeat on next file
-# TODO: Fix execute from the stack, after push.
 
 class TagCommand(QUndoCommand):
+    """
+    Adds/removes tags from the list to the file.
+
+    Does NOT handle tags added from outside of this Command added by direct rename features.
+    """
 
     CMD_ID = 1003
 
