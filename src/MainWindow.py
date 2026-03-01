@@ -465,7 +465,7 @@ class MainWindow(QMainWindow, QObject):
         self.setSortModeAction.triggered.connect(self.setSortMode)
         self.addAction(self.setSortModeAction)  # Needed to make the shortcut work.
 
-        # TODO: WIP; experiment / temporal
+        # TODO: WIP; experiment / temporal - Some Tags assigned directly to some shortcut.
         # self.appendTag1Action = QAction("&Append tag: Tag1", self)
         # self.appendTag1Action.setShortcut('Ctrl+T')
         # self.appendTag1Action.triggered.connect(self.appendTagToName)
@@ -585,28 +585,24 @@ class MainWindow(QMainWindow, QObject):
         tagsNotAlreadyUsed = [tag for tag in tags if tag not in self.galleryManager.getCurrentFilename()]
         pickedTag = TagSelectionDialog.selectTag(None, tagsNotAlreadyUsed)
         
-        print(f"Selected tag: {pickedTag}")
+        log.info(f"TagDialog - Selected tag: {pickedTag}")
 
-        pickedTag = f"[{pickedTag}]"
+        finalTagFormat = f"[{pickedTag}]"
 
         currentFile = self.galleryManager.getCurrentGalleryItem()
-        tagCommand = TagCommand(currentFile, pickedTag)
+        tagCommand = TagCommand(currentFile, finalTagFormat)
+        log.info(f"TagCommand created and is ready to be pushed.")
 
         # TODO: After inventing, how to manage multiple operations above 1 image, uncomment those 2 lines:
         # pushed = self.commandsStack.push(tagCommand)
-        # self.commandsStack.execute(tagCommand)
+        # self.commandsStack.execute(pushed)
+
+        # TMP solution. Cannot be undone because it is not pushed to the stack. Ref comment few lines above
         tagCommand.execute()
-        print(self.galleryManager.getCurrentFilename())
-        tagCommand.undo()
-        print(self.galleryManager.getCurrentFilename())
 
         self.galleryManager.updateFilenameLabelText()
         self.galleryManager.updateStatusBarLabelSignal.emit("File was renamed successfully.")
 
-        # self.galleryManager.appendTagToName(pickedTag)
-        
-        # TODO: Create TagCommand with append/ remove tag functionality.
-            # TODO: Add command into stack so it can be Undone.
         # TODO: Load tags from file or settings, not hardcoded
 
 

@@ -17,6 +17,7 @@ class FileTagService:
         """
         Allowed Tag format: "[a-zA-Z0-9_ ]+"
         """
+        log.info(f"AppendTag Entered: \n{fileItem}\n{tagToAdd}")
 
         if not FileTagService.verifyTag(tagToAdd):
             log.info(f"Tag '{tagToAdd}' does not have a valid format.")
@@ -54,6 +55,7 @@ class FileTagService:
             return False
 
         if tagToRemove not in fileItem.fileName:
+            log.info(f"Tag '{tagToRemove}'does not exist in the filename.")
             return False
 
         currentFilePath = fileItem.pathAsPath()

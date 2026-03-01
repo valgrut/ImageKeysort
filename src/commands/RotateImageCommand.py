@@ -17,7 +17,7 @@ class ImageRotateCommand(QUndoCommand):
 
     def __init__(self, imageData: GalleryItem):
         super().__init__()
-        self.imageData: GalleryItem = imageData
+        self._fileData: GalleryItem = imageData
         self.numberOfRotations: int = 0
 
     def id(self) -> int:
@@ -32,7 +32,7 @@ class ImageRotateCommand(QUndoCommand):
         self.numberOfRotations += otherCommand.numberOfRotations
 
     def execute(self):
-        ImageRotateService().rotate90(self.imageData.pathAsStr())
+        ImageRotateService().rotate90(self._fileData.pathAsStr())
         self.numberOfRotations += 1
         print(f"{self.numberOfRotations}")
 
@@ -44,8 +44,8 @@ class ImageRotateCommand(QUndoCommand):
 
         # TMP solution (no checks):
         # Remove cropped image
-        os.remove(self.imageData.pathAsStr())
+        os.remove(self._fileData.pathAsStr())
 
         # Restore original image
-        deleteDirectory = str(self.imageData.sourcePath / pathlib.Path("__DELETED__") / pathlib.Path(self.imageData.fileName))
-        shutil.move(deleteDirectory, self.imageData.pathAsStr())
+        deleteDirectory = str(self._fileData.sourcePath / pathlib.Path("__DELETED__") / pathlib.Path(self._fileData.fileName))
+        shutil.move(deleteDirectory, self._fileData.pathAsStr())

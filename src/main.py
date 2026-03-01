@@ -202,6 +202,7 @@ Links:
 
 
 Important - Misc:
+- [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) pridat log.info a StatusBarUpdates
 - [x] !!!!!!! Drag and Drop slozku z file-browseru do IK, coz ji otevre okamzite jako src dir. !!!!!!!!!!
     - [ ] Allow only 1 directory (currently, multiple is possible). 
     - Na multiple chci mit taby, pripadne povolit multiple s tim, ze kazda slozka se otevre ve svem tabu!!!. To je napad!

@@ -310,8 +310,9 @@ class GalleryManager(QStackedWidget):
         """
         Commits the new filename to the gallery's availableMediaFiles list.
         """
-        currentGalleryItem = self.getCurrentGalleryItem()
+        # TODO: Refactor this out - HIGH PRIORITY!!!
 
+        currentGalleryItem = self.getCurrentGalleryItem()
         originalFilename = self.getCurrentFilename()
 
         originalFullPath = currentGalleryItem.pathAsPath()
@@ -340,41 +341,28 @@ class GalleryManager(QStackedWidget):
             log.info("File was renamed successfully.")
 
 
-    def appendTagToName(self, tag: str = None):
-        # TODO: Refactor this out - HIGH PRIORITY!!!
-
-        currentFilePath = Path(self.getCurrentFilename())
-        currentFileNameNoExt = currentFilePath.stem
-        currentSrcDirPath = currentFilePath.parent
-        extension = currentFilePath.suffix
-        currentFile = currentFilePath.name
-
-        # A) Test tag appending
-        # if tag is None:
-        #     if "[Tag1]" in currentFileNameNoExt:
-        #         log.info("Filename already contains the tag.")
-        #         return
-            
-        #     tagged = currentFileNameNoExt + " [Tag1]" + extension
-        #     log.info(f"Appending tag to filename: {tagged}")
-
-        #     # TODO: Add command into stack so it can be Undone.
-        #     return
-        
-        # B) Production version:
-        if tag is None or tag in currentFileNameNoExt:
-            log.info(f"Filename already contains the tag '[{tag}]'.")
-            return
-        
-        nameWithTag = f"{currentFileNameNoExt} [{tag}]{extension}"
-        log.info(f"Appending tag to filename: {nameWithTag}")
-
-        # TODO: Add command into stack so it can be Undone.
-
-        # Commit new filename
-        self.commitNewFileName(nameWithTag)
-        
-        return
+    # def appendTagToName(self, tag: str = None):
+    #     # TODO: Refactor this out - HIGH PRIORITY!!!
+    #
+    #     currentFilePath = Path(self.getCurrentFilename())
+    #     currentFileNameNoExt = currentFilePath.stem
+    #     currentSrcDirPath = currentFilePath.parent
+    #     extension = currentFilePath.suffix
+    #     currentFile = currentFilePath.name
+    #
+    #     if tag is None or tag in currentFileNameNoExt:
+    #         log.info(f"Filename already contains the tag '[{tag}]'.")
+    #         return
+    #
+    #     nameWithTag = f"{currentFileNameNoExt} [{tag}]{extension}"
+    #     log.info(f"Appending tag to filename: {nameWithTag}")
+    #
+    #     # TODO: Add command into stack so it can be Undone.
+    #
+    #     # Commit new filename
+    #     self.commitNewFileName(nameWithTag)
+    #
+    #     return
 
 
     def removeFile(self, fileName):

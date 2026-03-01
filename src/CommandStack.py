@@ -31,7 +31,7 @@ class CommandStack:
         """
         for cmd in self._commands:
             # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
-            if cmd.imageData.fileName == filename:
+            if cmd._fileData.fileName == filename:
                 return cmd
         return None
 
@@ -41,7 +41,7 @@ class CommandStack:
         """
         for i, cmd in enumerate(self._commands):
             # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
-            if cmd.imageData.fileName == filename:
+            if cmd._fileData.fileName == filename:
                 del self._commands[i]
                 return True
         return False
@@ -52,7 +52,7 @@ class CommandStack:
         """
         for i, cmd in enumerate(self._commands):
             # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
-            if cmd.imageData.fileName == filename:
+            if cmd._fileData.fileName == filename:
                 return i
         return -1
 
@@ -89,11 +89,11 @@ class CommandStack:
         # if self.imageSrcPath != otherCommand.imageSrcPath:
         #     return False
 
-        # TODO: Tohle ma byt genericke, ne jen pro Crop command!!!
-        matchingCropCommand = self.getCommandByFilename(command.imageData.fileName)
-        if matchingCropCommand:
-            matchingCropCommand.mergeWith(command)
-            return matchingCropCommand
+        matchingCommand = self.getCommandByFilename(command._fileData.fileName)
+        if matchingCommand:
+            log.info("Matching command found, trying to merge...")
+            matchingCommand.mergeWith(command)
+            return matchingCommand
 
         self._commands.append(command)
 

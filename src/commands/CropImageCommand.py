@@ -19,7 +19,7 @@ class CropImageCommand(QUndoCommand):
 
     def __init__(self, imageData: GalleryItem, cropRectangle: QRect, originalImageSize: QSize):
         super().__init__()
-        self.imageData: GalleryItem = imageData
+        self._fileData: GalleryItem = imageData
         self.cropRectangle: QRect = cropRectangle
         self.originalImageSize: QSize = originalImageSize
 
@@ -43,7 +43,7 @@ class CropImageCommand(QUndoCommand):
 
 
     def execute(self):
-        ImageCropService().crop(self.imageData.pathAsStr(), self.cropRectangle)
+        ImageCropService().crop(self._fileData.pathAsStr(), self.cropRectangle)
 
     def undo(self):
         # TODO:
@@ -53,8 +53,8 @@ class CropImageCommand(QUndoCommand):
         
         # TMP solution (no checks):
         # Remove cropped image
-        os.remove(self.imageData.pathAsStr())
+        os.remove(self._fileData.pathAsStr())
 
         # Restore original image
-        deleteDirectory = str(self.imageData.sourcePath / pathlib.Path("__DELETED__") / pathlib.Path(self.imageData.fileName))
-        shutil.move(deleteDirectory, self.imageData.pathAsStr())
+        deleteDirectory = str(self._fileData.sourcePath / pathlib.Path("__DELETED__") / pathlib.Path(self._fileData.fileName))
+        shutil.move(deleteDirectory, self._fileData.pathAsStr())
