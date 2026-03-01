@@ -4,52 +4,54 @@ import os
 from PyQt5.QtWidgets import QUndoCommand
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 
-# TODO: Rozhodnuti
-# - Co delat v pripade rucni zmeny nazvu souboru? Zmenit basename pak i v odpovidajicim TagCommandu pro dany filename?
-# TODO: Vsak tady muzu import Classu, ktera vezme srcpath a img_name a udelat kyzene zmeny proste. LOL.
-# TODO: After RENAME / Adding tag / removing tag - nutno update filenames v Gallery.loadedFiles a pak v ostatnich Commands, pokud se tam nachazi obrazek s danym jmenem pred modifikaci.
+from src.GalleryItem import GalleryItem
+from src.file_operations.FileTagService import FileTagService
 
+
+# TODO: How to handle the case, when tag is added from Selection, but removed by hand with normal rename???
+
+# TODO: Finish command repeat on next file
+# TODO: Fix Undo - multiple tags
+# TODO: Fix mergeWith, to add multiple tags on one file.
 
 class TagCommand(QUndoCommand):
 
-    CMD_ID = 1002
+    CMD_ID = 1003
 
-    def __init__(self, imagename, imageSrcPath, tag):
+    def __init__(self, fileData: GalleryItem, tag: str):
         super().__init__()
-        self.imageName = imagename
-        self.imageSrcPath = imageSrcPath
-        self._addedTag = None
-        self._originalFilename = ""
-    
+        self._fileData: GalleryItem = fileData
+        self._addedTags: [str] = [tag]
+        # self._addedTags.append(tag)
 
     def id(self) -> int:
         return self.CMD_ID
 
-
-    def mergeWith(self, other) -> bool:
-        if not isinstance(other, TagCommand):
-            return False
-        
-        if self.imageName != other.imageName:
-            return False
-        
-        # TODO: ??? Handle multiple tags?
-
-        # Optional but often useful: make redo idempotent and re-apply:
-        # self.redo()
-
-        return True
-
+    def mergeWith(self, otherCommand: QUndoCommand) -> bool:
+        """
+        TODO finish
+        """
+        # if not isinstance(other, TagCommand):
+        #     return False
+        #
+        # if self.imageName != other.imageName:
+        #     return False
+        #
+        # # TODO: ??? Handle multiple tags?
+        # return True
+        raise NotImplementedError
 
     def execute(self):
-        pass
-        #self.image.crop(self.crop_rectangle)
-
+        tagService = FileTagService()
+        for tag in self._addedTags:
+            tagService.appendTag(self._fileData, tag)
 
     def undo(self):
-        # Remove tag T from image file name
-        if self._addedTag in self.imageName:
-            self.imageName.replace(" " + self._addedTag, '')
+        """
+        Remove all tags added through Tagging from the filename.
+        """
+        tagService = FileTagService()
+        for tag in self._addedTags:
+            tagService.removeTag(self._fileData, tag)
 
-        # TODO: Change filename in the list of images in the GalleryManager
-        # TODO: Change the name of the file itself.
+        self._addedTags.clear()

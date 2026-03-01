@@ -31,6 +31,7 @@ from src.SettingsDialog import SettingsDialog
 from src.SortModeHandler import SortModeHandler
 from src.EditModeHandler import EditModeHandler
 from src.Modes import Modes
+from src.commands.TagCommand import TagCommand
 from src.file_operations.TextExtractor import TextExtractor
 from src.commands.CropImageCommand import CropImageCommand
 from src.CropData import CropData
@@ -541,6 +542,8 @@ class MainWindow(QMainWindow, QObject):
         
         # Update image preview after undoing the crop command.
         self.galleryManager.updatePreview()
+        self.galleryManager.updateFilenameLabelText()
+        self.galleryManager.updateStatusBarLabelSignal.emit("File was renamed successfully.")
 
     def reuseLastCropCommand(self):
         """
@@ -580,11 +583,27 @@ class MainWindow(QMainWindow, QObject):
         tags = ["work", "family", "anime", "urgent", "todo"]  # TODO: Save/Load from the file
         
         tagsNotAlreadyUsed = [tag for tag in tags if tag not in self.galleryManager.getCurrentFilename()]
-        picked = TagSelectionDialog.selectTag(None, tagsNotAlreadyUsed)
+        pickedTag = TagSelectionDialog.selectTag(None, tagsNotAlreadyUsed)
         
-        print(f"Selected tag: {picked}")
-        
-        self.galleryManager.appendTagToName(picked)
+        print(f"Selected tag: {pickedTag}")
+
+        pickedTag = f"[{pickedTag}]"
+
+        currentFile = self.galleryManager.getCurrentGalleryItem()
+        tagCommand = TagCommand(currentFile, pickedTag)
+
+        # TODO: After inventing, how to manage multiple operations above 1 image, uncomment those 2 lines:
+        # pushed = self.commandsStack.push(tagCommand)
+        # self.commandsStack.execute(tagCommand)
+        tagCommand.execute()
+        print(self.galleryManager.getCurrentFilename())
+        tagCommand.undo()
+        print(self.galleryManager.getCurrentFilename())
+
+        self.galleryManager.updateFilenameLabelText()
+        self.galleryManager.updateStatusBarLabelSignal.emit("File was renamed successfully.")
+
+        # self.galleryManager.appendTagToName(pickedTag)
         
         # TODO: Create TagCommand with append/ remove tag functionality.
             # TODO: Add command into stack so it can be Undone.

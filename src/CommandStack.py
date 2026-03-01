@@ -89,6 +89,7 @@ class CommandStack:
         # if self.imageSrcPath != otherCommand.imageSrcPath:
         #     return False
 
+        # TODO: Tohle ma byt genericke, ne jen pro Crop command!!!
         matchingCropCommand = self.getCommandByFilename(command.imageData.fileName)
         if matchingCropCommand:
             matchingCropCommand.mergeWith(command)

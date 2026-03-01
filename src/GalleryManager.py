@@ -73,7 +73,6 @@ class GalleryManager(QStackedWidget):
 
         self.mediaContainerWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
         self.mainWindow.updateMediaPreviewSignal.connect(self.updatePreview)
-        # self.rotateImageSignal.connect(self.mediaContainerWidget.rotateImageSignal)
         self.mainWindow.setEnabledCursorGuidelinesSignal.connect(self.setEnabledCursorGuidelinesSignal)
 
 
@@ -342,7 +341,6 @@ class GalleryManager(QStackedWidget):
 
 
     def appendTagToName(self, tag: str = None):
-        # TODO: Refactor this into FileTagger class.
         # TODO: Refactor this out - HIGH PRIORITY!!!
 
         currentFilePath = Path(self.getCurrentFilename())
