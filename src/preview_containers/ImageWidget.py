@@ -149,8 +149,7 @@ class ImageWidget(QWidget):
 
     def _transformPositionFromScaledPixmapToUnscaled(self, scaledPixmapCursorPosition: QPoint) -> QPoint:
         """
-        # TODO: Tohle si myslim, ze by tez melo byt asi jinde...
-        
+        # TODO: Tohle si myslim, ze by tez melo byt asi jinde..
         """
         # Gather facts about label area and current pixmap's area (both original and scaled)
         pixmapWidth = self._pixmap.rect().width()
@@ -203,9 +202,7 @@ class ImageWidget(QWidget):
     def mousePressEvent(self, event):
         # TODO: move elsewhere??? Maybe into GalleryManager, because I want this to use also on Videos...
         # TODO: V1: QRubberBand nebo V2: QGraphicView (okraje s kruhama v rozich a po stranach)
-        # TODO: Logika croppingu by mela byt separatni uplne pryc, jako TextExtraction.
         # TODO: A mouseEvent handling a rubberband drawing presunout do toho GalleryManager asi,
-        # abych to pak mohl pouzit i pro videa.
 
         self._dragging = True
 
@@ -256,7 +253,6 @@ class ImageWidget(QWidget):
                 log.warning(f"[mouseMoveEvent]: startPosition or endPosition not initialised!")
         
         # Draw cross line to indicate boundaries of the start of the crop area relative to cursor
-        # - [ ] TODO: enable/disable by clicking to the crop button
         if self._showMouseGuideLines:
             pixmapCursorEndPosition: QPoint = self._transformPositionFromGlobalToPixmap(event.pos())
             px = self._pixmap.copy()
