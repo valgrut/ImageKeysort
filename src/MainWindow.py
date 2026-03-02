@@ -218,6 +218,7 @@ class MainWindow(QMainWindow, QObject):
 
         # TODO: Rewrite, then use.
         # 1. New tree - qts example
+        # from src.treeView import ShortcutsTreeView
         # self.treeViewWidget = ShortcutsTreeView(self.shortcutManager)
 
         # 2. New tree - My one
