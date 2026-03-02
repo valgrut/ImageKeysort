@@ -204,7 +204,7 @@ Links:
 Important - Misc:
 - [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
 - [x] !!!!!!! Drag and Drop slozku z file-browseru do IK, coz ji otevre okamzite jako src dir. !!!!!!!!!!
-    - [ ] Allow only 1 directory (currently, multiple is possible). 
+    - [ ] Allow only 1 directory (currently, multiple is possible).
     - Na multiple chci mit taby, pripadne povolit multiple s tim, ze kazda slozka se otevre ve svem tabu!!!. To je napad!
     - [X] Otestovat na linuxu
 - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
@@ -235,9 +235,10 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [ ] Moznost vytvorit nejak rychle slozku pro nejakou skupinu fotek v aktualne otevrene src slozce. Je to totiz x kroku, kdyz chci udelat novou kategorii. Napr vim, ze dalsich x fotek bude nevim barveni mece u miniatur, tak musim stisknout zkratku, otevre se dialog okno pro vyber dst. Vytvorim slozku s nejakym nazvem, potvrdim. Pak ji zvolim jako dst pro slozku. Bud udelat dialog rovnou po odklepnuti nove zkratky, nebo nevim. Urcite jako moznost, nedelat to tak vzdy. Mozna v edit modu, kdyz napisu treba "~" pred zkratku, tak se otevre dialog pro zadani jmena slozky pro tuto zkratku a ta se vytvori v src diru. Rozvest napad...
 - [ ] Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
-- [ ] Zacit pouzivat v tomto projektu static code analysis tool 
+- [ ] Zacit pouzivat v tomto projektu static code analysis tool
 - [ ] Git project and actions - implementovat nejakou pipeline ?
 - [ ] Zarovnat kod tak, aby nepresahoval pres krajnici napravo (80 znaku nebo kolik) !!
+- [ ] THEMES: Zmenit u ruznych themes nektere barvy, aby byly citelne texty (text v buttons, text v textfiles...)
 
 Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
 
@@ -276,7 +277,7 @@ Important features TODO:
 - [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
 - [X] Delete button do menu a do toolbaru !!!!!
 - [ ] !!!!! On/Off crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
-- [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those); 
+- [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those);
       - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
       - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
 - [ ] Na aktualnim obrazku by se mohla ukazat dostupna tlacitka pro repeat tag, repeat rename, repeat crop (pokud size je stejna) a pod. A po provedeni dane operace by se odpovidajici tlacitko z repeat last zmenilo na Undo.
@@ -322,7 +323,7 @@ To Fix:
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
-- [x] Crash behem cropu provedenem hned po prejmenovani obrazku (i po pridani tagu). 
+- [x] Crash behem cropu provedenem hned po prejmenovani obrazku (i po pridani tagu).
 
 
 Shortcuts management, Shortcut Tree (GUI):
