@@ -201,13 +201,13 @@ class MediaContainerWidget(QWidget):
         self.imageCounterLabel.setText(self.galleryManager.getCounterString())
 
 
-    def setVideoWidget(self):
+    def showVideoWidget(self):
         self.stackedMediaWidget.setCurrentWidget(self.videoViewWidget)
 
-    def setImageWidget(self):
+    def showImageWidget(self):
         self.stackedMediaWidget.setCurrentWidget(self.imageViewWidget)
     
-    def setTextWidget(self):
+    def showTextWidget(self):
         self.stackedMediaWidget.setCurrentWidget(self.textPreviewWidget)
 
 

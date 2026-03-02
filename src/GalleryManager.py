@@ -262,20 +262,20 @@ class GalleryManager(QStackedWidget):
         # TODO: Refactor - prakticky se vsechny 3 opakuji, jen prvne nastavim VideoWidget, pak TextWidget...
         # Specific operations by the file type
         if self.isCurrentVideo():
-            self.mediaContainerWidget.setVideoWidget()
+            self.mediaContainerWidget.showVideoWidget()
             self.mediaContainerWidget.updateVideo(currentFile)  # Mozna spis prejmenovat na showVideo()
             self.disableExtractTextButtonSignal.emit()
             self.enableCropButtonSignal.emit()
 
         elif self.isCurrentTextFile():
-            self.mediaContainerWidget.setTextWidget()
+            self.mediaContainerWidget.showTextWidget()
             self.mediaContainerWidget.updateTextFile(currentFile)
             self.disableExtractTextButtonSignal.emit()
             self.disableCropButtonSignal.emit()
 
         else:
             # It is image
-            self.mediaContainerWidget.setImageWidget()
+            self.mediaContainerWidget.showImageWidget()
             self.mediaContainerWidget.updatePreviewImage(currentFile)  # Mozna spis prejmenovat na showImage()
             self.enableExtractTextButtonSignal.emit()
             self.enableCropButtonSignal.emit()
