@@ -69,7 +69,7 @@ class TestSortModeHandler(unittest.TestCase):
 
         # Create the application window and button (the GUI to be tested)
         self.window = MainWindow()  # Replace with your actual window class
-        self.window.set_sort_mode()
+        self.window.setSortMode()
         self.window.unsetCopyMode()
         self.window.galleryManager.setSourcePath(self.galleryTestSrcDir.path())
 
