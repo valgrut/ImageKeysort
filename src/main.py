@@ -149,7 +149,7 @@ Links:
     - Zkratka 1 zopakuje posledni crop operaci na aktualni obrazek.
     - Zkratka 2 zopakuje posledni tag operaci na aktualni obrazek.
 - [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne nejake operace k undo. (renaming, tags, cropping)
-- [ ] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
+- [!] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 - [ ] !! Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 - [ ] !!!! Kdyz udelam crop obrazku, v __deleted__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
@@ -183,12 +183,15 @@ Links:
 - [~] AddTagButton into the Tab pop-up window.
 
 
+- Note TODO: !!!!! Co kdyz obrazek ABC.png prvne cropnu, tzn do delete se hodi ABC.png, a pak ho prejmenuju na CDE.png??? a budu chtit uncrop??
+
+
 ### Image rotation
 - Note: Pozor, obrazky se obcas zobrazuji jinak natocene, nez je zobrazuje windows explorer. Proc?
 - [X] Rotate image button (staci 1 smer) do toolbaru.
 - [X] Dat jinou ikonku pro rotateButton v Toolbaru.
 - [X] Pridat nejakou klavesovou zkratku
-- [ ] ? Undo - udelat Command pro rotaci
+- [ ] ? Undo
 
 
 ### Poznamky k novym zkratkam:
@@ -200,9 +203,41 @@ Links:
 - Ctrl+Shift+T pro Repeat posledni Tag operace. ???
 
 
+Important features TODO:
+- [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
+- [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
+- [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
+- [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
+- [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
+- [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou treeViewWidget a image.
+- [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
+- [ ] !!!! Add do Settings: Otevrit presets z minula
+- [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
+- [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
+  - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
+- [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
+- [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
+- [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
+- [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
+- [X] Delete button do menu a do toolbaru !!!!!
+- [~] !!!!! On/Off crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
+- [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those);
+      - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
+      - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
+- [ ] Na aktualnim obrazku by se mohla ukazat dostupna tlacitka pro repeat tag, repeat rename, repeat crop (pokud size je stejna) a pod. A po provedeni dane operace by se odpovidajici tlacitko z repeat last zmenilo na Undo.
+- [ ] Undo zkratky: Ctrl+z - undo moving/copying; Ctrl+shift+z - undo renaming/tagging/cropping.
+- [ ] Mozna dat doleva listu jako je ve VSCode, kde jde prepnout mezi overview, dir/file explorer a tak. Bylo by to dir explorer kde po kliknuti by se otevrel dir jako src dir. Pak druhy tab by byly shortcuts.
+- [ ] Taby - vice instanci v jednom okne.
+- [ ] Maybe save the whole session (including the history and commandStack).
+- [ ] THEMES: Zmenit u ruznych themes nektere barvy, aby byly citelne texty (text v buttons, text v textfiles...)
+- [ ] Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
+- [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
+- [ ] !!!!! Copy mode border se zobrazi az pri druhem kliknuti na CopyButton (Zkratka je OK)
+- [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
+- [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
+
 
 Important - Misc:
-- [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
 - [x] !!!!!!! Drag and Drop slozku z file-browseru do IK, coz ji otevre okamzite jako src dir. !!!!!!!!!!
     - [ ] Allow only 1 directory (currently, multiple is possible).
     - Na multiple chci mit taby, pripadne povolit multiple s tim, ze kazda slozka se otevre ve svem tabu!!!. To je napad!
@@ -227,20 +262,14 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
-- [ ] !!!!! Copy mode border se zobrazi az pri druhem kliknuti na CopyButton (Zkratka je OK)
 - [ ] Zobrazit nekde/nejak list nactenych souboru ze source dir abecedne. Treba zase pop-up okno jen. Proste tak pro prehled, protoze proc ne. Po kliknuti na nejaky se tento nacte jako aktualni.
 - [ ] Disable to go to the next/prev picture - force user to process the picture instead of skipping it.
 - [ ] !!! Poklikanim na zkratku otevrit cestu
-- [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
-- [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [ ] Moznost vytvorit nejak rychle slozku pro nejakou skupinu fotek v aktualne otevrene src slozce. Je to totiz x kroku, kdyz chci udelat novou kategorii. Napr vim, ze dalsich x fotek bude nevim barveni mece u miniatur, tak musim stisknout zkratku, otevre se dialog okno pro vyber dst. Vytvorim slozku s nejakym nazvem, potvrdim. Pak ji zvolim jako dst pro slozku. Bud udelat dialog rovnou po odklepnuti nove zkratky, nebo nevim. Urcite jako moznost, nedelat to tak vzdy. Mozna v edit modu, kdyz napisu treba "~" pred zkratku, tak se otevre dialog pro zadani jmena slozky pro tuto zkratku a ta se vytvori v src diru. Rozvest napad...
-- [ ] Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
+- [ ] Feature: Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
 - [ ] Zacit pouzivat v tomto projektu static code analysis tool
 - [ ] Git project and actions - implementovat nejakou pipeline ?
 - [ ] Zarovnat kod tak, aby nepresahoval pres krajnici napravo (80 znaku nebo kolik) !!
-- [ ] THEMES: Zmenit u ruznych themes nektere barvy, aby byly citelne texty (text v buttons, text v textfiles...)
-
-Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
 
 
 Settings:
@@ -258,33 +287,6 @@ Refactoring and code tweaking
 - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodovani ohledne zobrazeni (obrazek vs video vs text vs pdf)
 - [~] Vytvorit Actions z akci, ktere jeste Action nemaji. Vymenit to za prime volani metod. Zvlast u veci, ktere jsou volane z vice mist (button / shortcut / menu / ...)
 
-
-Important features TODO:
-- [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
-- [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
-- [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
-- [ ] Zobrazit nazev nactenych dat (soubor se zkratkama) (Nad Nazvama sloupcu by mohl byt label, kde bude zobrazen nazev nacteneho souboru se shortcuts-daty.) nebo do WindowTitle?
-- [ ] Moznost napsat, na kolikaty obrazek se chceme presunout - udelat textfield z image counter labelu. (bude fungovat podobne jako prejmenovani obrazku)
-- [ ] Mezi obrazek a treeview dat vertikalni listu, ktera bude hybatelna - pujde menit pomer mezi sirkou treeViewWidget a image.
-- [ ] Vsude u user-defined strings pridat tr(). Viz: The tr() call around the literal string marks the string for translation. It is a good habit to call tr() on all user-visible strings, in case you later decide to translate your application to other languages. The Internationalization with Qt overview covers tr() in more detail.
-- [ ] !!!! Add do Settings: Otevrit presets z minula
-- [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
-- [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
-  - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
-- [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
-- [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
-- [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
-- [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
-- [X] Delete button do menu a do toolbaru !!!!!
-- [ ] !!!!! On/Off crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
-- [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those);
-      - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
-      - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
-- [ ] Na aktualnim obrazku by se mohla ukazat dostupna tlacitka pro repeat tag, repeat rename, repeat crop (pokud size je stejna) a pod. A po provedeni dane operace by se odpovidajici tlacitko z repeat last zmenilo na Undo.
-- [ ] Undo zkratky: Ctrl+z - undo moving/copying; Ctrl+shift+z - undo renaming/tagging/cropping.
-- [ ] Mozna dat doleva listu jako je ve VSCode, kde jde prepnout mezi overview, dir/file explorer a tak. Bylo by to dir explorer kde po kliknuti by se otevrel dir jako src dir. Pak druhy tab by byly shortcuts.
-- [ ] Taby - vice instanci v jednom okne.
-- [ ] Maybe save the whole session (including the history and commandStack).
 
 
 Consider (Maybe):
@@ -315,7 +317,7 @@ Design:
 
 To Fix:
 - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
-- [ ] Fix videos on Windows (Codec?)
+- [ ] Fix videos on Windows (Codec?) K-Lite Codec pack ??
 - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
 - [ ] Sentinel set + space key in sort mode. seq: acde; nastavit ac+; acd<mezernik> -> Error zkratka 'd' neexistuje. Mela by se ale pouzit i cast pred sentinelem ('ac').
 - [ ] SortMode: abc<enter>cde<enter>xyz<enter> ... vzdy prepisuje predchozi sentinel. Udelat s tim neco nebo to tak nechat?
