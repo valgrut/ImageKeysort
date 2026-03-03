@@ -35,6 +35,20 @@ class CommandStack:
                 return cmd
         return None
 
+    def getCommandOfSameType(self, filename: str, commandId: int) -> QUndoCommand | None:
+        """
+        Retrieve a command of the given ID from the stack by its associated filename.
+
+        Used to get command of the specific type (TagCommand/CropCommand/...) for given filename.
+
+        TODO WIP
+        """
+        for cmd in self._commands:
+            # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
+            if cmd._fileData.fileName == filename and cmd.CMD_ID == commandId:
+                return cmd
+        return None
+
     def removeCommandByFilename(self, filename: str) -> bool:
         """
         Remove a command from the stack by its associated filename.
