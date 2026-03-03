@@ -49,6 +49,13 @@ class ShortcutManager(QObject):
     def printShortcuts(self):
         pass
 
+    def getChildrenKeychars(self, shortcut: str) -> list[str]:
+        """
+        For provided shortcut, return list of the keychars which are available next.
+        """
+        keycharData = self.getLastKeyContentOfSequence(shortcut)
+        return keycharData["keys"]
+
     def getAllPaths(self, shortcutsData) -> [str]:  # type: ignore
         """
         Recursively returns all dst_paths from the shortcuts json tree.

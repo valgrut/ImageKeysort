@@ -125,6 +125,14 @@ class MainWindow(QMainWindow, QObject):
         mainLayout.addLayout(leftInnerLayout)
         mainLayout.addLayout(rightInnerLayout)
 
+        # Show next available character(s) to continue with pressed shortcut.
+        self.availableKeycharsLabel = QLabel("None")
+        self.availableKeycharsLabel.resize(self.availableKeycharsLabel.sizeHint())
+        self.availableKeycharsLabel.setGraphicsEffect(Styles.getShadowEffect())
+        self.availableKeycharsLabel.setObjectName("availableKeychar")
+        self.availableKeycharsLabel.setAlignment(Qt.AlignCenter)
+        rightInnerLayout.addWidget(self.availableKeycharsLabel)
+
         # Right side of the main layout
         # TODO: Tabs - future feature
         # self.galleryTabs = QTabWidget(self)
@@ -821,7 +829,8 @@ class MainWindow(QMainWindow, QObject):
 
         else: # Unknown mode
             pass
-
+        
+        # self.availableKeycharsLabel.setText(self.shortcutManager.getChildrenKeychars(str(pressedKey)))
 
     @pyqtSlot(str)
     def updateKeySequenceLabel(self, newContent=None):
