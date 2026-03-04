@@ -30,14 +30,19 @@ class CropImageCommand(QUndoCommand):
         print(f"Original rectangle: {self.cropRectangle}")
         print(f"Second rectangle: {otherCommand.cropRectangle}")
         
+
+        # TOHLE ASI NEMA BYT RECALCULOVANO ZDE, protoze novy crop uz pocitam z toho predchoziho, nez toho prvniho.
+        # TZN - ja musim tuto recalculaci zahrnout az v tom recropu?...
+        # NEBO RECALC TADY< ALE MUSI SE NA CROP2 pouzit ten novy qrect. A pak prekalkulovat hodnoty.
+        
         # TODO: Recalculate the crop rectangle of the cropped image to correspond to its original size, not the cropped one.
         #   (in case of recropping the same picture multiple times)
         # _globStartX = self.cropRectangle.x() + otherCommand.cropRectangle.x()
         # _globStartY = self.cropRectangle.y() + otherCommand.cropRectangle.y()
-        # # _globEndX = min(self.cropRectangle.x(), otherCommand.cropRectangle.x())
-        # # _globEndY = max(self.cropRectangle.y(), otherCommand.cropRectangle.y())
-        # _globEndX = self.cropRectangle.width() - otherCommand.cropRectangle.width()
-        # _globEndY = self.cropRectangle.height() - otherCommand.cropRectangle.height()
+        # # # _globEndX = min(self.cropRectangle.x(), otherCommand.cropRectangle.x())
+        # # # _globEndY = max(self.cropRectangle.y(), otherCommand.cropRectangle.y())
+        # _globEndX = self.cropRectangle.x() + otherCommand.cropRectangle.width()
+        # _globEndY = self.cropRectangle.y() + otherCommand.cropRectangle.height()
         # self.cropRectangle = QRect(QPoint(_globStartX, _globStartY), QPoint(_globEndX, _globEndY))
 
         # print(f"CHECK: {self.cropRectangle} updated to {otherCommand.cropRectangle}")
