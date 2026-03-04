@@ -49,7 +49,7 @@ class ShortcutManager(QObject):
     def printShortcuts(self):
         pass
 
-    def getChildrenKeychars(self, shortcut: str) -> list[str]:
+    def getPossibleFollowupsKeychars(self, shortcut: str) -> list[str]:
         """
         For provided shortcut, return list of the keychars which are available next.
         """
