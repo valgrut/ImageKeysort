@@ -236,6 +236,7 @@ Important features TODO:
 - [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [ ] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
+- [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
 
 
 Important - Misc:
