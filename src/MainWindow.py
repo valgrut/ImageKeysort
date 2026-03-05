@@ -37,7 +37,7 @@ from src.commands.CropImageCommand import CropImageCommand
 from src.CropData import CropData
 from src.CommandStack import CommandStack
 from src.TagSelectionDialog import TagSelectionDialog
-from src.QuickDirectoryCreator import QuickDirectoryCreator
+from src.QuickDirectoryCreator import QuickDirectoryDialog
 from src.commands.RotateImageCommand import ImageRotateCommand
 
 # TODO: Tohle jinam; Kam?
@@ -625,7 +625,7 @@ class MainWindow(QMainWindow, QObject):
     def createQuickDirectory(self):
         # TODO: Maybe move to GalleryManager or some FileOperationManager
 
-        newDirName = QuickDirectoryCreator.enterName(None)
+        newDirName = QuickDirectoryDialog.enterName(None)
         print(f"New directory name will be created: {newDirName}")
 
         # TODO: Check that entered (if any) directory does not exist in sourceDirectory

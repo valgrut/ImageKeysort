@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (
 )
 
 
-class QuickDirectoryCreator(QDialog):
+class QuickDirectoryDialog(QDialog):
     """
     Enter a new directory's name to be created in the sourceDirectory without need to use system's file manager.
     """
@@ -51,7 +51,7 @@ class QuickDirectoryCreator(QDialog):
 
     @staticmethod
     def enterName(parent) -> Optional[str]:
-        dialogue = QuickDirectoryCreator(parent=parent)
+        dialogue = QuickDirectoryDialog(parent=parent)
         result = dialogue.exec_()
         if result == QDialog.Accepted:
             return dialogue._directoryNameEntered
