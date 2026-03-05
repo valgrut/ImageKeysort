@@ -623,8 +623,20 @@ class MainWindow(QMainWindow, QObject):
         # TODO: Load tags from file or settings, not hardcoded
 
     def createQuickDirectory(self):
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
+
         newDirName = QuickDirectoryCreator.enterName(None)
         print(f"New directory name will be created: {newDirName}")
+
+        # TODO: Check that entered (if any) directory does not exist in sourceDirectory
+
+        # TODO: strip start/end spaces, verify dir format name (no bullshit in the name)
+
+        # TODO: Create a directory
+
+        # TODO: Add a shortcut into the dialogue (maybe edit-mode -> write shortcut but dont enter, instead hit ctrl+shift+D to open dialogue)
+        #  - which will add a shortcut and a directory will be created and assigned to that shortcut.
+        #  - Vyzkouset, co bude vic convenient a uvidime.
 
 
     @pyqtSlot(str)
