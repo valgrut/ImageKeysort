@@ -37,6 +37,7 @@ from src.commands.CropImageCommand import CropImageCommand
 from src.CropData import CropData
 from src.CommandStack import CommandStack
 from src.TagSelectionDialog import TagSelectionDialog
+from src.QuickDirectoryCreator import QuickDirectoryCreator
 from src.commands.RotateImageCommand import ImageRotateCommand
 
 # TODO: Tohle jinam; Kam?
@@ -485,17 +486,22 @@ class MainWindow(QMainWindow, QObject):
         self.appendTagFromDialogAction.triggered.connect(self.selectTagFromDialog)
         self.addAction(self.appendTagFromDialogAction)
 
+        self.createQuickDirectoryAction = QAction("&Create quickly new directory", self)
+        self.createQuickDirectoryAction.setShortcut('Ctrl+Shift+D')
+        self.createQuickDirectoryAction.triggered.connect(self.createQuickDirectory)
+        self.addAction(self.createQuickDirectoryAction)
+
         # TODO: How to undo specific Command performed on current file? Like CropCommand or TagCommand?
-        self.undoCommandOnStack = QAction("&Undo Command operation on stack", self)
-        self.undoCommandOnStack.setShortcut('Ctrl+Shift+Z')
-        self.undoCommandOnStack.triggered.connect(self.undoCommand)
-        self.addAction(self.undoCommandOnStack)
+        self.undoCommandOnStackAction = QAction("&Undo Command operation on stack", self)
+        self.undoCommandOnStackAction.setShortcut('Ctrl+Shift+Z')
+        self.undoCommandOnStackAction.triggered.connect(self.undoCommand)
+        self.addAction(self.undoCommandOnStackAction)
 
         # TODO: How to Repeat specific Command performed on current file? Like CropCommand or TagCommand?
-        self.repeatCommandOnStack = QAction("&Repeat Command operation on stack", self)
-        self.repeatCommandOnStack.setShortcut('Ctrl+Shift+R')  # TODO: Maybe change shortcut to something else.
-        self.repeatCommandOnStack.triggered.connect(self.reuseLastCropCommand)  # TODO: Currently repeats Crop command!!!!
-        self.addAction(self.repeatCommandOnStack)
+        self.repeatCommandOnStackAction = QAction("&Repeat Command operation on stack", self)
+        self.repeatCommandOnStackAction.setShortcut('Ctrl+Shift+R')  # TODO: Maybe change shortcut to something else.
+        self.repeatCommandOnStackAction.triggered.connect(self.reuseLastCropCommand)  # TODO: Currently repeats Crop command!!!!
+        self.addAction(self.repeatCommandOnStackAction)
 
     def extractTextFromImage(self):
         """
@@ -615,6 +621,10 @@ class MainWindow(QMainWindow, QObject):
         self.galleryManager.updateStatusBarLabelSignal.emit("File was renamed successfully.")
 
         # TODO: Load tags from file or settings, not hardcoded
+
+    def createQuickDirectory(self):
+        newDirName = QuickDirectoryCreator.enterName(None)
+        print(f"New directory name will be created: {newDirName}")
 
 
     @pyqtSlot(str)
