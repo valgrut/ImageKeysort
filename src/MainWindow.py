@@ -1,6 +1,8 @@
 import sys
 import datetime
 import logging
+import os
+import pathlib
 
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
 from PyQt5.QtWidgets import (
@@ -626,17 +628,26 @@ class MainWindow(QMainWindow, QObject):
         # TODO: Maybe move to GalleryManager or some FileOperationManager
 
         newDirName = QuickDirectoryDialog.enterName(None)
-        print(f"New directory name will be created: {newDirName}")
 
         # TODO: Check that entered (if any) directory does not exist in sourceDirectory
 
         # TODO: strip start/end spaces, verify dir format name (no bullshit in the name)
 
-        # TODO: Create a directory
+        # Create a directory
+        src = self.galleryManager.getSourcePath()
+        dst = str(src / pathlib.Path(newDirName))
+
+        if os.path.exists(dst):
+            print(f"Directory {newDirName} already exists in {src}.")
+            return
+        os.makedirs(dst)
 
         # TODO: Add a shortcut into the dialogue (maybe edit-mode -> write shortcut but dont enter, instead hit ctrl+shift+D to open dialogue)
         #  - which will add a shortcut and a directory will be created and assigned to that shortcut.
         #  - Vyzkouset, co bude vic convenient a uvidime.
+        # self.shortcutManager.addShortcut(shc, dir)
+
+        print(f"New directory '{newDirName}' has been created!")
 
 
     @pyqtSlot(str)
