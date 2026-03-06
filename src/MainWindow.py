@@ -625,34 +625,123 @@ class MainWindow(QMainWindow, QObject):
 
         # TODO: Load tags from file or settings, not hardcoded
 
+        # TODO: !!!!! When no tag is selected, "[None]" is added.
+
     def createQuickDirectory(self):
         # TODO: Maybe move to GalleryManager or some FileOperationManager
 
-        shortcut, newDirName = QuickDirectoryShortcutDialog.enterName(None)
-        # newDirName = QuickDirectoryDialog.enterName(None)
+        # TODO: Prozkouset tyhle 3 verze, ktera bude nejlepsi.
+        
+        # Version 1 - Dir only
+        #self._createQuickDirectoryOnly()
 
-        # TODO: Check that entered (if any) directory does not exist in sourceDirectory
+        # Version 2 - Dir and shortcut
+        self._createQuickDirectoryAndShortcut()
+
+        # Version 3 - Dir and shortcut from edit mode
+        # self._createQuickDirectoryAndShortcutFromEdit()
+    
+
+    def _createQuickDirectoryOnly(self):
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
+        
+        newDirName = QuickDirectoryDialog.enterName(None)
 
         # TODO: strip start/end spaces, verify dir format name (no bullshit in the name)
+        if not newDirName:
+            print(f"Directory {newDirName} cannot be empty string!")
+            return
 
-        # Create a directory
         src = self.galleryManager.getSourcePath()
         dst = str(src / pathlib.Path(newDirName))
 
         if os.path.exists(dst):
-            print(f"Directory {newDirName} already exists in {src}.")
+            print(f"Directory {newDirName} already exists in {src}!")
             return
+
+        # All checks passed - create a dir and shortcut
         os.makedirs(dst)
-
-        # TODO: Add a shortcut into the dialogue (maybe edit-mode -> write shortcut but dont enter, instead hit ctrl+shift+D to open dialogue)
-        #  - which will add a shortcut and a directory will be created and assigned to that shortcut.
-        #  - Vyzkouset, co bude vic convenient a uvidime.
-
-        self.shortcutManager.addShortcutSequence(shortcut, dst)
-        # TODO: Check whether shortcut does not exist yet.
 
         print(f"New directory '{newDirName}' has been created!")
 
+
+    def _createQuickDirectoryAndShortcut(self):
+        """
+        Dialogue allows to enter both dir name and shortcut.
+        """
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
+
+        shortcut, newDirName = QuickDirectoryShortcutDialog.enterName(None)
+
+        # TODO: strip start/end spaces, verify dir format name (no bullshit in the name)
+        if not newDirName:
+            print(f"Directory {newDirName} cannot be empty string!")
+            return
+
+        src = self.galleryManager.getSourcePath()
+        dst = str(src / pathlib.Path(newDirName))
+
+        if os.path.exists(dst):
+            print(f"Directory {newDirName} already exists in {src}!")
+            return
+        
+        if self.shortcutManager.shortcutExists(shortcut):
+            print(f"Shortcut {shortcut} already exists!")
+            return
+        
+        if len(shortcut) > 5:  # TODO: will there be a nesting limit? Maybe pull from the Settings.
+            print(f"Shortcut {shortcut} is too long!")
+            return
+
+        # All checks passed - create a dir and shortcut
+        os.makedirs(dst)
+        self.shortcutManager.addShortcutSequence(shortcut, dst)
+
+
+        print(f"New directory '{newDirName}' has been created!")
+
+
+    def _createQuickDirectoryAndShortcutFromEdit(self):
+        """
+        Add a shortcut into the dialogue (edit-mode -> write shortcut but dont enter, instead hit ctrl+shift+D to open dialogue for that shortcut and enter only dirname)
+
+        TODO: Mozna nejen z edit modu. Asi by bylo lepsi to moct udelat i ze sort. Precejen, kdyz zkratka neexistuje, tak se nehitne.
+        """
+
+        # TODO: Maybe move to GalleryManager or some FileOperationManager
+
+        newDirName = QuickDirectoryDialog.enterName(None)
+        shortcut = self.editModeHandler.keySeq
+        # shortcut = self.sortModeHandler.keySeq
+
+        # TODO: strip start/end spaces, verify dir format name (no bullshit in the name)
+        if not newDirName:
+            print(f"Directory {newDirName} cannot be empty string!")
+            return
+
+        src = self.galleryManager.getSourcePath()
+        dst = str(src / pathlib.Path(newDirName))
+
+        if os.path.exists(dst):
+            print(f"Directory {newDirName} already exists in {src}!")
+            return
+        
+        if not shortcut:
+            print(f"Shortcut {shortcut} is empty!")
+            return
+        
+        if len(shortcut) > 5:  # TODO: will there be a nesting limit? Maybe pull from the Settings.
+            print(f"Shortcut {shortcut} is too long!")
+            return
+
+        # All checks passed - create a dir and shortcut
+        os.makedirs(dst)
+        self.shortcutManager.addShortcutSequence(shortcut, dst)
+
+        self.editModeHandler.keySeq = ""
+        self.updateKeySequenceLabel("")
+
+        print(f"New directory '{newDirName}' has been created!")
 
     @pyqtSlot(str)
     def updateWindowTitle(self, newTitle):
