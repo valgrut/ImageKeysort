@@ -40,6 +40,7 @@ from src.CropData import CropData
 from src.CommandStack import CommandStack
 from src.TagSelectionDialog import TagSelectionDialog
 from src.QuickDirectoryCreator import QuickDirectoryDialog
+from src.QuickDirectoryShortcutCreator import QuickDirectoryShortcutDialog
 from src.commands.RotateImageCommand import ImageRotateCommand
 
 # TODO: Tohle jinam; Kam?
@@ -627,7 +628,8 @@ class MainWindow(QMainWindow, QObject):
     def createQuickDirectory(self):
         # TODO: Maybe move to GalleryManager or some FileOperationManager
 
-        newDirName = QuickDirectoryDialog.enterName(None)
+        shortcut, newDirName = QuickDirectoryShortcutDialog.enterName(None)
+        # newDirName = QuickDirectoryDialog.enterName(None)
 
         # TODO: Check that entered (if any) directory does not exist in sourceDirectory
 
@@ -645,7 +647,9 @@ class MainWindow(QMainWindow, QObject):
         # TODO: Add a shortcut into the dialogue (maybe edit-mode -> write shortcut but dont enter, instead hit ctrl+shift+D to open dialogue)
         #  - which will add a shortcut and a directory will be created and assigned to that shortcut.
         #  - Vyzkouset, co bude vic convenient a uvidime.
-        # self.shortcutManager.addShortcut(shc, dir)
+
+        self.shortcutManager.addShortcutSequence(shortcut, dst)
+        # TODO: Check whether shortcut does not exist yet.
 
         print(f"New directory '{newDirName}' has been created!")
 
