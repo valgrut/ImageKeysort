@@ -170,7 +170,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.copyButton = QPushButton("&Copy", self)
         self.copyButton.setCheckable(True)
-        self.copyButton.clicked.connect(self.toggleCopyModeAction.activate)
+        self.copyButton.clicked.connect(self.toggleCopyModeAction.trigger)
         self.copyButton.setFocusPolicy(Qt.NoFocus)
         self.copyButton.setGraphicsEffect(Styles.getShadowEffect())
         self.copyButton.setToolTip("Toggle copy mode (switch between copy and move operation).")
