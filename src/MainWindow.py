@@ -671,6 +671,7 @@ class MainWindow(QMainWindow, QObject):
         """
         # TODO: Maybe move to GalleryManager or some FileOperationManager
 
+        # TODO: Pridat ikonku adresare k labelu pro napsani dirname a druhou ikonku - textu pro napsani zkratky.
         shortcut, newDirName = QuickDirectoryShortcutDialog.enterName(None)
 
         # TODO: strip start/end spaces, verify dir format name (no bullshit in the name)
