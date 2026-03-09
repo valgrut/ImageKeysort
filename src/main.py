@@ -117,7 +117,7 @@ Links:
 
 
 ====== Main features to implement ======
-- [X] Change names of the files
+- [X] Rename the files
 - [ ] Rework ShortcutTreeView
 - [~] Crop (sources: keyboard shortcut, button in menu, button in toolbar)
         - [~] Crop image
@@ -204,6 +204,8 @@ Links:
 
 
 Important features TODO:
+- [X] Copy mode border se zobrazi az pri druhem kliknuti na CopyButton (Zkratka je OK)
+- [X] Delete button do menu a do toolbaru !!!!!
 - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 - [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
 - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
@@ -219,7 +221,6 @@ Important features TODO:
 - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 - [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
-- [X] Delete button do menu a do toolbaru !!!!!
 - [~] !!!!! On/Off crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 - [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those);
       - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
@@ -232,7 +233,6 @@ Important features TODO:
 - [ ] THEMES: Zmenit u ruznych themes nektere barvy, aby byly citelne texty (text v buttons, text v textfiles...)
 - [ ] Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
 - [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
-- [X] Copy mode border se zobrazi az pri druhem kliknuti na CopyButton (Zkratka je OK)
 - [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [~] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
@@ -240,6 +240,7 @@ Important features TODO:
 
 
 Important - Misc:
+- [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
 - [x] !!!!!!! Drag and Drop slozku z file-browseru do IK, coz ji otevre okamzite jako src dir. !!!!!!!!!!
     - [ ] Allow only 1 directory (currently, multiple is possible).
     - Na multiple chci mit taby, pripadne povolit multiple s tim, ze kazda slozka se otevre ve svem tabu!!!. To je napad!
@@ -263,7 +264,6 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
-- [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
 - [ ] Zobrazit nekde/nejak list nactenych souboru ze source dir abecedne. Treba zase pop-up okno jen. Proste tak pro prehled, protoze proc ne. Po kliknuti na nejaky se tento nacte jako aktualni.
 - [ ] Disable to go to the next/prev picture - force user to process the picture instead of skipping it.
 - [ ] !!! Poklikanim na zkratku otevrit cestu
@@ -273,6 +273,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Git project and actions - implementovat nejakou pipeline ?
 - [ ] Zarovnat kod tak, aby nepresahoval pres krajnici napravo (80 znaku nebo kolik) !!
 - [ ] Ve zdrojovem kodu vsude zmenit public attributy na private (_mojeInterniVariable). !!!!!!!
+- [ ] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __deleted__, pokud se tam nejaka nachazi treba z operace Crop.
 
 
 Settings:
@@ -319,6 +320,7 @@ Design:
 
 
 To Fix:
+- [x] Crash behem cropu provedenem hned po prejmenovani obrazku (i po pridani tagu).
 - [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
 - [ ] Fix videos on Windows (Codec?) K-Lite Codec pack ??
 - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
@@ -328,7 +330,6 @@ To Fix:
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
-- [x] Crash behem cropu provedenem hned po prejmenovani obrazku (i po pridani tagu).
 
 
 Shortcuts management, Shortcut Tree (GUI):
@@ -361,6 +362,7 @@ Misc:
 
 
 Minor issues, future features:
+- [X] Pridat slovo "EMPTY" do Inbox obrazku
 - [ ] Translate all done tasks and ideas to EN
 - [ ] Otevrit a tridit remote slozku - napr. Google Drive a pod ?
 - [ ] Stabni kultura - vse prepsat z var_xyz() na varXyz()
@@ -368,7 +370,6 @@ Minor issues, future features:
 - [ ] Pridat radu do helpu: Udelat si mensi shortcuts pro konkretni slozky jako Gaming, a pod.
 - [ ] Vyresit ? pomale nacitani velkych obrazku (6MB+)
 - [~] Separatni repozitar, hodit na reddit, na RH, kolegum,
-- [X] Pridat slovo "EMPTY" do Inbox obrazku
 - [ ] udelat ikonu pro aplikaci: ikonka obrazek a na ni dat "axc" (Neco jako tam je ted, ale dopsat napis??)
 - [ ] Dodelat progress widget
 - [ ] MAYBE: Pridat AI advices based on keywords on image.
