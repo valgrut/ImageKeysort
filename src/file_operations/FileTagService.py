@@ -1,5 +1,6 @@
 import re
 import logging
+import pathlib
 
 from src.GalleryItem import GalleryItem
 
@@ -27,6 +28,7 @@ class FileTagService:
             log.info(f"Filename already contains the tag '{tagToAdd}'.")
             return False
 
+        oldFilename = fileItem.fileName
         currentFilePath = fileItem.pathAsPath()
         originalFilePath = currentFilePath
         currentFileNameNoExt = currentFilePath.stem
@@ -37,6 +39,7 @@ class FileTagService:
         nameWithTag = f"{currentFileNameNoExt}{finalTag}{extension}"
         fileItem.fileName = nameWithTag
         originalFilePath.rename(fileItem.pathAsPath())
+        # FileTagService.renameBackup(fileItem.sourcePath, oldFilename, nameWithTag)
 
         log.info(f"Tag added to the filename: {nameWithTag}")
         return True
@@ -57,7 +60,8 @@ class FileTagService:
         if tagToRemove not in fileItem.fileName:
             log.info(f"Tag '{tagToRemove}'does not exist in the filename.")
             return False
-
+        
+        oldFilename = fileItem.fileName
         currentFilePath = fileItem.pathAsPath()
         originalFilePath = currentFilePath
 
@@ -66,4 +70,14 @@ class FileTagService:
         fileItem.fileName = newName
 
         originalFilePath.rename(fileItem.pathAsPath())
+        # FileTagService.renameBackup(fileItem.sourcePath, oldFilename, newName)
         return True
+    
+    @staticmethod
+    def renameBackup(srcDir: pathlib.Path, oldName, newName):
+        """
+        Renames even a backup in __deleted__ folder, when renaming after cropping.
+        """
+        deletedDir: pathlib.Path = srcDir / pathlib.Path("__DELETED__")
+        deletedFile = deletedDir / pathlib.Path(oldName)
+        deletedFile.rename(deletedDir / pathlib.Path(newName))
