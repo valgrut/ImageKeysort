@@ -152,8 +152,8 @@ Links:
 - [!] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 - [ ] !! Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
-- [ ] !!!! Kdyz udelam crop obrazku, v __deleted__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
-        - Obrazek v __delete__ musi mit stejny nazev a rozmer x a/nebo y vetsi nez ten, kteri je jeste ve slozce!!!
+- [ ] !!!! Kdyz udelam crop obrazku, v __DELETED__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
+        - Obrazek v __DELETED__  musi mit stejny nazev a rozmer x a/nebo y vetsi nez ten, kteri je jeste ve slozce!!!
 
 
 ### Zoom - related todo:
@@ -273,7 +273,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Git project and actions - implementovat nejakou pipeline ?
 - [ ] Zarovnat kod tak, aby nepresahoval pres krajnici napravo (80 znaku nebo kolik) !!
 - [ ] Ve zdrojovem kodu vsude zmenit public attributy na private (_mojeInterniVariable). !!!!!!!
-- [ ] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __deleted__, pokud se tam nejaka nachazi treba z operace Crop.
+- [ ] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
 
 
 Settings:
