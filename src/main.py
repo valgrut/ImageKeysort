@@ -248,7 +248,6 @@ Important - Misc:
 - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
   - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
-- [ ] Prochazet TODO v souborech a udelat je.
 - [~] ! Napsat unit testy !!
 - [ ] !!!!!!! Setridit a zorganizovat MainWindow init metodu - vsechny Actions k sobe, vsechny .connect k sobe a tak.
 - [ ] Help: Pridat examples - jak vypada tree, jak bude vypadat po pridani
@@ -260,6 +259,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Menu: Open recent source directories / shortcuts files.
 - [ ] Pridat pod zobrazeny obrazek operace (crop/rename/tag), ktere na nem byly provedeny jako mala kulata tlacitka -> po kliknuti na ne se dana operace provede Undo().
 - [ ] !!! TODO poznamky a ukoly primo v src souborech.
+        - [ ] Prochazet TODO v souborech a udelat je.
 - [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi. Mozna QSaveFile?
 - [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
 - [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.

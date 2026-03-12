@@ -6,6 +6,10 @@ from PyQt5.QtWidgets import QUndoCommand
 log = logging.getLogger(__name__)
 
 
+# TODO: Vetsina operaci tady musi byt prizpusobena hledani/odstranovani/returning tomu, aby se nasly vsechny commands ruznych typu pro dany 1 filename.
+# TODO: Ale sakra, ja nechci udelat obsolete vsechny commands. Crop chci mit moznost pouzit na dalsi obrazek i kdyz predchozi jsem presunul jinam, sakra...
+
+
 class CommandStack:
     def __init__(self):
         self._commands = []
@@ -63,6 +67,9 @@ class CommandStack:
     def getIndexOfCommandByFilename(self, filename: str) -> int:
         """
         Get the index of a specific command in the stack.
+        
+        TODO: 1. Rework to find by filename AND type
+        TODO: 2. OR return ALL commands associated with this filename.
         """
         for i, cmd in enumerate(self._commands):
             # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
@@ -146,3 +153,25 @@ class CommandStack:
                 return True
 
         return False
+
+    def disableRelatedCommands(self, filename: str):
+        """
+        Disable all commands associated with the provided filename.
+        
+        Required after moving the filename elsewhere, but in case of undoing the move operation, commands can be enabled again.
+        
+        # TODO: Ale sakra, ja nechci udelat obsolete vsechny commands. Crop chci mit moznost pouzit na dalsi obrazek i kdyz predchozi jsem presunul jinam, sakra...
+        """
+        for command in self._commands:
+            if command._fileData.fileName == filename:
+                command.setObsolete(True)
+
+    def enableRelatedCommands(self, filename: str):
+        """
+        Enable all commands associated with the provided filename.
+        
+        Required after moving the filename back to its original src directory.
+        """
+        for command in self._commands:
+            if command._fileData.fileName == filename:
+                command.setObsolete(False)
