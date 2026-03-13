@@ -270,6 +270,29 @@ class SortModeHandler(QObject):
         self.galleryManager.updatePreview()
 
 
+        # # Prevent override of an image in dst, if file with same name exist there.
+        # # Beware, it does not have to be image. It can be any file.
+        # # TODO: Ugh - problemy - moveHistory entry + _availableMediaFiles a _movedFiles .....
+        # # TODO: Rename all ...Image... to ...File...
+        # if self.srcImageExistsInDst(dst, imageName):
+        #     # self.handleExistingImageInDst()
+        #     log.warning(f"File '{imageName}' already exists in __DELETED__. Moving to trash.")
+        #     os.remove(pathlib.Path(src) / pathlib.Path(imageName))
+        #     # return
+        # else:
+        #     self.moveImageCommand(src, dst, imageName)
+        #
+        # log.info(f"It is found. Possible to move from {src} into {dst}!")
+        #
+        # # Remove current image from the list of images in src directory
+        # self.updateStatusBarLabel(f"File {imageName} deleted.")
+        #
+        # self.galleryManager.updateCounterLabelText()
+        #
+        # # Show new image
+        # self.galleryManager.updatePreview()
+
+
     def handleKeyOthers(self, event):
         """
         Appends pressed key into the label in the UI.

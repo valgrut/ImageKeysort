@@ -237,6 +237,9 @@ Important features TODO:
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [~] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
 - [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
+- [ ] Add TESTY: Crop -> Rename -> UndoCrop;; Crop -> Tag -> UndoCrop.
+- [ ] Add TESTY: Move
+- [ ] Sjednotit filename (without path) a fullFilename (with path)
 
 
 Important - Misc:
