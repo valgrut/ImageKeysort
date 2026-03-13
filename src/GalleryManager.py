@@ -340,6 +340,19 @@ class GalleryManager(QStackedWidget):
             self.updateStatusBarLabelSignal.emit("File was renamed successfully.")
             log.info("File was renamed successfully.")
 
+            # Rename also a file in __DELETED__, which could be there after Crop operation.
+            self.tryRenameDeleted(currentGalleryItem.sourcePath, originalFilename, newFileName)
+
+    def tryRenameDeleted(self, path: pathlib.Path, oldFileName, newFileName):
+        deletedFileOld = path / pathlib.Path("__DELETED__") / pathlib.Path(oldFileName)
+        deletedFileNew = path / pathlib.Path("__DELETED__") / pathlib.Path(newFileName)
+        if not deletedFileOld.exists():
+            print(f"No {oldFileName} in __DELETED__ folder.")
+            return
+
+        deletedFileOld.rename(deletedFileNew)
+        print(f"{deletedFileOld} changed to {deletedFileNew}")
+
 
     def removeFile(self, fileName):
         isFound = False
