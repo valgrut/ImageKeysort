@@ -216,7 +216,6 @@ Important features TODO:
 - [ ] !!!! Add do Settings: Otevrit presets z minula
 - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 - [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
-  - mvHistory presunout do separatni tridy a mit tam metody jako pop(), getLast(), push() a pod. Mozna pouzit QUndoStack, QUndoCommand, ....
 - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
 - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
@@ -238,8 +237,11 @@ Important features TODO:
 - [~] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
 - [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
 - [ ] Add TESTY: Crop -> Rename -> UndoCrop;; Crop -> Tag -> UndoCrop.
-- [ ] Add TESTY: Move
+- [ ] Add TESTY: Crop -> Delete.
+- [ ] Add TESTY: Crop -> Crop -> gotoNext -> RepeatCrop.
+- [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
 - [ ] Sjednotit filename (without path) a fullFilename (with path)
+- [ ] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort !!!!!!! Pak bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
 
 
 Important - Misc:
@@ -276,17 +278,16 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Git project and actions - implementovat nejakou pipeline ?
 - [ ] Zarovnat kod tak, aby nepresahoval pres krajnici napravo (80 znaku nebo kolik) !!
 - [ ] Ve zdrojovem kodu vsude zmenit public attributy na private (_mojeInterniVariable). !!!!!!!
-- [ ] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
+- [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
 - [ ] Vsechny cesty tvorene jeste s 'neco + "/" + neco' predelat na 'pathlib.path(neco / neco)'
 - [ ] Nahradit vsude "pathlib.Path" za "Path" !!!!! a pripadne i  os.pathlike
+            ```
+            from pathlib import Path
+            from os import PathLike
 
-```
-from pathlib import Path
-from os import PathLike
-
-def f(mydata: str | PathLike[str]) -> None:
-    path = Path(mydata)
-```
+            def f(mydata: str | PathLike[str]) -> None:
+                path = Path(mydata)
+            ```
 
 
 Settings:

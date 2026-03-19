@@ -272,3 +272,27 @@ class TestSortModeHandler(unittest.TestCase):
         self.assertEqual(self.window.sortModeHandler.keySeq, "")
 
         self.tearDown()
+
+
+    def test_undo_move(self):
+        self.prepare(2)
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 2)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+        
+        QTest.keySequence(self.window, "a,a")
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 1)
+        
+        # QTest.keySequence(self.window, "Ctrl+Z")
+        self.window.undoSortAction.trigger()  # Workaround. Cannot make Ctrl+z sequence work.
+        
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 2)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+        
+        self.window.undoSortAction.trigger()  # Workaround. Cannot make Ctrl+z sequence work.
+        
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 2)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+        self.tearDown()
