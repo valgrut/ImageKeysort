@@ -596,6 +596,7 @@ class SortModeHandler(QObject):
 
     def moveImageCommand(self, src: str, dst: str, imageName: str):
         # TODO: Replace with the Command and UndoStack.
+        # TODO: !!! Image will have to be an object GalleryItem, not just string, so the filename changes are kept.
         shutil.move(src + "/" + imageName, dst + "/" + imageName)
         self.addEntryIntoHistory(src, dst, imageName, self.galleryManager.getGalleryIndex(), Operations.MOVE)
         self.galleryManager.removeFile(imageName)
