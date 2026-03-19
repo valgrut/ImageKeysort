@@ -22,6 +22,17 @@ QCoreApplication.setApplicationName("Image Keysort")
 app = QApplication([])  # needed for the app to work during testing
 
 
+# TODO:
+# crop -> Move
+# crop -> delete
+# crop -> move -> undoCrop
+# crop -> move -> undoMove -> undoCrop
+# 
+#
+#
+#
+
+
 def generateRandomImage(x, y, save_path=None):
     """
     Generate a random RGB image of size (x, y).
@@ -112,6 +123,7 @@ class FileOperationTest(unittest.TestCase):
         
         self.tearDown()
 
+
     def test_crop_basic_undo(self):
         self.prepare(1, 256, 256)
                 
@@ -129,6 +141,110 @@ class FileOperationTest(unittest.TestCase):
         
         size = Image.open(current).size
         self.assertEqual(size, (256, 256))
-        self.assertNotEqual(size, (100, 100))
         
         self.tearDown()
+        
+
+    def test_crop_undo_on_empty(self):
+        self.prepare(1, 256, 256)
+        
+        # Undo on empty stack
+        self.window.undoCommandOnStackAction.trigger()
+        
+        self.tearDown()
+        
+        
+    # def test_crop_double(self):
+    #     # TODO: WIP (does not work implementation-wise)
+    #     self.prepare(1, 256, 256)
+                
+    #     originalImageSize = QSize(256, 256)
+        
+    #     # Crop 1
+    #     cropRect = QRect(56, 56, 100, 100)
+    #     cropData = CropData(self.window.galleryManager.getCurrentGalleryItem(), cropRect, originalImageSize)
+    #     self.window.createAndExecuteCropCommand(cropData)
+        
+    #     self.assertEqual(self.window.commandsStack.count(), 1)
+        
+    #     # Crop 2
+    #     cropRect2 = QRect(10, 10, 50, 50)
+    #     cropData2 = CropData(self.window.galleryManager.getCurrentGalleryItem(), cropRect2, originalImageSize)
+    #     self.window.createAndExecuteCropCommand(cropData2)
+        
+    #     # Commands should merge into single one!
+    #     self.assertEqual(self.window.commandsStack.count(), 1)
+        
+    #     current = self.window.galleryManager.getCurrentGalleryItem().pathAsStr()
+    #     size = Image.open(current).size
+    #     self.assertEqual(size, (40, 40))
+
+    #     self.tearDown()
+        
+        
+    # def test_crop_double_undo(self):
+    #     # TODO: WIP (does not work implementation-wise)
+    #     self.prepare(1, 256, 256)
+                
+    #     originalImageSize = QSize(256, 256)
+        
+    #     # Crop 1
+    #     cropRect = QRect(56, 56, 100, 100)
+    #     cropData = CropData(self.window.galleryManager.getCurrentGalleryItem(), cropRect, originalImageSize)
+    #     self.window.createAndExecuteCropCommand(cropData)
+
+    #     # Crop 2
+    #     cropRect2 = QRect(10, 10, 50, 50)
+    #     cropData2 = CropData(self.window.galleryManager.getCurrentGalleryItem(), cropRect2, originalImageSize)
+    #     self.window.createAndExecuteCropCommand(cropData2)
+        
+    #     # Commands should merge into single one!
+    #     self.assertEqual(self.window.commandsStack.count(), 1)
+        
+        
+    #     current = self.window.galleryManager.getCurrentGalleryItem().pathAsStr()
+    #     size = Image.open(current).size
+    #     self.assertEqual(size, (40, 40))
+        
+    #     # Undo Crop
+    #     self.window.undoCommandOnStackAction.trigger()
+        
+    #     size = Image.open(current).size
+    #     self.assertEqual(size, (256, 256))
+        
+    #     self.assertEqual(self.window.commandsStack.count(), 0)   
+        
+    #     self.tearDown()
+
+
+    def test_crop_repeat(self):
+        self.prepare(3, 256, 256)
+        self.tearDown()
+
+
+    # def test_crop_double_repeat(self):
+    #     ...
+
+
+    def test_crop_rename_undo(self):
+        self.prepare(1, 256, 256)
+                
+        originalImageSize = QSize(256, 256)
+        cropRect = QRect(56, 56, 100, 100)
+        cropData = CropData(self.window.galleryManager.getCurrentGalleryItem(), cropRect, originalImageSize)
+        
+        # Execute crop
+        self.window.createAndExecuteCropCommand(cropData)
+        self.assertEqual(self.window.commandsStack.count(), 1)
+
+        # Rename current file - have to rename both backup in __DELETED_ and current file.
+        self.window.galleryManager.commitNewFileName("TEST.png")
+        
+        # Check new filename
+        self.assertEqual(self.window.galleryManager.getCurrentFilename(), "TEST.png")
+        
+        # Undo Crop
+        self.window.undoCommandOnStackAction.trigger()
+        
+        # Check filename still ok
+        self.assertEqual(self.window.galleryManager.getCurrentFilename(), "TEST.png")

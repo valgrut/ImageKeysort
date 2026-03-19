@@ -1,4 +1,3 @@
-import pathlib
 import shutil
 import os
 from dataclasses import dataclass

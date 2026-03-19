@@ -206,6 +206,7 @@ Links:
 Important features TODO:
 - [X] Copy mode border se zobrazi az pri druhem kliknuti na CopyButton (Zkratka je OK)
 - [X] Delete button do menu a do toolbaru !!!!!
+- [X] Add TESTY: Crop -> Rename -> UndoCrop;; Crop -> Tag -> UndoCrop.
 - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 - [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
 - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
@@ -236,12 +237,12 @@ Important features TODO:
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [~] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
 - [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
-- [ ] Add TESTY: Crop -> Rename -> UndoCrop;; Crop -> Tag -> UndoCrop.
 - [ ] Add TESTY: Crop -> Delete.
 - [ ] Add TESTY: Crop -> Crop -> gotoNext -> RepeatCrop.
 - [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
 - [ ] Sjednotit filename (without path) a fullFilename (with path)
 - [ ] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort !!!!!!! Pak bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
+- [ ] !!!!!!! Musim prejmenovat soubor i v dst, kdyz pouziju COPY mode. Prejmenovavam je pouze v __DELETED__. Bez toho by neslo dat Copy->Rename->UndoCopy.
 
 
 Important - Misc:
@@ -280,14 +281,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Ve zdrojovem kodu vsude zmenit public attributy na private (_mojeInterniVariable). !!!!!!!
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
 - [ ] Vsechny cesty tvorene jeste s 'neco + "/" + neco' predelat na 'pathlib.path(neco / neco)'
-- [ ] Nahradit vsude "pathlib.Path" za "Path" !!!!! a pripadne i  os.pathlike
-            ```
-            from pathlib import Path
-            from os import PathLike
-
-            def f(mydata: str | PathLike[str]) -> None:
-                path = Path(mydata)
-            ```
+- [ ] Nahradit vsude "pathlib.Path" za "Path" !!!!! a pripadne i  os.pathlike ...... '$rg "pathlib.Path"'
 
 
 Settings:

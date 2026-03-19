@@ -2,7 +2,7 @@ import sys
 import datetime
 import logging
 import os
-import pathlib
+from pathlib import Path
 
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
 from PyQt5.QtWidgets import (
@@ -653,7 +653,7 @@ class MainWindow(QMainWindow, QObject):
             return
 
         src = self.galleryManager.getSourcePath()
-        dst = str(src / pathlib.Path(newDirName))
+        dst = str(src / Path(newDirName))
 
         if os.path.exists(dst):
             print(f"Directory {newDirName} already exists in {src}!")
@@ -680,7 +680,7 @@ class MainWindow(QMainWindow, QObject):
             return
 
         src = self.galleryManager.getSourcePath()
-        dst = str(src / pathlib.Path(newDirName))
+        dst = str(src / Path(newDirName))
 
         if os.path.exists(dst):
             print(f"Directory {newDirName} already exists in {src}!")
@@ -721,7 +721,7 @@ class MainWindow(QMainWindow, QObject):
             return
 
         src = self.galleryManager.getSourcePath()
-        dst = str(src / pathlib.Path(newDirName))
+        dst = str(src / Path(newDirName))
 
         if os.path.exists(dst):
             print(f"Directory {newDirName} already exists in {src}!")
@@ -789,7 +789,7 @@ class MainWindow(QMainWindow, QObject):
 
         import pathlib
         # Required for new styles to take effect.
-        app.setStyleSheet(pathlib.Path('static/app-styles.qss').read_text(encoding="utf-8"))
+        app.setStyleSheet(Path('static/app-styles.qss').read_text(encoding="utf-8"))
 
 
     def showAbout(self):
