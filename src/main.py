@@ -278,6 +278,15 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Ve zdrojovem kodu vsude zmenit public attributy na private (_mojeInterniVariable). !!!!!!!
 - [ ] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
 - [ ] Vsechny cesty tvorene jeste s 'neco + "/" + neco' predelat na 'pathlib.path(neco / neco)'
+- [ ] Nahradit vsude "pathlib.Path" za "Path" !!!!! a pripadne i  os.pathlike
+
+```
+from pathlib import Path
+from os import PathLike
+
+def f(mydata: str | PathLike[str]) -> None:
+    path = Path(mydata)
+```
 
 
 Settings:

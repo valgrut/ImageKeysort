@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-import pathlib
+from pathlib import Path
 
 
 @dataclass(order=True)
@@ -13,21 +13,21 @@ class GalleryItem:
     places (in gallery's list, commands, ...) during the renaming, tagging, ...
     """
     fileName: str
-    sourcePath: pathlib.Path
+    sourcePath: Path
 
     def pathAsStr(self) -> str:
         """
         Return full path as a string.
         :return:
         """
-        return str(self.sourcePath / pathlib.Path(self.fileName))
+        return str(self.sourcePath / Path(self.fileName))
 
-    def pathAsPath(self) -> pathlib.Path:
+    def pathAsPath(self) -> Path:
         """
         Return full path as a pathlib.Path.
         :return:
         """
-        return self.sourcePath / pathlib.Path(self.fileName)
+        return self.sourcePath / Path(self.fileName)
 
     # def __repr__(self):
     #     return f'{self.fileName}'

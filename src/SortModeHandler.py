@@ -1,3 +1,4 @@
+import pathlib
 import shutil
 import os
 from dataclasses import dataclass
@@ -9,14 +10,53 @@ from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtGui import QKeyEvent
 
+from src.GalleryItem import GalleryItem
 from src.SettingsDialog import SettingsDialog
 from src.Operations import Operations
 
 log = logging.getLogger(__name__)
 
-# @dataclass
-# class HistoryEntry(dataclass):
-#     pass
+@dataclass
+class HistoryEntry:
+    imageData: GalleryItem
+    srcPath: Path
+    dstPath: Path
+    galleryIndex: int
+    operation: Operations
+
+
+class MoveHistoryManager:
+    def __init__(self):
+        self._moveHistory: list[HistoryEntry] = []
+        
+    def push(self, entry: HistoryEntry):
+        self._moveHistory.append(entry)
+        
+    def getLast(self) -> HistoryEntry:
+        if self._moveHistory:
+            return self._moveHistory[-1]
+        return None
+        
+    def pop(self) -> HistoryEntry:
+        if self._moveHistory:
+            return self._moveHistory.pop()
+        return None
+        
+    def top(self) -> HistoryEntry:
+        if self._moveHistory:
+            return self._moveHistory[-1]
+        return None
+
+    def clear(self):
+        self._moveHistory.clear()
+        
+    def len(self) -> int:
+        return len(self._moveHistory)
+    
+    def empty(self) -> bool:
+        if len(self._moveHistory) <= 0:
+            return True
+        return False
 
 
 class SortModeHandler(QObject):
@@ -35,7 +75,7 @@ class SortModeHandler(QObject):
         self.shortcutManager = shortcutManager
         self.galleryManager = galleryManager
 
-        self.mvHistory = []
+        self._historyManager = MoveHistoryManager()
         self.keySeq = ""
         self.permanentKeySeq = ""
         self.copyOnly = False
@@ -130,6 +170,7 @@ class SortModeHandler(QObject):
 
         src = str(self.galleryManager.getSourcePath())
         imageName = self.galleryManager.getCurrentFilename()
+        currentItem = self.galleryManager.getCurrentGalleryItem()
         if not imageName:
             log.warning("There is no gallery currently opened.")
             self.updateStatusBarLabel(f"There is no gallery currently opened.")
@@ -137,7 +178,7 @@ class SortModeHandler(QObject):
 
         # Check that image was not removed from outside of an app
         if self.srcImageStillExists(src, imageName) is False:
-            self.cleanupMissingImage(src, imageName)
+            self.cleanupMissingImage(imageName)
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
@@ -147,15 +188,14 @@ class SortModeHandler(QObject):
 
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
-            self.moveImageCommand(src, dst, imageName)
+            self.moveImageCommand(src, dst, currentItem)
         else:
-            self.copyImageCommand(src, dst, imageName)
+            self.copyImageCommand(src, dst, currentItem)
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.decrementGalleryIndex()
 
         self.keySeq = ""
-        # log.info(f"History entries: {len(self.mvHistory)}")
         self.updateKeySequenceLabel()
         self.galleryManager.updateCounterLabelText()
 
@@ -177,15 +217,9 @@ class SortModeHandler(QObject):
         This operation is made in non-copy mode (moves image).
         """
         log.debug("handleSortMode: Case '.'")
-        # TODO: refactor: Mohlo by to vypadat nejak takhle:
-        # if history is empty:
-        #     return
-        # src = self.mvHistory[-1]["src"]
-        # dst = self.mvHistory[-1]["dst"]
-        # tryToMoveImage(src, dst, currentImage)
         log.info("Repeat last finished command for current image")
 
-        if len(self.mvHistory) <= 0:
+        if self._historyManager.empty():
             log.info("History is empty.")
             self.updateStatusBarLabel(f"Cannot repeat last command. History is Empty!")
             return
@@ -196,15 +230,16 @@ class SortModeHandler(QObject):
             self.updateStatusBarLabel(f"There is no gallery currently opened.")
             return
 
-        src = self.mvHistory[-1]["src"]
-        dst = self.mvHistory[-1]["dst"]
+        lastEntry = self._historyManager.getLast()
+        src = str(lastEntry.srcPath)
+        dst = str(lastEntry.dstPath)
 
         if not self.checkDestinationDirectoryExists(dst):
             return
 
         # Check that image was not removed from outside of an app
         if self.srcImageStillExists(src, imageName) is False:
-            self.cleanupMissingImage(src, imageName)
+            self.cleanupMissingImage(imageName)
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
@@ -213,16 +248,16 @@ class SortModeHandler(QObject):
             return
 
         # Remove current image from the list of images in src directory
+        currentItem = self.galleryManager.getCurrentGalleryItem()
         if not self.copyOnly:
-            self.moveImageCommand(src, dst, imageName)
+            self.moveImageCommand(src, dst, currentItem)
         else:
-            self.copyImageCommand(src, dst, imageName)
+            self.copyImageCommand(src, dst, currentItem)
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.incrementGalleryIndex()
 
-
-        log.info(f"History entries: {len(self.mvHistory)}")
+        log.info(f"History entries: {self._historyManager.len()}")
         self.galleryManager.updateCounterLabelText()
 
         # Show new image
@@ -243,14 +278,14 @@ class SortModeHandler(QObject):
             self.updateStatusBarLabel(f"There is no gallery currently opened.")
             return
         src = str(self.galleryManager.getSourcePath())
-        dst = src + "/" + "__DELETED__"
+        dst = str(src / Path("__DELETED__"))
 
         if not os.path.exists(dst):
             os.makedirs(dst)
 
         # Check that image was not removed from outside of an app
         if self.srcImageStillExists(src, imageName) is False:
-            self.cleanupMissingImage(src, imageName)
+            self.cleanupMissingImage(imageName)
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
@@ -261,7 +296,8 @@ class SortModeHandler(QObject):
         log.info(f"It is found. Possible to move from {src} into {dst}!")
 
         # Remove current image from the list of images in src directory
-        self.moveImageCommand(src, dst, imageName)
+        currentItem = self.galleryManager.getCurrentGalleryItem()
+        self.moveImageCommand(src, dst, currentItem)
         self.updateStatusBarLabel(f"File Deleted.")
 
         self.galleryManager.updateCounterLabelText()
@@ -277,7 +313,7 @@ class SortModeHandler(QObject):
         # if self.srcImageExistsInDst(dst, imageName):
         #     # self.handleExistingImageInDst()
         #     log.warning(f"File '{imageName}' already exists in __DELETED__. Moving to trash.")
-        #     os.remove(pathlib.Path(src) / pathlib.Path(imageName))
+        #     os.remove(Path(src) / Path(imageName))
         #     # return
         # else:
         #     self.moveImageCommand(src, dst, imageName)
@@ -370,7 +406,7 @@ class SortModeHandler(QObject):
 
         # Check that image was not removed from outside of an app
         if self.srcImageStillExists(src, imageName) is False:
-            self.cleanupMissingImage(src, imageName)
+            self.cleanupMissingImage(imageName)
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
@@ -381,10 +417,11 @@ class SortModeHandler(QObject):
         log.info(f"It is found. Possible to move from {src} into {dst}!")
 
         # Remove current image from the list of images in src directory
+        currentItem = self.galleryManager.getCurrentGalleryItem()
         if not self.copyOnly and instantCopy is False:
-            self.moveImageCommand(src, dst, imageName)
+            self.moveImageCommand(src, dst, currentItem)
         elif self.copyOnly or instantCopy:
-            self.copyImageCommand(src, dst, imageName)
+            self.copyImageCommand(src, dst, currentItem)
 
             # TODO: Should instantCopy override Settings?
             # 2 options: 1. Settings->Gotonext overrides everything else.
@@ -392,7 +429,8 @@ class SortModeHandler(QObject):
             if SettingsDialog.settingsGetAutoNextAfterCopy() or moveToNextImage:
                 self.galleryManager.incrementGalleryIndex()
 
-        log.info(f"History entries: {len(self.mvHistory)}")
+        log.info(f"History entries: {self._historyManager.len()}")
+
         # Update counter label
         self.galleryManager.updateCounterLabelText()
 
@@ -407,18 +445,19 @@ class SortModeHandler(QObject):
     @pyqtSlot()
     def undo_last_operation(self):
         log.debug("Undo last operation")
-        # log.info(self.mv_history)
 
-        if not self.mvHistory:
+        if self._historyManager.empty():
             log.info(f"History is Empty!")
             self.updateStatusBarLabelSignal.emit(f"Nothing to Undo, history is empty.")
             return
 
-        imageName = self.mvHistory[-1]["image"]
-        src = self.mvHistory[-1]["dst"]
-        dst = self.mvHistory[-1]["src"]
-        positionIndex = self.mvHistory[-1]["gallery_index"]
-        operation = self.mvHistory[-1]["operation"]
+        lastEntry = self._historyManager.getLast()
+        imageData = lastEntry.imageData
+        imageName = lastEntry.imageData.fileName
+        src = str(lastEntry.dstPath)  # Beware, We use src from history as dst for Undo-move operation.
+        dst = str(lastEntry.srcPath)
+        positionIndex = lastEntry.galleryIndex
+        operation = lastEntry.operation
 
         if not self.checkDestinationDirectoryExists(dst):
             return
@@ -441,7 +480,7 @@ class SortModeHandler(QObject):
                 self.updateStatusBarLabel(f"File moved BACK from: {src}.")
 
                 # return back the image into the list of images
-                self.galleryManager.addFile(imageName, positionIndex)
+                self.galleryManager.restoreFile(imageData, positionIndex)
 
                 # Update counter label
                 self.galleryManager.updateCounterLabelText()
@@ -451,8 +490,7 @@ class SortModeHandler(QObject):
                 self.updateStatusBarLabel(f"File deleted from: {src}.")
 
         # Remove last record from history
-        if self.mvHistory:
-            self.mvHistory.pop()
+        self._historyManager.pop()
 
         # Show new image
         self.galleryManager.updatePreview()
@@ -518,22 +556,20 @@ class SortModeHandler(QObject):
         """
         pass
 
-    def cleanupMissingImage(self, src, imageName):
+    def cleanupMissingImage(self, fileData: GalleryItem):
         """
         If an image is not found (deleted from outside the app), then
         remove it from the images list, update preview...
         """
-        self.galleryManager.removeFile(imageName)
         self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
+        self.galleryManager.removeFile(fileData)
         self.galleryManager.updateCounterLabelText()
         self.galleryManager.updatePreview()
         self.keySeq = ""
         self.updateKeySequenceLabel()
-        # if self.mvHistory:  # TODO maybe remove? pros / cons
-        #     self.mvHistory.pop()
 
 
-    def srcImageExistsInDst(self, dst, imageName) -> bool:
+    def srcImageExistsInDst(self, dst: Path, imageName) -> bool:
         """
         Check, whether the file with the same name does not already exist in the destination directory.
         """
@@ -541,7 +577,7 @@ class SortModeHandler(QObject):
         # log.info(f"image: '{imageName}' !!!")
         # log.info(f"Dst: '{dst}'!!!")
         # if os.path.exists(dst + "/" + imageName):
-        if os.path.isfile(dst + "/" + imageName):
+        if os.path.isfile(dst / Path(imageName)):
             log.info(f"Image {imageName} already exists in the {dst}!!!")
             return True
         return False
@@ -561,7 +597,7 @@ class SortModeHandler(QObject):
         self.updateKeySequenceLabel()
 
 
-    def checkDestinationDirectoryExists(self, dst) -> bool:
+    def checkDestinationDirectoryExists(self, dst: Path) -> bool:
         """
         Check, whether destination directory exists.
         If it does NOT, return False.
@@ -582,31 +618,34 @@ class SortModeHandler(QObject):
         self.updateKeySequenceLabel()
         self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 
-    def addEntryIntoHistory(self, src: str, dst: str, imageName: str, currentIndex: int, operation: Operations):
-        # TODO: Replace with the Command and UndoStack.
-        newHistoryEntry = {
-            "src": src,
-            "dst": dst,
-            "image": imageName,
-            "gallery_index": currentIndex,  # self.galleryManager.getGalleryIndex()
-            "operation": operation
-        }
+    def addEntryIntoHistory(self, imageData: GalleryItem, src: Path, dst: Path, currentIndex: int, operation: Operations):
+        # TODO: maybe ? Replace with the Command and UndoStack.
+        newHistoryEntry = HistoryEntry(
+            imageData = imageData,
+            srcPath = src,
+            dstPath = dst,
+            galleryIndex = currentIndex,
+            operation = operation
+        )
+        
         # Append entry / Push entry to historyStack
-        self.mvHistory.append(newHistoryEntry)
+        self._historyManager.push(newHistoryEntry)
+        
+        # Check:
+        print(self._historyManager.top())
 
-    def moveImageCommand(self, src: str, dst: str, imageName: str):
+    def moveImageCommand(self, src: str|Path, dst: str|Path, imageData: GalleryItem):
         # TODO: Replace with the Command and UndoStack.
-        # TODO: !!! Image will have to be an object GalleryItem, not just string, so the filename changes are kept.
-        shutil.move(src + "/" + imageName, dst + "/" + imageName)
-        self.addEntryIntoHistory(src, dst, imageName, self.galleryManager.getGalleryIndex(), Operations.MOVE)
-        self.galleryManager.removeFile(imageName)
-        self.updateStatusBarLabel(f"File moved to {dst}.")
+        shutil.move(Path(src) / Path(imageData.fileName), Path(dst) / Path(imageData.fileName))
+        self.addEntryIntoHistory(imageData, src, dst, self.galleryManager.getGalleryIndex(), Operations.MOVE)
+        self.galleryManager.removeFile(imageData)
+        self.updateStatusBarLabel(f"File moved to {str(dst)}.")
 
-    def copyImageCommand(self, src: str, dst: str, imageName: str):
+    def copyImageCommand(self, src: str|Path, dst: str|Path, imageData: GalleryItem):
         # TODO: Replace with the Command and UndoStack.
-        shutil.copy2(src + "/" + imageName, dst + "/" + imageName)
-        self.addEntryIntoHistory(src, dst, imageName, self.galleryManager.getGalleryIndex(), Operations.COPY)
-        self.updateStatusBarLabel(f"File copied to {dst}.")
+        shutil.copy2(Path(src) / Path(imageData.fileName), Path(dst) / Path(imageData.fileName))
+        self.addEntryIntoHistory(imageData, src, dst, self.galleryManager.getGalleryIndex(), Operations.COPY)
+        self.updateStatusBarLabel(f"File copied to {str(dst)}.")
 
 
     def afterMoveOperations(self):

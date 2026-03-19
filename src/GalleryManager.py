@@ -44,8 +44,9 @@ class GalleryManager(QStackedWidget):
         # self.emptyInboxIcon.selectSourceSignal.connect(self.selectSourceDirectory)
 
         # Variables:
-        self._sourceDirectoryPath: pathlib.Path = None
+        self._sourceDirectoryPath: Path = None
         self._availableMediaFiles: list[GalleryItem] = []
+        self._movedMediaFiles: list[GalleryItem] = []
         self._currentFileIndex: int = -1  # Index with a value -1 represents empty gallery.
 
         # TODO: Future feature (multiple opened tabs representing separated galleries (source directories). vvvvv
@@ -82,22 +83,22 @@ class GalleryManager(QStackedWidget):
     #         return self._galleries[self._galleryIndex]
     #     return None
 
-    def setSourcePath(self, source_path: pathlib.Path | str):
+    def setSourcePath(self, source_path: Path | str):
         # TODO: future feature.
         # activeGallery = self.getActiveGallery()
         # if activeGallery is None:
         #     return
 
         if isinstance(source_path, str):
-            resultPath = pathlib.Path(source_path)
-        if isinstance(source_path, pathlib.Path):
+            resultPath = Path(source_path)
+        if isinstance(source_path, Path):
             resultPath = source_path
 
         self._sourceDirectoryPath = resultPath
         self.mediaContainerWidget.setSourceDirLabelText(str(resultPath))
         self.loadImagesInDirectory()
 
-    def getSourcePath(self) -> pathlib.Path:
+    def getSourcePath(self) -> Path:
         return self._sourceDirectoryPath
 
     def selectSourceDirectory(self):
@@ -105,7 +106,7 @@ class GalleryManager(QStackedWidget):
         if not srcPath:
             return
 
-        self._sourceDirectoryPath = pathlib.Path(srcPath)
+        self._sourceDirectoryPath = Path(srcPath)
         self.mediaContainerWidget.setSourceDirLabelText(str(self._sourceDirectoryPath))
         self.loadImagesInDirectory()
 
@@ -290,14 +291,6 @@ class GalleryManager(QStackedWidget):
         counter: str = str(self._currentFileIndex + 1) + "/" + str(len(self._availableMediaFiles))
         return counter
 
-    # TODO: Update to ImgDataObj version:
-    # TODO: 1. Deleting of entry z availableMediaFiles se bude jen presouvat do deletedMediaFiles
-    # TODO: 2. Undo move to presune zase zpet (nechci ztratit reference na dany GalleryItem v Commands)
-    # TODO: tento addFile vrati soubor z deletedMediaFiles zpet do _availableMediaFiles.
-    # TODO: _deletedMediaFiles pak budou dropnuty, kdyz se zmeni galerie a pod...
-    def addFile(self, fileName: str, positionIndex:int=0):
-        self._availableMediaFiles.insert(positionIndex, GalleryItem(fileName, self.getSourcePath()))
-
     @pyqtSlot()
     def renameFile(self):
         """
@@ -343,9 +336,9 @@ class GalleryManager(QStackedWidget):
             # Rename also a file in __DELETED__, which could be there after Crop operation.
             self.tryRenameDeleted(currentGalleryItem.sourcePath, originalFilename, newFileName)
 
-    def tryRenameDeleted(self, path: pathlib.Path, oldFileName, newFileName):
-        deletedFileOld = path / pathlib.Path("__DELETED__") / pathlib.Path(oldFileName)
-        deletedFileNew = path / pathlib.Path("__DELETED__") / pathlib.Path(newFileName)
+    def tryRenameDeleted(self, path: Path, oldFileName, newFileName):
+        deletedFileOld = path / Path("__DELETED__") / Path(oldFileName)
+        deletedFileNew = path / Path("__DELETED__") / Path(newFileName)
         if not deletedFileOld.exists():
             print(f"No {oldFileName} in __DELETED__ folder.")
             return
@@ -354,20 +347,44 @@ class GalleryManager(QStackedWidget):
         print(f"{deletedFileOld} changed to {deletedFileNew}")
 
 
-    def removeFile(self, fileName):
-        isFound = False
-        for file in self._availableMediaFiles:
-            if file.fileName == fileName:
-                self._availableMediaFiles.remove(file)
-                isFound = True
-                break
-
-        if not isFound:
+    def removeFile(self, fileData: GalleryItem):
+        """
+        Move file from availableMedia list into movedMedia list.
+        
+        Required for possibility to revert the move operation while keeping the same imageData object intact.
+        """
+        
+        if fileData not in self._availableMediaFiles:
             return
+        
+        self._availableMediaFiles.remove(fileData)
+        self._movedMediaFiles.append(fileData)
 
         if self._currentFileIndex >= len(self._availableMediaFiles):
             self._currentFileIndex = len(self._availableMediaFiles) - 1
 
+        log.info(f"Number of items in _availableMediaFiles: {len(self._availableMediaFiles)}")
+        log.info(f"Number of items in _movedMediaFiles: {len(self._movedMediaFiles)}")
+
+
+    def restoreFile(self, fileData: GalleryItem, positionIndex:int=0):
+        """
+        Move file movedMedia list.back into availableMedia list.
+        
+        Required for possibility to revert the move operation while keeping the same imageData object intact.
+        """
+        
+        if fileData not in self._movedMediaFiles:
+            log.info(f"File {fileData} not found in _movedMediaFiles!")
+            return
+        
+        self._availableMediaFiles.insert(positionIndex, fileData)
+        self._movedMediaFiles.remove(fileData)
+
+        # if self._currentFileIndex >= len(self._availableMediaFiles):
+        #     self._currentFileIndex = len(self._availableMediaFiles) - 1
+        log.info(f"Number of items in _availableMediaFiles: {len(self._availableMediaFiles)}")
+        log.info(f"Number of items in _movedMediaFiles: {len(self._movedMediaFiles)}")
 
     def dragEnterEvent(self, event) -> None:
         """
