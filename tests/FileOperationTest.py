@@ -248,3 +248,34 @@ class FileOperationTest(unittest.TestCase):
         
         # Check filename still ok
         self.assertEqual(self.window.galleryManager.getCurrentFilename(), "TEST.png")
+
+
+    def test_copy_rename_undo(self):
+        """
+        Set Copy mode -> Copy to dst -> Rename -> Undo
+        """
+        self.prepare(1, 256, 256)
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+
+        # Copy file to dst
+        self.window.setCopyMode()
+        QTest.keySequence(self.window, "a,a")
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 1)
+
+        # Rename current file - have to rename file in both src and dst
+        self.window.galleryManager.commitNewFileName("TEST.png")
+
+        # Check new filename
+        self.assertEqual(self.window.galleryManager.getCurrentFilename(), "TEST.png")
+
+        # Undo copy
+        self.window.undoSortAction.trigger()  # Workaround. Cannot make Ctrl+z sequence work.
+
+        # Check number of files in src and dst
+        self.assertEqual(self.window.galleryManager.getCurrentFilename(), "TEST.png")
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)

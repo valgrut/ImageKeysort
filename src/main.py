@@ -240,7 +240,6 @@ Important features TODO:
 - [ ] Add TESTY: Crop -> Delete.
 - [ ] Add TESTY: Crop -> Crop -> gotoNext -> RepeatCrop.
 - [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
-- [ ] Add TESTY: Set Copy mode -> Copy to dst -> Rename -> Undo
 - [ ] Sjednotit filename (without path) a fullFilename (with path)
 - [X] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort.
     - Note: Pak bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
