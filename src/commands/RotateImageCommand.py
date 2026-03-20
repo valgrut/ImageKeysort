@@ -1,5 +1,5 @@
 import logging
-import pathlib
+from pathlib import Path
 import shutil
 import os
 
@@ -47,5 +47,5 @@ class ImageRotateCommand(QUndoCommand):
         os.remove(self._fileData.pathAsStr())
 
         # Restore original image
-        deleteDirectory = str(self._fileData.sourcePath / pathlib.Path("__DELETED__") / pathlib.Path(self._fileData.fileName))
+        deleteDirectory = str(self._fileData.sourcePath / Path("__DELETED__") / Path(self._fileData.fileName))
         shutil.move(deleteDirectory, self._fileData.pathAsStr())

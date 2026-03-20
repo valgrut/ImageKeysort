@@ -1,5 +1,5 @@
 import logging
-import pathlib
+from pathlib import Path
 import shutil
 
 from PyQt5.QtCore import QRect, QSize
@@ -28,7 +28,7 @@ class ImageCropService:
         :return:
         """
         # Prepare useful paths and names
-        currentFilePath = pathlib.Path(imageUri)
+        currentFilePath = Path(imageUri)
         srcDir = currentFilePath.parent
         filename = currentFilePath.name
 
@@ -37,10 +37,10 @@ class ImageCropService:
         print(f"File name: {filename}")
 
         # Backup original (uncropped) file so Undo is possible
-        trashDir = pathlib.Path(srcDir) / "__DELETED__"
+        trashDir = Path(srcDir) / "__DELETED__"
         trashDir.mkdir(exist_ok=True)
-        if not pathlib.Path(trashDir, filename).is_file():
-            shutil.copy2(currentFilePath, pathlib.Path(trashDir, filename))
+        if not Path(trashDir, filename).is_file():
+            shutil.copy2(currentFilePath, Path(trashDir, filename))
 
         # Load a pixmap and crop it
         pixmap = QPixmap(imageUri)

@@ -1,5 +1,5 @@
 import logging
-import pathlib
+from pathlib import Path
 import shutil
 
 from PyQt5.QtGui import QPixmap, QTransform
@@ -20,7 +20,7 @@ class ImageRotateService:
         Rotates provided image 90 degrees to the right (clockwise).
         """
         # Prepare useful paths and names
-        currentFilePath = pathlib.Path(imageUri)
+        currentFilePath = Path(imageUri)
         srcDir = currentFilePath.parent
         filename = currentFilePath.name
 
@@ -30,10 +30,10 @@ class ImageRotateService:
 
         # Backup original (unrotated) file so Undo is possible.
         # If the file is already in the trash directory (from previous modifying operation like Crop), skip this.
-        trashDir = pathlib.Path(srcDir) / "__DELETED__"
+        trashDir = Path(srcDir) / "__DELETED__"
         trashDir.mkdir(exist_ok=True)
-        if not pathlib.Path(trashDir, filename).is_file():
-            shutil.copy2(currentFilePath, pathlib.Path(trashDir, filename))
+        if not Path(trashDir, filename).is_file():
+            shutil.copy2(currentFilePath, Path(trashDir, filename))
 
         # Load a pixmap and crop it
         pixmap = QPixmap(imageUri)

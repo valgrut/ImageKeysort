@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import Path
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple
 
@@ -77,7 +77,7 @@ class ShortcutsTreeView(QWidget):
 
         def set_path():
             # choose directory; you can replace with your custom dialog
-            start_dir = node.dst_path or str(pathlib.Path.home())
+            start_dir = node.dst_path or str(Path.home())
             dst = QFileDialog.getExistingDirectory(self, "Select destination directory", start_dir)
             if dst:
                 self.model.setData(self.model.index(src_index.row(), ShortcutTreeModel.COL_DST, src_index.parent()), dst)

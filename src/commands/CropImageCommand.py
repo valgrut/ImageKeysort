@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import Path
 import shutil
 import os
 
@@ -29,12 +29,12 @@ class CropImageCommand(QUndoCommand):
     def mergeWith(self, otherCommand: QUndoCommand):
         print(f"Original rectangle: {self.cropRectangle}")
         print(f"Second rectangle: {otherCommand.cropRectangle}")
-        
+
 
         # TOHLE ASI NEMA BYT RECALCULOVANO ZDE, protoze novy crop uz pocitam z toho predchoziho, nez toho prvniho.
         # TZN - ja musim tuto recalculaci zahrnout az v tom recropu?...
         # NEBO RECALC TADY< ALE MUSI SE NA CROP2 pouzit ten novy qrect. A pak prekalkulovat hodnoty.
-        
+
         # TODO: Recalculate the crop rectangle of the cropped image to correspond to its original size, not the cropped one.
         #   (in case of recropping the same picture multiple times)
         # _globStartX = self.cropRectangle.x() + otherCommand.cropRectangle.x()
@@ -60,11 +60,11 @@ class CropImageCommand(QUndoCommand):
         # 1. Check, that original image still exists in the __deleted__ directory
         # 2. Move it back to the source directory (override the cropped one)
         # 3. Pop this command from the command stack
-        
+
         # TMP solution (no checks):
         # Remove cropped image
         os.remove(self._fileData.pathAsStr())
 
         # Restore original image
-        deleteDirectory = str(self._fileData.sourcePath / pathlib.Path("__DELETED__") / pathlib.Path(self._fileData.fileName))
+        deleteDirectory = str(self._fileData.sourcePath / Path("__DELETED__") / Path(self._fileData.fileName))
         shutil.move(deleteDirectory, self._fileData.pathAsStr())

@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import Path
 import logging
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import (
@@ -46,7 +46,7 @@ class CustomTreeWidget(QTreeWidget):
                 # last level to be shown (leaf items)
                 if currentLevel < maxLevel:
                     dst_path = properties["dst_path"]
-                    current_key_char_tree_item = QTreeWidgetItem([key_char, pathlib.Path(dst_path).name])
+                    current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
                     parent_key_char.addChild(current_key_char_tree_item)
 
                     # Process current key_char's children

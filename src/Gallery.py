@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import Path
 import logging
 
 from src.GalleryItem import GalleryItem
@@ -13,6 +13,6 @@ class Gallery:
     """
 
     def __init__(self):
-        self.sourceDirectoryPath: pathlib.Path = None
+        self.sourceDirectoryPath: Path = None
         self.availableFiles: list[GalleryItem] = []
         self.currentFileIndex: int = -1  # Index with a value -1 represents empty gallery.
