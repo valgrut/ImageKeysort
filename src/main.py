@@ -231,7 +231,7 @@ Important features TODO:
 - [ ] Taby - vice instanci v jednom okne.
 - [ ] Maybe save/load the whole session (including the history and commandStack) - serialization.
 - [ ] THEMES: Zmenit u ruznych themes nektere barvy, aby byly citelne texty (text v buttons, text v textfiles...)
-- [ ] Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
+- [ ] !!!!!!!!!!!!!!!!!!!! Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
 - [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
 - [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
@@ -242,7 +242,7 @@ Important features TODO:
 - [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
 - [ ] Sjednotit filename (without path) a fullFilename (with path)
 - [X] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort.
-- Note: Pak bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
+    - Note: Pak bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
 - [ ] !!!!!!! Musim prejmenovat soubor i v dst, kdyz pouziju COPY mode. Prejmenovavam je pouze v __DELETED__. Bez toho by neslo dat Copy->Rename->UndoCopy.
 
 
@@ -254,7 +254,7 @@ Important - Misc:
     - [X] Otestovat na linuxu
 - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
-  - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
+    - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
 - [~] ! Napsat unit testy !!
 - [ ] !!!!!!! Setridit a zorganizovat MainWindow init metodu - vsechny Actions k sobe, vsechny .connect k sobe a tak.
 - [ ] Help: Pridat examples - jak vypada tree, jak bude vypadat po pridani
@@ -276,13 +276,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] !!! Poklikanim na zkratku otevrit cestu
 - [~] Moznost vytvorit nejak rychle slozku pro nejakou skupinu fotek v aktualne otevrene src slozce. Je to totiz x kroku, kdyz chci udelat novou kategorii. Napr vim, ze dalsich x fotek bude nevim barveni mece u miniatur, tak musim stisknout zkratku, otevre se dialog okno pro vyber dst. Vytvorim slozku s nejakym nazvem, potvrdim. Pak ji zvolim jako dst pro slozku. Bud udelat dialog rovnou po odklepnuti nove zkratky, nebo nevim. Urcite jako moznost, nedelat to tak vzdy. Mozna v edit modu, kdyz napisu treba "~" pred zkratku, tak se otevre dialog pro zadani jmena slozky pro tuto zkratku a ta se vytvori v src diru. Rozvest napad...
 - [ ] ! Feature: Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
-- [ ] Zacit pouzivat v tomto projektu static code analysis tool
-- [ ] Git project and actions - implementovat nejakou pipeline ?
-- [ ] Zarovnat kod tak, aby nepresahoval pres krajnici napravo (80 znaku nebo kolik) !!
-- [ ] Ve zdrojovem kodu vsude zmenit public attributy na private (_mojeInterniVariable). !!!!!!!
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
-- [ ] Vsechny cesty tvorene jeste s 'neco + "/" + neco' predelat na 'pathlib.path(neco / neco)'
-- [X] Nahradit vsude "pathlib.Path" za "Path" !!!!! a pripadne i  os.pathlike ...... '$rg "pathlib.Path"'
 - [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text.
 
 
@@ -300,6 +294,10 @@ Refactoring and code tweaking
 - [~] Pridat Type hints ( -> int, myvar: str, ...)
 - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodovani ohledne zobrazeni (obrazek vs video vs text vs pdf)
 - [~] Vytvorit Actions z akci, ktere jeste Action nemaji. Vymenit to za prime volani metod. Zvlast u veci, ktere jsou volane z vice mist (button / shortcut / menu / ...)
+- [X] Nahradit vsude "pathlib.Path" za "Path" !!!!! a pripadne i  os.pathlike ...... '$rg "pathlib.Path"'
+- [ ] Zarovnat kod tak, aby nepresahoval pres krajnici napravo (80 znaku nebo kolik) !!
+- [ ] Ve zdrojovem kodu vsude zmenit public attributy na private (_mojeInterniVariable). !!!!!!!
+- [ ] Vsechny cesty tvorene jeste s 'neco + "/" + neco' predelat na 'pathlib.path(neco / neco)'
 
 
 
@@ -322,6 +320,8 @@ Installation, Building
 - [ ] Upgrade from Qt5 to Qt6
 - [~] Add ImakeKeysort into Fedora's Files OpenWith. Just like for Windows.
 - [~] Add Image Keysort into Fedora's app list (so it appears in the app launcher/search).
+- [ ] Zacit pouzivat v tomto projektu static code analysis tool
+- [ ] Git project and actions - implementovat nejakou pipeline ?
 
 
 Design:
