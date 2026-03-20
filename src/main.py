@@ -241,7 +241,8 @@ Important features TODO:
 - [ ] Add TESTY: Crop -> Crop -> gotoNext -> RepeatCrop.
 - [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
 - [ ] Sjednotit filename (without path) a fullFilename (with path)
-- [ ] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort !!!!!!! Pak bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
+- [X] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort.
+- Note: Pak bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
 - [ ] !!!!!!! Musim prejmenovat soubor i v dst, kdyz pouziju COPY mode. Prejmenovavam je pouze v __DELETED__. Bez toho by neslo dat Copy->Rename->UndoCopy.
 
 
@@ -281,7 +282,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Ve zdrojovem kodu vsude zmenit public attributy na private (_mojeInterniVariable). !!!!!!!
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
 - [ ] Vsechny cesty tvorene jeste s 'neco + "/" + neco' predelat na 'pathlib.path(neco / neco)'
-- [ ] Nahradit vsude "pathlib.Path" za "Path" !!!!! a pripadne i  os.pathlike ...... '$rg "pathlib.Path"'
+- [X] Nahradit vsude "pathlib.Path" za "Path" !!!!! a pripadne i  os.pathlike ...... '$rg "pathlib.Path"'
 
 
 Settings:

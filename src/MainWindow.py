@@ -466,6 +466,12 @@ class MainWindow(QMainWindow, QObject):
         self.toggleCopyModeAction.triggered.connect(self.toggleCopyMode)
         self.addAction(self.toggleCopyModeAction)  # Needed to make the shortcut work.
 
+        self.switchSortEditModeAction = QAction("&Toggle between edit and sort mode.", self)
+        self.switchSortEditModeAction.setShortcut(Qt.Key_Tab)
+        self.switchSortEditModeAction.setStatusTip("Toggle between edit and sort mode.")
+        self.switchSortEditModeAction.triggered.connect(self.switchSortEditMode)
+        self.addAction(self.switchSortEditModeAction)
+
         self.setEditModeAction = QAction("&Set edit mode", self)
         self.setEditModeAction.setShortcut('Ctrl+E')
         self.setEditModeAction.setStatusTip("Sets Edit mode.")
@@ -870,6 +876,15 @@ class MainWindow(QMainWindow, QObject):
 
         if self.sortModeHandler.isCopyOnly() is True:
             self.unsetCopyMode()
+            return
+
+    @pyqtSlot()
+    def switchSortEditMode(self):
+        if self.currentMode is Modes.EDIT:
+            self.setSortMode()
+            return
+        if self.currentMode is Modes.SORT:
+            self.setEditMode()
             return
 
     @pyqtSlot()
