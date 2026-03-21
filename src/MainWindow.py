@@ -569,7 +569,7 @@ class MainWindow(QMainWindow, QObject):
         # Update image preview after undoing the crop command.
         self.galleryManager.updatePreview()
         self.galleryManager.updateFilenameLabelText()
-        self.galleryManager.updateStatusBarLabelSignal.emit("File was renamed successfully.")
+        self.galleryManager.updateStatusBarLabelSignal.emit("Command was undone successfully.")
 
     def reuseLastCropCommand(self):
         """
@@ -594,11 +594,11 @@ class MainWindow(QMainWindow, QObject):
 
         cropData = CropData(
             imageData=currentFile,
-            cropRectangle=lastCropCommand.cropRectangle,
+            cropRectangle=lastCropCommand.absoluteCropRectangle,
             originalImageSize=lastCropCommand.originalImageSize
         )
 
-        log.info(f"RepeatCropCommand emitted! Sending: {lastCropCommand.originalImageSize} and {lastCropCommand.cropRectangle}")
+        log.info(f"RepeatCropCommand emitted! Sending: {lastCropCommand.originalImageSize} and {lastCropCommand.absoluteCropRectangle}")
         self.createAndExecuteCropCommand(cropData)
 
         log.info(f"Crop repeat successful.")

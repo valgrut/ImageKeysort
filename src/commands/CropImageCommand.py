@@ -22,49 +22,45 @@ class CropImageCommand(QUndoCommand):
         self._fileData: GalleryItem = imageData
         self.cropRectangle: QRect = cropRectangle
         self.originalImageSize: QSize = originalImageSize
+        self.absoluteCropRectangle: QRect = cropRectangle  # Calculated to relate to original uncropped image. For reusing data on next image.
 
     def id(self) -> int:
         return self.CMD_ID
 
     def mergeWith(self, otherCommand: QUndoCommand):
-        print(f"Original rectangle: {self.cropRectangle}")
-        print(f"Second rectangle: {otherCommand.cropRectangle}")
+        """
+        NOTE: Rekalkulace je nutna pro REPEAT CROP na dalsim obrazku. Ne pro additional crop of current image.
+        Note: Musel bych prvne provest exec, a az pak rekalkulaci.
+        Note: Protoze kdyz recroppuju 1 image vicekrat, tak ziskany Rect je relativni k jiz predtim croppnutemu obrazku.
+        Note: Na rekalkulaci ale potrebuju QRect z tohoto i toho druheho commandu.
+        """
 
+        # Recalculate the crop rectangle of the cropped image to correspond to its original size, not the cropped one.
+        # This allows to reuse those data and crop other image of the same size with the same crop data.
+        _globStartX = self.absoluteCropRectangle.x() + otherCommand.cropRectangle.x()
+        _globStartY = self.absoluteCropRectangle.y() + otherCommand.cropRectangle.y()
 
-        # TOHLE ASI NEMA BYT RECALCULOVANO ZDE, protoze novy crop uz pocitam z toho predchoziho, nez toho prvniho.
-        # TZN - ja musim tuto recalculaci zahrnout az v tom recropu?...
-        # NEBO RECALC TADY< ALE MUSI SE NA CROP2 pouzit ten novy qrect. A pak prekalkulovat hodnoty.
+        _globEndX = otherCommand.cropRectangle.width()
+        _globEndY = otherCommand.cropRectangle.height()
 
-        # TODO: Recalculate the crop rectangle of the cropped image to correspond to its original size, not the cropped one.
-        #   (in case of recropping the same picture multiple times)
-        # _globStartX = self.cropRectangle.x() + otherCommand.cropRectangle.x()
-        # _globStartY = self.cropRectangle.y() + otherCommand.cropRectangle.y()
-        # # # _globEndX = min(self.cropRectangle.x(), otherCommand.cropRectangle.x())
-        # # # _globEndY = max(self.cropRectangle.y(), otherCommand.cropRectangle.y())
-        # _globEndX = self.cropRectangle.x() + otherCommand.cropRectangle.width()
-        # _globEndY = self.cropRectangle.y() + otherCommand.cropRectangle.height()
-        # self.cropRectangle = QRect(QPoint(_globStartX, _globStartY), QPoint(_globEndX, _globEndY))
-
-        # print(f"CHECK: {self.cropRectangle} updated to {otherCommand.cropRectangle}")
+        # Note: Beware the QRect constructor. It gave negative values when provided (QPoint(), QPoint()).
+        self.absoluteCropRectangle = QRect(_globStartX, _globStartY, _globEndX, _globEndY)
 
         # update stored crop data
         self.cropRectangle = QRect(otherCommand.cropRectangle)
-        # self.originalImageSize = QSize(otherCommand.originalImageSize)
 
 
     def execute(self):
         ImageCropService().crop(self._fileData.pathAsStr(), self.cropRectangle)
 
     def undo(self):
-        # TODO:
-        # 1. Check, that original image still exists in the __deleted__ directory
-        # 2. Move it back to the source directory (override the cropped one)
-        # 3. Pop this command from the command stack
-
-        # TMP solution (no checks):
         # Remove cropped image
-        os.remove(self._fileData.pathAsStr())
+        os.remove(self._fileData.pathAsStr())  # TODO: Is this required? Couldn't I just override it by shutil.move?
 
         # Restore original image
-        deleteDirectory = str(self._fileData.sourcePath / Path("__DELETED__") / Path(self._fileData.fileName))
-        shutil.move(deleteDirectory, self._fileData.pathAsStr())
+        deleteDirectoryPath = self._fileData.sourcePath / Path("__DELETED__") / Path(self._fileData.fileName)
+        if not deleteDirectoryPath.exists():
+            print("Cannot undo crop. Original image (backup) was removed from __DELETED__.")
+            return
+
+        shutil.move(str(deleteDirectoryPath), self._fileData.pathAsStr())

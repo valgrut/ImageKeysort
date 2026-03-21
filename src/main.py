@@ -145,15 +145,14 @@ Links:
         - [X] Button to toggle guide lines on/off.
         - [ ] Settings: jestli by default On nebo by default Off.
 - [X] !!! Use function from Cropper.py class instead of directly in the ImageWidget. !!!
+- [X] Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
 - [ ] Vymyslet jinou klavesovou zkratku pro Repeat Crop. Je silene neprijemna ta aktualni i pri nizsich poctech opakovani.
     - Zkratka 1 zopakuje posledni crop operaci na aktualni obrazek.
     - Zkratka 2 zopakuje posledni tag operaci na aktualni obrazek.
 - [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne nejake operace k undo. (renaming, tags, cropping)
 - [!] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
-- [ ] !! Fix: When cropping a same image multiple times, repeating crop of the subsequent images is slightly off.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
-- [ ] !!!! Kdyz udelam crop obrazku, v __DELETED__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
-        - Obrazek v __DELETED__  musi mit stejny nazev a rozmer x a/nebo y vetsi nez ten, kteri je jeste ve slozce!!!
+- [~] !!!! Kdyz udelam crop obrazku, v __DELETED__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
 
 
 ### Zoom - related todo:
@@ -183,9 +182,6 @@ Links:
 - [~] AddTagButton into the Tab pop-up window.
 
 
-- Note TODO: !!!!! Co kdyz obrazek ABC.png prvne cropnu, tzn do delete se hodi ABC.png, a pak ho prejmenuju na CDE.png??? a budu chtit uncrop??
-
-
 ### Image rotation
 - Note: Pozor, obrazky se obcas zobrazuji jinak natocene, nez je zobrazuje windows explorer. Proc?
 - [X] Rotate image button (staci 1 smer) do toolbaru.
@@ -207,6 +203,7 @@ Important features TODO:
 - [X] Copy mode border se zobrazi az pri druhem kliknuti na CopyButton (Zkratka je OK)
 - [X] Delete button do menu a do toolbaru !!!!!
 - [X] Add TESTY: Crop -> Rename -> UndoCrop;; Crop -> Tag -> UndoCrop.
+- [X] Fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
 - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 - [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
 - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
@@ -223,15 +220,15 @@ Important features TODO:
 - [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
 - [~] !!!!! On/Off crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 - [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those);
-      - Commands deprecation. Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
-      - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
+- [ ] Commands deprecation.
+        - Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
+        - Jeste nevim, jestli pak kdyz obrazek vratim (undo na move), tak se ten rename command reaktivuje, nebo zustane deprecatnuty.
 - [ ] Na aktualnim obrazku by se mohla ukazat dostupna tlacitka pro repeat tag, repeat rename, repeat crop (pokud size je stejna) a pod. A po provedeni dane operace by se odpovidajici tlacitko z repeat last zmenilo na Undo.
 - [ ] Undo zkratky: Ctrl+z - undo moving/copying; Ctrl+shift+z - undo renaming/tagging/cropping.
 - [ ] Mozna dat doleva listu jako je ve VSCode, kde jde prepnout mezi overview, dir/file explorer a tak. Bylo by to dir explorer kde po kliknuti by se otevrel dir jako src dir. Pak druhy tab by byly shortcuts.
 - [ ] Taby - vice instanci v jednom okne.
 - [ ] Maybe save/load the whole session (including the history and commandStack) - serialization.
 - [ ] THEMES: Zmenit u ruznych themes nektere barvy, aby byly citelne texty (text v buttons, text v textfiles...)
-- [ ] !!!!!!!!!!!!!!!!!!!! Note: fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
 - [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
 - [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
@@ -242,8 +239,9 @@ Important features TODO:
 - [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
 - [ ] Sjednotit filename (without path) a fullFilename (with path)
 - [X] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort.
-    - Note: Pak bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
+- [ ] Kdyz TABem prepinam Edit/Sort, tak mozna bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
 - [ ] !!!!!!! Musim prejmenovat soubor i v dst, kdyz pouziju COPY mode. Prejmenovavam je pouze v __DELETED__. Bez toho by neslo dat Copy->Rename->UndoCopy.
+    - Note: Hmm, ale ja muzu zkopirovat soubor do treba 5 ruznych dst... Fuck. Co ted... ? TODO THINK this through.
 
 
 Important - Misc:
@@ -277,7 +275,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [~] Moznost vytvorit nejak rychle slozku pro nejakou skupinu fotek v aktualne otevrene src slozce. Je to totiz x kroku, kdyz chci udelat novou kategorii. Napr vim, ze dalsich x fotek bude nevim barveni mece u miniatur, tak musim stisknout zkratku, otevre se dialog okno pro vyber dst. Vytvorim slozku s nejakym nazvem, potvrdim. Pak ji zvolim jako dst pro slozku. Bud udelat dialog rovnou po odklepnuti nove zkratky, nebo nevim. Urcite jako moznost, nedelat to tak vzdy. Mozna v edit modu, kdyz napisu treba "~" pred zkratku, tak se otevre dialog pro zadani jmena slozky pro tuto zkratku a ta se vytvori v src diru. Rozvest napad...
 - [ ] ! Feature: Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
-- [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text.
+- [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text. Pripadne vedle status baru pridat obrazek, ktery nastavim na nejake X kdyz error, a fajfku kdyz OK.
 
 
 Settings:
