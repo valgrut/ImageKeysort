@@ -204,6 +204,7 @@ Important features TODO:
 - [X] Delete button do menu a do toolbaru !!!!!
 - [X] Add TESTY: Crop -> Rename -> UndoCrop;; Crop -> Tag -> UndoCrop.
 - [X] Fix toho double crop img a re-crop next - budu muset vzit puvodni crop, a na zaklade techto udaju a druheho cropu vypocitat vysledne souradnice druheho cropu. Prvni crop bude offset.
+- [X] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort.
 - [ ] Vedle srcDirectoryLabel jeste pridat Button pro otevreni nove slozky. Jinak se musi do menu nebo pouzit ctrl+o, ale chce to i cudlik.
 - [ ] Moznost zavrit slozku (Close gallery) pomoci polozky v Gallery menu.
 - [ ] Mozna nejakou animaci, nebo ze blikne statusbar, kdyz tam pribude nova informace.
@@ -238,7 +239,6 @@ Important features TODO:
 - [ ] Add TESTY: Crop -> Crop -> gotoNext -> RepeatCrop.
 - [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
 - [ ] Sjednotit filename (without path) a fullFilename (with path)
-- [X] Mozna pouzit TAB klavesu pro zmenu rezimu mezi Edit a Sort.
 - [ ] Kdyz TABem prepinam Edit/Sort, tak mozna bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
 - [ ] !!!!!!! Musim prejmenovat soubor i v dst, kdyz pouziju COPY mode. Prejmenovavam je pouze v __DELETED__. Bez toho by neslo dat Copy->Rename->UndoCopy.
     - Note: Hmm, ale ja muzu zkopirovat soubor do treba 5 ruznych dst... Fuck. Co ted... ? TODO THINK this through.
