@@ -153,6 +153,7 @@ Links:
 - [!] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 - [~] !!!! Kdyz udelam crop obrazku, v __DELETED__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
+- [ ] !!! Zobrazovat uzivateli CropRect dostupny z minule crop operace na kompatibilnim obrazku. At vi, kdyz udela Recrop, co bude oriznuto.
 
 
 ### Zoom - related todo:
