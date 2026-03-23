@@ -565,7 +565,7 @@ class MainWindow(QMainWindow, QObject):
         if not self.commandsStack.undo(currentFilename):
             log.info("No command associated with the current image. Cannot undo.")
             return
-        
+
         # Update image preview after undoing the crop command.
         self.galleryManager.updatePreview()
         self.galleryManager.updateFilenameLabelText()
@@ -607,10 +607,14 @@ class MainWindow(QMainWindow, QObject):
     def selectTagFromDialog(self):
         # TODO: Maybe move to GalleryManager or some FileOperationManager
         tags = ["work", "family", "anime", "urgent", "todo"]  # TODO: Save/Load from the file
-        
+
         tagsNotAlreadyUsed = [tag for tag in tags if tag not in self.galleryManager.getCurrentFilename()]
         pickedTag = TagSelectionDialog.selectTag(None, tagsNotAlreadyUsed)
-        
+
+        if pickedTag is None:
+            print("No tag selected! Quitting.")
+            return
+
         log.info(f"TagDialog - Selected tag: {pickedTag}")
 
         finalTagFormat = f"[{pickedTag}]"
@@ -631,13 +635,12 @@ class MainWindow(QMainWindow, QObject):
 
         # TODO: Load tags from file or settings, not hardcoded
 
-        # TODO: !!!!! When no tag is selected, "[None]" is added.
 
     def createQuickDirectory(self):
         # TODO: Maybe move to GalleryManager or some FileOperationManager
 
         # TODO: Prozkouset tyhle 3 verze, ktera bude nejlepsi.
-        
+
         # Version 1 - Dir only
         #self._createQuickDirectoryOnly()
 
@@ -646,11 +649,11 @@ class MainWindow(QMainWindow, QObject):
 
         # Version 3 - Dir and shortcut from edit mode
         # self._createQuickDirectoryAndShortcutFromEdit()
-    
+
 
     def _createQuickDirectoryOnly(self):
         # TODO: Maybe move to GalleryManager or some FileOperationManager
-        
+
         newDirName = QuickDirectoryDialog.enterName(None)
 
         # TODO: strip start/end spaces, verify dir format name (no bullshit in the name)
@@ -691,11 +694,11 @@ class MainWindow(QMainWindow, QObject):
         if os.path.exists(dst):
             print(f"Directory {newDirName} already exists in {src}!")
             return
-        
+
         if self.shortcutManager.shortcutExists(shortcut):
             print(f"Shortcut {shortcut} already exists!")
             return
-        
+
         if len(shortcut) > 5:  # TODO: will there be a nesting limit? Maybe pull from the Settings.
             print(f"Shortcut {shortcut} is too long!")
             return
@@ -732,11 +735,11 @@ class MainWindow(QMainWindow, QObject):
         if os.path.exists(dst):
             print(f"Directory {newDirName} already exists in {src}!")
             return
-        
+
         if not shortcut:
             print(f"Shortcut {shortcut} is empty!")
             return
-        
+
         if len(shortcut) > 5:  # TODO: will there be a nesting limit? Maybe pull from the Settings.
             print(f"Shortcut {shortcut} is too long!")
             return
@@ -971,7 +974,7 @@ class MainWindow(QMainWindow, QObject):
 
         else: # Unknown mode
             pass
-        
+
         # self.availableKeycharsLabel.setText(self.shortcutManager.getChildrenKeychars(str(pressedKey)))
 
     @pyqtSlot(str)

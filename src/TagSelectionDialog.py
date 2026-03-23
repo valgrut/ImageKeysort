@@ -34,7 +34,7 @@ class TagSelectionDialog(QDialog):
         for tag in tags:
             # TODO: Load tags from file or settings, not hardcoded
             self.tagList.addItem(QListWidgetItem(tag))
-        
+
         # Default selection to first item
         if self.tagList.count() > 0:
             self.tagList.setCurrentRow(0)
@@ -50,14 +50,14 @@ class TagSelectionDialog(QDialog):
         # Layout for buttons
         buttonsLayout = QHBoxLayout()
         buttonsLayout.addStretch(1)
-        
+
         self.okButton = QPushButton("OK")
         self.okButton.clicked.connect(self._acceptCurrent)
         self.okButton.setDefault(True)
-        
+
         self.cancelButton = QPushButton("Cancel")
         self.cancelButton.clicked.connect(self.reject)
-        
+
         #self.addNewTagButton.clicked.connect(self.addNewTag)
 
         buttonsLayout.addWidget(self.okButton)
@@ -79,7 +79,7 @@ class TagSelectionDialog(QDialog):
     def selectTag(parent, tags: Iterable[str], title: str = "Select tag to append") -> Optional[str]:
         dialogue = TagSelectionDialog(tags, parent=parent, title=title)
         result = dialogue.exec_()
-        if result == QDialog.Accepted:
+        if result == QDialog.Accepted and result is not None:
             return dialogue._selectedTag
         return None
 
@@ -92,7 +92,7 @@ class TagSelectionDialog(QDialog):
             return
 
         return super().keyPressEvent(event)
-    
+
 
     # def addNewTag(self):
     # TODO: WIP - implement adding new tag
