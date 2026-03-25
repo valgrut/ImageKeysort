@@ -1,7 +1,8 @@
 from __future__ import annotations
 from typing import Iterable, Optional
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import (
     QDialog,
     QVBoxLayout,
@@ -22,12 +23,29 @@ class QuickDirectoryShortcutDialog(QDialog):
         self.setModal(True)
 
         self._directoryNameField = QLineEdit()
+        self._directoryNamePixmap = QPixmap(':Resources/folder.png')
+        self._directoryNameIcon = QLabel()
+        self._directoryNameIcon.setPixmap(self._directoryNamePixmap.scaled(QSize(20, 20), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        
         self._shortcutField = QLineEdit()
+        self._shortcutPixmap = QPixmap(':Resources/font.png')
+        self._shortcutIcon = QLabel()
+        self._shortcutIcon.setPixmap(self._shortcutPixmap.scaled(QSize(20, 20), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+
+        
         layout = QVBoxLayout(self)
+        
         layout.addWidget(QLabel("Enter a name for new directory:"))
-        layout.addWidget(self._directoryNameField)
+        row1 = QHBoxLayout(self)
+        row1.addWidget(self._directoryNameIcon)
+        row1.addWidget(self._directoryNameField)
+        layout.addLayout(row1)
+        
         layout.addWidget(QLabel("Enter a shortcut for this directory:"))
-        layout.addWidget(self._shortcutField)
+        row2 = QHBoxLayout(self)
+        row2.addWidget(self._shortcutIcon)
+        row2.addWidget(self._shortcutField)
+        layout.addLayout(row2)
 
         # Layout for buttons
         buttonsLayout = QHBoxLayout()
@@ -54,9 +72,9 @@ class QuickDirectoryShortcutDialog(QDialog):
 
 
     @staticmethod
-    def enterName(parent) -> Optional[str]:
+    def enterName(parent) -> Optional[str] | None:
         dialogue = QuickDirectoryShortcutDialog(parent=parent)
         result = dialogue.exec_()
         if result == QDialog.Accepted:
             return dialogue._shortcutEntered, dialogue._directoryNameEntered
-        return None
+        return None, None

@@ -12,5 +12,7 @@
         <file>Resources/disk-arrow.png</file>
         <file>Resources/disk-pencil.png</file>
         <file>Resources/inbox-plus.png</file>
+        <file>Resources/folder.png</file>
+        <file>Resources/font.png</file>
     </qresource>
 </RCC>
