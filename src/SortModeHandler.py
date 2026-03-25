@@ -131,6 +131,10 @@ class SortModeHandler(QObject):
 
 
     def handleKeySpace(self):
+        """
+        If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
+        and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
+        """
         log.debug("handleSortMode: Case 'Space'")
         log.info("Select destination directory just for the current image.")
         dst = ""
@@ -138,24 +142,22 @@ class SortModeHandler(QObject):
         # TODO: Nefunguje, kdyz je pouzit sentinel (+).
 
         # TODO: Refactor celou tuhle hruzu::::::
-        # If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
-        # and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
+
         if self.keySeq:
-            # TODO: Refactor tuhle divnou if podminku:
             log.info(f"keySeq is not empty ('{self.keySeq}')")
             nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq)
-            if nonTerminalKey:
-                dst = nonTerminalKey["dst_path"]
-                if not os.path.exists(dst):
-                    log.info(f"No action. Shortcut probably does not contain dst_path ({dst}).")
-                    self.updateStatusBarLabelSignal.emit(
-                        f"No action. Destination directory ({dst}) for the sequence {self.keySeq} is empty or does not exist.")
-                    return
-                log.info(f"middle_path {dst}")
-            else:
+            if not nonTerminalKey:
                 log.info(f"Shortcut sequence {self.keySeq} does not exist.")
                 return
-
+            
+            dst = nonTerminalKey["dst_path"]
+            if not os.path.exists(dst):
+                log.info(f"No action. Shortcut probably does not contain dst_path ({dst}).")
+                self.updateStatusBarLabelSignal.emit(
+                    f"No action. Destination directory ({dst}) for the sequence {self.keySeq} is empty or does not exist.")
+                return
+            log.info(f"middle_path {dst}")
+            
         else:  # KeySeq is empty
             singleUseDstDirectory = QFileDialog.getExistingDirectory(self.mainWindow, "Select Directory")
 
