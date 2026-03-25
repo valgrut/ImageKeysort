@@ -243,6 +243,7 @@ Important features TODO:
 - [ ] Kdyz TABem prepinam Edit/Sort, tak mozna bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
 - [ ] !!!!!!! Musim prejmenovat soubor i v dst, kdyz pouziju COPY mode. Prejmenovavam je pouze v __DELETED__. Bez toho by neslo dat Copy->Rename->UndoCopy.
     - Note: Hmm, ale ja muzu zkopirovat soubor do treba 5 ruznych dst... Fuck. Co ted... ? TODO THINK this through.
+- [~] !!! Prelozit vsechny poznamky v kodu do EN. Nebo aspon oficialni komentare metod a komentare v kodu, ktere nejsou vylozene TODO a poznamky k TODO.
 
 
 Important - Misc:
