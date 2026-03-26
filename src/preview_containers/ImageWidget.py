@@ -262,6 +262,8 @@ class ImageWidget(QWidget):
             painter.drawLine(0, pixmapCursorEndPosition.y()-10, self.label.width(), pixmapCursorEndPosition.y()-10)
             painter.end()
             self.label.setPixmap(scaledTmpPixmap)
+        
+        # self.drawCropPreview(QRect(50, 50, 200, 270))
 
 
     def leaveEvent(self, a0):
@@ -349,3 +351,17 @@ class ImageWidget(QWidget):
         return super().keyPressEvent(event)
     
 
+    def drawCropPreview(self, cropRect: QRect):
+        """
+        If enabled and any available, draws a preview of the possible crop operation result based on previous crop.
+        
+        TODO: WIP.
+        """
+        square = cropRect
+        px = self._pixmap.copy()
+        scaledTmpPixmap = px.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        painter = QPainter(scaledTmpPixmap)
+        painter.setPen(QPen(Qt.red, 1))
+        painter.drawRects(square)
+        painter.end()
+        self.label.setPixmap(scaledTmpPixmap)
