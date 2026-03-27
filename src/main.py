@@ -120,13 +120,13 @@ Links:
 - [X] Rename the files
 - [ ] Rework ShortcutTreeView
 - [~] Crop (sources: keyboard shortcut, button in menu, button in toolbar)
-        - [~] Crop image
+        - [X] Crop image
         - [ ] Crop video (sources: keyboard shortcut, button in menu, button in toolbar)
         - [X] Crop image by mouse click + drag
 - [ ] Zoom in/out the image (imageView only)
         - Kvuli velkym obrazkum s textem, ktery je kvuli velikosti uz skoro necitelny.
-- [ ] Add tags into the filename
-        - [ ] Just for me - define shortcuts (ctrl+1, ctrl+2 ...) a k nim priradit konkretni " [xyz]".
+- [~] Add tags into the filename
+        - [~] Just for me - define shortcuts (ctrl+1, ctrl+2 ...) a k nim priradit konkretni " [xyz]".
 - [ ] Tabs (vice "instanci" v jednom okne, kde kazda instance bude mit svou galerii a shortcuts otevrene.
 
 
@@ -150,7 +150,7 @@ Links:
     - Zkratka 1 zopakuje posledni crop operaci na aktualni obrazek.
     - Zkratka 2 zopakuje posledni tag operaci na aktualni obrazek.
 - [ ] Pridat indikaci k obrazku, (jestli) ze jsou dostupne nejake operace k undo. (renaming, tags, cropping)
-- [!] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
+- [X] Drop whole CommandStack history when changing source directory, because the images are not valid anymore.
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 - [~] !!!! Kdyz udelam crop obrazku, v __DELETED__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
 - [ ] !!! Zobrazovat uzivateli CropRect dostupny z minule crop operace na kompatibilnim obrazku. At vi, kdyz udela Recrop, co bude oriznuto.
@@ -161,7 +161,7 @@ Links:
 
 
 ### Rename - related todo:
-- [N] Undo/Redo
+- [/] Undo/Redo
 
 
 ### Text extraction
@@ -234,7 +234,7 @@ Important features TODO:
 - [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
 - [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
-- [~] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
+- [X] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
 - [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
 - [ ] Add TESTY: Crop -> Delete.
 - [ ] Add TESTY: Crop -> Crop -> gotoNext -> RepeatCrop.
@@ -275,9 +275,14 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Disable to go to the next/prev picture - force user to process the picture instead of skipping it.
 - [ ] !!! Poklikanim na zkratku otevrit cestu
 - [~] Moznost vytvorit nejak rychle slozku pro nejakou skupinu fotek v aktualne otevrene src slozce. Je to totiz x kroku, kdyz chci udelat novou kategorii. Napr vim, ze dalsich x fotek bude nevim barveni mece u miniatur, tak musim stisknout zkratku, otevre se dialog okno pro vyber dst. Vytvorim slozku s nejakym nazvem, potvrdim. Pak ji zvolim jako dst pro slozku. Bud udelat dialog rovnou po odklepnuti nove zkratky, nebo nevim. Urcite jako moznost, nedelat to tak vzdy. Mozna v edit modu, kdyz napisu treba "~" pred zkratku, tak se otevre dialog pro zadani jmena slozky pro tuto zkratku a ta se vytvori v src diru. Rozvest napad...
+        - [X] Vnorene adresare - "dir1/dir2"
+        - [X] Nazvy s mezerama jsou OK.
+        - [ ] TESTY pro vytvoreni dir a subdir - "dir1/dir2"
+        - [ ] TESTY pro vytvoreni dir s mezerama v nazvu
 - [ ] ! Feature: Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
-- [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop.
+- [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop. Nezapomenout na copy mode - tzn nutno i ve vsech dst, kam byl tento zkopirovan... uhhh.
 - [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text. Pripadne vedle status baru pridat obrazek, ktery nastavim na nejake X kdyz error, a fajfku kdyz OK.
+- [ ] Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
 
 
 Settings:

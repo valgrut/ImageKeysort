@@ -141,8 +141,6 @@ class SortModeHandler(QObject):
 
         # TODO: Nefunguje, kdyz je pouzit sentinel (+).
 
-        # TODO: Refactor celou tuhle hruzu::::::
-
         if self.keySeq:
             log.info(f"keySeq is not empty ('{self.keySeq}')")
             nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq)

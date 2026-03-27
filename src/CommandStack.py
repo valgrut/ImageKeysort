@@ -14,7 +14,7 @@ class CommandStack:
     def __init__(self):
         self._commands = []
 
-    def clearStack(self):
+    def clear(self):
         """
         Drop all command from the stack leaving it empty.
         """

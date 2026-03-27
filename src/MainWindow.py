@@ -293,7 +293,7 @@ class MainWindow(QMainWindow, QObject):
 
 
         # ========== Signal connections ==========
-        self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.galleryManager.selectSourceDirectory)  # TODO: do it better
+        self.galleryManager.emptyInboxWidget.selectSourceSignal.connect(self.selectSourceDirectory)
         self.galleryManager.enableExtractTextButtonSignal.connect(lambda: self.buttonExtractTextAction.setDisabled(False))  # 'lambda' creates 'callable' from the setDisabled method.
         self.galleryManager.disableExtractTextButtonSignal.connect(lambda: self.buttonExtractTextAction.setDisabled(True))
         self.galleryManager.enableCropButtonSignal.connect(lambda: self.buttonCropImageAction.setDisabled(False))
@@ -328,6 +328,7 @@ class MainWindow(QMainWindow, QObject):
         # ========== Apply the provided CLI options, if any ==========
         if srcPathArg:
             self.galleryManager.setSourcePath(srcPathArg)
+            self.commandsStack.clear()
         else:
             log.info("Empty or invalid arg srcDir path")
 
@@ -417,7 +418,7 @@ class MainWindow(QMainWindow, QObject):
         self.openDirectoryAction = QAction(QIcon('Resources/inbox-plus.png'), "&Open directory", self)
         self.openDirectoryAction.setShortcut('Ctrl+O')
         self.openDirectoryAction.setStatusTip("Open source directory")
-        self.openDirectoryAction.triggered.connect(self.galleryManager.selectSourceDirectory)
+        self.openDirectoryAction.triggered.connect(self.selectSourceDirectory)
 
         self.saveAction = QAction(QIcon('Resources/disk-pencil.png'), "&Save shortcuts", self)
         self.saveAction.setShortcut('Ctrl+S')
@@ -512,6 +513,10 @@ class MainWindow(QMainWindow, QObject):
         self.repeatCommandOnStackAction.triggered.connect(self.reuseLastCropCommand)  # TODO: Currently repeats Crop command!!!!
         self.addAction(self.repeatCommandOnStackAction)
 
+    def selectSourceDirectory(self):
+        self.galleryManager.selectSourceDirectory()
+        self.commandsStack.clear()
+    
     def extractTextFromImage(self):
         """
         Extract text from the given image
