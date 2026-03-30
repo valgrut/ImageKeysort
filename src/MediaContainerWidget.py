@@ -225,7 +225,7 @@ class MediaContainerWidget(QWidget):
         self.videoViewWidget.updateVideo(mediaFile)
 
     def updatePreviewImage(self, mediaFile: GalleryItem):
-        self.imageViewWidget.updateImage(mediaFile)
+        self.imageViewWidget.updatePreview(mediaFile)
     
     def updateTextFile(self, mediaFile: GalleryItem):
         self.textPreviewWidget.setTextFile(mediaFile)

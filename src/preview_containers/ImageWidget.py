@@ -5,13 +5,14 @@ from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QRect, QSize, QPoint
 from PyQt5.QtGui import QPixmap, QPainter, QPen
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QRubberBand
 
+from src.preview_containers.PreviewInterface import PreviewInterface
 from src.CropData import CropData
 from src.GalleryItem import GalleryItem
 
 log = logging.getLogger(__name__)
 
 
-class ImageWidget(QWidget):
+class ImageWidget(QWidget, PreviewInterface):
 
     """
     Class handling Images (png, jpeg and such) preview drawing and preparing for it.
@@ -53,7 +54,7 @@ class ImageWidget(QWidget):
         self.setLayout(self.layout)
 
 
-    def updateImage(self, imageData: GalleryItem):
+    def updatePreview(self, imageData: GalleryItem):
         # TODO: Use cache?
         self._imageData = imageData
         self._pixmap.load(imageData.pathAsStr())
