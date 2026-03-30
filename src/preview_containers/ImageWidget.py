@@ -12,7 +12,8 @@ from src.GalleryItem import GalleryItem
 log = logging.getLogger(__name__)
 
 
-class ImageWidget(QWidget, PreviewInterface):
+#class ImageWidget(QWidget, PreviewInterface):
+class ImageWidget(QWidget):
 
     """
     Class handling Images (png, jpeg and such) preview drawing and preparing for it.
