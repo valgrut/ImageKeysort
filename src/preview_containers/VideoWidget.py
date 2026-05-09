@@ -1,11 +1,11 @@
 import logging
 import pathlib
 
-from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtCore import QDir, Qt, QUrl, QSize, pyqtSlot, QSizeF
+from PyQt5.QtGui import QFont
+from PyQt5.QtCore import Qt, QUrl, QSize
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
-from PyQt5.QtMultimediaWidgets import QVideoWidget, QGraphicsVideoItem
-from PyQt5.QtWidgets import (QGraphicsScene, QGraphicsView, QApplication, QFileDialog, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget, QStatusBar)
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtWidgets import (QHBoxLayout, QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget, QStatusBar)
 
 from src.GalleryItem import GalleryItem
 from src.SettingsDialog import SettingsDialog
@@ -24,18 +24,13 @@ class VideoWidget(QWidget):
 
         self.defaultVolume = 50
 
-        scene = QGraphicsScene()
-        self.graphicsView = QGraphicsView(scene)
-        self.videoItem = QGraphicsVideoItem()
-        scene.addItem(self.videoItem)
-        size = self.graphicsView.size()
-        self.videoItem.setSize(QSizeF(size.width()-30, size.height()-30))
+        self.videoWidget = QVideoWidget(self)
+        self.videoWidget.setMinimumSize(320, 240)  # Some default value to prevent some potential issues
+        self.videoWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
-        self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.mediaPlayer.setVideoOutput(self.videoItem)
-
-        layoutQVideoWidget = QVBoxLayout()
-        layoutQVideoWidget.addWidget(self.graphicsView)
+        self.mediaPlayer = QMediaPlayer(self)
+        self.mediaPlayer.setVideoOutput(self.videoWidget)
+        self.mediaPlayer.setVolume(self.defaultVolume)
 
         btnSize = QSize(16, 16)
 
@@ -47,12 +42,14 @@ class VideoWidget(QWidget):
         self.playButton.clicked.connect(self.togglePlayPause)
 
         self.positionSlider = QSlider(Qt.Horizontal)
-        self.positionSlider.setRange(0, 0)
+        self.positionSlider.setRange(0, 100)
         # self.positionSlider.setTickInterval(3)
         # self.positionSlider.setTickPosition(QSlider.TicksLeft)
         self.positionSlider.setToolTip("Video Progress")
         self.positionSlider.sliderMoved.connect(self.setPosition)
         self.positionSlider.sliderReleased.connect(lambda: self.setPosition(self.positionSlider.value()))
+        self.positionSlider.setTracking(True)
+        self.positionSlider.setMouseTracking(True)
 
         # Create a QSlider for controlling the volume
         self.volumeSlider = QSlider(Qt.Horizontal)
@@ -78,7 +75,7 @@ class VideoWidget(QWidget):
         controlLayout.addWidget(self.muteUnmuteBtn)
 
         layout = QVBoxLayout()
-        layout.addLayout(layoutQVideoWidget)
+        layout.addWidget(self.videoWidget)
         layout.addLayout(controlLayout)
         layout.addWidget(self.statusBar)
 
@@ -87,8 +84,9 @@ class VideoWidget(QWidget):
         self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
         self.mediaPlayer.durationChanged.connect(self.durationChanged)
-
         self.mediaPlayer.error.connect(self.handleError)
+        self.mediaPlayer.mediaStatusChanged.connect(self.mediaStatusChanged)
+
         self.statusBar.showMessage("Ready")
 
     def playVideo(self):
@@ -101,12 +99,20 @@ class VideoWidget(QWidget):
         """
         Load a video file into the player.
         """
-        fileName = videoPath.pathAsStr()
+        fileName: str = videoPath.pathAsStr()
 
         if not fileName:
+            log.warning("Empty video path.")
             return
 
         self.mediaPlayer.stop()
+
+        path = pathlib.Path(fileName).resolve()
+        url = QUrl.fromLocalFile(str(path))
+        log.info("Loading video path: %s", path)
+        log.info("Loading video url: %s", url.toString())
+        log.info("Is local file: %s", url.isLocalFile())
+
         self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)))
         self.playButton.setEnabled(True)
         self.statusBar.showMessage(fileName)
@@ -133,19 +139,21 @@ class VideoWidget(QWidget):
 
     # @pyqtSlot()
     def positionChanged(self, position):
-        self.positionSlider.setValue(position)
+
+        if not self.positionSlider.isSliderDown():
+            self.positionSlider.setValue(position)
+        self.positionSlider.update()
+        self.update()
 
     # @pyqtSlot()
     def durationChanged(self, duration):
         self.positionSlider.setRange(0, duration)
+        self.positionSlider.update()
+        self.update()
 
     # @pyqtSlot(int)
     def setPosition(self, position):
         self.mediaPlayer.setPosition(position)
-
-    def handleError(self):
-        self.playButton.setEnabled(False)
-        self.statusBar.showMessage("Error: " + self.mediaPlayer.errorString())
 
     def cleanup(self):
         log.info("Cleanup VideoWidget")
@@ -177,13 +185,28 @@ class VideoWidget(QWidget):
         else:
             self.setUnmuted()
 
-    def handleError(self):
+    def handleError(self, error=None):
         self.playButton.setEnabled(False)
         self.statusBar.showMessage("Error: " + self.mediaPlayer.errorString())
         self.mediaPlayer.stop()
-        log.info(f"Error: {self.mediaPlayer.errorString()}")
+        # log.info(f"Error: {self.mediaPlayer.errorString()}")
+        log.error(
+            "QMediaPlayer error: enum=%s, text=%r, media=%s",
+            error,
+            self.mediaPlayer.errorString(),
+            self.mediaPlayer.currentMedia().canonicalUrl().toString()
+        )
+
+    def mediaStatusChanged(self, status):
+        log.info(
+            "Media status changed: status=%s, error=%s, errorString=%r",
+            status,
+            self.mediaPlayer.error(),
+            self.mediaPlayer.errorString()
+        )
+
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        size = self.graphicsView.size()
-        self.videoItem.setSize(QSizeF(size.width()-30, size.height()-30))
+        #size = self.graphicsView.size()
+        #self.videoWidget.setSize(QSizeF(size.width()-30, size.height()-30))

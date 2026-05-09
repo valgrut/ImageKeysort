@@ -1,5 +1,11 @@
-import argparse
+import os
 import sys
+
+# On Windows, set multimedia backend for videos to work.
+if sys.platform.startswith("win"):
+    os.environ["QT_MULTIMEDIA_PREFERRED_PLUGINS"] = "windowsmediafoundation"
+
+import argparse
 import pathlib
 import logging
 from PyQt5.QtWidgets import QApplication
