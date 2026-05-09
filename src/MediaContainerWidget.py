@@ -3,7 +3,8 @@ from pathlib import Path
 
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QCursor, QKeyEvent
-from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QVBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QWidget, QStackedWidget, QLabel, QHBoxLayout, QPushButton, QVBoxLayout, QLineEdit, \
+    QApplication
 
 from src.GalleryItem import GalleryItem
 from src.preview_containers.ImageWidget import ImageWidget
@@ -105,7 +106,16 @@ class MediaContainerWidget(QWidget):
         # Connect signals
         self.imageViewWidget.requestImageCropSignal.connect(self.requestImageCropSignal)  # Re-emit signal
         self.galleryManager.setEnabledCursorGuidelinesSignal.connect(self.imageViewWidget.showMouseGuidelines)
+        # self.videoViewWidget.updateUISignal.connect(self.redrawUI)
 
+    # @pyqtSlot()
+    # def redrawUI(self):
+    #     log.info("Redrawing")
+    #     self.update()
+    #     # self.repaint()
+    #     # QApplication.processEvents()
+    #     self.galleryManager.update()
+    #     self.galleryManager.repaint()
 
     def keyPressEvent(self, a0):
         """
