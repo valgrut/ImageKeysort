@@ -251,6 +251,7 @@ Important features TODO:
     - Note: Hmm, ale ja muzu zkopirovat soubor do treba 5 ruznych dst... Fuck. Co ted... ? TODO THINK this through.
 - [~] !!! Prelozit vsechny poznamky v kodu do EN. Nebo aspon oficialni komentare metod a komentare v kodu, ktere nejsou vylozene TODO a poznamky k TODO.
 - [ ] S pomoci '/' mozna vyhledavat pattern (vyfiltrovat shortcuts matchujici pattern) - Pri velkem poctu zkratek lepe najde. Zobrazi se i rodicovske, ne jen polozka (bo napr. IG v poledance, IG v nsfw...) 
+- [ ] Klik pravym na nejakou vetev stromu -> Extract into separated file. Treba pole dance, aby kdyz tridim jen to, nemusel jsem to rucne nejak vyhlodavat z json souboru.
 
 
 Important - Misc:
