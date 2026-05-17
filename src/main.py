@@ -291,6 +291,8 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop. Nezapomenout na copy mode - tzn nutno i ve vsech dst, kam byl tento zkopirovan... uhhh.
 - [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text. Pripadne vedle status baru pridat obrazek, ktery nastavim na nejake X kdyz error, a fajfku kdyz OK.
 - [ ] Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
+- [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten.
+- [ ] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
 
 
 Settings:
