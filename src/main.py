@@ -293,6 +293,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
 - [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten.
 - [ ] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
+- [ ] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ; a ,
 
 
 Settings:
