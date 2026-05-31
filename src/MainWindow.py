@@ -804,7 +804,16 @@ class MainWindow(QMainWindow, QObject):
 
         import pathlib
         # Required for new styles to take effect.
-        app.setStyleSheet(Path('static/app-styles.qss').read_text(encoding="utf-8"))
+        # app.setStyleSheet(Path('static/app-styles.qss').read_text(encoding="utf-8"))
+        # app.setStyleSheet(Path('_internal/static/app-styles.qss').read_text(encoding="utf-8"))
+        # TODO: Temporal workaround because of the building process on windows vs linux. It is ugly.
+        try:
+            app.setStyleSheet(Path('static/app-styles.qss').read_text(encoding="utf-8"))
+        except:
+            try:
+                app.setStyleSheet(Path('_internal/static/app-styles.qss').read_text(encoding="utf-8"))
+            except:
+                print("Could not load app-styles.qss")
 
 
     def showAbout(self):

@@ -51,6 +51,7 @@ OR
   - Add custom tag(s) into the current file
 - Rename files
 
+
 ## 4. How to build the app
 
 ### 4.1. Linux
@@ -69,6 +70,7 @@ OR
 
     ```
 
+
 ## 5. Known issues:
 
 - Videos on Windows are playing, but are not shown in the player. Missing codecs/driver?
@@ -77,9 +79,13 @@ OR
 ## 6. Dependencies
 
 ```
-sudo dnf install
-python3-pip
+sudo dnf install \
+python3-pip \
 python3-qt5
 ```
 
+- Install deps:
+
+```
 pip3 install -r requirements.txt
+```

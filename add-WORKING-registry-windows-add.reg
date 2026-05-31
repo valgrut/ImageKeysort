@@ -1,0 +1,24 @@
+Windows Registry Editor Version 5.00
+
+; ------------------------------------------------------------
+; Right-click directly on a folder
+; ------------------------------------------------------------
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\ImageKeysort]
+@="Open in Image Keysort"
+"Icon"="C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\dist\\image-keysort\\image-keysort.exe"
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\ImageKeysort\command]
+@="\"C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\dist\\image-keysort\\image-keysort.exe\" --src-path \"%1\""
+
+
+; ------------------------------------------------------------
+; Right-click empty space while already inside a folder
+; ------------------------------------------------------------
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\ImageKeysort]
+@="Open this directory in Image Keysort"
+"Icon"="C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\dist\\image-keysort\\image-keysort.exe"
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\ImageKeysort\command]
+@="\"C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\dist\\image-keysort\\image-keysort.exe\" --src-path \"%V\""

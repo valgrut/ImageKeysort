@@ -6,3 +6,5 @@ venv/
 testing-data/
 Presets/*
 image-keysort.log
+dist/
+build/

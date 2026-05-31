@@ -31,6 +31,7 @@ config:
 	# '-' at the start makes makefile to ignore the potential error:
 	- pyrcc5.exe ${ROOT_DIR}/resources.qrc -o ${ROOT_DIR}/src/resources_rc.py
 
+# TODO: tady duplikatne vytvarim ty resource files, zbytecne. Prvne se vola config, takze v run to uz byt nemusi.
 run: config qss
 	( \
 	source ${ROOT_DIR}/venv/bin/activate; \
