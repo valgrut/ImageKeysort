@@ -1,6 +1,12 @@
 from pathlib import Path
+import os
 import qtsass
 from PyInstaller.utils.hooks import collect_submodules
+
+# Prevent this .spec file be run on non-Windows systems
+if os.name != 'nt':
+  print("Not a Windows OS, exiting...")
+  exit(1)
 
 
 # SPECPATH is provided by PyInstaller while evaluating this file.

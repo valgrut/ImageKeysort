@@ -58,7 +58,7 @@ pyinstaller --onefile image-keysort.py
 - Building can be repeated using the specfile
 
 ```
-pyinstaller.exe --noconfirm .\main.spec
+pyinstaller.exe --noconfirm .\windows.spec
 ```
 
 - Resulting .exe is in 'dist' directory.
