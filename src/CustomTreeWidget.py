@@ -27,7 +27,7 @@ class CustomTreeWidget(QTreeWidget):
         items = []
         shortcuts_data = self.shortcutManager.getData()  # Original
 
-        if root:
+        if SettingsDialog.settingsGetShowSubtreeOnly() and root:
             # shortcuts_data = self.shortcutManager.getLastKeyParent(root)            # V1
             shortcuts_data = self.shortcutManager.getLastKeyContentOfSequence(root)  # V2
             # # shortcuts_data = shortcuts_data["keys"]

@@ -34,12 +34,15 @@ class SettingsDialog(QDialog):
         self.sp_nested_levels.setRange(1, 5)
         self.sp_nested_levels.setToolTip("How many nested shortcut folders to show in the UI.")
         self.cfg_load_last_preset = QCheckBox("Load preset from the last session on start.")
+        self.cfg_show_only_key_subtree = QCheckBox("Show only shortcut subtree based on the current keychar sequence.")
+
 
         # Form
         treeview_box = QGroupBox("Treeview behavior")
         treeview_form = QFormLayout()
         treeview_form.addRow("Shortcuts nested levels to show:", self.sp_nested_levels)
         treeview_form.addRow(self.cfg_load_last_preset)
+        treeview_form.addRow(self.cfg_show_only_key_subtree)
         treeview_box.setLayout(treeview_form)
 
 
@@ -135,6 +138,7 @@ class SettingsDialog(QDialog):
 
         settings.beginGroup("treeview")
         self.sp_nested_levels.setValue(int(settings.value("nestedLevels", type=int)))
+        self.cfg_show_only_key_subtree.setChecked(settings.value("showSubtreeOnly") == "true")
         settings.endGroup()
 
         settings.beginGroup("copy")
@@ -168,6 +172,7 @@ class SettingsDialog(QDialog):
 
         settings.beginGroup("treeview")
         settings.setValue("nestedLevels", int(self.sp_nested_levels.value()))
+        settings.setValue("showSubtreeOnly", "true" if self.cfg_show_only_key_subtree.isChecked() else "false")
         settings.endGroup()
 
         settings.beginGroup("copy")
@@ -191,6 +196,7 @@ class SettingsDialog(QDialog):
         self.cb_allow_no_dest.setChecked(True)
         self.cfg_confirm_to_override.setChecked(False)
         self.cfg_sort_shortcuts.setChecked(True)
+        self.cfg_show_only_key_subtree.setChecked(True)
         self.cb_auto_next_after_copy.setChecked(True)
         self.cb_other_opt1.setChecked(False)
         self.cb_other_opt2.setChecked(False)
@@ -218,6 +224,7 @@ class SettingsDialog(QDialog):
 
             settings.beginGroup("treeview")
             settings.setValue("nestedLevels", 4)
+            settings.setValue("showSubtreeOnly", "true")
             settings.endGroup()
 
             settings.beginGroup("copy")
@@ -254,6 +261,11 @@ class SettingsDialog(QDialog):
     @staticmethod
     def settingsGetNestingLevels() -> int:
         return int(SettingsDialog._checkSetting("treeview/nestedLevels"))
+
+    @staticmethod
+    def settingsGetShowSubtreeOnly() -> bool:
+        # return SettingsDialog.checkSetting("shortcuts/allowNoDest")
+        return True if SettingsDialog._checkSetting("treeview/showSubtreeOnly") == "true" else False
 
     @staticmethod
     def settingsGetAllowNoDest() -> bool:
