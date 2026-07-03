@@ -27,12 +27,13 @@ class CustomTreeWidget(QTreeWidget):
         items = []
         shortcuts_data = self.shortcutManager.getData()  # Original
 
-        # shortcuts_data = self.shortcutManager.getLastKeyParent(root)            # V1
-        # shortcuts_data = self.shortcutManager.getLastKeyContentOfSequence(root)  # V2
-        # # shortcuts_data = shortcuts_data["keys"]
-        #
-        # print("Shortcuts_data:", shortcuts_data)
-        # print("shortcuts_data2:", self.shortcutManager.getLastKeyContentOfSequence(root))
+        if root:
+            # shortcuts_data = self.shortcutManager.getLastKeyParent(root)            # V1
+            shortcuts_data = self.shortcutManager.getLastKeyContentOfSequence(root)  # V2
+            # # shortcuts_data = shortcuts_data["keys"]
+            #
+            # print("Shortcuts_data:", shortcuts_data)
+            # print("shortcuts_data2:", self.shortcutManager.getLastKeyContentOfSequence(root))
 
         # TODO: Do not show subtrees except the one starting with the first pressed key.
         # if root is not None and key_L1 != root:

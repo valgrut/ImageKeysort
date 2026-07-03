@@ -108,6 +108,7 @@ class SortModeHandler(QObject):
         else:
             pass
         self.updateKeySequenceLabel()
+        self.updateTreeViewSignal.emit("")  # Sem to rozhodne patri. TODO: Podivat se ale, jestli to ma byt vsude, kam jsem to pridal...
 
 
     def handleKeyBackspace(self):
@@ -115,6 +116,7 @@ class SortModeHandler(QObject):
         if len(self.keySeq) >= 1:
             self.keySeq = self.keySeq[:-1]
             self.updateKeySequenceLabel()
+            self.updateTreeViewSignal.emit("")
 
 
     def handleKeyReturn(self):
