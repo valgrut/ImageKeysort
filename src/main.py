@@ -256,7 +256,8 @@ Important features TODO:
 - [~] !!! Prelozit vsechny poznamky v kodu do EN. Nebo aspon oficialni komentare metod a komentare v kodu, ktere nejsou vylozene TODO a poznamky k TODO.
 - [ ] S pomoci '/' mozna vyhledavat pattern (vyfiltrovat shortcuts matchujici pattern) - Pri velkem poctu zkratek lepe najde. Zobrazi se i rodicovske, ne jen polozka (bo napr. IG v poledance, IG v nsfw...) 
 - [ ] Klik pravym na nejakou vetev stromu -> Extract into separated file. Treba pole dance, aby kdyz tridim jen to, nemusel jsem to rucne nejak vyhlodavat z json souboru.
-
+- [ ] Status bar nejak zvyraznit / vycistit? Moc informaci, a ja bych potreboval spis vedet, ze se neco presunulo, odkud a kam.
+- [ ] Mozna oddelat / presunout cely Label zobrazujici srcDir v middleLayoutu nekam jinam (dolu pod aktualni obrazek? nebo do Window Title?)
 
 Important - Misc:
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
