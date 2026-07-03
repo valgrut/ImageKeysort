@@ -258,6 +258,8 @@ Important features TODO:
 - [ ] Klik pravym na nejakou vetev stromu -> Extract into separated file. Treba pole dance, aby kdyz tridim jen to, nemusel jsem to rucne nejak vyhlodavat z json souboru.
 - [ ] Status bar nejak zvyraznit / vycistit? Moc informaci, a ja bych potreboval spis vedet, ze se neco presunulo, odkud a kam.
 - [ ] Mozna oddelat / presunout cely Label zobrazujici srcDir v middleLayoutu nekam jinam (dolu pod aktualni obrazek? nebo do Window Title?)
+- [ ] Pridat ikonu zelene fajfky / cerveneho X, a pridavat pred status bar zpravy (napr presun obrazku ze src do dst je successful a pod.) Bude to lepsi vizualni indikace, ze se to povedlo nebo nepovedlo.
+
 
 Important - Misc:
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
