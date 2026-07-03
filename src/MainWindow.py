@@ -129,15 +129,6 @@ class MainWindow(QMainWindow, QObject):
         mainLayout.addLayout(leftInnerLayout)
         mainLayout.addLayout(rightInnerLayout)
 
-        # Show next available character(s) to continue with pressed shortcut.
-        # TODO: Mozna presunout pod keyLabel.
-        self.availableKeycharsLabel = QLabel("None")
-        self.availableKeycharsLabel.resize(self.availableKeycharsLabel.sizeHint())
-        self.availableKeycharsLabel.setGraphicsEffect(Styles.getShadowEffect())
-        self.availableKeycharsLabel.setObjectName("availableKeychar")
-        self.availableKeycharsLabel.setAlignment(Qt.AlignCenter)
-        rightInnerLayout.addWidget(self.availableKeycharsLabel)
-
         # Right side of the main layout
         # TODO: Tabs - future feature
         # self.galleryTabs = QTabWidget(self)
@@ -162,6 +153,13 @@ class MainWindow(QMainWindow, QObject):
         self.keyLabel.setGraphicsEffect(Styles.getShadowEffect())
         self.keyLabel.setObjectName("keyLabel")
         self.keyLabel.setAlignment(Qt.AlignCenter)
+
+        # Show next available character(s) to continue with pressed shortcut.
+        self.availableKeycharsLabel = QLabel("None")
+        self.availableKeycharsLabel.resize(self.availableKeycharsLabel.sizeHint())
+        self.availableKeycharsLabel.setGraphicsEffect(Styles.getShadowEffect())
+        self.availableKeycharsLabel.setObjectName("availableKeychar")
+        self.availableKeycharsLabel.setAlignment(Qt.AlignCenter)
 
         # TODO: WIP
         self.expProgress = QProgressBar()
@@ -214,6 +212,7 @@ class MainWindow(QMainWindow, QObject):
         leftInnerLayout.addWidget(self.copyButton)
         leftInnerLayout.addLayout(leftInnerButtonLayout)
         leftInnerLayout.addWidget(self.keyLabel)
+        leftInnerLayout.addWidget(self.availableKeycharsLabel)
 
 
         # ========== Default variables and behaviour ==========
@@ -1011,8 +1010,9 @@ class MainWindow(QMainWindow, QObject):
         
         availableKeysStr: str = " ".join(list(availableKeysList))
         
-        availableKeysHint = sequencePressed + " -> " + availableKeysStr
-        # availableKeysHint = availableKeys
+        # availableKeysHint = sequencePressed + " -> " + availableKeysStr  # V1
+        # availableKeysHint = availableKeys  # V2
+        availableKeysHint = "Next:\n" + availableKeysStr  # V3
         
         self.availableKeycharsLabel.setText(availableKeysHint)
 

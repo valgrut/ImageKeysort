@@ -28,16 +28,7 @@ class CustomTreeWidget(QTreeWidget):
         shortcuts_data = self.shortcutManager.getData()  # Original
 
         if SettingsDialog.settingsGetShowSubtreeOnly() and root:
-            # shortcuts_data = self.shortcutManager.getLastKeyParent(root)            # V1
-            shortcuts_data = self.shortcutManager.getLastKeyContentOfSequence(root)  # V2
-            # # shortcuts_data = shortcuts_data["keys"]
-            #
-            # print("Shortcuts_data:", shortcuts_data)
-            # print("shortcuts_data2:", self.shortcutManager.getLastKeyContentOfSequence(root))
-
-        # TODO: Do not show subtrees except the one starting with the first pressed key.
-        # if root is not None and key_L1 != root:
-        #     continue
+            shortcuts_data = self.shortcutManager.getLastKeyContentOfSequence(root)
 
         maxLevel = SettingsDialog.settingsGetNestingLevels()
 
@@ -67,15 +58,12 @@ class CustomTreeWidget(QTreeWidget):
         firstItem = QTreeWidgetItem(["level0"])
 
         nextItems = []
-        if not SettingsDialog.settingsGetSortShortcuts():
-            nextItems = shortcuts_data["keys"].items()  # Do not sort - insert order
-        else:
-            nextItems = sorted(shortcuts_data["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
-            # Show just pressed-key's subtree:
-            # if shortcuts_data:
-            #     print("Shortcuts_data3:", shortcuts_data)
-            #     nextItems = sorted(shortcuts_data["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
-            # nextitems = sorted(shortcuts_data["keys"].items()), 0)  # Sort alphabetically (case sensitive)
+        if self.shortcutManager.shortcutExists(root):
+            if SettingsDialog.settingsGetSortShortcuts():
+                nextItems = sorted(shortcuts_data["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
+            else:
+                nextItems = shortcuts_data["keys"].items()  # Do not sort - insert order
+
 
         buildTreeView(firstItem, nextItems, 0)
 
