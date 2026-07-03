@@ -78,4 +78,7 @@ class CustomTreeWidget(QTreeWidget):
         items = firstItem.takeChildren()
         self.insertTopLevelItems(0, items)
         self.expandAll()
+        print(f"Hide first item: ")
+        firstItem.setHidden(True)
+
 
