@@ -50,9 +50,9 @@ class ShortcutManager(QObject):
     def printShortcuts(self):
         pass
 
-    def getPossibleFollowupsKeychars(self, sequencePressed: str) -> str:
+    def getPossibleFollowupsKeychars(self, sequencePressed: str) -> list[str]:
         """
-        For provided key-char sequence, return list of the keychars which are available next.
+        For provided key-char sequence, return unsorted list of the keychars which are available next.
         """
         # log.info(f"Pressed sequence: {sequencePressed}")
         
@@ -65,11 +65,10 @@ class ShortcutManager(QObject):
         
         else:
             childrenKeys = ["NONE"]
-        
-        availableKeys = " ".join(list(childrenKeys))
+
         # log.info(f"Final: {availableKeys}")
         
-        return availableKeys
+        return childrenKeys
 
 
     def getAllPaths(self, shortcutsData) -> [str]:  # type: ignore

@@ -772,6 +772,7 @@ class MainWindow(QMainWindow, QObject):
     def open_settings(self):
         dlg = SettingsDialog(self)
         dlg.settingsChangedSignal.connect(self.treeViewWidget.update_tree_view)
+        dlg.settingsChangedSignal.connect(self.updateAvailableKeysLabel)
         dlg.settingsChangedSignal.connect(self.apply_settings)
         dlg.exec()
 
@@ -999,12 +1000,20 @@ class MainWindow(QMainWindow, QObject):
     
     @pyqtSlot()
     def updateAvailableKeysLabel(self, newContent=None):
-        # Construct hint message
+        """
+        Construct hint message
+        """
         sequencePressed = self.sortModeHandler.keySeq
-        availableKeys = self.shortcutManager.getPossibleFollowupsKeychars(sequencePressed)
+        availableKeysList = self.shortcutManager.getPossibleFollowupsKeychars(sequencePressed)
         
-        availableKeysHint = sequencePressed + " -> " + availableKeys
+        if SettingsDialog.settingsGetSortShortcuts():
+            availableKeysList = sorted(availableKeysList, key=lambda x: str.casefold(x[0]))
+        
+        availableKeysStr: str = " ".join(list(availableKeysList))
+        
+        availableKeysHint = sequencePressed + " -> " + availableKeysStr
         # availableKeysHint = availableKeys
+        
         self.availableKeycharsLabel.setText(availableKeysHint)
 
     @pyqtSlot(str)

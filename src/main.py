@@ -239,11 +239,9 @@ Important features TODO:
 - [ ] THEMES: Zmenit u ruznych themes nektere barvy, aby byly citelne texty (text v buttons, text v textfiles...)
 - [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
 - [X] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) 
-    - [ ] MAYBE Pri NICEM nezmacknutem zobrazit mozna i znaky ".,;:" ??? Nebo to necham omezene pouze na shortcuts?
-        - [ ] MAYBE: Vcetne mezerniku (pokud existuje dst pro aktualni zkratku) - protoze pokud jde mezernik pouzit v aktualni pozici, proc ho taky nejak nezobrazit?
     - [ ] Alignovat tak, aby zkratka vzdy byla na stejnem miste a totez pro possiblekeys. tzn '->' bude vzdy na stejne pozici, jen se bude menit, co je pred a za tim. 
     - [ ] ?Presunout availableKeysLabel pod keyseqLabel.
-    - [ ] !Aplikovat stejne nastaveni sort jako v treeView. Pokud treba zvoleno podle abecedy, i TreeView i availableKeys by melo byt serazeno uplne stejne.
+    - [X] Aplikovat stejne nastaveni sort jako v treeView. Pokud treba zvoleno podle abecedy, i TreeView i availableKeys by melo byt serazeno uplne stejne.
     - [ ] Nefunguje, kdyz pouziju jako prvni znaky ",;", ktere az pak mohou byt nasledovany sequenci ... musim je odignorovat, pripadne pouzit nejakou variable, ze ktere jsem tyto uz odstranil.
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [X] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
