@@ -130,6 +130,7 @@ class MainWindow(QMainWindow, QObject):
         mainLayout.addLayout(rightInnerLayout)
 
         # Show next available character(s) to continue with pressed shortcut.
+        # TODO: Mozna presunout pod keyLabel.
         self.availableKeycharsLabel = QLabel("None")
         self.availableKeycharsLabel.resize(self.availableKeycharsLabel.sizeHint())
         self.availableKeycharsLabel.setGraphicsEffect(Styles.getShadowEffect())
@@ -309,6 +310,7 @@ class MainWindow(QMainWindow, QObject):
         self.shortcutManager.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.shortcutManager.updateMainWindowTitleSignal.connect(self.updateWindowTitle)
         self.shortcutManager.updateTreePreviewSignal.connect(self.treeViewWidget.update_tree_view)
+        self.shortcutManager.updateAvailableKeysLabelSignal.connect(self.updateAvailableKeysLabel)
 
         self.sortModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
         self.sortModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
@@ -338,6 +340,9 @@ class MainWindow(QMainWindow, QObject):
             self.treeViewWidget.update_tree_view()  # TODO: emit signal?
         else:
             log.info("Empty or invalid arg shortcuts path")
+
+        
+        self.updateAvailableKeysLabel()
 
 
         # ========== Start the App with the Sort mode as default ==========
@@ -986,11 +991,21 @@ class MainWindow(QMainWindow, QObject):
 
         elif self.currentMode == Modes.SORT:
             self.sortModeHandler.handleSortMode(event)
-
+            
+            # Show all possible available key-chars from shortcuts hierarchy for current key-sequence.
+            self.updateAvailableKeysLabel()
         else: # Unknown mode
             pass
-
-        # self.availableKeycharsLabel.setText(self.shortcutManager.getChildrenKeychars(str(pressedKey)))
+    
+    @pyqtSlot()
+    def updateAvailableKeysLabel(self, newContent=None):
+        # Construct hint message
+        sequencePressed = self.sortModeHandler.keySeq
+        availableKeys = self.shortcutManager.getPossibleFollowupsKeychars(sequencePressed)
+        
+        availableKeysHint = sequencePressed + " -> " + availableKeys
+        # availableKeysHint = availableKeys
+        self.availableKeycharsLabel.setText(availableKeysHint)
 
     @pyqtSlot(str)
     def updateKeySequenceLabel(self, newContent=None):

@@ -238,7 +238,13 @@ Important features TODO:
 - [ ] Maybe save/load the whole session (including the history and commandStack) - serialization.
 - [ ] THEMES: Zmenit u ruznych themes nektere barvy, aby byly citelne texty (text v buttons, text v textfiles...)
 - [ ] !!! Po velkem refactoringu (GalleryItem, Commands...) doplnit log.info a StatusBarUpdates
-- [ ] [Simple] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) Vcetne mezerniku (pokud existuje dst pro aktualni zkratku)
+- [X] Nad obrazkem mozna oranzovym textem ukazovat pro aktualne namacknutou klavesu aktualni moznosti, jak pokracovat. (treba mam f-k,l,m. zobrazuje se 'f'. Zmacknu 'f', a zobrazi se k, l, m.) 
+    - [ ] MAYBE Pri NICEM nezmacknutem zobrazit mozna i znaky ".,;:" ??? Nebo to necham omezene pouze na shortcuts?
+        - [ ] MAYBE: Vcetne mezerniku (pokud existuje dst pro aktualni zkratku) - protoze pokud jde mezernik pouzit v aktualni pozici, proc ho taky nejak nezobrazit?
+    - [ ] Alignovat tak, aby zkratka vzdy byla na stejnem miste a totez pro possiblekeys. tzn '->' bude vzdy na stejne pozici, jen se bude menit, co je pred a za tim. 
+    - [ ] ?Presunout availableKeysLabel pod keyseqLabel.
+    - [ ] !Aplikovat stejne nastaveni sort jako v treeView. Pokud treba zvoleno podle abecedy, i TreeView i availableKeys by melo byt serazeno uplne stejne.
+    - [ ] Nefunguje, kdyz pouziju jako prvni znaky ",;", ktere az pak mohou byt nasledovany sequenci ... musim je odignorovat, pripadne pouzit nejakou variable, ze ktere jsem tyto uz odstranil.
 - [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
 - [X] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
 - [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
@@ -290,7 +296,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] ! Feature: Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop. Nezapomenout na copy mode - tzn nutno i ve vsech dst, kam byl tento zkopirovan... uhhh.
 - [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text. Pripadne vedle status baru pridat obrazek, ktery nastavim na nejake X kdyz error, a fajfku kdyz OK.
-- [ ] Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
+- [ ] Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne. LISTARY !!!
 - [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten.
 - [ ] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
 - [ ] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ; a ,

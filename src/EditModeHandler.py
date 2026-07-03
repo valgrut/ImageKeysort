@@ -55,7 +55,7 @@ class EditModeHandler(QObject):
 
     def handleEditMode(self, event):
         pressedKey = event.text()
-        log.debug(f"Pressed Key: {pressedKey}.")
+        log.debug(f"Pressed Key: '{pressedKey}'")
 
         match event.key():
             # Clear current key-sequence

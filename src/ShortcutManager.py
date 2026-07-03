@@ -23,6 +23,7 @@ class ShortcutManager(QObject):
 
     updateMainWindowTitleSignal = pyqtSignal(str)
     updateStatusBarLabelSignal = pyqtSignal(str)
+    updateAvailableKeysLabelSignal = pyqtSignal()
     updateTreePreviewSignal = pyqtSignal()
 
     def __init__(self, mainWindow, parent=None):
@@ -49,12 +50,27 @@ class ShortcutManager(QObject):
     def printShortcuts(self):
         pass
 
-    def getPossibleFollowupsKeychars(self, shortcut: str) -> list[str]:
+    def getPossibleFollowupsKeychars(self, sequencePressed: str) -> str:
         """
-        For provided shortcut, return list of the keychars which are available next.
+        For provided key-char sequence, return list of the keychars which are available next.
         """
-        keycharData = self.getLastKeyContentOfSequence(shortcut)
-        return keycharData["keys"]
+        # log.info(f"Pressed sequence: {sequencePressed}")
+        
+        if not sequencePressed:
+            childrenKeys = self.shortcutTree["keys"]
+        
+        elif self.shortcutExists(sequencePressed):
+            # log.info(f"Data: {self.getLastKeyContentOfSequence(sequencePressed)["keys"].keys()}")
+            childrenKeys = self.getLastKeyContentOfSequence(sequencePressed)["keys"].keys()
+        
+        else:
+            childrenKeys = ["NONE"]
+        
+        availableKeys = " ".join(list(childrenKeys))
+        # log.info(f"Final: {availableKeys}")
+        
+        return availableKeys
+
 
     def getAllPaths(self, shortcutsData) -> [str]:  # type: ignore
         """
@@ -230,6 +246,7 @@ class ShortcutManager(QObject):
             self.setDataModified()
 
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
 
 
     def updateDstPathForShortcut(self, shortcut: str, dst_path: str) -> bool:
@@ -247,6 +264,7 @@ class ShortcutManager(QObject):
         lastKeyContent.update({"dst_path" : dst_path})
         self.setDataModified()
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
         return True
 
 
@@ -355,6 +373,7 @@ class ShortcutManager(QObject):
         destinationKey["keys"].update({lastKeyChar: poppedSubtree})
 
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
         return True
 
 
@@ -424,6 +443,7 @@ class ShortcutManager(QObject):
         self.setDataModified()
         parentOfLastKey["keys"].update({newKeyChar: changingKeyCharContent})
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
         return True
 
 
@@ -473,6 +493,7 @@ class ShortcutManager(QObject):
                 return True
 
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
         return False
 
 
@@ -486,6 +507,7 @@ class ShortcutManager(QObject):
         self.setDataUnmodified()
         self.shortcutTree = {"keys": {}}
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
 
 
     def dropUnsavedChanges(self):
@@ -495,6 +517,7 @@ class ShortcutManager(QObject):
         self._loadShortcuts(self.srcPathOfLoadedData)
         self.setDataUnmodified()
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
 
 
     def askSaveIfChanged(self) -> bool:
@@ -524,6 +547,7 @@ class ShortcutManager(QObject):
 
         self._loadShortcuts(presetsFilePath)
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
         return True
 
 
@@ -535,6 +559,7 @@ class ShortcutManager(QObject):
 
         self._loadShortcuts(jsonDataFile[0])
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
         return True
 
 
@@ -576,6 +601,7 @@ class ShortcutManager(QObject):
         log.info(f"Data loaded from {presetsFilePath}.")
         self.updateStatusBarLabelSignal.emit(f"Data successfully loaded from {presetsFilePath}.")
         self.updateTreePreviewSignal.emit()
+        self.updateAvailableKeysLabelSignal.emit()
         return True
 
 

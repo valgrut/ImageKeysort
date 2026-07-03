@@ -17,9 +17,11 @@ class CustomTreeWidget(QTreeWidget):
         super().__init__()
         self.shortcutManager = shortcut_manager
 
-
     @pyqtSlot()
+    @pyqtSlot(str)
     def update_tree_view(self, root: str = ""):
+        log.debug(f"Shortcut passed from signal: {root}")
+        
         # Just flush the whole content of the treeViewWidget and rebuild it from scratch.
         self.clear()
         items = []
