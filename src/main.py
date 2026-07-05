@@ -243,7 +243,7 @@ Important features TODO:
     - [X] Presunout availableKeysLabel pod keyseqLabel.
     - [X] Aplikovat stejne nastaveni sort jako v treeView. Pokud treba zvoleno podle abecedy, i TreeView i availableKeys by melo byt serazeno uplne stejne.
     - [ ] Nefunguje, kdyz pouziju jako prvni znaky ",;" a sentinel '+' (Enter), ktere az pak mohou byt nasledovany sequenci ... musim je odignorovat, pripadne pouzit nejakou variable, ze ktere jsem tyto uz odstranil.
-- [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..." (Ref. SortModeManager).
+- [X] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..." (Ref. SortModeManager).
 - [X] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
 - [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
 - [ ] Add TESTY: Crop -> Delete.

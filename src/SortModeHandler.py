@@ -190,8 +190,10 @@ class SortModeHandler(QObject):
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
             self.moveImageCommand(src, dst, currentItem)
+            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File moved to '{dst}'.")
         else:
             self.copyImageCommand(src, dst, currentItem)
+            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File copied to '{dst}'.")
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.decrementGalleryIndex()
@@ -252,8 +254,10 @@ class SortModeHandler(QObject):
         currentItem = self.galleryManager.getCurrentGalleryItem()
         if not self.copyOnly:
             self.moveImageCommand(src, dst, currentItem)
+            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File moved to '{dst}'.")
         else:
             self.copyImageCommand(src, dst, currentItem)
+            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File copied to '{dst}'.")
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.incrementGalleryIndex()
@@ -421,8 +425,10 @@ class SortModeHandler(QObject):
         currentItem = self.galleryManager.getCurrentGalleryItem()
         if not self.copyOnly and instantCopy is False:
             self.moveImageCommand(src, dst, currentItem)
+            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File moved to '{dst}'.")
         elif self.copyOnly or instantCopy:
             self.copyImageCommand(src, dst, currentItem)
+            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File copied to '{dst}'.")
 
             # TODO: Should instantCopy override Settings?
             # 2 options: 1. Settings->Gotonext overrides everything else.
@@ -596,6 +602,7 @@ class SortModeHandler(QObject):
         self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
         self.keySeq = ""
         self.updateKeySequenceLabel()
+        self.updateTreeViewSignal.emit(self.keySeq)
 
 
     def checkDestinationDirectoryExists(self, dst: Path) -> bool:
@@ -640,13 +647,13 @@ class SortModeHandler(QObject):
         shutil.move(Path(src) / Path(imageData.fileName), Path(dst) / Path(imageData.fileName))
         self.addEntryIntoHistory(imageData, src, dst, self.galleryManager.getGalleryIndex(), Operations.MOVE)
         self.galleryManager.removeFile(imageData)
-        self.updateStatusBarLabel(f"File moved to {str(dst)}.")
+        #self.updateStatusBarLabel(f"File moved to {str(dst)}.")
 
     def copyImageCommand(self, src: str|Path, dst: str|Path, imageData: GalleryItem):
         # TODO: Replace with the Command and UndoStack.
         shutil.copy2(Path(src) / Path(imageData.fileName), Path(dst) / Path(imageData.fileName))
         self.addEntryIntoHistory(imageData, src, dst, self.galleryManager.getGalleryIndex(), Operations.COPY)
-        self.updateStatusBarLabel(f"File copied to {str(dst)}.")
+        #self.updateStatusBarLabel(f"File copied to {str(dst)}.")
 
 
     def afterMoveOperations(self):
