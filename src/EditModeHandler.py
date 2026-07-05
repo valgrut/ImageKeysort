@@ -119,6 +119,7 @@ class EditModeHandler(QObject):
                 # Settings: Allow empty destination path (no path selected) or dont.
                 if not dstSortDirectory and not SettingsDialog.settingsGetAllowNoDest():
                     log.info("No dst selected and empty dst is not allowed. No further action.")
+                    self.updateStatusBarLabel("Warning: Empty directory cannot be added. This can be changed in Settings.")
                     self.cleanupAndUpdate()
                     return
 
@@ -127,24 +128,30 @@ class EditModeHandler(QObject):
                 # for k in self.keySeq:
                 #     self.shortcutManager.addShortcut(self.keySeq)
                 self.shortcutManager.addShortcutSequence(self.keySeq)
+                self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' has been added!")
 
                 # Decide, whether to add dst_path for new shortcut sequence
                 # TODO: Bud ponechat settings, jestli povolovat zmeny, NEBO pridat do stromu button zamecek, ktery zamkne modifikace.
                 # TODO: Kruci, ja vlastne chtel pridat moznost Undo changes v shortcuts, takze i lock button, i settings budou asi zbytecne.....
                 currentDstPathForShortcut = self.shortcutManager.getDstPathForShortcut(self.keySeq)
 
+                # TODO: Refactor. Myslim ,ze by to slo napsat cisteji, protoze se kod vlastne opakuje v IF, a pak v ELSE po potvrzeni.
                 if currentDstPathForShortcut is None or SettingsDialog.settingsGetConfirmToOverride() is False:
                     self.shortcutManager.updateDstPathForShortcut(self.keySeq, dstSortDirectory)
+                    self.updateStatusBarLabel(f"Directory for shortcut '{self.keySeq}' has been updated to '{dstSortDirectory}'!")
                 else:
                     # TODO: 2. Button do ShortcutTree - Lock shortcuts from modifications (allow only adding new shortcuts).
-                    log.info("Overriding existing dst_path is not allowed. Go to Settings to allow it.")
-                    self.updateStatusBarLabel("Warning: Overriding existing dst_path is not allowed. Go to Settings to allow it.")
+                    #log.info("Overriding existing dst_path is not allowed. Go to Settings to allow it.")
+                    #self.updateStatusBarLabel("Warning: Overriding existing dst_path is not allowed. Go to Settings to allow it.")
 
                     qm = QMessageBox()
                     user_confirmed = qm.question(self.mainWindow, '', f"Do you want to override dst_path for shortcut {self.keySeq}?", qm.Yes | qm.No)
                     if user_confirmed == qm.Yes:
                         self.shortcutManager.updateDstPathForShortcut(self.keySeq, dstSortDirectory)
+                        self.updateStatusBarLabel(f"Directory for shortcut '{self.keySeq}' has been updated to '{dstSortDirectory}'!")
                         # TODO: Mozna jeste nejak udelat, aby se prvne zeptalo, esi chci prepsat dst, az pak vyhodit dialog pro novou dst.
+                    else:
+                        self.updateStatusBarLabel(f"Directory update for shortcut {self.keySeq} was cancelled by the user.")
 
                 self.cleanupAndUpdate()
                 log.info(json.dumps(self.shortcutManager.getData(), indent=2))

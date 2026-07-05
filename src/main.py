@@ -243,7 +243,7 @@ Important features TODO:
     - [X] Presunout availableKeysLabel pod keyseqLabel.
     - [X] Aplikovat stejne nastaveni sort jako v treeView. Pokud treba zvoleno podle abecedy, i TreeView i availableKeys by melo byt serazeno uplne stejne.
     - [ ] Nefunguje, kdyz pouziju jako prvni znaky ",;" a sentinel '+' (Enter), ktere az pak mohou byt nasledovany sequenci ... musim je odignorovat, pripadne pouzit nejakou variable, ze ktere jsem tyto uz odstranil.
-- [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..."
+- [ ] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..." (Ref. SortModeManager).
 - [X] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
 - [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
 - [ ] Add TESTY: Crop -> Delete.
@@ -297,10 +297,11 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] ! Feature: Ukladat si cesty z pouziti pouze mezerniku (onetime), a moct otevrit dialog, kde tyhle cesty budou sipkama vybiratelne a znovupouzitelne, a taky pujde z teto oznacene cesty v dialogu priradit zkratka a tim se to presune do stromu (pokud takova zkratka jeste neexistuje).
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop. Nezapomenout na copy mode - tzn nutno i ve vsech dst, kam byl tento zkopirovan... uhhh.
 - [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text. Pripadne vedle status baru pridat obrazek, ktery nastavim na nejake X kdyz error, a fajfku kdyz OK.
-- [ ] Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne. LISTARY !!!
+- [X] (SOLVED by LISTARY) Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
 - [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten.
-- [ ] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
+- [X] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
 - [ ] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ; a ,
+- [ ] Disable Next Label when in the Edit mode.
 
 
 Settings:
