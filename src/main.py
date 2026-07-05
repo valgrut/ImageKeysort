@@ -301,7 +301,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten.
 - [X] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
 - [ ] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ; a ,
-- [ ] Disable Next Label when in the Edit mode.
+- [X] Disable Next Label when in the Edit mode.
 
 
 Settings:
