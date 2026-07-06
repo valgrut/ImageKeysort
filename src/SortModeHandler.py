@@ -62,6 +62,16 @@ class SortModeHandler(QObject):
     """
     Handle sort mode of the app.
     Executes operations.
+
+    Allowed syntax examples:
+        abcd
+        ,abcd    # Activate Copy mode only for this shortcut and move to next image.
+        ;abcd    # Activate Copy mode only for this shortcut and stay on this image.
+        ab+cd    # Sentinel working as temporal mark. When shortcut is found, only characters after sentinel are cleared.
+        ab+,cd
+        ab+;cd
+        <space>  # Select manually dst for current picture without using any shortcut
+        .        # Repeat last move operation
     """
 
     updateKeySequenceLabelSignal = pyqtSignal(str)
@@ -80,6 +90,8 @@ class SortModeHandler(QObject):
         self.copyOnly = False
         self.separator = "+"
 
+    def getActiveSequence(self):
+        return self.permanentKeySeq + self.keySeq
 
     def updateKeySequenceLabel(self):
         if self.permanentKeySeq:
@@ -89,10 +101,8 @@ class SortModeHandler(QObject):
             # No sentinel, just shortcut.
             self.updateKeySequenceLabelSignal.emit(f"Key Sequence Pressed: \n{self.keySeq}")
 
-
     def updateStatusBarLabel(self, newStatusbarMessage: str):
         self.updateStatusBarLabelSignal.emit(newStatusbarMessage)
-
 
     def handleKeyEscape(self):
         log.debug("handleSortMode: Case 'Escape'")
@@ -107,8 +117,9 @@ class SortModeHandler(QObject):
             self.keySeq = ""
         else:
             pass
+
         self.updateKeySequenceLabel()
-        self.updateTreeViewSignal.emit("")  # Sem to rozhodne patri. TODO: Podivat se ale, jestli to ma byt vsude, kam jsem to pridal...
+        self.updateTreeViewSignal.emit(self.getActiveSequence())  # Sem to rozhodne patri. TODO: Podivat se ale, jestli to ma byt vsude, kam jsem to pridal...
 
 
     def handleKeyBackspace(self):
@@ -116,7 +127,7 @@ class SortModeHandler(QObject):
         if len(self.keySeq) >= 1:
             self.keySeq = self.keySeq[:-1]
             self.updateKeySequenceLabel()
-            self.updateTreeViewSignal.emit("")
+            self.updateTreeViewSignal.emit(self.getActiveSequence())
 
 
     def handleKeyReturn(self):
@@ -130,6 +141,7 @@ class SortModeHandler(QObject):
             self.keySeq = ""
 
         self.updateKeySequenceLabel()
+        self.updateTreeViewSignal.emit(self.getActiveSequence())
 
 
     def handleKeySpace(self):
@@ -200,6 +212,7 @@ class SortModeHandler(QObject):
 
         self.keySeq = ""
         self.updateKeySequenceLabel()
+        # self.updateTreeViewSignal.emit("")
         self.galleryManager.updateCounterLabelText()
 
         # Show new image
@@ -390,6 +403,7 @@ class SortModeHandler(QObject):
         # self.updateStatusBarLabelSignal.emit(f"Hit but No action. Destination directory is empty or does not exist for this shortcut.")
         if not self.shortcutManager.shortcutExistsAndIsFinal(fullShortcut):
             self.updateKeySequenceLabel()
+            self.updateTreeViewSignal.emit(fullShortcut)
             return
 
         log.info("HIT!")
@@ -400,6 +414,7 @@ class SortModeHandler(QObject):
             log.info("Source directory is empty")
             self.keySeq = ""
             self.updateKeySequenceLabel()
+            self.updateTreeViewSignal.emit(self.getActiveSequence())
             return
 
         imageName = self.galleryManager.getCurrentFilename()
@@ -447,6 +462,8 @@ class SortModeHandler(QObject):
         # Enable temporaly save and reuse partial shortcut
         self.keySeq = ""
         self.updateKeySequenceLabel()
+        # self.updateTreeViewSignal.emit(self.permanentKeySeq)
+        self.updateTreeViewSignal.emit(self.getActiveSequence())
 
 
     @pyqtSlot()
@@ -602,7 +619,7 @@ class SortModeHandler(QObject):
         self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
         self.keySeq = ""
         self.updateKeySequenceLabel()
-        self.updateTreeViewSignal.emit(self.keySeq)
+        # self.updateTreeViewSignal.emit(self.keySeq)
 
 
     def checkDestinationDirectoryExists(self, dst: Path) -> bool:

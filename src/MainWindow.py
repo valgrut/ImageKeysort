@@ -1004,7 +1004,7 @@ class MainWindow(QMainWindow, QObject):
         """
         Construct hint message
         """
-        sequencePressed = self.sortModeHandler.keySeq
+        sequencePressed = self.sortModeHandler.getActiveSequence()
         availableKeysList = self.shortcutManager.getPossibleFollowupsKeychars(sequencePressed)
         
         if SettingsDialog.settingsGetSortShortcuts():
