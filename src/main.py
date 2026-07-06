@@ -355,6 +355,8 @@ Installation, Building
 - [ ] Windows build process pro .exe
     - [ ] Pridat do makefile spusteni buildeni pro windows: `pyinstaller --noconfirm main.spec`
     - [ ] Vytvorit klasicky installer pomoci InstallForge; Ref: https://www.pythonguis.com/tutorials/packaging-pyqt5-pyside2-applications-windows-pyinstaller/
+- [ ] Zprovoznit Debugger na windowsech sakra uz.
+
 
 - Windows building process:
     - Compile using the pyinstaller.exe from the .spec file.
