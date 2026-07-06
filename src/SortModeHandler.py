@@ -70,6 +70,8 @@ class SortModeHandler(QObject):
         ab+cd    # Sentinel working as temporal mark. When shortcut is found, only characters after sentinel are cleared.
         ab+,cd
         ab+;cd
+        ,ab+cd   # Becomes ab+,cd
+        ;ab+cd   # Becomes ab+;cd
         <space>  # Select manually dst for current picture without using any shortcut
         .        # Repeat last move operation
     """
@@ -83,33 +85,55 @@ class SortModeHandler(QObject):
         self.mainWindow = mainWindow
         self.shortcutManager = shortcutManager
         self.galleryManager = galleryManager
-
         self._historyManager = MoveHistoryManager()
+
+        # TODO: Can be customized from Settings.
+        self.separatorChar = "+"
+        self._copyAndMoveChar = ","
+        self._copyAndStopChar = ";"
+
         self.keySeq = ""
         self.permanentKeySeq = ""
         self.copyOnly = False
-        self.separator = "+"
+        self.copyAndMove = False
+        self.copyAndStop = False
 
-    def getActiveSequence(self):
-        # Also remove ,; from the self.keyseq or self.permanentkeyseq
+        self.finalSequenceText = self.permanentKeySeq + self.separatorChar + self.keySeq
+
+    def getCleanSequence(self):
+        """
+        Returns sequence without any markers (sentinel +) or one-time copy markers (,;).
+
+        Used for actual Shortcut searching and validation.
+        """
         return self.permanentKeySeq + self.keySeq
 
     def updateKeySequenceLabel(self):
+        shortcutText = ""
+        onetimeCopyChar = ""
+
+        if self.copyAndMove:
+            onetimeCopyChar = self._copyAndMoveChar
+        elif self.copyAndStop:
+            onetimeCopyChar = self._copyAndStopChar
+        else:
+            onetimeCopyChar = ""
+
         if self.permanentKeySeq:
             # Sentinel (+) is set.
-            self.updateKeySequenceLabelSignal.emit(f"Key Sequence Pressed: \n{self.permanentKeySeq}{self.separator}{self.keySeq}")
+            shortcutText = self.permanentKeySeq + self.separatorChar + onetimeCopyChar + self.keySeq
         else:
             # No sentinel, just shortcut.
-            self.updateKeySequenceLabelSignal.emit(f"Key Sequence Pressed: \n{self.keySeq}")
+            shortcutText = onetimeCopyChar + self.keySeq
+
+        self.updateKeySequenceLabelSignal.emit(f"Key Sequence Pressed: \n{shortcutText}")
 
     def updateStatusBarLabel(self, newStatusbarMessage: str):
         self.updateStatusBarLabelSignal.emit(newStatusbarMessage)
 
     def handleKeyEscape(self):
         log.debug("handleSortMode: Case 'Escape'")
-        # log.info(f"key_seq: {self.key_seq}")
-        # log.info(f"permanent_key_seq: {self.permanent_key_seq}")
-        # TODO: Refactor this: pridat flag sentinelExists, bude to srozumitelnejsi.
+
         if self.keySeq and self.permanentKeySeq:
             self.keySeq = ""
         elif not self.keySeq and self.permanentKeySeq:
@@ -117,21 +141,29 @@ class SortModeHandler(QObject):
         elif self.keySeq and not self.permanentKeySeq:
             self.keySeq = ""
         else:
+            # Both self.keySeq and self.permanentKeySeq are empty, nothing to do.
             pass
 
+        self.copyAndMove = False
+        self.copyAndStop = False
+
         self.updateKeySequenceLabel()
-        self.updateTreeViewSignal.emit(self.getActiveSequence())  # Sem to rozhodne patri. TODO: Podivat se ale, jestli to ma byt vsude, kam jsem to pridal...
+        self.updateTreeViewSignal.emit(self.getCleanSequence())  # Sem to rozhodne patri. TODO: Podivat se ale, jestli to ma byt vsude, kam jsem to pridal...
 
 
-    def handleKeyBackspace(self):
+    def handleKeyBackspace(self):  # TODO: Test
         log.debug("handleSortMode: Case 'Backspace'")
         if len(self.keySeq) >= 1:
             self.keySeq = self.keySeq[:-1]
-            self.updateKeySequenceLabel()
-            self.updateTreeViewSignal.emit(self.getActiveSequence())
+        elif not self.keySeq and (self.copyAndMove or self.copyAndStop):
+            self.copyAndMove = False
+            self.copyAndStop = False
+
+        self.updateKeySequenceLabel()
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
 
 
-    def handleKeyReturn(self):
+    def handleKeyReturn(self):  # TODO: Test
         """
         Adds sentinel (+) serving as a temporal position marker.
         """
@@ -142,15 +174,15 @@ class SortModeHandler(QObject):
             log.info("Sentinel already exists, cannot add another one.")
             return
 
-        if self.keySeq:
-            if self.keySeq[0] == ',' or self.keySeq[0] == ';':
-                self.permanentKeySeq = self.keySeq[1:]
-            else:
-                self.permanentKeySeq = self.keySeq
-            self.keySeq = ""
+        if not self.keySeq:
+            log.info(f"Nothing to add before sentinel. Current key-sequence is empty.")
+            return
+
+        self.permanentKeySeq = self.keySeq
+        self.keySeq = ""
 
         self.updateKeySequenceLabel()
-        self.updateTreeViewSignal.emit(self.getActiveSequence())
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
 
 
     def handleKeySpace(self):
@@ -371,42 +403,44 @@ class SortModeHandler(QObject):
 
         pressedKey = event.text()
 
+        # === Handle the ; and , ===
+        # TODO: Maybe create 2 separated methods for those: handleKeyStrednik(), handleKeyCarka().
         # Validation of InstantCopy feature: ',' or ';' can be only the first char in sequence.
         # Otherwise, shortcut could match before user could write the ',' or ';'.
-        if len(self.keySeq) > 0 and (pressedKey == ',' or pressedKey == ';'):
+        if len(self.keySeq) > 0 and (pressedKey == self._copyAndMoveChar or pressedKey == self._copyAndStopChar):
             # ',' or ';' can be only used as the first character of the sequence
             self.updateStatusBarLabel(f"Temporal copy characters ',' and ';' can only be the used as the first character.")
             return
 
-        self.keySeq += pressedKey
-        cleanKeySeq = self.keySeq
-
-        # Handle the ; and ,
         moveToNextImage = False
         instantCopy = False
-        if self.keySeq[0] == ',' or self.keySeq[0] == ';':
-            print("';' or ',' detected in the sequence.")
-            cleanKeySeq = self.keySeq[1:]  # We remove ',' or ';' from the shortcut to use it for matching and HIT.
+        if pressedKey == self._copyAndMoveChar or pressedKey == self._copyAndStopChar:
+            log.info("';' or ',' detected in the sequence as the first character.")
             instantCopy = True
-            if self.keySeq[0] == ',':
+            if pressedKey == self._copyAndMoveChar:
                 moveToNextImage = True
+                self.copyAndMove = True
+            elif pressedKey == self._copyAndStopChar:
+                self.copyAndStop = True
 
-        self.updateTreeViewSignal.emit(self.keySeq)
-        self.updateKeySequenceLabel()
+            self.updateKeySequenceLabel()
 
-        fullShortcut = ""
-        if self.permanentKeySeq:
-            fullShortcut = self.permanentKeySeq + cleanKeySeq
-        else:
-            fullShortcut = cleanKeySeq
+            # stop processing here. We do not want the ',' or ';' to be appended to self.keySeq variable.
+            return
+
+        # Continue processing of normal characters
+        self.keySeq += pressedKey
+        # self.updateKeySequenceLabel()
+        # self.updateTreeViewSignal.emit(self.keySeq)
+
+        fullShortcut = self.getCleanSequence()
 
         log.debug(f"self.permanentkeySeq: {self.permanentKeySeq}")
-        log.debug(f"CleanKeySeq: {cleanKeySeq}")
         log.debug(f"self.keySeq: {self.keySeq}")
         log.debug(f"permanentSeq + keySeq: {fullShortcut}")
 
         # Prevent matching empty key sequence
-        if not cleanKeySeq:
+        if not fullShortcut:
             return
 
         # self.updateStatusBarLabelSignal.emit(f"Hit but No action. Destination directory is empty or does not exist for this shortcut.")
@@ -417,13 +451,17 @@ class SortModeHandler(QObject):
 
         log.info("HIT!")
 
+        # Reset flags  # TODO: Ma to byt tady, nebo nekde jinde?
+        self.copyAndMove = False
+        self.copyAndStop = False
+
         dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
 
         if self.galleryManager.isGalleryEmpty():
             log.info("Source directory is empty")
             self.keySeq = ""
             self.updateKeySequenceLabel()
-            self.updateTreeViewSignal.emit(self.getActiveSequence())
+            self.updateTreeViewSignal.emit(self.getCleanSequence())
             return
 
         imageName = self.galleryManager.getCurrentFilename()
@@ -447,7 +485,7 @@ class SortModeHandler(QObject):
 
         # Remove current image from the list of images in src directory
         currentItem = self.galleryManager.getCurrentGalleryItem()
-        if not self.copyOnly and instantCopy is False:
+        if not self.copyOnly and not instantCopy:
             self.moveImageCommand(src, dst, currentItem)
             self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File moved to '{dst}'.")
         elif self.copyOnly or instantCopy:
@@ -472,7 +510,7 @@ class SortModeHandler(QObject):
         self.keySeq = ""
         self.updateKeySequenceLabel()
         # self.updateTreeViewSignal.emit(self.permanentKeySeq)
-        self.updateTreeViewSignal.emit(self.getActiveSequence())
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
 
 
     @pyqtSlot()
@@ -673,14 +711,11 @@ class SortModeHandler(QObject):
         shutil.move(Path(src) / Path(imageData.fileName), Path(dst) / Path(imageData.fileName))
         self.addEntryIntoHistory(imageData, src, dst, self.galleryManager.getGalleryIndex(), Operations.MOVE)
         self.galleryManager.removeFile(imageData)
-        #self.updateStatusBarLabel(f"File moved to {str(dst)}.")
 
     def copyImageCommand(self, src: str|Path, dst: str|Path, imageData: GalleryItem):
         # TODO: Replace with the Command and UndoStack.
         shutil.copy2(Path(src) / Path(imageData.fileName), Path(dst) / Path(imageData.fileName))
         self.addEntryIntoHistory(imageData, src, dst, self.galleryManager.getGalleryIndex(), Operations.COPY)
-        #self.updateStatusBarLabel(f"File copied to {str(dst)}.")
-
 
     def afterMoveOperations(self):
         pass
