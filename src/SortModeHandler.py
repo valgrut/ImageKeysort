@@ -91,6 +91,7 @@ class SortModeHandler(QObject):
         self.separator = "+"
 
     def getActiveSequence(self):
+        # Also remove ,; from the self.keyseq or self.permanentkeyseq
         return self.permanentKeySeq + self.keySeq
 
     def updateKeySequenceLabel(self):
@@ -131,7 +132,15 @@ class SortModeHandler(QObject):
 
 
     def handleKeyReturn(self):
+        """
+        Adds sentinel (+) serving as a temporal position marker.
+        """
+
         log.debug("handleSortMode: Case 'Enter' (Key_Return)")
+
+        if self.permanentKeySeq:
+            log.info("Sentinel already exists, cannot add another one.")
+            return
 
         if self.keySeq:
             if self.keySeq[0] == ',' or self.keySeq[0] == ';':
