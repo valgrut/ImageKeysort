@@ -132,7 +132,13 @@ class SortModeHandler(QObject):
         self.updateStatusBarLabelSignal.emit(newStatusbarMessage)
 
     def handleKeyEscape(self):
-        log.debug("handleSortMode: Case 'Escape'")
+        """
+        ESC
+        Clears out currently pressed sequence.
+        If sentinel is present, only temporal sequence is cleared.
+        If temporal part of sequence (after sentinel) is empty, permanent sequence (before sentinel) is cleared too.
+        """
+        log.debug("handleSortMode: Case 'ESC'")
 
         if self.keySeq and self.permanentKeySeq:
             self.keySeq = ""
@@ -151,7 +157,7 @@ class SortModeHandler(QObject):
         self.updateTreeViewSignal.emit(self.getCleanSequence())  # Sem to rozhodne patri. TODO: Podivat se ale, jestli to ma byt vsude, kam jsem to pridal...
 
 
-    def handleKeyBackspace(self):  # TODO: Test
+    def handleKeyBackspace(self):
         log.debug("handleSortMode: Case 'Backspace'")
         if len(self.keySeq) >= 1:
             self.keySeq = self.keySeq[:-1]
@@ -163,9 +169,11 @@ class SortModeHandler(QObject):
         self.updateTreeViewSignal.emit(self.getCleanSequence())
 
 
-    def handleKeyReturn(self):  # TODO: Test
+    def handleKeyReturn(self):
         """
+        ENTER
         Adds sentinel (+) serving as a temporal position marker.
+        When sentinel is present, pressing ESC does not clear whole sequence, only the part after sentinel.
         """
 
         log.debug("handleSortMode: Case 'Enter' (Key_Return)")
@@ -187,27 +195,33 @@ class SortModeHandler(QObject):
 
     def handleKeySpace(self):
         """
-        If keySeq is empty, pressing "space" will allow user to select dst dir for one-time use.
-        and else dst directory is chosen from the current non-terminal shortcut, if dst_path is not empty.
+        SPACEBAR
+
+        Allows to use dst directory of uncompleted shortcut.
+        e.g. If there is a shortcut "abcd", where b.dst="some_path", pressing only 'ab' will not match a shortcut, because it searches for longest possible match (abcd).
+
+        If keySeq is empty, pressing "space" will allow user to SELECT any destination dir just for this one time via Dialogue window.
+        If keySeq is not empty AND current's sequence's dst_path is not empty, dst directory of current unfinished sequence is used for operation.
+
+        TODO: maybe: If keySeq is not empty AND current's sequence's dst_path is empty, dst directory of current unfinished sequence is OFFERED via Dialogue window.
         """
         log.debug("handleSortMode: Case 'Space'")
         log.info("Select destination directory just for the current image.")
+
         dst = ""
-
-        # TODO: Nefunguje, kdyz je pouzit sentinel (+).
-
-        if self.keySeq:
-            log.info(f"keySeq is not empty ('{self.keySeq}')")
-            nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(self.keySeq)
+        currentSequence = self.getCleanSequence()
+        if currentSequence:
+            log.info(f"keySeq is not empty ('{currentSequence}')")
+            nonTerminalKey = self.shortcutManager.getLastKeyContentOfSequence(currentSequence)
             if not nonTerminalKey:
-                log.info(f"Shortcut sequence {self.keySeq} does not exist.")
+                log.info(f"Shortcut sequence {currentSequence} does not exist.")
                 return
             
             dst = nonTerminalKey["dst_path"]
             if not os.path.exists(dst):
                 log.info(f"No action. Shortcut probably does not contain dst_path '{dst}'.")
                 self.updateStatusBarLabelSignal.emit(
-                    f"No action. Destination directory '{dst}' for the sequence '{self.keySeq}' is empty or does not exist.")
+                    f"No action. Destination directory '{dst}' for the sequence '{currentSequence}' is empty or does not exist.")
                 return
             log.info(f"middle_path {dst}")
             
@@ -243,17 +257,17 @@ class SortModeHandler(QObject):
         # Remove current image from the list of images in src directory
         if not self.copyOnly:
             self.moveImageCommand(src, dst, currentItem)
-            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File moved to '{dst}'.")
+            self.updateStatusBarLabel(f"Shortcut '{currentSequence}' is used. File moved to '{dst}'.")
         else:
             self.copyImageCommand(src, dst, currentItem)
-            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File copied to '{dst}'.")
+            self.updateStatusBarLabel(f"Shortcut '{currentSequence}' is used. File copied to '{dst}'.")
 
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.decrementGalleryIndex()
 
         self.keySeq = ""
         self.updateKeySequenceLabel()
-        # self.updateTreeViewSignal.emit("")
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
         self.galleryManager.updateCounterLabelText()
 
         # Show new image
@@ -638,6 +652,7 @@ class SortModeHandler(QObject):
         self.galleryManager.updatePreview()
         self.keySeq = ""
         self.updateKeySequenceLabel()
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
 
 
     def srcImageExistsInDst(self, dst: Path, imageName) -> bool:
@@ -666,8 +681,7 @@ class SortModeHandler(QObject):
         self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
         self.keySeq = ""
         self.updateKeySequenceLabel()
-        # self.updateTreeViewSignal.emit(self.keySeq)
-
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
 
     def checkDestinationDirectoryExists(self, dst: Path) -> bool:
         """
@@ -686,7 +700,7 @@ class SortModeHandler(QObject):
     def cleanupAndUpdate(self):
         self.keySeq = ""
         self.permanentKeySeq = ""
-        self.updateTreeViewSignal.emit(self.keySeq)
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
         self.updateKeySequenceLabel()
         self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
 

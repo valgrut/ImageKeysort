@@ -41,6 +41,20 @@ app = QApplication([])  # needed for the app to work during testing
 #
 # COPY mode:
 # to samo co vyse
+#
+# TODO:
+# abc<enter>de
+# abc<enter>dedede
+# abc<enter>d<ESC>de
+# abc<enter>;de
+# abc<enter>,de
+# abc<enter>;d<ESC>
+# ;abc<enter>de
+# ;abc<enter>;;
+# ;abc<ESC>
+# abc<enter>;d<BS><BS><BS><BS><ESC>
+# abc<enter>d<ESC><ESC>
+# abc<enter>cde<enter>xyz<enter>
 
 class TestSortModeHandler(unittest.TestCase):
 

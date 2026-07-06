@@ -260,7 +260,7 @@ Important features TODO:
 - [ ] Status bar nejak zvyraznit / vycistit? Moc informaci, a ja bych potreboval spis vedet, ze se neco presunulo, odkud a kam.
 - [ ] Mozna oddelat / presunout cely Label zobrazujici srcDir v middleLayoutu nekam jinam (dolu pod aktualni obrazek? nebo do Window Title?)
 - [ ] Pridat ikonu zelene fajfky / cerveneho X, a pridavat pred status bar zpravy (napr presun obrazku ze src do dst je successful a pod.) Bude to lepsi vizualni indikace, ze se to povedlo nebo nepovedlo.
-
+- [ ] Mozna, kdyz je CopyMode on (oranzovy ramecek) tak prepend ',' do keySeqLabel. Pokud v Settings je aktivni, ze doNotGoToNextImageAfterCopy = True, tak zobrazit ';'. 
 
 Important - Misc:
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
@@ -299,9 +299,9 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop. Nezapomenout na copy mode - tzn nutno i ve vsech dst, kam byl tento zkopirovan... uhhh.
 - [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text. Pripadne vedle status baru pridat obrazek, ktery nastavim na nejake X kdyz error, a fajfku kdyz OK.
 - [X] (SOLVED by LISTARY) Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
-- [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten.
+- [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten (navzdory Settings - zobrazovat pouze podstrom aktualni sequence)
 - [X] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
-- [ ] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ; a ,
+- [ ] !!!!!! Nefunguje castecna-zkratka+mezernik pro copy s pomoci ; a ,
 - [X] Disable Next Label when in the Edit mode.
 
 
@@ -380,11 +380,11 @@ Design:
 
 To Fix:
 - [x] Crash behem cropu provedenem hned po prejmenovani obrazku (i po pridani tagu).
-- [ ] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
+- [X] !!! Fix - Backspace funguje divne, kdyz pouziju + (zarazku) v delsich zkratkach
 - [ ] Fix videos on Windows (Codec?) K-Lite Codec pack ??
 - [ ] Fix, kdyz se prehrava video a zmenim slozku ci jdu dal, video je porad slyset !!! Pouzit signaly a sloty pro stop.
-- [ ] Sentinel set + space key in sort mode. seq: acde; nastavit ac+; acd<mezernik> -> Error zkratka 'd' neexistuje. Mela by se ale pouzit i cast pred sentinelem ('ac').
-- [ ] SortMode: abc<enter>cde<enter>xyz<enter> ... vzdy prepisuje predchozi sentinel. Udelat s tim neco nebo to tak nechat?
+- [X] Sentinel set + space key in sort mode. seq: acde; nastavit ac+; acd<mezernik> -> Error zkratka 'd' neexistuje. Mela by se ale pouzit i cast pred sentinelem ('ac').
+- [X] SortMode: abc<enter>cde<enter>xyz<enter> ... vzdy prepisuje predchozi sentinel. Udelat s tim neco nebo to tak nechat?
 - [ ] Textove dokumenty nemaji oranzovy ramecek v Copy modu
 - [ ] nelze smazat soubor, kdyz uz se v __delete__ takovy nachazi. Hmmm.
 - [ ] V EditMode nejde pouzit Esc pro zruseni zmeny jmena souboru. Focus je na psani keySeqa jeho zobrazeni, takze Esc se neregistruje. (V sort funguje spravne)
