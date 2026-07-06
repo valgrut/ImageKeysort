@@ -140,21 +140,27 @@ class SortModeHandler(QObject):
         """
         log.debug("handleSortMode: Case 'ESC'")
 
-        if self.keySeq and self.permanentKeySeq:
+        # if self.keySeq or self.copyAndMove or self.copyAndStop or not self.permanentKeySeq:
+        #     self.copyAndStop = False
+        #     self.copyAndMove = False
+
+        if (self.keySeq or self.copyAndMove or self.copyAndStop) and self.permanentKeySeq:
             self.keySeq = ""
-        elif not self.keySeq and self.permanentKeySeq:
+            self.copyAndStop = False
+            self.copyAndMove = False
+        elif not self.keySeq and not self.copyAndMove and not self.copyAndStop and self.permanentKeySeq:
             self.permanentKeySeq = ""
         elif self.keySeq and not self.permanentKeySeq:
             self.keySeq = ""
+            self.copyAndStop = False
+            self.copyAndMove = False
         else:
-            # Both self.keySeq and self.permanentKeySeq are empty, nothing to do.
-            pass
-
-        self.copyAndMove = False
-        self.copyAndStop = False
+            log.info("Both self.keySeq and self.permanentKeySeq are empty, nothing to do")
+            self.copyAndStop = False
+            self.copyAndMove = False
 
         self.updateKeySequenceLabel()
-        self.updateTreeViewSignal.emit(self.getCleanSequence())  # Sem to rozhodne patri. TODO: Podivat se ale, jestli to ma byt vsude, kam jsem to pridal...
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
 
 
     def handleKeyBackspace(self):
@@ -247,31 +253,33 @@ class SortModeHandler(QObject):
         # Check that image was not removed from outside of an app
         if self.srcImageStillExists(src, imageName) is False:
             self.cleanupMissingImage(imageName)
+            self.restoreAndCleanup()
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
         if self.srcImageExistsInDst(dst, imageName):
             self.handleExistingImageInDst()
+            self.restoreAndCleanup()
             return
 
         # Remove current image from the list of images in src directory
-        if not self.copyOnly:
+        if not self.copyOnly and not self.copyAndStop and not self.copyAndMove:
             self.moveImageCommand(src, dst, currentItem)
             self.updateStatusBarLabel(f"Shortcut '{currentSequence}' is used. File moved to '{dst}'.")
         else:
             self.copyImageCommand(src, dst, currentItem)
             self.updateStatusBarLabel(f"Shortcut '{currentSequence}' is used. File copied to '{dst}'.")
 
-            if SettingsDialog.settingsGetAutoNextAfterCopy():
-                self.galleryManager.decrementGalleryIndex()
-
-        self.keySeq = ""
-        self.updateKeySequenceLabel()
-        self.updateTreeViewSignal.emit(self.getCleanSequence())
-        self.galleryManager.updateCounterLabelText()
+            # one-shot copy+stop operation with ';' overrides Settings.
+            # if SettingsDialog.settingsGetAutoNextAfterCopy() and not self.copyAndStop:
+            if (SettingsDialog.settingsGetAutoNextAfterCopy() or self.copyAndMove) and not self.copyAndStop:
+                self.galleryManager.incrementGalleryIndex()  # TODO: v handleOtherKey je increment. wtf?
 
         # Show new image
         self.galleryManager.updatePreview()
+
+        # Restore clean state of the app
+        self.restoreAndCleanup()
 
 
     def handleKeyPeriod(self):
@@ -444,8 +452,6 @@ class SortModeHandler(QObject):
 
         # Continue processing of normal characters
         self.keySeq += pressedKey
-        # self.updateKeySequenceLabel()
-        # self.updateTreeViewSignal.emit(self.keySeq)
 
         fullShortcut = self.getCleanSequence()
 
@@ -465,66 +471,60 @@ class SortModeHandler(QObject):
 
         log.info("HIT!")
 
-        # Reset flags  # TODO: Ma to byt tady, nebo nekde jinde?
-        self.copyAndMove = False
-        self.copyAndStop = False
-
-        dstPath = self.shortcutManager.getDstPathForShortcut(fullShortcut)
-
         if self.galleryManager.isGalleryEmpty():
             log.info("Source directory is empty")
-            self.keySeq = ""
-            self.updateKeySequenceLabel()
-            self.updateTreeViewSignal.emit(self.getCleanSequence())
+            self.restoreAndCleanup()
             return
 
         imageName = self.galleryManager.getCurrentFilename()
         src = str(self.galleryManager.getSourcePath())
-        dst = dstPath
+        dst = self.shortcutManager.getDstPathForShortcut(fullShortcut)
 
         if not self.checkDestinationDirectoryExists(dst):
+            # self.restoreAndCleanup()  # TODO ??
             return
 
         # Check that image was not removed from outside of an app
-        if self.srcImageStillExists(src, imageName) is False:
-            self.cleanupMissingImage(imageName)
+        if not self.srcImageStillExists(src, imageName):
+            self.cleanupMissingImage(imageName)  # image still exists - specific cleanup
+            self.restoreAndCleanup()
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
         if self.srcImageExistsInDst(dst, imageName):
-            self.handleExistingImageInDst()
+            self.handleExistingImageInDst()  # Image already exists in Dst - specific cleanup
+            self.restoreAndCleanup()
             return
 
         log.info(f"It is found. Possible to move from {src} into {dst}!")
 
         # Remove current image from the list of images in src directory
+        currentSequence = self.getCleanSequence()
         currentItem = self.galleryManager.getCurrentGalleryItem()
-        if not self.copyOnly and not instantCopy:
+        if not self.copyOnly and not instantCopy and not self.copyAndStop and not self.copyAndMove:
+            log.info(f"Move operation will be executed. {self.copyOnly} {self.copyAndMove} {self.copyAndStop} {instantCopy}.")
             self.moveImageCommand(src, dst, currentItem)
-            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File moved to '{dst}'.")
-        elif self.copyOnly or instantCopy:
+            self.updateStatusBarLabel(f"Shortcut '{currentSequence}' is used. File moved to '{dst}'.")
+        else:
+            log.info(f"Copy operation will be executed. {self.copyOnly} {self.copyAndMove} {self.copyAndStop} {instantCopy}")
             self.copyImageCommand(src, dst, currentItem)
-            self.updateStatusBarLabel(f"Shortcut '{self.keySeq}' is used. File copied to '{dst}'.")
+            self.updateStatusBarLabel(f"Shortcut '{currentSequence}' is used. File copied to '{dst}'.")
 
-            # TODO: Should instantCopy override Settings?
-            # 2 options: 1. Settings->Gotonext overrides everything else.
-            #            2. , or ; overrides anything what is set in Settings
-            if SettingsDialog.settingsGetAutoNextAfterCopy() or moveToNextImage:
+            # TODO: Should instantCopy override Settings? Yes. Add this info to the Documentation.
+            # Options:
+            #   - 1. Settings->Gotonext overrides everything else.
+            #   - 2. , or ; overrules Settings
+            # if SettingsDialog.settingsGetAutoNextAfterCopy() and not self.copyAndStop:
+            if (SettingsDialog.settingsGetAutoNextAfterCopy() or moveToNextImage or self.copyAndMove) and not self.copyAndStop:
                 self.galleryManager.incrementGalleryIndex()
 
         log.info(f"History entries: {self._historyManager.len()}")
 
-        # Update counter label
-        self.galleryManager.updateCounterLabelText()
-
         # Show new image
         self.galleryManager.updatePreview()
 
-        # Enable temporaly save and reuse partial shortcut
-        self.keySeq = ""
-        self.updateKeySequenceLabel()
-        # self.updateTreeViewSignal.emit(self.permanentKeySeq)
-        self.updateTreeViewSignal.emit(self.getCleanSequence())
+        # Restore clean state of the app
+        self.restoreAndCleanup()
 
 
     @pyqtSlot()
@@ -582,7 +582,6 @@ class SortModeHandler(QObject):
         # log.info(self.images)
 
 
-
     def handleSortMode(self, event: QKeyEvent):
         # pressedKey = event.text()
         # Cancel currently started shortcut or escape from the hold partial sequence
@@ -612,7 +611,6 @@ class SortModeHandler(QObject):
                 self.handleKeyOthers(event)
 
 
-
     def srcImageStillExists(self, src, imageName) -> bool:
         """
         Check that source Image still exists in Src directory.
@@ -623,36 +621,6 @@ class SortModeHandler(QObject):
         if not os.path.exists(src + "/" + imageName):
             return False
         return True
-
-    def cleanupAndRestartState(self):
-        """
-        TODO: Vsude se opakuje:
-
-        self.keySeq = ""
-        self.updateKeySequenceLabel()
-
-        a dalsi, jako:
-
-        self.galleryManager.updateCounterLabelText()
-        self.galleryManager.updatePreview()
-
-        ktere vrati stav do startovni pozice. Uklidi po nacatych operacich.
-        Tohle by se melo volat i v pomocnych funkcich, aby se nikde neopakovala ta sama sekvence kodu porad...
-        """
-        pass
-
-    def cleanupMissingImage(self, fileData: GalleryItem):
-        """
-        If an image is not found (deleted from outside the app), then
-        remove it from the images list, update preview...
-        """
-        self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
-        self.galleryManager.removeFile(fileData)
-        self.galleryManager.updateCounterLabelText()
-        self.galleryManager.updatePreview()
-        self.keySeq = ""
-        self.updateKeySequenceLabel()
-        self.updateTreeViewSignal.emit(self.getCleanSequence())
 
 
     def srcImageExistsInDst(self, dst: Path, imageName) -> bool:
@@ -669,20 +637,6 @@ class SortModeHandler(QObject):
         return False
 
 
-    def handleExistingImageInDst(self):
-        """
-        Handles situation, when the file with the same name as source image already exist in the destination.
-
-        Currently, prevent any further operations.
-
-        In the future, maybe add a suffix to the filename.
-        """
-        # TODO: Maybe Add random suffix number to the filename (and update name in the list!)
-        self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
-        self.keySeq = ""
-        self.updateKeySequenceLabel()
-        self.updateTreeViewSignal.emit(self.getCleanSequence())
-
     def checkDestinationDirectoryExists(self, dst: Path) -> bool:
         """
         Check, whether destination directory exists.
@@ -697,12 +651,43 @@ class SortModeHandler(QObject):
         return True
 
 
-    def cleanupAndUpdate(self):
+    def restoreAndCleanup(self):
+        """
+        General restoration of the clean state of the app.
+
+        Call this after error states, like missing image and such.
+        """
+        self.copyAndMove = False
+        self.copyAndStop = False
         self.keySeq = ""
-        self.permanentKeySeq = ""
-        self.updateTreeViewSignal.emit(self.getCleanSequence())
+        # self.permanentKeySeq = ""
         self.updateKeySequenceLabel()
+        self.updateTreeViewSignal.emit(self.getCleanSequence())
         self.galleryManager.setFocus(True)  # Return focus to the gallerymanager
+
+
+    def cleanupMissingImage(self, fileData: GalleryItem):
+        """
+        If an image is not found (deleted from outside the app), then
+        remove it from the images list, update preview...
+        """
+        self.galleryManager.removeFile(fileData)
+        self.galleryManager.updateCounterLabelText()
+        self.galleryManager.updatePreview()
+        self.updateStatusBarLabel(f"File was not found. Probably was removed outside of the app.")
+
+
+    def handleExistingImageInDst(self):
+        """
+        Handles situation, when the file with the same name as source image already exist in the destination.
+
+        Currently, prevent any further operations.
+
+        In the future, maybe add a suffix to the filename.
+        """
+        # TODO: Maybe Add random suffix number to the filename (and update name in the list!)
+        self.updateStatusBarLabel(f"File with that name already exists in the dst directory.")
+
 
     def addEntryIntoHistory(self, imageData: GalleryItem, src: Path, dst: Path, currentIndex: int, operation: Operations):
         # TODO: maybe ? Replace with the Command and UndoStack.
@@ -750,11 +735,9 @@ class SortModeHandler(QObject):
         #     k. Update counter label
         #     l. Show new image
 
-
         # TODO: Udelat funkci nejakou jako zjistitDstDir - esi z dialogu, z historie, z parent's dstdir...
         #        - tam budou veci, jako esi ta dst existuje a pod.
         #        - zavolat ji v pouziti space, pouziti period a v normalni dstdir ze shortcut a undo.
-
         pass
 
     def setCopyOnly(self):

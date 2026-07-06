@@ -266,7 +266,7 @@ Important - Misc:
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
 - [x] !!!!!!! Drag and Drop slozku z file-browseru do IK, coz ji otevre okamzite jako src dir. !!!!!!!!!!
     - [ ] Allow only 1 directory (currently, multiple is possible).
-    - Na multiple chci mit taby, pripadne povolit multiple s tim, ze kazda slozka se otevre ve svem tabu!!!. To je napad!
+        - Na multiple chci mit taby, pripadne povolit multiple s tim, ze kazda slozka se otevre ve svem tabu!!!. To je napad!
     - [X] Otestovat na linuxu
 - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
 - [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
@@ -301,8 +301,10 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [X] (SOLVED by LISTARY) Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
 - [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten (navzdory Settings - zobrazovat pouze podstrom aktualni sequence)
 - [X] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
-- [ ] !!!!!! Nefunguje castecna-zkratka+mezernik pro copy s pomoci ; a ,
+- [X] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ';' a ','. Img je proste presunut a ',;' je ignorovano (',' nebo ';' zustane dokonce zobrazeno v Labelu). Vyzkouset i se sentinelem pak.
 - [X] Disable Next Label when in the Edit mode.
+- [X] Fix: ESC neodstrani ,; za sentinelem. Zrusi to cele. Ma to ale prvne odstranit pouze vse za sentinelem, kdyz je nastaveny.
+- [X] Fix: (bez sentinelu / Sentinel) + ',;' + HIT nefunguje. Pouzije se Move, ne Copy operace.
 
 
 Settings:
@@ -314,7 +316,7 @@ Settings:
 
 Refactoring and code tweaking
 - [~] EditModeHandler
-- [ ] SortModeHandler !
+- [~] SortModeHandler
 - [X] ShortcutManager
 - [~] Pridat Type hints ( -> int, myvar: str, ...)
 - [ ] GalleryManager a MediaContainerWidget - lepsi rozhodovani ohledne zobrazeni (obrazek vs video vs text vs pdf)
@@ -391,7 +393,7 @@ To Fix:
     - [ ] Mozna v Edit modu zakazat text extraction, renaming a pod. proste vsechno, co neni editace zkratek.
 
 
-Shortcuts management, Shortcut Tree (GUI):
+Shortcut Tree View (GUI):
 - [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
 - [ ] CustomTreeWidget:  2. Jak prizpusobit sirku - mozna na zaklade poctu zobrazenych sloupcu?
 - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
@@ -412,7 +414,7 @@ Shortcuts management, Shortcut Tree (GUI):
 - [ ] Expand / Collapse all shortcuts - button in Edit mode.
 - [ ] Moznost, ze by Napr: "a-" mohla odstranit vsechny podzkratky pod 'a' (a, a.b, a.c.d, ...)
 - [ ] Tag / color nodes - Add a color or tag (e.g. game, editing, global) for quick visual scanning.
-- [ ] Mozna nekde zobrazovat dynamicky, ktery nasledujici keychar je k dispozici. pak nejaky zmacknu, a vypise to jeho dalsi. Uzitecne pro vetsi presety.
+- [X] Mozna nekde zobrazovat dynamicky, ktery nasledujici keychar je k dispozici. pak nejaky zmacknu, a vypise to jeho dalsi. Uzitecne pro vetsi presety.
 
 
 Misc:

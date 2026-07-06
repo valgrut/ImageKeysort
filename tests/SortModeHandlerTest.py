@@ -52,6 +52,7 @@ app = QApplication([])  # needed for the app to work during testing
 # ;abc<enter>de
 # ;abc<enter>;;
 # ;abc<ESC>
+# ;ab<SPACE>   (in cases when b.dst_path is not empty -> should copy the image and stay on current.)
 # abc<enter>;d<BS><BS><BS><BS><ESC>
 # abc<enter>d<ESC><ESC>
 # abc<enter>cde<enter>xyz<enter>

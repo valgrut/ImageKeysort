@@ -920,7 +920,7 @@ class MainWindow(QMainWindow, QObject):
         self.availableKeycharsLabel.setText("Next:\n" + "Disabled in Edit mode!")
         self.galleryManager.setDisabled(True)
         self.treeViewWidget.setEnabled(True)
-        self.sortModeHandler.cleanupAndUpdate()
+        self.sortModeHandler.restoreAndCleanup()
 
     @pyqtSlot()
     def setSortMode(self):
