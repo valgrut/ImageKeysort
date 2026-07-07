@@ -41,21 +41,13 @@ app = QApplication([])  # needed for the app to work during testing
 #
 # COPY mode:
 # to samo co vyse
-#
+
+
 # TODO:
-# abc<enter>de
-# abc<enter>dedede
-# abc<enter>d<ESC>de
-# abc<enter>;de
-# abc<enter>,de
-# abc<enter>;d<ESC>
 # ;abc<enter>de
 # ;abc<enter>;;
-# ;abc<ESC>
 # ;ab<SPACE>   (in cases when b.dst_path is not empty -> should copy the image and stay on current.)
 # abc<enter>;d<BS><BS><BS><BS><ESC>
-# abc<enter>d<ESC><ESC>
-# abc<enter>cde<enter>xyz<enter>
 
 class TestSortModeHandler(unittest.TestCase):
 
@@ -191,7 +183,7 @@ class TestSortModeHandler(unittest.TestCase):
         self.tearDown()
 
 
-    def test_sentinel_basic(self):
+    def test_sentinel_basic_hit(self):
         self.prepare(1)
 
         self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
@@ -310,4 +302,411 @@ class TestSortModeHandler(unittest.TestCase):
         
         self.assertEqual(self.countFiles(self.galleryTestSrcDir), 2)
         self.assertEqual(self.countFiles(self.aaDstDir), 0)
+        self.tearDown()
+        
+
+    def test_sentinel_multiple_hit(self):
+        self.prepare(4)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": "",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 4)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Confirm sentinel
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, "c")  # hit 1
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, "c")  # hit 2
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, "c")  # hit 3
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 3)
+
+        self.tearDown()
+        
+
+    def test_sentinel_esc(self):
+        """
+        a<enter>b<ESC>bc
+        """
+        self.prepare(4)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": "",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 4)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Confirm sentinel
+        QTest.keySequence(self.window, "b")
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "b")
+        
+        QTest.keySequence(self.window, Qt.Key_Escape)
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, "c")  # hit
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 3)
+        self.assertEqual(self.countFiles(self.aaDstDir), 1)
+
+        self.tearDown()
+        
+        
+    def test_sentinel_copyandstop(self):
+        """
+        a<enter>;<ESC>;b<ESC>;bc
+        """
+        self.prepare(1)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": "",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Confirm sentinel
+        QTest.keySequence(self.window, ";")
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Escape)
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        
+        QTest.keySequence(self.window, ";")
+        QTest.keySequence(self.window, "b")
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "b")
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Escape)
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        
+        QTest.keySequence(self.window, ";")
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, "c")  # hit
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 1)
+
+        self.tearDown()
+
+
+    def test_sentinel_copyandmove(self):
+        """
+        a<enter>,<ESC>,b<ESC>,bc
+        """
+        self.prepare(1)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": "",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Confirm sentinel
+        QTest.keySequence(self.window, ",")
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Escape)
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, ",")
+        QTest.keySequence(self.window, "b")
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "b")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Escape)
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, ",")
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, "c")  # hit
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 1)
+
+        self.tearDown()
+        
+        
+    def test_sentinel_backspace(self):
+        """
+        a<enter>,<BS><BS>
+        """
+        self.prepare(1)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": "",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Confirm sentinel
+        QTest.keySequence(self.window, ",")
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Backspace)
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        # Second backspace should not do anything
+        QTest.keySequence(self.window, Qt.Key_Backspace)
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, ",")
+        QTest.keySequence(self.window, "b")
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "b")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Backspace)
+        QTest.keySequence(self.window, Qt.Key_Backspace)
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+
+        self.tearDown()
+
+
+    def test_sentinel_override(self):
+        """
+        a<enter>b<enter>
+        """
+        self.prepare(1)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": "",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Confirm sentinel
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        
+        # Overriding existing sentinel is not allowed.
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Try to Confirm sentinel
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "b")
+
+        self.tearDown()
+
+
+    def test_instacopy_stability(self):
+        """
+        ,<BS>
+        ,;
+        <ESC>
+        ;,
+        """
+        self.prepare(1)
+
+        QTest.keySequence(self.window, ",")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Backspace)
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        # Try to override , with ;
+        QTest.keySequence(self.window, ",")
+        QTest.keySequence(self.window, ";")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Escape)
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        # Try to override ; with ,
+        QTest.keySequence(self.window, ";")
+        QTest.keySequence(self.window, ",")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, True)
+
+        self.tearDown()
+
+
+    def test_instacopy_ESC(self):
+        """
+        ,abc<ESC>
+        """
+        self.prepare(1)
+
+        # Try to override , with ;
+        QTest.keySequence(self.window, ",")
+        QTest.keySequence(self.window, "a,b,c")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "abc")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, True)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+        
+        QTest.keySequence(self.window, Qt.Key_Escape)
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+
         self.tearDown()

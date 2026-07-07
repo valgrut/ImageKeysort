@@ -436,14 +436,15 @@ class SortModeHandler(QObject):
 
         moveToNextImage = False
         instantCopy = False
-        if pressedKey == self._copyAndMoveChar or pressedKey == self._copyAndStopChar:
+        if (not self.copyAndMove and not self.copyAndStop) and (pressedKey == self._copyAndMoveChar or pressedKey == self._copyAndStopChar):
             log.info("';' or ',' detected in the sequence as the first character.")
             instantCopy = True
-            if pressedKey == self._copyAndMoveChar:
-                moveToNextImage = True
-                self.copyAndMove = True
-            elif pressedKey == self._copyAndStopChar:
-                self.copyAndStop = True
+            match pressedKey:
+                case self._copyAndMoveChar:
+                    moveToNextImage = True
+                    self.copyAndMove = True
+                case self._copyAndStopChar:
+                    self.copyAndStop = True
 
             self.updateKeySequenceLabel()
 
