@@ -255,12 +255,12 @@ Important features TODO:
 - [ ] !!!!!!! Musim prejmenovat soubor i v dst, kdyz pouziju COPY mode. Prejmenovavam je pouze v __DELETED__. Bez toho by neslo dat Copy->Rename->UndoCopy.
     - Note: Hmm, ale ja muzu zkopirovat soubor do treba 5 ruznych dst... Fuck. Co ted... ? TODO THINK this through.
 - [~] !!! Prelozit vsechny poznamky v kodu do EN. Nebo aspon oficialni komentare metod a komentare v kodu, ktere nejsou vylozene TODO a poznamky k TODO.
-- [ ] S pomoci '/' mozna vyhledavat pattern (vyfiltrovat shortcuts matchujici pattern) - Pri velkem poctu zkratek lepe najde. Zobrazi se i rodicovske, ne jen polozka (bo napr. IG v poledance, IG v nsfw...) 
+- [ ] V SortMode filtrovat TreeView: S pomoci '/' mozna vyhledavat pattern (vyfiltrovat shortcuts matchujici pattern) - Pri velkem poctu zkratek lepe najde. Zobrazi se i rodicovske, ne jen polozka (bo napr. IG v poledance, IG v nsfw...) 
 - [ ] Klik pravym na nejakou vetev stromu -> Extract into separated file. Treba pole dance, aby kdyz tridim jen to, nemusel jsem to rucne nejak vyhlodavat z json souboru.
 - [ ] Status bar nejak zvyraznit / vycistit? Moc informaci, a ja bych potreboval spis vedet, ze se neco presunulo, odkud a kam.
 - [ ] Mozna oddelat / presunout cely Label zobrazujici srcDir v middleLayoutu nekam jinam (dolu pod aktualni obrazek? nebo do Window Title?)
 - [ ] Pridat ikonu zelene fajfky / cerveneho X, a pridavat pred status bar zpravy (napr presun obrazku ze src do dst je successful a pod.) Bude to lepsi vizualni indikace, ze se to povedlo nebo nepovedlo.
-- [ ] Mozna, kdyz je CopyMode on (oranzovy ramecek) tak prepend ',' do keySeqLabel. Pokud v Settings je aktivni, ze doNotGoToNextImageAfterCopy = True, tak zobrazit ';'. 
+- [ ] Mozna, kdyz je CopyMode on (oranzovy ramecek) tak prepend ',' do keySeqLabel. Pokud v Settings je aktivni, ze doNotGoToNextImageAfterCopy = True, tak zobrazit ';'.
 
 Important - Misc:
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
