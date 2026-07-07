@@ -673,16 +673,19 @@ class TestSortModeHandler(unittest.TestCase):
         # Try to override , with ;
         QTest.keySequence(self.window, ",")
         QTest.keySequence(self.window, ";")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
         self.assertEqual(self.window.sortModeHandler.copyAndMove, True)
         self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
         
         QTest.keySequence(self.window, Qt.Key_Escape)
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
         self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
         self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
         
         # Try to override ; with ,
         QTest.keySequence(self.window, ";")
         QTest.keySequence(self.window, ",")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
         self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
         self.assertEqual(self.window.sortModeHandler.copyAndStop, True)
 
@@ -751,6 +754,146 @@ class TestSortModeHandler(unittest.TestCase):
         QTest.keySequence(self.window, "c")  # hit
         
         self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "ab")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 1)
+
+        self.tearDown()
+        
+        
+    def test_instacopy_space(self):
+        """
+        ;ab<space>
+        
+        b.dst_path must not be empty.
+        """
+        self.prepare(1)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": f"{self.aaDstDir.path()}",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+
+        QTest.keySequence(self.window, ";")
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, Qt.Key_Space)  # Copyandstop with unfinished sequence to dst_dir of 'ab'.
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 1)
+
+        self.tearDown()
+        
+        
+    def test_sentinel_instacopy_space(self):
+        """
+        a<enter>;b<space>
+        
+        b.dst_path must not be empty.
+        """
+        self.prepare(1)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": f"{self.aaDstDir.path()}",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Confirm sentinel
+        QTest.keySequence(self.window, ";")
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, Qt.Key_Space)  # Copyandstop with unfinished sequence to dst_dir of 'ab'.
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
+        self.assertEqual(self.window.sortModeHandler.keySeq, "")
+        self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
+        self.assertEqual(self.window.sortModeHandler.copyAndStop, False)
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 1)
+
+        self.tearDown()
+        
+    def test_sentinel_double_instacopy(self):
+        """
+        a<enter>;b<space>
+        
+        b.dst_path must not be empty.
+        """
+        self.prepare(1)
+
+        self.window.shortcutManager.shortcutTree = {
+            "keys": {
+                "a": {
+                    "dst_path": "",
+                    "keys": {
+                        "b": {
+                            "dst_path": f"{self.aaDstDir.path()}",
+                            "keys": {
+                                "c": {
+                                    "dst_path": f"{self.aaDstDir.path()}",
+                                    "keys": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 1)
+        self.assertEqual(self.countFiles(self.aaDstDir), 0)
+
+        QTest.keySequence(self.window, ";")
+        QTest.keySequence(self.window, "a")
+        QTest.keySequence(self.window, Qt.Key_Return)  # Confirm sentinel
+        QTest.keySequence(self.window, ";")
+        QTest.keySequence(self.window, "b")
+        QTest.keySequence(self.window, Qt.Key_Space)  # Copyandstop with unfinished sequence to dst_dir of 'ab'.
+        
+        self.assertEqual(self.window.sortModeHandler.permanentKeySeq, "a")
         self.assertEqual(self.window.sortModeHandler.keySeq, "")
         self.assertEqual(self.window.sortModeHandler.copyAndMove, False)
         self.assertEqual(self.window.sortModeHandler.copyAndStop, False)

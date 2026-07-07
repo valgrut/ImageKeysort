@@ -436,8 +436,12 @@ class SortModeHandler(QObject):
 
         moveToNextImage = False
         instantCopy = False
-        if (not self.copyAndMove and not self.copyAndStop) and (pressedKey == self._copyAndMoveChar or pressedKey == self._copyAndStopChar):
-            log.info("';' or ',' detected in the sequence as the first character.")
+        if pressedKey == self._copyAndMoveChar or pressedKey == self._copyAndStopChar:
+            if self.copyAndMove or self.copyAndStop:
+                log.debug(f"CopyAndMove or CopyAndStop is already set to True. RETURN.")
+                return
+            
+            log.info(f"';' or ',' ({pressedKey}) detected in the sequence as the first character.")
             instantCopy = True
             match pressedKey:
                 case self._copyAndMoveChar:
@@ -447,10 +451,9 @@ class SortModeHandler(QObject):
                     self.copyAndStop = True
 
             self.updateKeySequenceLabel()
-
             # stop processing here. We do not want the ',' or ';' to be appended to self.keySeq variable.
             return
-
+        
         # Continue processing of normal characters
         self.keySeq += pressedKey
 
@@ -482,7 +485,7 @@ class SortModeHandler(QObject):
         dst = self.shortcutManager.getDstPathForShortcut(fullShortcut)
 
         if not self.checkDestinationDirectoryExists(dst):
-            # self.restoreAndCleanup()  # TODO ??
+            self.restoreAndCleanup()
             return
 
         # Check that image was not removed from outside of an app
