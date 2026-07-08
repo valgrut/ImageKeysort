@@ -404,12 +404,12 @@ Shortcut Tree View (GUI):
 - [ ] Udelat CustomTree resizable pomoci QSplitter
 - [~] Klikatko pro pridani a odstraneni zkratky / podzkratky
 - [ ] Pravym kdyz se klikne na radek ve strome, moznosti - upravit key_char, upravit dst, remove line...
-- [ ] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
+- [X] Po najeti na zkracenou cestu (napr. Images, Naruto, ...) se okamzite zobrazi cela cesta (v bubline).
 - [ ] SORT mode: mit moznost normalne klikat na ta jednotliva pole ve strome, a tam se pri kliknuti obrazek presune.
-- [ ] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
+- [X] Pridat zvyraznovani aktualne namacknute zkratky a filtraci - zustane pouze ta a jeji podzkratky.
 - [ ] Pod posledni prvek kazde sekce udelat tenkou caru jako oddelovac. (Nebo nad kazdou hlavni, bo to je root tak by to bylo jednodussi).
 - [ ] Pridat moznost otevrit slozku pri kliknuti na shortcut (Tohle funguje!!!):
-          webbrowser.open(self.shortcutManager.srcPathOfLoadedData)
+          webbrowser.open(self.shortcutManager.srcPathOfLoadedData)    ... Derive custom toolTips a pridat tam event onclick a akci pro otevreni viz.: webbrowser....
 - [ ] Moznost rucne pretahovat zkratky pod jine. a pretahovanim je zanorovat pod jine... Nutno pak pridat ruzne checky, ze esi tahle kombinace treba uz neexistuje.
 - [ ] Settings: Moznost sort podle dst_path, ne podle Key_char.
 - [ ] Existuje moveToTrash() od Qt, ale nevim, esi ji pouzit.

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import logging
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
@@ -5,6 +6,7 @@ from PyQt5.QtWidgets import (
     QTreeWidget,
     QTreeWidgetItem
 )
+from PyQt5.QtGui import (QColor, QGradient, QLinearGradient, QBrush)
 
 from src.SettingsDialog import SettingsDialog
 
@@ -41,6 +43,14 @@ class CustomTreeWidget(QTreeWidget):
                 if currentLevel < maxLevel:
                     dst_path = properties["dst_path"]
                     current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
+                    
+                    # Highlight non-existing destination paths in the Tree view
+                    if not os.path.exists(dst_path):
+                        current_key_char_tree_item.setForeground(1, QColor(200, 50, 0))
+                        current_key_char_tree_item.setToolTip(1, f"Destination path '{dst_path}' could not be found!")
+                    else:
+                        current_key_char_tree_item.setToolTip(1, f"{dst_path}")
+                    
                     parent_key_char.addChild(current_key_char_tree_item)
 
                     # Process current key_char's children

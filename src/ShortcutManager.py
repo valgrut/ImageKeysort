@@ -583,11 +583,8 @@ class ShortcutManager(QObject):
         # Check that all destination directories exist for all loaded shortcuts
         nonexistingPaths = self.isSomeDstDirectoryMissing(self.shortcutTree)
         if nonexistingPaths:
-            # TODO: Mozna jen warning do logu a zvyraznit cervene v Tree.
             for path in nonexistingPaths:
                 self.updateStatusBarLabelSignal.emit(f"Warning: One or more destination directories do not exist!")
-                # TODO: Highlight all dst dirs that do not exist
-            # return False
 
             # log.info nonexisting paths:
             for path in nonexistingPaths:
