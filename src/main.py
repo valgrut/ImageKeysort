@@ -285,8 +285,8 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [ ] !!! TODO poznamky a ukoly primo v src souborech.
         - [ ] Prochazet TODO v souborech a udelat je.
 - [ ] Udelat po kazde zmene shortcuts temporal soubor save pro pripad, ze by ta appka spadla, tak at user neztrati komplet svuj preset, nez ho ulozi. Mozna QSaveFile?
-- [ ] !!!! Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
-- [ ] !!!! Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
+- [X] Ctrl+O zase by melo ulozit misto, odkud otevira slozku, a pri dalsim ctrl+o tuto cestu zase nabidnout. Ne tu, do ktere se presouval posledni obrazek.
+- [X] Ctrl+L by melo nabizet porad tu slozku, odkud uplne puvodne byly nacteny Presets.
 - [ ] Sort opened gallery by image size (aby vsechny stejne screenshoty byly u sebe a pod.) - treba kdyz bude chtit user cropovat, a ne tridit.
 - [ ] Zobrazit nekde/nejak list nactenych souboru ze source dir abecedne. Treba zase pop-up okno jen. Proste tak pro prehled, protoze proc ne. Po kliknuti na nejaky se tento nacte jako aktualni.
 - [ ] Disable to go to the next/prev picture - force user to process the picture instead of skipping it.

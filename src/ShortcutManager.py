@@ -566,7 +566,7 @@ class ShortcutManager(QObject):
         """
         Load shortcuts from json file.
         """
-
+        
         if not presetsFilePath:
             log.info(f"No file selected.")
             return False

@@ -101,7 +101,7 @@ class GalleryManager(QStackedWidget):
         return self._sourceDirectoryPath
 
     def selectSourceDirectory(self):
-        srcPath = QFileDialog.getExistingDirectory(self.mainWindow, "Select source directory")
+        srcPath = QFileDialog.getExistingDirectory(self.mainWindow, "Select source directory", str(self._sourceDirectoryPath))
         if not srcPath:
             return
 
