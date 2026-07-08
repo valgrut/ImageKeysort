@@ -160,6 +160,7 @@ Links:
 - [ ] Brat v potaz, ze Undo() nebude uplne casta operace, takze mozna pro to nebude potreba nutne klavesova zkratka. Mozna jen tlacitko bude stacit.
 - [~] !!!! Kdyz udelam crop obrazku, v __DELETED__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
 - [ ] !!! Zobrazovat uzivateli CropRect dostupny z minule crop operace na kompatibilnim obrazku. At vi, kdyz udela Recrop, co bude oriznuto.
+- [ ] edge detectors - aby se pri cropu kurzor klipoval ke krajum obrazku. (klipovani bude vypnuto, kdyz bude zaroven zmacknuto treba ctrl.)
 
 
 ### Zoom - related todo:
@@ -269,7 +270,7 @@ Important - Misc:
         - Na multiple chci mit taby, pripadne povolit multiple s tim, ze kazda slozka se otevre ve svem tabu!!!. To je napad!
     - [X] Otestovat na linuxu
 - [ ] !!!! Otestovat cisla a velka pismena jako shortcuts !!!!!!!!
-- [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi).
+- [~] !!! Vypisuje se jen N urovni zkratek, nejak ale oznacit, jsou-li tam jeste dalsi. (proto sekvence treba neHITla, bo se tam skryvaly dalsi). Pouze kdyz se nebudou filtrovat subtrees podle zkratky. Zobrazit treba tak, ze tam bude shown 3/5 nebo neco takoveho. Klidne i jen jako hint (po najeti).
     - Udelat metodu, ktera vrati aktualni nejvyssi pocet zanoreni. Porovnat s Settings.getMaxNesting a pokud realny je vetsi nez povoleny, pridat treba ">" do nazvu.
 - [~] ! Napsat unit testy !!
 - [ ] !!!!!!! Setridit a zorganizovat MainWindow init metodu - vsechny Actions k sobe, vsechny .connect k sobe a tak.
