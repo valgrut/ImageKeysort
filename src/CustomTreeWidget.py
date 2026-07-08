@@ -45,7 +45,8 @@ class CustomTreeWidget(QTreeWidget):
                     current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
                     
                     # Highlight non-existing destination paths in the Tree view
-                    if not os.path.exists(dst_path):
+                    if dst_path and not os.path.exists(dst_path):
+                        # current_key_char_tree_item.setBackground(1, QColor(200, 50, 0))
                         current_key_char_tree_item.setForeground(1, QColor(200, 50, 0))
                         current_key_char_tree_item.setToolTip(1, f"Destination path '{dst_path}' could not be found!")
                     else:
