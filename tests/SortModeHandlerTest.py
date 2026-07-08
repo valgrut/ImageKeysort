@@ -32,8 +32,13 @@ app = QApplication([])  # needed for the app to work during testing
 # ;ax
 # <space>
 # abc<esc>
+# ab<space>
 # abc<enter>
 # abc<enter>cde
+# ;abc<enter>cde
+# abc<enter>;cde
+# abc<enter>c<ESC>
+# abc<enter>cd<space>
 # .
 # <delete>
 # ctrl+z
@@ -42,10 +47,6 @@ app = QApplication([])  # needed for the app to work during testing
 # COPY mode:
 # to samo co vyse
 
-
-# TODO:
-# ;ab<SPACE>   (in cases when b.dst_path is not empty -> should copy the image and stay on current.)
-# a<enter>;b<SPACE>   (in cases when b.dst_path is not empty -> should copy the image and stay on current.)
 
 class TestSortModeHandler(unittest.TestCase):
 
@@ -856,9 +857,9 @@ class TestSortModeHandler(unittest.TestCase):
 
         self.tearDown()
         
-    def test_sentinel_double_instacopy(self):
+    def test_sentinel_double_instacopy_space(self):
         """
-        a<enter>;b<space>
+        ;a<enter>;b<space>
         
         b.dst_path must not be empty.
         """
