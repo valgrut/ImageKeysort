@@ -249,7 +249,7 @@ Important features TODO:
 - [ ] Add TESTY: Crop -> Delete.
 - [ ] Add TESTY: Crop -> Crop -> gotoNext -> RepeatCrop.
 - [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
-- [ ] Add TESTY: Sentinel use (status bar message and such (before sentinel should be part of the message, for example).
+- [X] Add TESTY: Sentinel use (status bar message and such (before sentinel should be part of the message, for example).
 - [ ] Sjednotit filename (without path) a fullFilename (with path)
 - [ ] Kdyz TABem prepinam Edit/Sort, tak mozna bych mohl pouzit Ctrl+R treba pro Repeat a Ctrl+E pro extract Text treba.
 - [ ] !!!!!!! Musim prejmenovat soubor i v dst, kdyz pouziju COPY mode. Prejmenovavam je pouze v __DELETED__. Bez toho by neslo dat Copy->Rename->UndoCopy.
@@ -437,7 +437,7 @@ Minor issues, future features:
 - [ ] Dodelat progress widget
 - [ ] MAYBE: Pridat AI advices based on keywords on image.
 - [ ] Po dotrideni inboxu zobrazit tabulku s gratulaci, treba poctem setridenych obrazku, mozna animace famfar.
-- [ ] Ctrl+F Otevre search bar, a kdyz zadam cast nejake slozky, zobrazi se matchnute slozky s jejich zkratkami. (hlavne kdyz se preset rozroste, tak to muze byt uzitecne)
+- [ ] Ctrl+F nebo '/' Otevre search bar nebo pouze real time dynamicky filtr, a kdyz zadam cast nejake slozky, zobrazi se matchnute slozky s jejich zkratkami. (hlavne kdyz se preset rozroste, tak to muze byt uzitecne)
 - [ ] Jazykova podpora ?
 - [ ] Tooltips
 - [ ] $$$ Odkaz na cofee-cofee na dobrovolny prispevek na vyvoj. Viz GPT rada jak to zmonetizovat. Pohledat i web "How to sell SW".
