@@ -39,31 +39,33 @@ class CustomTreeWidget(QTreeWidget):
             if not itemsInLevel:
                 return None
             for key_char, properties in itemsInLevel:
-                # last level to be shown (leaf items)
-                if currentLevel < maxLevel:
-                    dst_path = properties["dst_path"]
-                    current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
-                    
-                    # Highlight non-existing destination paths in the Tree view
-                    if dst_path and not os.path.exists(dst_path):
-                        # current_key_char_tree_item.setBackground(1, QColor(200, 50, 0))
-                        current_key_char_tree_item.setForeground(1, QColor(200, 50, 0))
-                        current_key_char_tree_item.setToolTip(1, f"Destination path '{dst_path}' could not be found!")
-                    else:
-                        current_key_char_tree_item.setToolTip(1, f"{dst_path}")
-                    
-                    parent_key_char.addChild(current_key_char_tree_item)
+                # Show only maxLevel of nested shortcuts based on the value in Settings.
+                if currentLevel >= maxLevel:
+                    continue
+                
+                dst_path = properties["dst_path"]
+                current_key_char_tree_item = QTreeWidgetItem([key_char, Path(dst_path).name])
+                
+                # Highlight non-existing destination paths in the Tree view
+                if dst_path and not os.path.exists(dst_path):
+                    # current_key_char_tree_item.setBackground(1, QColor(200, 50, 0))
+                    current_key_char_tree_item.setForeground(1, QColor(200, 50, 0))
+                    current_key_char_tree_item.setToolTip(1, f"Destination path '{dst_path}' could not be found!")
+                else:
+                    current_key_char_tree_item.setToolTip(1, f"{dst_path}")
+                
+                parent_key_char.addChild(current_key_char_tree_item)
 
-                    # Process current key_char's children
-                    nextItems = []
-                    if not SettingsDialog.settingsGetSortShortcuts():
-                        nextItems = properties["keys"].items()  # Do not sort - insert order
-                    else:
-                        nextItems = sorted(properties["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
-                        # nextitems = sorted(properties["keys"].items()), 0)  # Sort alphabetically (case sensitive)
+                # Process current key_char's children
+                nextItems = []
+                if not SettingsDialog.settingsGetSortShortcuts():
+                    nextItems = properties["keys"].items()  # Do not sort - insert order
+                else:
+                    nextItems = sorted(properties["keys"].items(), key=lambda x: str.casefold(x[0]))  # Sort alphabetically (case insensitive)
+                    # nextitems = sorted(properties["keys"].items()), 0)  # Sort alphabetically (case sensitive)
 
-                    # buildTreeView(current_key_char_tree_item, properties["keys"].items(), currentLevel + 1)
-                    buildTreeView(current_key_char_tree_item, nextItems, currentLevel + 1)
+                # buildTreeView(current_key_char_tree_item, properties["keys"].items(), currentLevel + 1)
+                buildTreeView(current_key_char_tree_item, nextItems, currentLevel + 1)
 
 
         firstItem = QTreeWidgetItem(["level0"])
