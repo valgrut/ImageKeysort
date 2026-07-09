@@ -300,7 +300,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop. Nezapomenout na copy mode - tzn nutno i ve vsech dst, kam byl tento zkopirovan... uhhh.
 - [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text. Pripadne vedle status baru pridat obrazek, ktery nastavim na nejake X kdyz error, a fajfku kdyz OK.
 - [X] (SOLVED by LISTARY) Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
-- [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten (navzdory Settings - zobrazovat pouze podstrom aktualni sequence)
+- [ ] MOZNA: Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten (navzdory Settings - zobrazovat pouze podstrom aktualni sequence)
 - [X] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
 - [X] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ';' a ','. Img je proste presunut a ',;' je ignorovano (',' nebo ';' zustane dokonce zobrazeno v Labelu). Vyzkouset i se sentinelem pak.
 - [X] Disable Next Label when in the Edit mode.
@@ -397,7 +397,8 @@ To Fix:
 
 
 Shortcut Tree View (GUI):
-- [ ] Sort shortcuts alphabetically (a, A, c, G, x) [DONE] and option2 sort target directories alphabetically. [Settings]!
+- [X] Sort shortcuts alphabetically (a, A, c, G, x)
+- [ ] Sort target directories alphabetically. [Settings]
 - [ ] CustomTreeWidget:  2. Jak prizpusobit sirku - mozna na zaklade poctu zobrazenych sloupcu?
 - [~] Edit/Delete buttons v Tree se zobrazi pouze v Edit modu.
 - [ ] Deriv subclass of treeitem kterej bude obsahovat cudly na remove a edit a dalsi specialni obsahujici pouze cudl Add naspod kazde kategorie a podkategorie.
