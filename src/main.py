@@ -161,6 +161,7 @@ Links:
 - [~] !!!! Kdyz udelam crop obrazku, v __DELETED__ bude origo. Kdyz ale pak dam delete, tak to nejde, protoze tam uz obrazek s timto nazvem je. Kdyz to ale chci smazat, tak je jedno, ze to je cropped. Tzn, natvrdo smazat pouze tu cropped a v __delete__ nechat origo.
 - [ ] !!! Zobrazovat uzivateli CropRect dostupny z minule crop operace na kompatibilnim obrazku. At vi, kdyz udela Recrop, co bude oriznuto.
 - [ ] edge detectors - aby se pri cropu kurzor klipoval ke krajum obrazku. (klipovani bude vypnuto, kdyz bude zaroven zmacknuto treba ctrl.)
+- [~] !!!!! On/Off crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 
 
 ### Zoom - related todo:
@@ -224,10 +225,10 @@ Important features TODO:
 - [ ] Pridat do arguments --debug a jako mozny parametr None (default None kdyz neposkytnut), INFO, WARN, ERROR.
 - [ ] !!!! Pridat moznost vratit zpet zmeny v ShortcutTree (nahrazeni dst, operace (/, >, -) a pod).
 - [ ] Support PDF preview - QPdfDocument + QPdfView [Qt6 required]
+- [ ] Pridat do nastaveni language selection. Vzdy u teto polozky mit v zavorce anglicky ("Language selection").
 - [ ] TextPreviewWidget - Add scrolling with up/down arrow keys
 - [ ] Mozna pridat zobrazeni metadat doprava (velikost, rozliseni, typ, ...) (pridat i pravou listu); Nebo je zobrazovat nad obrazkem vedle nazvu a tak.
 - [~] Moznost Undo/Redo rename obrazku (proste dalsi undoable operace push do undo stacku) Ale v jakem modu? Ja uplne nechci,aby to kolidovalo s undo move operacemi.
-- [~] !!!!! On/Off crop (mouse click/release se bude registrovat pouze, pokud bude aktivni crop mode - aktivni tlacitko Crop.
 - [ ] Pridat novou polozku do menu: Tools -> Extract Text ; Crop image ; Rename image ; Undo (ctrl+shift+z) - only those tools operations ; Redo (only those);
 - [ ] Commands deprecation.
         - Napr pro obrazek, ktery prejmenuju a pak presunu, se prejmenovaci command deprecatne ve stacku, protoze obrazek uz bude "vyrizeny".
@@ -261,7 +262,6 @@ Important features TODO:
 - [ ] Status bar nejak zvyraznit / vycistit? Moc informaci, a ja bych potreboval spis vedet, ze se neco presunulo, odkud a kam.
 - [ ] Mozna oddelat / presunout cely Label zobrazujici srcDir v middleLayoutu nekam jinam (dolu pod aktualni obrazek? nebo do Window Title?)
 - [ ] Pridat ikonu zelene fajfky / cerveneho X, a pridavat pred status bar zpravy (napr presun obrazku ze src do dst je successful a pod.) Bude to lepsi vizualni indikace, ze se to povedlo nebo nepovedlo.
-- [ ] Mozna, kdyz je CopyMode on (oranzovy ramecek) tak prepend ',' do keySeqLabel. Pokud v Settings je aktivni, ze doNotGoToNextImageAfterCopy = True, tak zobrazit ';'.
 
 Important - Misc:
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
@@ -300,12 +300,16 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [~] Rename (a mozna i Tagger) musi prejmenovat i zalohu v __DELETED__, pokud se tam nejaka nachazi treba z operace Crop. Nezapomenout na copy mode - tzn nutno i ve vsech dst, kam byl tento zkopirovan... uhhh.
 - [ ] !!! Mozna nejak podbarvit statusBar cervene/zelene ci border, nebo jen cervene, kdyz nejaky error nebo chyba nastane... ! Kdyzuz nejde nabarvit jen text. Pripadne vedle status baru pridat obrazek, ktery nastavim na nejake X kdyz error, a fajfku kdyz OK.
 - [X] (SOLVED by LISTARY) Pri otevreni dialogu pro vyber dst dir pro shortcut, mit moznost pouzit fuzzy-finder nebo tak. Abych se mohl ke chtene slozce dostat rychleji, misto toho proklikavani tou hierarchii rucne.
-- [ ] MOZNA: Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten (navzdory Settings - zobrazovat pouze podstrom aktualni sequence)
 - [X] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
 - [X] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ';' a ','. Img je proste presunut a ',;' je ignorovano (',' nebo ';' zustane dokonce zobrazeno v Labelu). Vyzkouset i se sentinelem pak.
 - [X] Disable Next Label when in the Edit mode.
 - [X] Fix: ESC neodstrani ,; za sentinelem. Zrusi to cele. Ma to ale prvne odstranit pouze vse za sentinelem, kdyz je nastaveny.
 - [X] Fix: (bez sentinelu / Sentinel) + ',;' + HIT nefunguje. Pouzije se Move, ne Copy operace.
+
+
+Low prio - Napady a Mozna:
+- [ ] Kdyz je CopyMode on (oranzovy ramecek) tak prepend ',' do keySeqLabel. Pokud v Settings je aktivni, ze doNotGoToNextImageAfterCopy = True, tak zobrazit ';'.
+- [ ] Kdyz pouziju enter pro nastaveni sentinel, mely by se zobrazit pouze subtree, kde je ten sentinel aktualne umisten (navzdory Settings - zobrazovat pouze podstrom aktualni sequence)
 
 
 Settings:
