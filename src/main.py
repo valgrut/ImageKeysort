@@ -262,6 +262,8 @@ Important features TODO:
 - [ ] Status bar nejak zvyraznit / vycistit? Moc informaci, a ja bych potreboval spis vedet, ze se neco presunulo, odkud a kam.
 - [ ] Mozna oddelat / presunout cely Label zobrazujici srcDir v middleLayoutu nekam jinam (dolu pod aktualni obrazek? nebo do Window Title?)
 - [ ] Pridat ikonu zelene fajfky / cerveneho X, a pridavat pred status bar zpravy (napr presun obrazku ze src do dst je successful a pod.) Bude to lepsi vizualni indikace, ze se to povedlo nebo nepovedlo.
+- [ ] Zakomponovat nekam nejakou paralelizaci?
+
 
 Important - Misc:
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
