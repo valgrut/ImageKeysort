@@ -248,7 +248,7 @@ Important features TODO:
 - [X] Pridat do logu, jaka zkratka byla zmacknuta. "'xyz' pressed - File moved to ..." (Ref. SortModeManager).
 - [X] !!!!!!!!!! Quick dir add - pro rychlejsi sorteni do adresaru - dialog pro zadani zkratky a nazvu adresare, ktery se proste vytvori v src_dir. Nebudu muset prvne otevrit dialog, tam kliknout na createnewdir, dat jmeno a tak. Usetri to cas a otravnou praci.
 - [ ] Udelat nejak, aby shortcuts's root dir byl/mohl byt dynamicky, aby jeden shortcut setup sel pouzit na linuxu i na windows treba.
-- [ ] Add TESTY: Crop -> Delete.
+- [~] Add TESTY: Crop -> Delete.
 - [ ] Add TESTY: Crop -> Crop -> gotoNext -> RepeatCrop.
 - [ ] Add TESTY: Tag -> gotoNext -> RepeatTag.
 - [X] Add TESTY: Sentinel use (status bar message and such (before sentinel should be part of the message, for example).

@@ -226,6 +226,22 @@ class FileOperationTest(unittest.TestCase):
     #     ...
 
 
+    def test_crop_delete(self):
+        self.prepare(1, 256, 256)
+                
+        originalImageSize = QSize(256, 256)
+        cropRect = QRect(56, 56, 100, 100)
+        cropData = CropData(self.window.galleryManager.getCurrentGalleryItem(), cropRect, originalImageSize)
+        
+        self.window.createAndExecuteCropCommand(cropData)
+        
+        # Delete cropped image
+        QTest.keySequence(self.window, Qt.Key_Delete)
+        self.assertEqual(self.countFiles(self.galleryTestSrcDir), 0)
+        
+        self.tearDown()
+
+
     def test_crop_rename_undo(self):
         self.prepare(1, 256, 256)
                 
