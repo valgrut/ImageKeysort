@@ -56,7 +56,7 @@ allowedKeysCommon = [Qt.Key_A, Qt.Key_B, Qt.Key_C, Qt.Key_D, Qt.Key_E, Qt.Key_F,
 # TODO: Maybe move into SortModeHandler class
 allowedKeysSort = allowedKeysCommon + [Qt.Key_Escape, Qt.Key_Backspace, Qt.Key_Return, Qt.Key_Space, Qt.Key_Period,
                                        Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Home, Qt.Key_End, Qt.Key_Comma,
-                                       Qt.Key_Semicolon]
+                                       Qt.Key_Semicolon, Qt.Key_Slash]
 
 # TODO: Maybe move into EditModeHandler class
 allowedKeysEdit = allowedKeysCommon + [Qt.Key_Escape, Qt.Key_Backspace, Qt.Key_Return, Qt.Key_Left, Qt.Key_Right,
@@ -973,7 +973,11 @@ class MainWindow(QMainWindow, QObject):
                 self.lastImageRequestedSignal.emit()
                 # TODO: ? Move/remove this whole match-cases into QActions, since both keyboard and button execute this.
                 return
-
+            
+            case Qt.Key_Slash:
+                print("Starting quick shortcut filter. WIP.")
+                return
+    
             case _:  # Default case
                 super().keyPressEvent(event)
                 # Then proceed with the handling Sort or Edit mode... vvv
