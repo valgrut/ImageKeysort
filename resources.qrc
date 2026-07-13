@@ -14,5 +14,7 @@
         <file>Resources/inbox-plus.png</file>
         <file>Resources/folder.png</file>
         <file>Resources/font.png</file>
+        <file>Resources/sounds/success-sound.wav</file>
+        <file>Resources/sounds/undo-sound.wav</file>
     </qresource>
 </RCC>

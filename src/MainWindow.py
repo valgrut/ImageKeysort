@@ -4,7 +4,7 @@ import logging
 import os
 from pathlib import Path
 
-from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal, QObject, QSize, QUrl
 from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -21,6 +21,7 @@ from PyQt5.QtWidgets import (
     QStatusBar
 )
 from PyQt5.QtGui import QKeyEvent, QCursor, QIcon, QPixmap
+from PyQt5.QtMultimedia import QSoundEffect
 
 # pip3 install pyqt5
 # pip3 install keyboard
@@ -114,6 +115,19 @@ class MainWindow(QMainWindow, QObject):
 
         self.sortModeHandler = SortModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
         self.editModeHandler = EditModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
+
+        # ========== Sound management ==========
+        #sound = Path("/mnt/c/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources/sounds/success-sound.wav")
+        sound = Path(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\Resources\sounds\success-sound.wav")
+        self.feedbackSound = QSoundEffect(self)
+        self.feedbackSound.setSource(QUrl.fromLocalFile(str(sound)))
+        # if self.feedbackSound.status() == QSoundEffect.Ready:
+        if sound.exists():
+            log.info("Sound exists")
+        else:
+            log.warning("Sound does not exist!")
+        self.feedbackSound.setVolume(1.0)
+        self.feedbackSound.play()
 
         # ========== Layout ==========
         mainLayout = QHBoxLayout()
@@ -314,6 +328,7 @@ class MainWindow(QMainWindow, QObject):
         self.sortModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
         self.sortModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
         self.sortModeHandler.updateTreeViewSignal.connect(self.treeViewWidget.update_tree_view)
+        self.sortModeHandler.playSoundSignal.connect(self.playFeedbackSound)
 
         self.editModeHandler.updateKeySequenceLabelSignal.connect(self.updateKeySequenceLabel)
         self.editModeHandler.updateStatusBarLabelSignal.connect(self.updateStatusBarLabel)
@@ -520,7 +535,12 @@ class MainWindow(QMainWindow, QObject):
     def selectSourceDirectory(self):
         self.galleryManager.selectSourceDirectory()
         self.commandsStack.clear()
-    
+
+    @pyqtSlot(str)
+    def playFeedbackSound(self, sound):
+        log.info("PLAYING SOUND")
+        self.feedbackSound.play()
+
     def extractTextFromImage(self):
         """
         Extract text from the given image
@@ -920,7 +940,7 @@ class MainWindow(QMainWindow, QObject):
         self.availableKeycharsLabel.setText("Next:\n" + "Disabled in Edit mode!")
         self.galleryManager.setDisabled(True)
         self.treeViewWidget.setEnabled(True)
-        self.sortModeHandler.restoreAndCleanup()
+        self.sortModeHandler.updateAndCleanup()
 
     @pyqtSlot()
     def setSortMode(self):

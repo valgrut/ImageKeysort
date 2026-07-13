@@ -264,6 +264,10 @@ Important features TODO:
 - [ ] Pridat ikonu zelene fajfky / cerveneho X, a pridavat pred status bar zpravy (napr presun obrazku ze src do dst je successful a pod.) Bude to lepsi vizualni indikace, ze se to povedlo nebo nepovedlo.
 - [ ] Zakomponovat nekam nejakou paralelizaci?
 - [ ] Mozna: Moznost ne mit vice dst (nebo taky?), ale mit moznost naraz pouzit vic zkratek? Treba '+abc,abd,cde<?mezernik?>'
+- [ ] Pridat counter, kolik jsem setridil (presunul) obrazku v dane session???
+- [~] Play feedback sound after moving/copying/deleting/undoing actions...
+    - [ ] Add SETTINGS to enable/disable sound feedback, add sound level control (into settings too).
+- [ ] !!! Pri operaci Undo (move/copy), VZDY skocit zpet na tento obrazek, co jsme presunuli zpet.
 
 
 Important - Misc:

@@ -63,7 +63,7 @@ class SortModeHandler(QObject):
     Handle sort mode of the app.
     Executes operations.
 
-    Allowed syntax examples:
+    Allowed syntax examples: TODO: Double-Check, if all options are listed here.
         abcd
         ,abcd    # Activate Copy mode only for this shortcut and move to next image.
         ;abcd    # Activate Copy mode only for this shortcut and stay on this image.
@@ -79,6 +79,7 @@ class SortModeHandler(QObject):
     updateKeySequenceLabelSignal = pyqtSignal(str)
     updateStatusBarLabelSignal = pyqtSignal(str)
     updateTreeViewSignal = pyqtSignal(str)
+    playSoundSignal = pyqtSignal(str)
 
     def __init__(self, mainWindow, shortcutManager, galleryManager, parent=None):
         super().__init__(parent)
@@ -128,8 +129,10 @@ class SortModeHandler(QObject):
 
         self.updateKeySequenceLabelSignal.emit(f"Key Sequence Pressed: \n{shortcutText}")
 
+
     def updateStatusBarLabel(self, newStatusbarMessage: str):
         self.updateStatusBarLabelSignal.emit(newStatusbarMessage)
+
 
     def handleKeyEscape(self):
         """
@@ -253,13 +256,13 @@ class SortModeHandler(QObject):
         # Check that image was not removed from outside of an app
         if self.srcImageStillExists(src, imageName) is False:
             self.cleanupMissingImage(imageName)
-            self.restoreAndCleanup()
+            self.updateAndCleanup()
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
         if self.srcImageExistsInDst(dst, imageName):
             self.handleExistingImageInDst()
-            self.restoreAndCleanup()
+            self.updateAndCleanup()
             return
 
         # Remove current image from the list of images in src directory
@@ -275,11 +278,17 @@ class SortModeHandler(QObject):
             if (SettingsDialog.settingsGetAutoNextAfterCopy() or self.copyAndMove) and not self.copyAndStop:
                 self.galleryManager.incrementGalleryIndex()  # TODO: v handleOtherKey je increment. wtf?
 
+        # Success
+        # Play feedback sound
+        # if SettingsDialog.playFeedbackSound(): TODO
+        # self.mainWindow.feedbackSound.play()
+        self.playSoundSignal.emit("SUCCESS_SOUND")
+
         # Show new image
         self.galleryManager.updatePreview()
 
         # Restore clean state of the app
-        self.restoreAndCleanup()
+        self.updateAndCleanup()
 
 
     def handleKeyPeriod(self):
@@ -338,11 +347,20 @@ class SortModeHandler(QObject):
             if SettingsDialog.settingsGetAutoNextAfterCopy():
                 self.galleryManager.incrementGalleryIndex()
 
+        # Success
         log.info(f"History entries: {self._historyManager.len()}")
         self.galleryManager.updateCounterLabelText()
 
+        # Play feedback sound
+        # if SettingsDialog.playFeedbackSound(): TODO
+        # self.mainWindow.feedbackSound.play()
+        self.playSoundSignal.emit("SUCCESS_SOUND")
+
         # Show new image
         self.galleryManager.updatePreview()
+
+        # Restore clean state of the app
+        self.updateAndCleanup()
 
 
     def handleKeyDelete(self):
@@ -383,8 +401,16 @@ class SortModeHandler(QObject):
 
         self.galleryManager.updateCounterLabelText()
 
+        # Play feedback sound
+        # if SettingsDialog.playFeedbackSound(): TODO
+        # self.mainWindow.feedbackSound.play()
+        self.playSoundSignal.emit("SUCCESS_SOUND")
+
         # Show new image
         self.galleryManager.updatePreview()
+
+        # Restore clean state of the app
+        self.updateAndCleanup()
 
 
         # # Prevent override of an image in dst, if file with same name exist there.
@@ -477,7 +503,7 @@ class SortModeHandler(QObject):
 
         if self.galleryManager.isGalleryEmpty():
             log.info("Source directory is empty")
-            self.restoreAndCleanup()
+            self.updateAndCleanup()
             return
 
         imageName = self.galleryManager.getCurrentFilename()
@@ -485,19 +511,19 @@ class SortModeHandler(QObject):
         dst = self.shortcutManager.getDstPathForShortcut(fullShortcut)
 
         if not self.checkDestinationDirectoryExists(dst):
-            self.restoreAndCleanup()
+            self.updateAndCleanup()
             return
 
         # Check that image was not removed from outside of an app
         if not self.srcImageStillExists(src, imageName):
             self.cleanupMissingImage(imageName)  # image still exists - specific cleanup
-            self.restoreAndCleanup()
+            self.updateAndCleanup()
             return
 
         # Prevent override of an image in dst, if file with same name exist there.
         if self.srcImageExistsInDst(dst, imageName):
             self.handleExistingImageInDst()  # Image already exists in Dst - specific cleanup
-            self.restoreAndCleanup()
+            self.updateAndCleanup()
             return
 
         log.info(f"It is found. Possible to move from {src} into {dst}!")
@@ -524,11 +550,18 @@ class SortModeHandler(QObject):
 
         log.info(f"History entries: {self._historyManager.len()}")
 
+        self.galleryManager.updateCounterLabelText()
+
+        # Play feedback sound
+        # if SettingsDialog.playFeedbackSound(): TODO
+        # self.mainWindow.feedbackSound.play()
+        self.playSoundSignal.emit("SUCCESS_SOUND")
+
         # Show new image
         self.galleryManager.updatePreview()
 
         # Restore clean state of the app
-        self.restoreAndCleanup()
+        self.updateAndCleanup()
 
 
     @pyqtSlot()
@@ -581,9 +614,17 @@ class SortModeHandler(QObject):
         # Remove last record from history
         self._historyManager.pop()
 
+        # Success
+        # Play feedback sound
+        # if SettingsDialog.playFeedbackSound(): TODO
+        # self.mainWindow.feedbackSound.play()
+        self.playSoundSignal.emit("SUCCESS_SOUND")
+
         # Show new image
         self.galleryManager.updatePreview()
-        # log.info(self.images)
+
+        # Restore clean state of the app
+        # self.updateAndCleanup()
 
 
     def handleSortMode(self, event: QKeyEvent):
@@ -655,7 +696,7 @@ class SortModeHandler(QObject):
         return True
 
 
-    def restoreAndCleanup(self):
+    def updateAndCleanup(self):
         """
         General restoration of the clean state of the app.
 
