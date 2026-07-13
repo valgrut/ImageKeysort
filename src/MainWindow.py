@@ -288,7 +288,7 @@ class MainWindow(QMainWindow, QObject):
         self.buttonRotateImageAction.setStatusTip("Rotate image right 90 degrees.")
         # self.buttonRotateImageAction.triggered.connect(self.galleryManager.rotateImageRight)
         self.buttonRotateImageAction.triggered.connect(self.createAndExecuteRotateCommand)
-        self.buttonRotateImageAction.setCheckable(True)
+        self.buttonRotateImageAction.setCheckable(False)
         self.buttonRotateImageAction.setShortcut("Ctrl+G")
         # self.buttonRotateImageAction.setDisabled(True)
         self.toolbar.addAction(self.buttonRotateImageAction)
@@ -304,6 +304,7 @@ class MainWindow(QMainWindow, QObject):
         self.toolbar.addAction(self.buttonExtractTextAction)
 
         self.toolbar.addAction(self.renameFileAction)
+        self.toolbar.addAction(self.deleteCurrentFileAction)
 
 
         # ========== Signal connections ==========
