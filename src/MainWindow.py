@@ -426,7 +426,7 @@ class MainWindow(QMainWindow, QObject):
 
 
     def _createActions(self):
-        self.returnToolbarAction = QAction("&Return toolbar", self)
+        self.returnToolbarAction = QAction(QIcon('Resources/toolbox.png'), "&Return toolbar", self)
         self.returnToolbarAction.setStatusTip("Returns toolbar, if closed.")
         self.returnToolbarAction.triggered.connect(self.returnToolbar)
 
@@ -473,7 +473,7 @@ class MainWindow(QMainWindow, QObject):
         self.clearTreeAction.setStatusTip("Clears all shortcuts from the tree.")
         self.clearTreeAction.triggered.connect(self.clearShortcuts)
 
-        self.deleteCurrentFileAction = QAction("&Delete file", self)
+        self.deleteCurrentFileAction = QAction(QIcon('Resources/cross.png'), "&Delete file", self)
         self.deleteCurrentFileAction.setStatusTip("Delete current file.")
         self.deleteCurrentFileAction.triggered.connect(self.sortModeHandler.handleKeyDelete)
 
