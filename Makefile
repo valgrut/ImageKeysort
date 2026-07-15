@@ -16,7 +16,7 @@ PYTEST_ARGS	?= "-v"  # -v | -vv |
 # RUN_ARGS = python3 -m src.main
 # RUN_ARGS = python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Pictures/test_options.json
 # RUN_ARGS = /usr/bin/python3 -m src.main --src-path ~/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads/ --set-copy-mode
-RUN_ARGS ?= python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Repositories/WorkstationSetup/scripts/image-sorter/presets/data.json
+RUN_ARGS ?= python3 -m src.main --src-path ~/Pictures/ --presets-path ~/Repositories/WorkstationSetup/scripts/image-sorter/presets/win-gaming-only.json
 # RUN_ARGS = python3 -m src.main --src-path /home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/testing-data/downloads
 # RUN_ARGS = python3 -m src.main --src-path C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\testing-data\downloads
 

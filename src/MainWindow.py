@@ -117,8 +117,7 @@ class MainWindow(QMainWindow, QObject):
         self.editModeHandler = EditModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
 
         # ========== Sound management ==========
-        #sound = Path("/mnt/c/Users/Kyuubi/Repositories/WorkstationSetup/scripts/image-sorter/Resources/sounds/success-sound.wav")
-        sound = Path(r"C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter\Resources\sounds\success-sound.wav")
+        sound = Path(":Resources/sounds/success-sound.wav")
         self.feedbackSound = QSoundEffect(self)
         self.feedbackSound.setSource(QUrl.fromLocalFile(str(sound)))
         # if self.feedbackSound.status() == QSoundEffect.Ready:
@@ -356,7 +355,7 @@ class MainWindow(QMainWindow, QObject):
         else:
             log.info("Empty or invalid arg shortcuts path")
 
-        
+
         self.updateAvailableKeysLabel()
 
 
@@ -707,7 +706,7 @@ class MainWindow(QMainWindow, QObject):
     def _createQuickDirectoryAndShortcut(self):
         """
         Dialogue allows to enter both dir name and shortcut.
-        
+
         TODO: Keep possibility to add just directory without shortcut???
         """
         # TODO: Maybe move to GalleryManager or some FileOperationManager
@@ -994,11 +993,11 @@ class MainWindow(QMainWindow, QObject):
                 self.lastImageRequestedSignal.emit()
                 # TODO: ? Move/remove this whole match-cases into QActions, since both keyboard and button execute this.
                 return
-            
+
             case Qt.Key_Slash:
                 print("Starting quick shortcut filter. WIP.")
                 return
-    
+
             case _:  # Default case
                 super().keyPressEvent(event)
                 # Then proceed with the handling Sort or Edit mode... vvv
@@ -1018,12 +1017,12 @@ class MainWindow(QMainWindow, QObject):
 
         elif self.currentMode == Modes.SORT:
             self.sortModeHandler.handleSortMode(event)
-            
+
             # Show all possible available key-chars from shortcuts hierarchy for current key-sequence.
             self.updateAvailableKeysLabel()
         else: # Unknown mode
             pass
-    
+
     @pyqtSlot()
     def updateAvailableKeysLabel(self, newContent=None):
         """
@@ -1031,16 +1030,16 @@ class MainWindow(QMainWindow, QObject):
         """
         sequencePressed = self.sortModeHandler.getCleanSequence()
         availableKeysList = self.shortcutManager.getPossibleFollowupsKeychars(sequencePressed)
-        
+
         if SettingsDialog.settingsGetSortShortcuts():
             availableKeysList = sorted(availableKeysList, key=lambda x: str.casefold(x[0]))
-        
+
         availableKeysStr: str = " ".join(list(availableKeysList))
-        
+
         # availableKeysHint = sequencePressed + " -> " + availableKeysStr  # V1
         # availableKeysHint = availableKeys  # V2
         availableKeysHint = "Next:\n" + availableKeysStr  # V3
-        
+
         self.availableKeycharsLabel.setText(availableKeysHint)
 
     @pyqtSlot(str)
