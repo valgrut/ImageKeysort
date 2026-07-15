@@ -269,6 +269,8 @@ Important features TODO:
     - [ ] Add SETTINGS to enable/disable sound feedback, add sound level control (into settings too).
 - [ ] !!! Pri operaci Undo (move/copy), VZDY skocit zpet na tento obrazek, co jsme presunuli zpet.
 - [ ] Disable sounds during the testing (new option --disable-sound-feedback a nejak ji protlacit do pytest??? - https://stackoverflow.com/questions/40880259/how-to-pass-arguments-in-pytest-by-command-line)
+- [ ] Vypsat cestu k Settings souboru v Settings okne. Treba uplne dole.
+
 
 Important - Misc:
 - [X] ReloadGallery button (kdyz vim, ze jsem treba off-app smazal obrazek ci pridal novy). Sice bych mohl slozku znovuotevrit, ale bylo by vice convenient mit button.
