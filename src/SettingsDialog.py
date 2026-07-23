@@ -1,6 +1,7 @@
 import logging
 from PyQt5.QtCore import Qt, QSettings, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QVBoxLayout, QGroupBox, QFormLayout, QSpinBox, QCheckBox, QComboBox)
+from PyQt5.QtWidgets import (QDialog, QDialogButtonBox, QVBoxLayout, QGroupBox, QFormLayout, QSpinBox, QCheckBox,
+                             QComboBox, QLabel)
 
 from src.Styles import Styles
 
@@ -116,6 +117,7 @@ class SettingsDialog(QDialog):
         root.addWidget(copy_box)
         root.addWidget(video_box)
         root.addWidget(themes_box)
+        root.addWidget(QLabel(QSettings().fileName()))  # Print location of the config ini file. Win - regedit: HKEY_CURRENT_USER\...
         root.addWidget(self.buttons)
         self.setLayout(root)
 
