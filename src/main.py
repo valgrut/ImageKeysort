@@ -263,13 +263,19 @@ Important features TODO:
 - [ ] Mozna oddelat / presunout cely Label zobrazujici srcDir v middleLayoutu nekam jinam (dolu pod aktualni obrazek? nebo do Window Title?)
 - [ ] Pridat ikonu zelene fajfky / cerveneho X, a pridavat pred status bar zpravy (napr presun obrazku ze src do dst je successful a pod.) Bude to lepsi vizualni indikace, ze se to povedlo nebo nepovedlo.
 - [ ] Zakomponovat nekam nejakou paralelizaci?
-- [ ] Mozna: Moznost ne mit vice dst (nebo taky?), ale mit moznost naraz pouzit vic zkratek? Treba '+abc,abd,cde<?mezernik?>'
 - [ ] Pridat counter, kolik jsem setridil (presunul) obrazku v dane session???
 - [~] Play feedback sound after moving/copying/deleting/undoing actions...
     - [ ] Add SETTINGS to enable/disable sound feedback, add sound level control (into settings too).
 - [ ] !!! Pri operaci Undo (move/copy), VZDY skocit zpet na tento obrazek, co jsme presunuli zpet.
 - [ ] Disable sounds during the testing (new option --disable-sound-feedback a nejak ji protlacit do pytest??? - https://stackoverflow.com/questions/40880259/how-to-pass-arguments-in-pytest-by-command-line)
 - [X] Vypsat cestu k Settings souboru v Settings okne. Treba uplne dole.
+
+
+Dropped ideas, WONT_DO:
+- [-] Mozna: Moct pridat ke zkratce vice cest, kam zkopirovat dany obrazek/soubor pri jeji aktivaci.
+    - V edit modu: zkratka a '+' znak ??? Napr: "fcg+"
+    - Nebo Moznost ne mit vice dst (nebo taky?), ale mit moznost naraz pouzit vic zkratek? Treba '+abc,abd,cde<?mezernik?>'. 
+    - -> BLBOST, vic zkratek je basically jen to, ze pouziju pred kazdou carku pro kopirovani. takze efektivne ,abc,def,ghi je uplne to samo, jako jsem psal driv, az na to ze nemusim nic noveho implementovat.
 
 
 Important - Misc:
@@ -348,8 +354,7 @@ Consider (Maybe):
 - [ ] textExtraction: zobrazit nacitaci kolecko pri cekani na dokonceni.
 - [ ] textExtraction: Tez mozna pouzit cache a ulozit tan prevedeny text, aby se to neprevadelo furt dokola.
 - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
-- [ ] Mozna: Moct pridat ke zkratce vice cest, kam zkopirovat dany obrazek/soubor pri jeji aktivaci.
-        - V edit modu: zkratka a '+' znak ??? Napr: "fcg+"
+
 
 
 Installation, Building
