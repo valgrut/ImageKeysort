@@ -269,6 +269,9 @@ Important features TODO:
 - [ ] !!! Pri operaci Undo (move/copy), VZDY skocit zpet na tento obrazek, co jsme presunuli zpet.
 - [ ] Disable sounds during the testing (new option --disable-sound-feedback a nejak ji protlacit do pytest??? - https://stackoverflow.com/questions/40880259/how-to-pass-arguments-in-pytest-by-command-line)
 - [X] Vypsat cestu k Settings souboru v Settings okne. Treba uplne dole.
+- [ ] Fix crash, kdyz oteviram velkou galerii, kdyz je uz otevrena jina velka galerie (tisice fotek)
+- [ ] Pri pouziti tecky pro opakovani prikazu se ve statusBar zprave ta zopakovana zkratka nevypise. Je tam pouze ''.
+- [ ] Rotovany image nekopirovat jako zalohu do __DELETED__.
 
 
 Dropped ideas, WONT_DO:
