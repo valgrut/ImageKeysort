@@ -321,6 +321,7 @@ nejake zkratky, jak bude vypadat po odstraneni/presunu/zmene keychar...
 - [X] Pridat do statusbaru, ze byla pridana zkratka (jaka zkratka a jake dst pro ni)
 - [X] Nefunguje castecna-zkratka+mezernik pro copy s pomoci ';' a ','. Img je proste presunut a ',;' je ignorovano (',' nebo ';' zustane dokonce zobrazeno v Labelu). Vyzkouset i se sentinelem pak.
 - [X] Disable Next Label when in the Edit mode.
+    - [ ] Actually, filtraci povolit, protoze chci videt, ktere zkratky uz mam pouzite. Kdyz jsou zrovna nekde dole, je mi to k nicemu.
 - [X] Fix: ESC neodstrani ,; za sentinelem. Zrusi to cele. Ma to ale prvne odstranit pouze vse za sentinelem, kdyz je nastaveny.
 - [X] Fix: (bez sentinelu / Sentinel) + ',;' + HIT nefunguje. Pouzije se Move, ne Copy operace.
 
