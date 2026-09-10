@@ -273,6 +273,10 @@ Important features TODO:
 - [ ] Pri pouziti tecky pro opakovani prikazu se ve statusBar zprave ta zopakovana zkratka nevypise. Je tam pouze ''.
 - [ ] Rotovany image nekopirovat jako zalohu do __DELETED__.
 
+vvv
+- [ ] Undo pro jednotlive operace mozna normalne pridat do toolbaru, doprava od aktualnich tools - pridat tam proste oddelovac, a jednotliva tlacitka povolovat / disablovat podle toho, jake operace v aktualni session se staly s danym obrazkem.
+^^^
+
 
 Dropped ideas, WONT_DO:
 - [-] Mozna: Moct pridat ke zkratce vice cest, kam zkopirovat dany obrazek/soubor pri jeji aktivaci.
