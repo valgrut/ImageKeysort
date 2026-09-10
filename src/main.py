@@ -279,6 +279,7 @@ Dropped ideas, WONT_DO:
     - V edit modu: zkratka a '+' znak ??? Napr: "fcg+"
     - Nebo Moznost ne mit vice dst (nebo taky?), ale mit moznost naraz pouzit vic zkratek? Treba '+abc,abd,cde<?mezernik?>'. 
     - -> BLBOST, vic zkratek je basically jen to, ze pouziju pred kazdou carku pro kopirovani. takze efektivne ,abc,def,ghi je uplne to samo, jako jsem psal driv, az na to ze nemusim nic noveho implementovat.
+    - ! Chtel bych to JEN proto, ze by to mohlo byt zabavne naprogramovat (pro me ok duvod, ale fakt to je blbost jakozto featura).
 
 
 Important - Misc:

@@ -33,7 +33,7 @@ class ImageRotateCommand(QUndoCommand):
 
     def execute(self):
         ImageRotateService().rotate90(self._fileData.pathAsStr())
-        self.numberOfRotations += 1
+        self.numberOfRotations += 1  # TODO: Mozna pri == 4 to vratit na nulu?
         print(f"{self.numberOfRotations}")
 
     def undo(self):
