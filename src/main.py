@@ -274,7 +274,7 @@ Important features TODO:
 - [ ] Rotovany image nekopirovat jako zalohu do __DELETED__.
 
 vvv
-- [ ] Undo pro jednotlive operace mozna normalne pridat do toolbaru, doprava od aktualnich tools - pridat tam proste oddelovac, a jednotliva tlacitka povolovat / disablovat podle toho, jake operace v aktualni session se staly s danym obrazkem.
+- [~] Undo pro jednotlive operace mozna normalne pridat do toolbaru, doprava od aktualnich tools - pridat tam proste oddelovac, a jednotliva tlacitka povolovat / disablovat podle toho, jake operace v aktualni session se staly s danym obrazkem.
 ^^^
 
 

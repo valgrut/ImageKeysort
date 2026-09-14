@@ -304,6 +304,30 @@ class MainWindow(QMainWindow, QObject):
 
         self.toolbar.addAction(self.renameFileAction)
         self.toolbar.addAction(self.deleteCurrentFileAction)
+               
+        self.toolbar.addSeparator()
+        
+        # ====== Toolbar - add Undo Button for each file operations ======
+        self.buttonUndoCropAction = QAction(QIcon("Resources/arrow-circle-left.png"), "Undo Crop", self)
+        self.buttonUndoCropAction.setStatusTip("Undo Crop of current image.")
+        # self.buttonUndoCropAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
+        self.buttonUndoCropAction.setDisabled(True)
+        self.buttonUndoCropAction.triggered.connect(self.undoCommand)
+        self.toolbar.addAction(self.buttonUndoCropAction)
+        
+        self.buttonUndoRotateAction = QAction(QIcon("Resources/arrow-circle-left.png"), "Undo Rotate", self)
+        self.buttonUndoRotateAction.setStatusTip("Undo Rotate of current image.")
+        # self.buttonUndoRotateAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
+        self.buttonUndoRotateAction.setDisabled(True)
+        self.buttonUndoRotateAction.triggered.connect(self.undoCommand)
+        self.toolbar.addAction(self.buttonUndoRotateAction)
+        
+        self.buttonUndoRenameAction = QAction(QIcon("Resources/arrow-circle-left.png"), "Undo Rename or Tag", self)
+        self.buttonUndoRenameAction.setStatusTip("Undo Rename of current image.")
+        # self.buttonUndoRenameAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
+        self.buttonUndoRenameAction.setDisabled(True)
+        self.buttonUndoRenameAction.triggered.connect(self.undoCommand)
+        self.toolbar.addAction(self.buttonUndoRenameAction)
 
 
         # ========== Signal connections ==========
@@ -459,6 +483,7 @@ class MainWindow(QMainWindow, QObject):
         self.undoSortAction.setStatusTip("Undo last move/copy operation")
         self.undoSortAction.triggered.connect(self.sortModeHandler.undo_last_operation)
 
+        # TODO:
         self.undoShortcutModificationAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo modification", self)
         # self.undoShortcutModificationAction.setShortcut('Ctrl+Z')
         self.undoShortcutModificationAction.setStatusTip("Undo last shortcut modification. It could be adding, deleting, ...")
