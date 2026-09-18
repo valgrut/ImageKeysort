@@ -38,6 +38,17 @@ class CommandStack:
             if cmd._fileData.fileName == filename:
                 return cmd
         return None
+    
+    def getAllCommandsByFilename(self, filename: str) -> list[QUndoCommand] | None:
+        """
+        Retrieve all commands from the stack associated with given filename.
+        """
+        associatedCommands: list[QUndoCommand] = []
+        for cmd in self._commands:
+            # if hasattr(cmd, 'imageName') and cmd.imageName == filename:
+            if cmd._fileData.fileName == filename:
+                associatedCommands.append(cmd)
+        return associatedCommands
 
     def getCommandOfSameType(self, filename: str, commandId: int) -> QUndoCommand | None:
         """
@@ -69,7 +80,7 @@ class CommandStack:
         Get the index of a specific command in the stack.
         
         TODO: 1. Rework to find by filename AND type
-        TODO: 2. OR return ALL commands associated with this filename.
+        TODO: 2. OR return ALL commands associated with this filename. !!! TODO TODO TODO !!!!!!!!!!!!!
         """
         for i, cmd in enumerate(self._commands):
             # if hasattr(cmd, 'imageName') and cmd.imageName == filename:

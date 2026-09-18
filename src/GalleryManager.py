@@ -280,6 +280,16 @@ class GalleryManager(QStackedWidget):
             self.enableExtractTextButtonSignal.emit()
             self.enableCropButtonSignal.emit()
 
+        # TODO: Retrieve all executed operations on current file (Crop/Rotate/Tag/...) and enable/disable corresponding Undo buttons.
+        associatedCommands = self.mainWindow.commandsStack.getAllCommandsByFilename(currentFile.fileName)
+        print(associatedCommands)
+        # If Crop was performed on this file, Enable Undo button for Crop
+        # self.buttonUndoCropAction.setEnabled(True)
+                
+        # If Rotate was performed on this file, Enable Undo button for Rotation
+        # self.buttonUndoRotateAction.setEnabled(True)
+        
+        
         self.updateFilenameLabelText()  # TODO: sig-slots
         self.updateCounterLabelText()  # TODO: sig-slots
 

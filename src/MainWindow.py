@@ -584,10 +584,12 @@ class MainWindow(QMainWindow, QObject):
 
         currentFile = self.galleryManager.getCurrentGalleryItem()
         rotateCommand = ImageRotateCommand(currentFile)
-        # TODO: After inventing, how to manage multiple operations above 1 image, uncomment those 2 lines:
-        #   pushed = self.commandsStack.push(rotateCommand)
-        #   self.commandsStack.execute(rotateCommand)
-        rotateCommand.execute()
+        # ! TODO: After inventing, how to manage multiple operations above 1 image, uncomment those 2 lines and comment the one below those 2: 
+        pushed = self.commandsStack.push(rotateCommand)
+        self.commandsStack.execute(pushed)
+        
+        # ! Comment out this one, after uncommenting 2 above:
+        # rotateCommand.execute()
 
         # self.updateMediaPreviewSignal.emit()  # TODO maybe rename to redrawMediaPreview().
         self.galleryManager.updatePreview()
