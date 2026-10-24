@@ -89,3 +89,38 @@ python3-qt5
 ```
 pip3 install -r requirements.txt
 ```
+
+
+## 7. Filter all relevant commits out of the initial repository
+
+Issues:
+- some of the commits (many of them) were made from work laptop, so there is my work email included.
+- many commits do not contain only changes to the said project, but also updates to my config files, adding notes and such.
+
+I want:
+- Preserve project's history
+
+Commands:
+- Pick a commits touching selected sub-tree:
+```
+# reconstructs the commit using only the selected project tree. Commits that only affected unrelated paths disappear entirely.
+
+git filter-repo --subdirectory-filter scripts/my-ultimate-app
+```
+
+- Change email in commits while the historical date remains the historical date
+```
+cat > /tmp/my-mailmap <<'EOF'
+Naruto Uzumaki <personal@example.com> <jpeska@company.com>
+EOF
+
+git filter-repo --mailmap /tmp/my-mailmap
+```
+
+- Warning - those procedures will change a Hashes of the commits (of course)
+
+
+## 8. Private development branch within public project
+
+- Create second repository (private) where the development happens
+- Link both together
