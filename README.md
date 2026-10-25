@@ -1,5 +1,7 @@
 # Image Keysort
 
+![app-preview](ideas-sketches/preview.png)
+
 ## 1. Description
 
 Do you have directory with hundreds of screenshots, where every image belongs to different directory?
