@@ -39,10 +39,6 @@ pip install --requirement requirements.txt
 
 ## 4. cd into app directory
 
-```
-cd C:\Users\Kyuubi\Repositories\WorkstationSetup\scripts\image-sorter
-```
-
 
 ## 5. Build the app
 

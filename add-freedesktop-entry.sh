@@ -20,8 +20,8 @@ cat << EOF > "$SINGLE"
 Type=Application
 Name=Image Keysort
 Comment=Sort and manage files in the directory with a keyboard
-Icon=/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/Resources/icon.jpg
-Path=/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter
+Icon=TODO_PATH_TO_REPO/Resources/icon.jpg
+Path=TODO_PATH_TO_REPO
 Exec=/usr/bin/python3 -m src.main
 Terminal=false
 Categories=Application;Utility
@@ -30,6 +30,6 @@ Categories=Application;Utility
 MimeType=inode/directory;
 
 # Optional
-Icon=/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/Resources/icon.jpg %U
+Icon=TODO_PATH_TO_REPO/Resources/icon.jpg %U
 StartupNotify=true
 EOF

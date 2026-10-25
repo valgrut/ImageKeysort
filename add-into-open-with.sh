@@ -14,7 +14,7 @@ Comment=Sort images from a folder
 # If you have a CLI entrypoint:
 # Exec=image-keysort %U
 # Or if you run a script directly:
-Exec=/home/jpeska/Repositories/WorkstationSetup/scripts/image-sorter/src/main.py %U
+Exec=TODO_PATH_TO_REPO/src/main.py %U
 Terminal=false
 Categories=Utility;
 

@@ -6,10 +6,10 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CURRENT_USER\Software\Classes\Directory\shell\ImageKeysort]
 @="Open in Image Keysort"
-"Icon"="C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\dist\\image-keysort\\image-keysort.exe"
+"Icon"="C:\\TODO_PATH_TO_REPO\\dist\\image-keysort\\image-keysort.exe"
 
 [HKEY_CURRENT_USER\Software\Classes\Directory\shell\ImageKeysort\command]
-@="\"C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\dist\\image-keysort\\image-keysort.exe\" --src-path \"%1\""
+@="\"C:\\TODO_PATH_TO_REPO\\dist\\image-keysort\\image-keysort.exe\" --src-path \"%1\""
 
 
 ; ------------------------------------------------------------
@@ -18,7 +18,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\ImageKeysort]
 @="Open this directory in Image Keysort"
-"Icon"="C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\dist\\image-keysort\\image-keysort.exe"
+"Icon"="C:\\TODO_PATH_TO_REPO\\dist\\image-keysort\\image-keysort.exe"
 
 [HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\ImageKeysort\command]
-@="\"C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\dist\\image-keysort\\image-keysort.exe\" --src-path \"%V\""
+@="\"C:\\TODO_PATH_TO_REPO\\dist\\image-keysort\\image-keysort.exe\" --src-path \"%V\""

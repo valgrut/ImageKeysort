@@ -7,11 +7,11 @@ Windows Registry Editor Version 5.00
 "Icon"="C:\\Windows\\py.exe,0"
 
 [HKEY_CLASSES_ROOT\Directory\shell\ImageKeysort\command]
-@="\"C:\\Windows\\pyw.exe\" \"C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\src\\main.py\" \"%1\""
+@="\"C:\\TODO_PATH_TO_REPO\\src\\main.py\" \"%1\""
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\ImageKeysort]
 @="Open in Image Keysort"
 "Icon"="C:\\Windows\\py.exe,0"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\ImageKeysort\command]
-@="\"C:\\Windows\\pyw.exe\" \"C:\\Users\\Kyuubi\\Repositories\\WorkstationSetup\\scripts\\image-sorter\\src\\main.py\" \"%V\""
+@="\"C:\\TODO_PATH_TO_REPO\\src\\main.py\" \"%V\""
