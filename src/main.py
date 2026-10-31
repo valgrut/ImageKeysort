@@ -1,15 +1,41 @@
 import os
 import sys
+import traceback
+from pathlib import Path
 
 # On Windows, set multimedia backend for videos to work.
 if sys.platform.startswith("win"):
     os.environ["QT_MULTIMEDIA_PREFERRED_PLUGINS"] = "windowsmediafoundation"
 
+
+def _crash_log_path() -> Path:
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent / "image-keysort-crash.log"
+    return Path.cwd() / "image-keysort-crash.log"
+
+
+def _excepthook(exc_type, exc, tb):
+    text = "".join(traceback.format_exception(exc_type, exc, tb))
+    try:
+        _crash_log_path().write_text(text, encoding="utf-8")
+    except OSError:
+        pass
+    sys.__excepthook__(exc_type, exc, tb)
+
+
+sys.excepthook = _excepthook
+
 import argparse
-import pathlib
 import logging
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QCoreApplication
+
+try:
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtCore import QCoreApplication
+except Exception:
+    _crash_log_path().write_text(traceback.format_exc(), encoding="utf-8")
+    raise
+
+import src.resources_rc  # noqa: F401  registers Qt resources
 from src.MainWindow import MainWindow
 
 
@@ -20,15 +46,21 @@ log = logging.getLogger(__name__)
 
 
 def setupLogging(debugLevel):
+    if getattr(sys, "frozen", False):
+        log_file = Path(sys.executable).resolve().parent / "image-keysort.log"
+    else:
+        log_file = Path("image-keysort.log")
+
     logging.basicConfig(
         level=debugLevel,
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
         datefmt="%H:%M:%S",
         handlers=[
             logging.StreamHandler(sys.stdout),
-            logging.FileHandler("image-keysort.log")
+            logging.FileHandler(log_file, encoding="utf-8"),
         ]
     )
+
 
 def parseArguments():
     parser = argparse.ArgumentParser(
@@ -39,10 +71,6 @@ def parseArguments():
     parser.add_argument('--src-path', type=str, required=False, help='Path to the source directory to load images from on startup')
     parser.add_argument('--presets-path', type=str, required=False, help='Path to the presets file (shortcuts data) to load on startup')
     args = parser.parse_args()
-
-    # srcPathArg = args.src_path
-    # presetsArg = args.presets_path
-    # setCopyModeArg = args.set_copy_mode
     return args
 
 
@@ -51,25 +79,13 @@ def main():
     QCoreApplication.setOrganizationDomain("wogon.cz")
     QCoreApplication.setApplicationName("Image Keysort")
 
-    # # Initialize Settings on first run to prevent non-existing config
     from src.SettingsDialog import SettingsDialog
     SettingsDialog.initializeSettings()
 
-    # Build qss file on the start (in case app started without Makefile)
-    # TODO: Does not work:
-    # import qtsass
-    # scss_path = pathlib.Path("static/app-styles.scss")
-    # qss_path = pathlib.Path("static/app-styles.qss")
-    # qss = qtsass.compile(scss_path.read_text(encoding="utf-8"))
-    # qss_path.write_text(qss, encoding="utf-8")
+    setupLogging(debugLevel=logging.DEBUG)
 
-    # Config logging
-    setupLogging(debugLevel=logging.WARNING and logging.INFO and logging.DEBUG)
-
-    # CLI arguments parsing
     parsedArgs = parseArguments()
 
-    # Create app and apply theme
     app = QApplication(sys.argv)
     window = MainWindow(args=parsedArgs)
     window.apply_settings()
@@ -81,4 +97,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

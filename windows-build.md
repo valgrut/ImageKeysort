@@ -1,8 +1,20 @@
 # How to build app on Windows
 
+TODO - Merge into README ?
+
 - **Considerations**:
     - You always need to compile your app on your target system. So, if you want to create a Mac .app you need to do this on a Mac, for an EXE you need to use Windows.
-    - 
+
+
+## 0. Run a windows-build script
+
+Run in PowerShell:
+
+`.\tools\build-windows.ps1`
+
+DONE!
+
+or - manually, follow steps 1-n ... :
 
 
 ## 1. Install python
@@ -22,11 +34,14 @@ and Check the "Add to PATH" option!
 
 - Activate venv to keep the env clean:
 ```
-python3 -m venv packenv
-.\packenv\scripts\activate.bat
+py.exe -3.12 -m venv packenv
+.\packenv\Scripts\python.exe -m pip install -r requirements.txt
+.\packenv\Scripts\python.exe -m PyInstaller --clean --noconfirm ImageKeysort.spec
+# .\packenv\scripts\activate.bat
 ```
 
-- Install dependencies:
+- [OPTIONAL] Install dependencies:
+    - TODO: Maybe not necessary now?
 ```
 apt-get install pylint  # to run static code analysis before starting the build process
 pip3 install pyinstaller

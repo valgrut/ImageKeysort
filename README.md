@@ -78,20 +78,97 @@ OR
 - Videos on Windows are playing, but are not shown in the player. Missing codecs/driver?
 
 
-## 6. Dependencies
+## 6. Run app manually
 
+```shell
+sudo dnf update
+sudo dnf install make
+
+# Run an app (requirements automatically installed in the python environment)
+make run
+
+# Cleanup everything
+make clean
 ```
+
+
+## 7. Contribution and development
+
+Install dependencies locally (messy) or in python env.
+
+- Install package dependencies
+
+```shell
+sudo dnf update
 sudo dnf install \
 python3-pip \
-python3-qt5
+make
 ```
 
-- Install deps:
+- Install pip dependencies:
 
-```
+```shell
 pip3 install -r requirements.txt
 ```
 
+- Make run
+
+```shell
+make run
+```
+
+
+## 8. Build a binary (exe) for Windows
+
+Note: To create a working binary for Windows, those steps must happen on Windows (power shell), not linux subsystem!
+
+- Ref windows-build.md
+
+
+- 1. Create a .spec file (the first time we prepare a setup)
+- 2. Install dependencies on the Windows's powershell:
+    - `py -3.12 -m venv packenv`
+    - `.\packenv\Scripts\python.exe -m pip install -r requirements.txt`
+- 3. Build an exe file:
+    - Must be done from PowerShell!
+    - `pyinstaller.exe --clean --noconfirm ImageKeysort.spec`
+- 4. Confirm that app is working by running an exe: `dist/ImageKeysort/ImageKeysort.exe`
+
+
+- [ ] inno
+- [ ] Installation (registry entry)
+- [ ] Uninstall (registry out)
+- [ ] Run without installation - Portable variant
+
+
+### 8.1. Create an installer with Inno Setup app
+
+- 0. Install Inno Setup
+    - A) via Powershell (CLI):
+        - `winget install --id JRSoftware.InnoSetup.7 -e -s winget -i`
+    - B) via installer
+        - https://jrsoftware.org/isinfo.php
+- 1. Create .iss file (the first time we prepare a setup)
+- 2. Ref steps above
+- 3. Create an installer with Inno Setup 
+    - A) GUI
+        - 3.1. Open .iss file in Inno Setup
+        - 3.2. Top Menu -> Build -> Compile
+    - B) CLI
+        - Must be done in PowerShell!
+        - `ISCC.exe ImageKeysort.iss`
+        - `& 'C:\Program Files\Inno Setup 7\ISCC.exe' ImageKeysort.iss`  sometimes fullpath is needed to the exe.
+- 4. We get `dist-installer/ImageKeysort-Setup-x.y.z.exe`
+- 5. Attach to GitHub Release
+
+
+- Links:
+    - Inno Setup page: https://jrsoftware.org/isdl.php
+    
+
+## 9. Build a package for Linux
+
+- TODO
 
 
 ## Third-party assets

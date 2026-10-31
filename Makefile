@@ -45,14 +45,23 @@ test: config
 	# PYTHONPATH=${ROOT_DIR}/src pytest -v tests/; \
 
 qss:
-	qtsass $(SCSS_STYLES) -o $(QSS_STYLES)
+	( \
+	python3 -m venv venv; \
+	source ${ROOT_DIR}/venv/bin/activate; \
+	qtsass $(SCSS_STYLES) -o $(QSS_STYLES); \
+	deactivate; \
+	)
 
 build:
-	pyinstaller --onefile ${ROOT_DIR}/src/${NAME}
+	@echo "Warning: This has to be run from Windows (e.g. PowerShell), to make it working."
+	@echo "Follow steps in the README to create binary on Windows."
+	# pyinstaller --onefile ${ROOT_DIR}/src/${NAME}
 
 clean:
 	rm -rf dist
+	rm -rf dist-installer
 	rm -rf build
+	rm -rf packenv
 	# rm image-keysort.spec
 	rm -rf venv
 	find . -type d -name "__pycache__" -exec rm -r {} +

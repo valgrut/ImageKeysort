@@ -43,6 +43,16 @@ from src.TagSelectionDialog import TagSelectionDialog
 from src.QuickDirectoryCreator import QuickDirectoryDialog
 from src.QuickDirectoryShortcutCreator import QuickDirectoryShortcutDialog
 from src.commands.RotateImageCommand import ImageRotateCommand
+from src.paths import asset, asset_root
+
+ASSET_ROOT = asset_root()
+
+
+def _icon(filename: str) -> QIcon:
+    qrc_icon = QIcon(f":/Resources/{filename}")
+    if not qrc_icon.availableSizes():
+        return QIcon(str(asset("Resources", filename)))
+    return qrc_icon
 
 # TODO: Tohle jinam; Kam?
 screenWidth = 1152
@@ -102,7 +112,9 @@ class MainWindow(QMainWindow, QObject):
         # ========== Main App Window parameters ==========
         self.appTitle = "Image Keysort"
         self.setWindowTitle(self.appTitle)
-        self.setWindowIcon(QIcon(':Resources/icon.jpg'))
+        self.setWindowIcon(_icon('icon.jpg'))
+        # self.setWindowIcon(QIcon(':Resources/icon.jpg'))
+        # self.buttonCropImageAction = QAction(_icon("image-crop.png"), "Crop", self)
         self.setMinimumWidth(screenWidth)
         self.setMinimumHeight(screenHeight)
 
@@ -117,7 +129,7 @@ class MainWindow(QMainWindow, QObject):
         self.editModeHandler = EditModeHandler(self, self.shortcutManager, self.galleryManager)  # deps are injected
 
         # ========== Sound management ==========
-        sound = Path(":Resources/sounds/success-sound.wav")
+        sound = asset("Resources", "sounds", "success-sound.wav")
         self.feedbackSound = QSoundEffect(self)
         self.feedbackSound.setSource(QUrl.fromLocalFile(str(sound)))
         # if self.feedbackSound.status() == QSoundEffect.Ready:
@@ -273,7 +285,7 @@ class MainWindow(QMainWindow, QObject):
         self.toolbar.setIconSize(QSize(16,16))
         self.addToolBar(self.toolbar)
 
-        self.buttonCropImageAction = QAction(QIcon("Resources/image-crop.png"), "Crop", self)
+        self.buttonCropImageAction = QAction(_icon("image-crop.png"), "Crop", self)
         self.buttonCropImageAction.setStatusTip("Crop current image.")
         # buttonCropImageAction.triggered.connect(self.toolbar_button_clicked)
         self.buttonCropImageAction.setCheckable(True)
@@ -283,7 +295,7 @@ class MainWindow(QMainWindow, QObject):
         self.buttonCropImageAction.triggered.connect(self.toggleCropImage)
         self.toolbar.addAction(self.buttonCropImageAction)
 
-        self.buttonRotateImageAction = QAction(QIcon("Resources/arrow-circle-right.png"), "Rotate image right", self)
+        self.buttonRotateImageAction = QAction(_icon("arrow-circle-right.png"), "Rotate image right", self)
         self.buttonRotateImageAction.setStatusTip("Rotate image right 90 degrees.")
         # self.buttonRotateImageAction.triggered.connect(self.galleryManager.rotateImageRight)
         self.buttonRotateImageAction.triggered.connect(self.createAndExecuteRotateCommand)
@@ -294,7 +306,7 @@ class MainWindow(QMainWindow, QObject):
 
         self.toolbar.addSeparator()
 
-        self.buttonExtractTextAction = QAction(QIcon("Resources/clipboard-pencil.png"), "Extract text", self)
+        self.buttonExtractTextAction = QAction(_icon("clipboard-pencil.png"), "Extract text", self)
         self.buttonExtractTextAction.setStatusTip("Extract text from the image.")
         # buttonExtractTextAction.triggered.connect(self.galleryManager.currentWidget().imageViewWidget.extractTextFromImage)
         self.buttonExtractTextAction.triggered.connect(self.extractTextFromImage)
@@ -308,21 +320,21 @@ class MainWindow(QMainWindow, QObject):
         self.toolbar.addSeparator()
         
         # ====== Toolbar - add Undo Button for each file operations ======
-        self.buttonUndoCropAction = QAction(QIcon("Resources/arrow-circle-left.png"), "Undo Crop", self)
+        self.buttonUndoCropAction = QAction(_icon("arrow-circle-left.png"), "Undo Crop", self)
         self.buttonUndoCropAction.setStatusTip("Undo Crop of current image.")
         # self.buttonUndoCropAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
         self.buttonUndoCropAction.setDisabled(True)
         self.buttonUndoCropAction.triggered.connect(self.undoCommand)
         self.toolbar.addAction(self.buttonUndoCropAction)
         
-        self.buttonUndoRotateAction = QAction(QIcon("Resources/arrow-circle-left.png"), "Undo Rotate", self)
+        self.buttonUndoRotateAction = QAction(_icon("arrow-circle-left.png"), "Undo Rotate", self)
         self.buttonUndoRotateAction.setStatusTip("Undo Rotate of current image.")
         # self.buttonUndoRotateAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
         self.buttonUndoRotateAction.setDisabled(True)
         self.buttonUndoRotateAction.triggered.connect(self.undoCommand)
         self.toolbar.addAction(self.buttonUndoRotateAction)
         
-        self.buttonUndoRenameAction = QAction(QIcon("Resources/arrow-circle-left.png"), "Undo Rename or Tag", self)
+        self.buttonUndoRenameAction = QAction(_icon("arrow-circle-left.png"), "Undo Rename or Tag", self)
         self.buttonUndoRenameAction.setStatusTip("Undo Rename of current image.")
         # self.buttonUndoRenameAction.setShortcut("Ctrl+/")  # Repeat crop se bude delat pomoci Ctrl+.
         self.buttonUndoRenameAction.setDisabled(True)
@@ -406,7 +418,7 @@ class MainWindow(QMainWindow, QObject):
         fileMenu.addAction(self.openDirectoryAction)
         fileMenu.addAction(self.returnToolbarAction)
 
-        appSettingsAction = QAction(QIcon("Resources/gear.png"), "Settings", self)
+        appSettingsAction = QAction(_icon("gear.png"), "Settings", self)
         appSettingsAction.setShortcut("Ctrl+,")  # common on mac
         appSettingsAction.triggered.connect(self.open_settings)
 
@@ -449,42 +461,42 @@ class MainWindow(QMainWindow, QObject):
 
 
     def _createActions(self):
-        self.returnToolbarAction = QAction(QIcon('Resources/toolbox.png'), "&Return toolbar", self)
+        self.returnToolbarAction = QAction(_icon('toolbox.png'), "&Return toolbar", self)
         self.returnToolbarAction.setStatusTip("Returns toolbar, if closed.")
         self.returnToolbarAction.triggered.connect(self.returnToolbar)
 
-        self.renameFileAction = QAction(QIcon("Resources/pencil.png"), "&Rename file", self)
+        self.renameFileAction = QAction(_icon("pencil.png"), "&Rename file", self)
         self.renameFileAction.setShortcuts(['Ctrl+F', 'F2'])
         self.renameFileAction.setStatusTip("Rename current file.")
         self.renameFileAction.triggered.connect(self.galleryManager.renameFile)
 
-        self.openDirectoryAction = QAction(QIcon('Resources/inbox-plus.png'), "&Open directory", self)
+        self.openDirectoryAction = QAction(_icon('inbox-plus.png'), "&Open directory", self)
         self.openDirectoryAction.setShortcut('Ctrl+O')
         self.openDirectoryAction.setStatusTip("Open source directory")
         self.openDirectoryAction.triggered.connect(self.selectSourceDirectory)
 
-        self.saveAction = QAction(QIcon('Resources/disk-pencil.png'), "&Save shortcuts", self)
+        self.saveAction = QAction(_icon('disk-pencil.png'), "&Save shortcuts", self)
         self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.setStatusTip("Save current shortcuts to a file")
         self.saveAction.triggered.connect(self.save_data)
 
-        self.loadAction = QAction(QIcon('Resources/disk-arrow.png'), "&Load shortcuts", self)
+        self.loadAction = QAction(_icon('disk-arrow.png'), "&Load shortcuts", self)
         self.loadAction.setShortcut('Ctrl+L')
         self.loadAction.setStatusTip("Load shortcuts from a file")
         self.loadAction.triggered.connect(self.load_data)
 
-        self.exitAction = QAction(QIcon('Resources/control-power.png'), "&Exit", self)
+        self.exitAction = QAction(_icon('control-power.png'), "&Exit", self)
         self.exitAction.setShortcut('Ctrl+Q')
         self.exitAction.setStatusTip("Exit application")
         self.exitAction.triggered.connect(self.exitApp)
 
-        self.undoSortAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo move", self)
+        self.undoSortAction = QAction(_icon('arrow-circle-left.png'), "&Undo move", self)
         self.undoSortAction.setShortcut('Ctrl+Z')
         self.undoSortAction.setStatusTip("Undo last move/copy operation")
         self.undoSortAction.triggered.connect(self.sortModeHandler.undo_last_operation)
 
         # TODO:
-        self.undoShortcutModificationAction = QAction(QIcon('Resources/arrow-circle-left.png'), "&Undo modification", self)
+        self.undoShortcutModificationAction = QAction(_icon('arrow-circle-left.png'), "&Undo modification", self)
         # self.undoShortcutModificationAction.setShortcut('Ctrl+Z')
         self.undoShortcutModificationAction.setStatusTip("Undo last shortcut modification. It could be adding, deleting, ...")
         # self.undoShortcutModificationAction.triggered.connect(TODO)
@@ -497,7 +509,7 @@ class MainWindow(QMainWindow, QObject):
         self.clearTreeAction.setStatusTip("Clears all shortcuts from the tree.")
         self.clearTreeAction.triggered.connect(self.clearShortcuts)
 
-        self.deleteCurrentFileAction = QAction(QIcon('Resources/cross.png'), "&Delete file", self)
+        self.deleteCurrentFileAction = QAction(_icon('cross.png'), "&Delete file", self)
         self.deleteCurrentFileAction.setStatusTip("Delete current file.")
         self.deleteCurrentFileAction.triggered.connect(self.sortModeHandler.handleKeyDelete)
 
@@ -852,18 +864,11 @@ class MainWindow(QMainWindow, QObject):
             case "Retro":
                 app.setPalette(Styles.get_retro_palette())
 
-        import pathlib
-        # Required for new styles to take effect.
-        # app.setStyleSheet(Path('static/app-styles.qss').read_text(encoding="utf-8"))
-        # app.setStyleSheet(Path('_internal/static/app-styles.qss').read_text(encoding="utf-8"))
-        # TODO: Temporal workaround because of the building process on windows vs linux. It is ugly.
+        qss_path = asset("static", "app-styles.qss")
         try:
-            app.setStyleSheet(Path('static/app-styles.qss').read_text(encoding="utf-8"))
-        except:
-            try:
-                app.setStyleSheet(Path('_internal/static/app-styles.qss').read_text(encoding="utf-8"))
-            except:
-                print("Could not load app-styles.qss")
+            app.setStyleSheet(qss_path.read_text(encoding="utf-8"))
+        except OSError:
+            log.warning("Could not load app-styles.qss from %s", qss_path)
 
 
     def showAbout(self):
@@ -871,7 +876,7 @@ class MainWindow(QMainWindow, QObject):
         aboutBox.setWindowTitle("About Image Keysort")
         aboutBox.setObjectName("AboutMessageBox")
         aboutBox.setTextFormat(Qt.RichText)
-        with open("about.html", "r", encoding="utf-8") as f:
+        with open(asset("about.html"), "r", encoding="utf-8") as f:
             about_text = f.read()
         aboutBox.setText(about_text)
         aboutBox.exec()
@@ -882,7 +887,7 @@ class MainWindow(QMainWindow, QObject):
         keyboardShortcutsBox.setWindowTitle("Available Keyboard shortcuts")
         keyboardShortcutsBox.setObjectName("KeyboardShortcutsMessageBox")
         keyboardShortcutsBox.setTextFormat(Qt.RichText)
-        with open("keyboard_shortcuts.html", "r", encoding="utf-8") as f:
+        with open(asset("keyboard_shortcuts.html"), "r", encoding="utf-8") as f:
             shortcuts_text = f.read()
         keyboardShortcutsBox.setText(shortcuts_text)
         keyboardShortcutsBox.exec()

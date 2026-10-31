@@ -109,12 +109,9 @@ Links:
 
 
 ====== Upstreaming-related TODO ======
-- [ ] Generalize a windows-registry and linux-desktop scripts
-- [ ] Fix "open in" in the windows context menu
+- [ ] Generalize a linux-desktop scripts to create context options
 - [ ] Update README.md and keyboard-shortcuts.html help page.
 - [ ] Cleanup this TODO.md into categories, create TOC.
-- [ ] Try to run on Linux
-- [ ] Try to build exe on Windows
 
 
 ====== Main features to implement ======
@@ -360,40 +357,31 @@ Consider (Maybe):
 - [ ] V MenuBar se inspirovat Pycharm treba - napr Help->(productivity guide, About, Keymap reference, Submit a bug report, ...)
 
 
-
 Installation, Building
-- [ ] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
-- [ ] Zakomponovat qtsass (pip3 install qtsass --break-system-packages)
-    - [ ] `qtsass src/styles/app-styles.scss -o src/styles/app-styles.qss`
-- [ ] Do kontext menu na Windows (prave kliknuti na slozku nebo ve slozce) pridat moznost otevrit ji jako src v Image Keysort.
-    - [ ] Do instalace pridat spusteni registr scriptuu (add-image-keysort.reg), ktery to prida do toho kontext menu.
+- [X] Fix Icon is not used for an app
+- [X] Zacit to normalne buildit vsude jednotne, aby se pouzivaly Resources (ikony a pod) (Makefile1)
+- [X] Zakomponovat qtsass (pip3 install qtsass --break-system-packages)
+    - [X] `qtsass src/styles/app-styles.scss -o src/styles/app-styles.qss`
+- [X] Do kontext menu na Windows (prave kliknuti na slozku nebo ve slozce) pridat moznost otevrit ji jako src v Image Keysort.
+    - [X] Do instalace pridat spusteni registr scriptuu (add-image-keysort.reg), ktery to prida do toho kontext menu.
         - https://www.wikihow.com/Add-New-Options-to-Right-Click-Menu-in-Windows
         - https://www.youtube.com/watch?v=vh19zUGwyxQ
         - https://defaultprogramseditor.com/
 - [ ] Upgrade from Qt5 to Qt6
 - [~] Add ImakeKeysort into Fedora's Files OpenWith. Just like for Windows.
 - [~] Add Image Keysort into Fedora's app list (so it appears in the app launcher/search).
-- [ ] Zacit pouzivat v tomto projektu static code analysis tool `pyling main.py` !!! a zahrnout do build procesu (Ref: https://blog.codacy.com/python-static-analysis-tools)
+- [ ] Do Makefile jako novy target, treba `make check` - Zacit pouzivat v tomto projektu static code analysis tool `pyling main.py` !!! a zahrnout do build procesu (Ref: https://blog.codacy.com/python-static-analysis-tools)
 - [ ] Git project and actions - implementovat nejakou pipeline ?
-- [ ] Windows build process pro .exe
-    - [ ] Pridat do makefile spusteni buildeni pro windows: `pyinstaller --noconfirm main.spec`
-    - [ ] Vytvorit klasicky installer pomoci InstallForge; Ref: https://www.pythonguis.com/tutorials/packaging-pyqt5-pyside2-applications-windows-pyinstaller/
-- [ ] Zprovoznit Debugger na windowsech sakra uz.
-
+- [X] Windows build process pro .exe
+    - [X] Pridat do makefile spusteni buildeni pro windows: `pyinstaller --noconfirm main.spec`
+    - [X] Vytvorit klasicky installer pomoci InstallForge; Ref: https://www.pythonguis.com/tutorials/packaging-pyqt5-pyside2-applications-windows-pyinstaller/
+- [X] Zprovoznit Debugger na windowsech sakra uz.
 
 - Windows building process:
-    - Compile using the pyinstaller.exe from the .spec file.
-    - compile qss file
-    - compile resources.py file
-    - create a .exe file
-
-- Windows installation process (created with InstallForge):
-    - move compiled qss file
-    - move compiled resources.py file
-    - move .exe and files as ProgramFiles/image-keysort/
-    - add image-keysort into the right click context menu (using registers). Point the target to the .exe in the ProgramFiles
-    - [optional] add shortcut to IK to the start menu / desktop / ...
-    - set destination for user's shortcut presets into the Users/<user>/image-keysort/Presets/
+    - [X] Compile using the pyinstaller.exe from the .spec file.
+    - [ ] Check that this is happening - compile qss file
+    - [ ] Check that this is happening - compile resources.py file
+    - [ ] set destination for user's shortcut presets into the Users/<user>/image-keysort/Presets/
 
 - Windows uninstallation process:
     - remove image-keysort from the right-click context menu
